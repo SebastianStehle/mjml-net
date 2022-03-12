@@ -45,7 +45,5 @@
         IElementHtmlRenderer Class(string? value);
 
         IElementHtmlRenderer Style(string name, string? value);
-
-        IElementHtmlRenderer Done();
     }
 }

@@ -21,8 +21,7 @@
         private static void RenderChild(string context, IChildRenderer child, IHtmlRenderer renderer, INode node)
         {
             renderer.StartElement("div")
-                .Attr("width", context)
-                .Done();
+                .Attr("width", context);
 
             child.Render();
 

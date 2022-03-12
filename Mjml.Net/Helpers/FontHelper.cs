@@ -11,8 +11,7 @@
                     var href = font.Href;
 
                     renderer.StartElement("style")
-                        .Attr("type", "text/css")
-                        .Done();
+                        .Attr("type", "text/css");
 
                     renderer.Content($"@import url({href});");
 
@@ -21,8 +20,7 @@
                     renderer.StartElement("link")
                         .Attr("href", href)
                         .Attr("type", "text/css")
-                        .Attr("rel", "stylesheet")
-                        .Done();
+                        .Attr("rel", "stylesheet");
 
                     renderer.EndElement("link");
                 }
