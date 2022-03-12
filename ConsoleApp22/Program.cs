@@ -7,6 +7,7 @@ Console.WriteLine("Hello, World!");
 var renderer = new MjmlRenderer();
 
 renderer.Add(new BodyComponent());
+renderer.Add(new ButtonComponent());
 renderer.Add(new RootComponent());
 
 var xml = @"

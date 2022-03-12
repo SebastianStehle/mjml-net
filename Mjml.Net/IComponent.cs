@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp22
+﻿namespace Mjml.Net
 {
     public interface IComponent
     {

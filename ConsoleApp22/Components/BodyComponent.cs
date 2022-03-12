@@ -21,14 +21,19 @@
         {
             renderer.SetContext("width", node.GetAttribute("width"));
 
+            renderer.StartElement("body")
+                .Style("word-spacing", "normal")
+                .Done();
+
             renderer.StartElement("div")
-                .SetAttribute("class", node.GetAttribute("css-class"))
-                .SetStyle("background-color", node.GetAttribute("background-color"))
+                .Attr("class", node.GetAttribute("css-class"))
+                .Style("background-color", node.GetAttribute("background-color"))
                 .Done();
 
             renderer.RenderChildren();
 
             renderer.EndElement("div");
+            renderer.EndElement("body");
         }
     }
 }

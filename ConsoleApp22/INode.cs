@@ -2,6 +2,6 @@
 {
     public interface INode
     {
-        string? GetAttribute(string name);
+        string? GetAttribute(string name, string fallback = null);
     }
 }

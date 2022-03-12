@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp22
+﻿namespace Mjml.Net
 {
     public interface IHtmlRenderer
     {
@@ -12,9 +12,20 @@
 
         void RenderChildren();
 
+        void RenderChildren<T>(ChildOptions<T> options);
+
         void SetContext(string name, object? value);
 
+        void SetGlobalData(string name, object values);
+
         object? GetContext(string name);
+    }
+
+    public interface IChildRenderer
+    {
+        void Render();
+
+        INode Node { get; }
     }
 
     public interface IElementHtmlRenderer
