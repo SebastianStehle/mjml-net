@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net
 {
-    public sealed class GlobalData : List<(string Type, object Values)>
+    public sealed class GlobalData : Dictionary<(string Type, string Name), object>
     {
     }
 }

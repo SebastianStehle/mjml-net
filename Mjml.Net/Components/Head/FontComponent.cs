@@ -17,7 +17,16 @@ namespace Mjml.Net.Components.Head
 
         public void Render(IHtmlRenderer renderer, INode node)
         {
-            renderer.SetGlobalData("font", new Font(node.GetAttribute("name"), node.GetAttribute("href")));
+            var href = node.GetAttribute("href");
+
+            // Just in case that validation is disabled.
+            if (href != null)
+            {
+                // The name does not really matter.
+                var name = node.GetAttribute("name");
+
+                renderer.SetGlobalData(name ?? Guid.NewGuid().ToString(), new Font(href));
+            }
         }
     }
 }

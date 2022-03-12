@@ -4,9 +4,9 @@
     {
         public void Render(IHtmlRenderer renderer, GlobalData data)
         {
-            foreach (var (type, values) in data)
+            foreach (var (_, value) in data)
             {
-                if (type == "font" && values is Font font && font.Href != null)
+                if (value is Font font)
                 {
                     var href = font.Href;
 
@@ -14,7 +14,7 @@
                         .Attr("type", "text/css")
                         .Done();
 
-                    renderer.Plain($"@import url({href});");
+                    renderer.Content($"@import url({href});");
 
                     renderer.EndElement("style");
 

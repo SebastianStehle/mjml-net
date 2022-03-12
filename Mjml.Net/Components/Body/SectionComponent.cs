@@ -1,32 +1,15 @@
-﻿namespace Mjml.Net.Components.Body
+﻿using Mjml.Net.Helpers;
+
+namespace Mjml.Net.Components.Body
 {
-    public sealed class SectionComponent : IComponent
+    public sealed class ColumnComponent : IComponent
     {
-        public string ComponentName => "mj-section";
+        public string ComponentName => "mj-column";
 
         public void Render(IHtmlRenderer renderer, INode node)
         {
-            RenderChildren(renderer, node);
-        }
-
-        private static void RenderChildren(IHtmlRenderer renderer, INode node)
-        {
-            renderer.RenderChildren(new ChildOptions<string>
-            {
-                Context = "100",
-                Renderer = RenderChild
-            });
-        }
-
-        private static void RenderChild(string context, IChildRenderer child, IHtmlRenderer renderer, INode node)
-        {
-            renderer.StartElement("div")
-                .Attr("width", context)
-                .Done();
-
-            child.Render();
-
-            renderer.EndElement("link");
+            // Set the breakpoint if not set before.
+            renderer.SetGlobalData("default", Breakpoint.Default, true);
         }
     }
 }
