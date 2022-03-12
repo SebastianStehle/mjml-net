@@ -35,5 +35,11 @@
             return top;
         }
 
+        public void Clear()
+        {
+            stack.Clear();
+
+            current = default;
+        }
     }
 }

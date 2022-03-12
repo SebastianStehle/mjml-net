@@ -17,6 +17,17 @@ namespace Mjml.Net
 
         public INode Node => this;
 
+        private void ClearRenderData()
+        {
+            buffers.Clear();
+            childOptions.Clear();
+            currentRenderAttributes.Clear();
+            currentRenderClasses.Clear();
+            currentRenderElement = null;
+            currentRenderStyles.Clear();
+            intend = 0;
+        }
+
         public void BufferStart()
         {
             Flush();
@@ -369,7 +380,7 @@ namespace Mjml.Net
 
                     if (index < currentRenderClasses.Count - 1)
                     {
-                        buffers.Current.Append(" ");
+                        buffers.Current.Append(' ');
                     }
 
                     index++;

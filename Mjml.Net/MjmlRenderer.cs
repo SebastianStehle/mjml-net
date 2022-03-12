@@ -28,30 +28,37 @@ namespace Mjml.Net
         {
             var xml = XmlReader.Create(new StringReader(mjml));
 
-            return Render(xml);
+            return Render(xml, options);
         }
 
         public string Render(Stream mjml, MjmlOptions options = default)
         {
             var xml = XmlReader.Create(mjml);
 
-            return Render(xml);
+            return Render(xml, options);
         }
 
         public string Render(TextReader mjml, MjmlOptions options = default)
         {
             var xml = XmlReader.Create(mjml);
 
-            return Render(xml);
+            return Render(xml, options);
         }
 
-        private string Render(XmlReader xml)
+        private string Render(XmlReader xml, MjmlOptions options)
         {
-            var context = new MjmlRenderContext(this, xml);
+            var context = ObjectPools.Contexts.Get();
+            try
+            {
+                context.Setup(this, xml, options);
+                context.Read();
 
-            context.Read();
-
-            return context.ToString()!;
+                return context.ToString()!;
+            }
+            finally
+            {
+                ObjectPools.Contexts.Return(context);
+            }
         }
     }
 }

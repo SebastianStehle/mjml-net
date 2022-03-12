@@ -7,5 +7,8 @@ namespace Mjml.Net
     {
         public static readonly ObjectPool<StringBuilder> StringBuilder =
             new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
+
+        public static readonly ObjectPool<MjmlRenderContext> Contexts =
+            new DefaultObjectPool<MjmlRenderContext>(new DefaultPooledObjectPolicy<MjmlRenderContext>());
     }
 }

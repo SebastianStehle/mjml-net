@@ -1,26 +1,53 @@
 ﻿using System.Xml;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : INode
     {
-        private readonly MjmlRenderer renderer;
-        private readonly XmlReader reader;
-        private readonly MjmlOptions options;
         private readonly GlobalData globalData = new GlobalData();
-        private readonly Dictionary<string, Dictionary<string, string>> defaultAttributes = new Dictionary<string, Dictionary<string, string>>();
+        private readonly Dictionary<string, Dictionary<string, string>> defaultAttributes = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
-        private readonly Dictionary<string, object?> context = new Dictionary<string, object?>();
+        private readonly Dictionary<string, object?> context = new Dictionary<string, object?>(10);
         private IComponent? currentComponent;
+        private MjmlOptions options;
+        private MjmlRenderer renderer;
+        private XmlReader reader;
         private string? currentText;
         private string? currentName;
         private string? currentElement;
 
+        public MjmlRenderContext()
+        {
+        }
+
         public MjmlRenderContext(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
         {
+            Setup(renderer, reader, options);
+        }
+
+        public void Setup(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
+        {
+            Clear();
+
             this.renderer = renderer;
             this.reader = reader;
             this.options = options;
+        }
+
+        private void Clear()
+        {
+            context.Clear();
+            currentComponent = null;
+            currentElement = null;
+            currentName = null;
+            currentText = null;
+            defaultAttributes.Clear();
+            reader = null!;
+            renderer = null!;
+
+            ClearRenderData();
         }
 
         public void Read()
