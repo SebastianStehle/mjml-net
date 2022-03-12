@@ -27,7 +27,7 @@
 
         void RenderChildren();
 
-        void RenderChildren<T>(ChildOptions<T> options);
+        void RenderChildren(ChildOptions options);
 
         void SetContext(string name, object? value);
 

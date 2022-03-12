@@ -3,57 +3,48 @@ using System.Xml;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer
+    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer, IChildRenderer
     {
         private readonly Dictionary<string, string> currentRenderStyles = new Dictionary<string, string>(10);
         private readonly Dictionary<string, string> currentRenderAttributes = new Dictionary<string, string>(10);
         private readonly HashSet<string> currentRenderClasses = new HashSet<string>(10);
-        private readonly Stack<StringBuilder> bufferStack = new Stack<StringBuilder>(2);
-        private StringBuilder? buffer;
+        private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
+        private readonly RenderStack<ChildOptions> childOptions = new RenderStack<ChildOptions>();
         private string? currentRenderElement;
         private int intend;
 
         public XmlReader Reader => reader;
 
+        public INode Node => this;
 
         public void BufferStart()
         {
             Flush();
 
             // Rent a buffer to avoid memory allocations.
-            buffer = ObjectPools.StringBuilder.Get();
-
-            // Maintain a stack of buffers to get access to the previous pool when this one is flushed.
-            bufferStack.Push(buffer);
+            buffers.Push(ObjectPools.StringBuilder.Get());
         }
 
         public string BufferFlush()
         {
-            if (buffer == null)
+            if (buffers.Current == null)
             {
                 return string.Empty;
             }
 
             Flush();
 
-            var currentPool = bufferStack.Pop();
+            var currentBuffer = buffers.Pop();
             try
             {
-                if (bufferStack.Count > 0)
-                {
-                    // Set back the last buffer for fast access.
-                    buffer = bufferStack.Peek();
-                }
-                else
-                {
-                    buffer = null;
-                }
-
-                return currentPool.ToString();
+                return currentBuffer?.ToString() ?? string.Empty;
             }
             finally
             {
-                ObjectPools.StringBuilder.Return(currentPool);
+                if (currentBuffer != null)
+                {
+                    ObjectPools.StringBuilder.Return(currentBuffer);
+                }
             }
         }
 
@@ -117,7 +108,7 @@ namespace Mjml.Net
 
         public void ElementEnd(string elementName)
         {
-            if (buffer == null)
+            if (buffers.Current == null)
             {
                 return;
             }
@@ -128,16 +119,16 @@ namespace Mjml.Net
 
             WriteLineStart();
 
-            buffer.Append("</");
-            buffer.Append(elementName);
-            buffer.Append('>');
+            buffers.Current.Append("</");
+            buffers.Current.Append(elementName);
+            buffers.Current.Append('>');
 
             WriteLineEnd();
         }
 
         public void Content(string? value)
         {
-            if (buffer == null)
+            if (buffers.Current == null)
             {
                 return;
             }
@@ -161,7 +152,7 @@ namespace Mjml.Net
             }
             else
             {
-                buffer.Append(value);
+                buffers.Current.Append(value);
             }
 
             WriteLineEnd();
@@ -169,7 +160,7 @@ namespace Mjml.Net
 
         public void Plain(string? value, bool appendLine = true)
         {
-            if (buffer == null)
+            if (buffers.Current == null)
             {
                 return;
             }
@@ -187,7 +178,7 @@ namespace Mjml.Net
             }
             else
             {
-                buffer.Append(value);
+                buffers.Current.Append(value);
             }
 
             if (appendLine)
@@ -198,7 +189,7 @@ namespace Mjml.Net
 
         private void WriteIntended(string value)
         {
-            buffer!.EnsureCapacity(buffer.Length + value.Length);
+            buffers.Current!.EnsureCapacity(buffers.Current.Length + value.Length);
 
             // We could go over the chars but it is much faster to writer to the buffer in batches. Therefore we create a span from newline to newline.
             var span = value.AsSpan();
@@ -207,7 +198,7 @@ namespace Mjml.Net
             {
                 if (value[i] == '\n')
                 {
-                    buffer.Append(span[..(j + 1)]);
+                    buffers.Current.Append(span[..(j + 1)]);
 
                     WriteLineStart();
 
@@ -217,12 +208,12 @@ namespace Mjml.Net
                 }
             }
 
-            buffer.Append(span);
+            buffers.Current.Append(span);
         }
 
         private void WriteMinified(string value)
         {
-            buffer!.EnsureCapacity(buffer.Length + value.Length);
+            buffers.Current!.EnsureCapacity(buffers.Current.Length + value.Length);
 
             // We could go over the chars but it is much faster to writer to the buffer in batches. Therefore we create a span from newline to newline.
             var span = value.AsSpan();
@@ -231,7 +222,7 @@ namespace Mjml.Net
             {
                 if (value[i] == '\n')
                 {
-                    buffer.Append(span[..j].Trim());
+                    buffers.Current.Append(span[..j].Trim());
 
                     WriteLineStart();
 
@@ -241,14 +232,14 @@ namespace Mjml.Net
                 }
             }
 
-            buffer.Append(span);
+            buffers.Current.Append(span);
         }
 
         private void WriteLineEnd()
         {
             if (options.Beautify)
             {
-                buffer!.AppendLine();
+                buffers.Current!.AppendLine();
             }
         }
 
@@ -258,7 +249,7 @@ namespace Mjml.Net
             {
                 for (var i = 0; i < intend; i++)
                 {
-                    buffer!.Append("  ");
+                    buffers.Current!.Append("  ");
                 }
             }
         }
@@ -268,79 +259,126 @@ namespace Mjml.Net
             RenderChildren(default);
         }
 
-        public void RenderChildren<T>(ChildOptions<T> options)
+        public void RenderChildren(ChildOptions options)
+        {
+            if (options.RawXML)
+            {
+                var level = -1;
+
+                var isStopped = false;
+
+                while (reader.Read() && !isStopped)
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            ElementStart(reader.Name);
+                            level++;
+                            break;
+                        case XmlNodeType.Text:
+                            Content(reader.Value);
+                            break;
+                        case XmlNodeType.Attribute:
+                            Attr(reader.Name, reader.Value);
+                            break;
+                        case XmlNodeType.EndElement:
+                            level--;
+
+                            if (level == 0)
+                            {
+                                isStopped = true;
+                            }
+                            else
+                            {
+                                ElementEnd(reader.Name);
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                childOptions.Push(options);
+
+                Read();
+
+                childOptions.Pop();
+            }
+        }
+
+        void IChildRenderer.Render()
         {
             Read();
         }
 
         private void Flush()
         {
-            if (currentRenderElement == null || buffer == null)
+            if (currentRenderElement == null || buffers.Current == null)
             {
                 return;
             }
 
             WriteLineStart();
 
-            buffer.Append('<');
-            buffer.Append(currentRenderElement);
+            buffers.Current.Append('<');
+            buffers.Current.Append(currentRenderElement);
 
             if (currentRenderAttributes.Count > 0)
             {
                 foreach (var (key, value) in currentRenderAttributes)
                 {
-                    buffer.Append(' ');
-                    buffer.Append(key);
-                    buffer.Append("=\"");
-                    buffer.Append(value);
-                    buffer.Append('"');
+                    buffers.Current.Append(' ');
+                    buffers.Current.Append(key);
+                    buffers.Current.Append("=\"");
+                    buffers.Current.Append(value);
+                    buffers.Current.Append('"');
                 }
             }
 
             if (currentRenderStyles.Count > 0)
             {
-                buffer.Append(" style=\"");
+                buffers.Current.Append(" style=\"");
 
                 var index = 0;
                 foreach (var (key, value) in currentRenderStyles)
                 {
-                    buffer.Append(key);
-                    buffer.Append(':');
-                    buffer.Append(' ');
-                    buffer.Append(value);
+                    buffers.Current.Append(key);
+                    buffers.Current.Append(':');
+                    buffers.Current.Append(' ');
+                    buffers.Current.Append(value);
 
                     if (index < currentRenderStyles.Count - 1)
                     {
-                        buffer.Append("; ");
+                        buffers.Current.Append("; ");
                     }
 
                     index++;
                 }
 
-                buffer.Append('"');
+                buffers.Current.Append('"');
             }
 
             if (currentRenderClasses.Count > 0)
             {
-                buffer.Append(" class=\"");
+                buffers.Current.Append(" class=\"");
 
                 var index = 0;
                 foreach (var value in currentRenderClasses)
                 {
-                    buffer.Append(value);
+                    buffers.Current.Append(value);
 
                     if (index < currentRenderClasses.Count - 1)
                     {
-                        buffer.Append(" ");
+                        buffers.Current.Append(" ");
                     }
 
                     index++;
                 }
 
-                buffer.Append('"');
+                buffers.Current.Append('"');
             }
 
-            buffer.Append('>');
+            buffers.Current.Append('>');
 
             WriteLineEnd();
 

@@ -72,7 +72,16 @@ namespace Mjml.Net
                 throw new InvalidOperationException($"Invalid element '{currentElement}'.");
             }
 
-            currentComponent.Render(this, this);
+            var childRenderer = childOptions.Current.Renderer;
+
+            if (childRenderer != null)
+            {
+                childRenderer(this);
+            }
+            else
+            {
+                currentComponent.Render(this, this);
+            }
         }
 
         public string? GetAttribute(string name, string? fallback = null)
