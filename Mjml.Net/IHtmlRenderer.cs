@@ -2,21 +2,28 @@
 {
     public interface IHtmlRenderer
     {
-        IElementHtmlRenderer StartElement(string elementName);
+        IElementHtmlRenderer ElementStart(string elementName);
 
-        void EndElement(string elementName);
+        void ElementEnd(string elementName);
 
         /// <summary>
         /// Renders a plain value.
         /// </summary>
         /// <param name="value">The value to render.</param>
-        void Plain(string? value);
+        /// <param name="appendLine">True to append a new line.</param>
+        void Plain(string? value, bool appendLine = true);
 
         /// <summary>
         /// Renders the content of an element.
         /// </summary>
         /// <param name="value">The value to render.</param>
         void Content(string? value);
+
+        void RenderHelpers(HelperTarget target);
+
+        void BufferStart();
+
+        string BufferFlush();
 
         void RenderChildren();
 

@@ -2,27 +2,32 @@
 {
     public sealed class FontHelper : IHelper
     {
-        public void Render(IHtmlRenderer renderer, GlobalData data)
+        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
         {
+            if (target != HelperTarget.HeadEnd)
+            {
+                return;
+            }
+
             foreach (var (_, value) in data)
             {
                 if (value is Font font)
                 {
                     var href = font.Href;
 
-                    renderer.StartElement("style")
+                    renderer.ElementStart("style")
                         .Attr("type", "text/css");
 
                     renderer.Content($"@import url({href});");
 
-                    renderer.EndElement("style");
+                    renderer.ElementEnd("style");
 
-                    renderer.StartElement("link")
+                    renderer.ElementStart("link")
                         .Attr("href", href)
                         .Attr("type", "text/css")
                         .Attr("rel", "stylesheet");
 
-                    renderer.EndElement("link");
+                    renderer.ElementEnd("link");
                 }
             }
         }

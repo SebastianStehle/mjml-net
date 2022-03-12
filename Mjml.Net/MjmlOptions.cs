@@ -4,9 +4,9 @@
     {
         public bool KeepComments { get; set; }
 
-        public string[] Fonts { get; set; }
+        public string[]? Fonts { get; set; }
 
-        public bool Beautify { get; set; }
+        public bool Beautify { get; set; } = true;
 
         public bool Minify { get; set; }
     }

@@ -6,10 +6,10 @@
 
         void Add(IHelper helper);
 
-        string Render(string mjml);
+        string Render(string mjml, MjmlOptions options = default);
 
-        string Render(Stream mjml);
+        string Render(Stream mjml, MjmlOptions options = default);
 
-        string Render(TextReader mjml);
+        string Render(TextReader mjml, MjmlOptions options = default);
     }
 }

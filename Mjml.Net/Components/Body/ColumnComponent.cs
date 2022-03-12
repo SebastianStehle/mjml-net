@@ -11,21 +11,18 @@
 
         private static void RenderChildren(IHtmlRenderer renderer, INode node)
         {
-            renderer.RenderChildren(new ChildOptions<string>
+            renderer.RenderChildren(new ChildOptions
             {
-                Context = "100",
-                Renderer = RenderChild
+                Renderer = child =>
+                {
+                    renderer.ElementStart("div")
+                        .Attr("width", node.GetAttribute("width"));
+
+                    child.Render();
+
+                    renderer.ElementEnd("link");
+                }
             });
-        }
-
-        private static void RenderChild(string context, IChildRenderer child, IHtmlRenderer renderer, INode node)
-        {
-            renderer.StartElement("div")
-                .Attr("width", context);
-
-            child.Render();
-
-            renderer.EndElement("link");
         }
     }
 }

@@ -2,13 +2,18 @@
 {
     public sealed class BreakpointHelper : IHelper
     {
-        public void Render(IHtmlRenderer renderer, GlobalData data)
+        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
         {
+            if (target != HelperTarget.HeadEnd)
+            {
+                return;
+            }
+
             foreach (var (_, value) in data)
             {
                 if (value is Breakpoint breakpoint)
                 {
-                    renderer.StartElement("style")
+                    renderer.ElementStart("style")
                         .Attr("type", "text/css");
 
                     renderer.Content($"@media only screen and (min-width:{breakpoint.Value}) {{");
@@ -18,9 +23,9 @@
                     renderer.Content($"  }}");
                     renderer.Content($"}}");
 
-                    renderer.EndElement("style");
+                    renderer.ElementEnd("style");
 
-                    renderer.StartElement("style")
+                    renderer.ElementStart("style")
                         .Attr("media", $"screen and (min-width:{breakpoint.Value})");
 
                     renderer.Content(".moz-text-html .mj-column-per-100 {");
@@ -28,7 +33,7 @@
                     renderer.Content("  max-width: 100%;");
                     renderer.Content("}}");
 
-                    renderer.EndElement("style");
+                    renderer.ElementEnd("style");
                 }
             }
         }

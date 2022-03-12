@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp22.Components
+﻿namespace ConsoleApp22.Components
 {
     internal class SectionComponent : IComponent
     {
