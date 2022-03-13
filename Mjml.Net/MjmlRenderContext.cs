@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using Mjml.Net.Validators;
+using System.Xml;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -12,13 +13,41 @@ namespace Mjml.Net
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
         private readonly Dictionary<string, object?> context = new Dictionary<string, object?>(10);
+        private readonly ValidationErrors errors = new ValidationErrors();
         private IComponent? currentComponent;
         private MjmlOptions options;
         private MjmlRenderer renderer;
         private XmlReader reader;
+        private IValidator validator;
         private string? currentText;
         private string? currentElement;
         private string[]? currentClasses;
+
+        private int? CurrentLine
+        {
+            get
+            {
+                if (reader is IXmlLineInfo lineInfo)
+                {
+                    return lineInfo.LineNumber;
+                }
+
+                return null;
+            }
+        }
+
+        private int? CurrentColumn
+        {
+            get
+            {
+                if (reader is IXmlLineInfo lineInfo)
+                {
+                    return lineInfo.LinePosition;
+                }
+
+                return null;
+            }
+        }
 
         public MjmlRenderContext()
         {
@@ -34,22 +63,37 @@ namespace Mjml.Net
             this.renderer = renderer;
             this.reader = reader;
             this.options = options;
+
+            validator = options.Validator ?? SoftValidator.Instance;
         }
 
         internal void Clear()
         {
+            attributesByClass.Clear();
+            attributesByName.Clear();
             context.Clear();
             currentAttributes.Clear();
             currentClasses = null;
             currentComponent = null;
             currentElement = null;
             currentText = null;
-            attributesByName.Clear();
+            errors.Clear();
             globalData.Clear();
             reader = null!;
             renderer = null!;
 
             ClearRenderData();
+        }
+
+        public void Validate()
+        {
+            validator.Complete(errors);
+
+            if (errors.Any())
+            {
+                // Create a copy because the error list could be reused.
+                throw new ValidationException(errors.ToList());
+            }
         }
 
         public void Read()
@@ -73,11 +117,23 @@ namespace Mjml.Net
             currentText = null;
             currentAttributes.Clear();
 
+            currentComponent = renderer.GetComponent(currentElement);
+
+            if (currentComponent == null)
+            {
+                errors.Add($"Invalid element '{currentElement}'.", CurrentLine, CurrentColumn);
+                Validate();
+            }
+
+            validator.ValidateComponent(currentComponent!, errors, CurrentLine, CurrentColumn);
+
             for (var i = 0; i < reader.AttributeCount; i++)
             {
                 reader.MoveToAttribute(i);
 
                 currentAttributes[reader.Name] = reader.Value;
+
+                validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors, CurrentLine, CurrentColumn);
             }
 
             while (reader.Read())
@@ -95,13 +151,6 @@ namespace Mjml.Net
                 }
             }
 
-            currentComponent = renderer.GetComponent(currentElement);
-
-            if (currentComponent == null)
-            {
-                throw new InvalidOperationException($"Invalid element '{currentElement}'.");
-            }
-
             var childRenderer = childOptions.Current.Renderer;
 
             if (childRenderer != null)
@@ -110,7 +159,7 @@ namespace Mjml.Net
             }
             else
             {
-                currentComponent.Render(this, this);
+                currentComponent!.Render(this, this);
             }
         }
 
@@ -138,7 +187,7 @@ namespace Mjml.Net
             {
                 if (currentClasses == null)
                 {
-                    currentClasses = currentAttributes.GetValueOrDefault("mj-class")?.Split() ?? Array.Empty<string>();
+                    currentClasses = currentAttributes.GetValueOrDefault(Constants.MjClass)?.Split() ?? Array.Empty<string>();
                 }
 
                 foreach (var className in currentClasses)
