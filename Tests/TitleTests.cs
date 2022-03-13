@@ -12,7 +12,7 @@ namespace Tests
             var source = @"
  <mjml>
   <mj-head>
-    <mj-title>Hello MJML<mj-title>
+    <mj-title>Hello MJML</mj-title>
   </mj-head>
   <mj-body>
   </mj-body>
