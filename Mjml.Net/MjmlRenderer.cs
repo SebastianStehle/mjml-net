@@ -15,11 +15,13 @@ namespace Mjml.Net
 
         public MjmlRenderer()
         {
+            Add(new AttributesComponent());
             Add(new BodyComponent());
             Add(new BreakpointComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
             Add(new PreviewComponent());
+            Add(new RawComponent());
             Add(new RootComponent());
             Add(new StyleComponent());
             Add(new TitleComponent());

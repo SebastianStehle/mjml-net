@@ -8,7 +8,8 @@ namespace Mjml.Net
     {
         private static readonly char[] TrimChars = new[] { ' ', '\n', '\r' };
         private readonly GlobalData globalData = new GlobalData();
-        private readonly Dictionary<string, Dictionary<string, string>> defaultAttributes = new Dictionary<string, Dictionary<string, string>>(10);
+        private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
+        private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
         private readonly Dictionary<string, object?> context = new Dictionary<string, object?>(10);
         private IComponent? currentComponent;
@@ -16,8 +17,8 @@ namespace Mjml.Net
         private MjmlRenderer renderer;
         private XmlReader reader;
         private string? currentText;
-        private string? currentName;
         private string? currentElement;
+        private string[]? currentClasses;
 
         public MjmlRenderContext()
         {
@@ -39,11 +40,11 @@ namespace Mjml.Net
         {
             context.Clear();
             currentAttributes.Clear();
+            currentClasses = null;
             currentComponent = null;
             currentElement = null;
-            currentName = null;
             currentText = null;
-            defaultAttributes.Clear();
+            attributesByName.Clear();
             globalData.Clear();
             reader = null!;
             renderer = null!;
@@ -59,7 +60,7 @@ namespace Mjml.Net
                 {
                     case XmlNodeType.Element:
                         ReadElement(reader.Name);
-                        return;
+                        break;
                 }
             }
             while (reader.Read());
@@ -68,8 +69,7 @@ namespace Mjml.Net
         private void ReadElement(string name)
         {
             currentElement = name;
-            currentName = currentElement.Substring(3); // Remove mj- prefix
-
+            currentClasses = null;
             currentText = null;
             currentAttributes.Clear();
 
@@ -121,22 +121,41 @@ namespace Mjml.Net
                 return attribute;
             }
 
+            if (attributesByName.TryGetValue(name, out var byType))
+            {
+                if (byType.TryGetValue(currentElement!, out attribute))
+                {
+                    return attribute;
+                }
+
+                if (byType.TryGetValue(Constants.All, out attribute))
+                {
+                    return attribute;
+                }
+            }
+
+            if (attributesByClass.Count > 0)
+            {
+                if (currentClasses == null)
+                {
+                    currentClasses = currentAttributes.GetValueOrDefault("mj-class")?.Split() ?? Array.Empty<string>();
+                }
+
+                foreach (var className in currentClasses)
+                {
+                    if (attributesByClass.TryGetValue(className, out var byName))
+                    {
+                        if (byName.TryGetValue(name, out attribute))
+                        {
+                            return attribute;
+                        }
+                    }
+                }
+            }
+
             if (currentComponent?.DefaultAttributes?.TryGetValue(name, out attribute) == true)
             {
                 return attribute;
-            }
-
-            if (defaultAttributes.TryGetValue(name, out var attributesByName))
-            {
-                if (attributesByName.TryGetValue(currentName!, out attribute))
-                {
-                    return attribute;
-                }
-
-                if (attributesByName.TryGetValue(string.Empty, out attribute))
-                {
-                    return attribute;
-                }
             }
 
             return fallback;
@@ -169,16 +188,28 @@ namespace Mjml.Net
             globalData[(type, name)] = value;
         }
 
-        public void SetDefaultAttribute(string name, string? type, string value)
+        public void SetTypeAttribute(string name, string type, string value)
         {
-            if (!defaultAttributes.TryGetValue(name, out var attributes))
+            if (!attributesByName.TryGetValue(name, out var attributes))
             {
                 attributes = new Dictionary<string, string>();
 
-                defaultAttributes[name] = attributes;
+                attributesByName[name] = attributes;
             }
 
-            attributes[type ?? string.Empty] = value;
+            attributes[type] = value;
+        }
+
+        public void SetClassAttribute(string name, string className, string value)
+        {
+            if (!attributesByClass.TryGetValue(className, out var attributes))
+            {
+                attributes = new Dictionary<string, string>();
+
+                attributesByClass[className] = attributes;
+            }
+
+            attributes[name] = value;
         }
     }
 }

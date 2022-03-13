@@ -277,42 +277,9 @@ namespace Mjml.Net
         {
             if (options.RawXML)
             {
-                var level = -1;
-                var isStopped = false;
+                var inner = reader.ReadOuterXml().Trim();
 
-                while (reader.Read() && !isStopped)
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            ElementStart(reader.Name);
-
-                            for (var i = 0; i < reader.AttributeCount; i++)
-                            {
-                                reader.MoveToAttribute(i);
-
-                                currentAttributes[reader.Value] = reader.Name;
-                            }
-
-                            level++;
-                            break;
-                        case XmlNodeType.Text:
-                            Content(reader.Value);
-                            break;
-                        case XmlNodeType.EndElement:
-                            level--;
-
-                            if (level == 0)
-                            {
-                                isStopped = true;
-                            }
-                            else
-                            {
-                                ElementEnd(reader.Name);
-                            }
-                            break;
-                    }
-                }
+                Content(inner);
             }
             else
             {
