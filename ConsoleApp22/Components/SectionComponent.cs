@@ -185,7 +185,7 @@
                 node.GetAttribute("background-position-y") ?? y
             );
         }
-        
+
         private static (string X, string Y) ParseBackgroundPosition(INode node)
         {
             // TODO: Allocation free

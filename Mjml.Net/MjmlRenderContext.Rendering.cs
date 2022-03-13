@@ -212,7 +212,7 @@ namespace Mjml.Net
             {
                 if (value[i] == '\n')
                 {
-                    buffers.Current.Append(span[..(j + 1)]);
+                    buffers.Current.Append(span[.. (j + 1)]);
 
                     WriteLineStart();
 

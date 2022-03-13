@@ -22,7 +22,7 @@
             }
 
             var top = stack.Pop();
-            
+
             if (stack.Count > 0)
             {
                 current = stack.Peek();
