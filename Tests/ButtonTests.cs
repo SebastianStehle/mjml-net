@@ -45,7 +45,7 @@ namespace Tests
                 Beautify = true,
             });
 
-            TestHelpers.TrimmedContains(Resources.Button, result);
+            TestHelpers.TrimmedContains(Resources.ButtonLink, result);
         }
     }
 }

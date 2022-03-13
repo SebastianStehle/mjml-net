@@ -108,7 +108,9 @@ namespace Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;&quot;&gt; Button&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;text-align:center;border-radius:3px;&quot;&gt;
+        ///Button
+        ///&lt;/p&gt;.
         /// </summary>
         internal static string Button {
             get {
@@ -117,7 +119,9 @@ namespace Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;&quot; target=&quot;_blank&quot;&gt; Button Link &lt;/a&gt;.
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://mjml.io/&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;text-align:center;border-radius:3px;&quot;&gt;
+        ///Button Link
+        ///&lt;/a&gt;.
         /// </summary>
         internal static string ButtonLink {
             get {

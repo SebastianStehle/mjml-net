@@ -205,10 +205,14 @@
 &lt;/style&gt;</value>
   </data>
   <data name="Button" xml:space="preserve">
-    <value>&lt;p style="display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;"&gt; Button&lt;/p&gt;</value>
+    <value>&lt;p style="display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;text-align:center;border-radius:3px;"&gt;
+Button
+&lt;/p&gt;</value>
   </data>
   <data name="ButtonLink" xml:space="preserve">
-    <value>&lt;a href="https://mjml.io/" style="display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;" target="_blank"&gt; Button Link &lt;/a&gt;</value>
+    <value>&lt;a href="https://mjml.io/" target="_blank" style="display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;text-align:center;border-radius:3px;"&gt;
+Button Link
+&lt;/a&gt;</value>
   </data>
   <data name="Font" xml:space="preserve">
     <value>&lt;!--[if !mso]&gt;&lt;!--&gt;

@@ -132,7 +132,8 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", textAlign)
                 .Style("border-radius", borderRadius);
 
-            RenderChildren(renderer, node);
+            // RenderChildren(renderer, node);
+            renderer.Content(node.GetContent());
 
             renderer.ElementEnd(buttonHtmlTag);
             renderer.ElementEnd("td");
