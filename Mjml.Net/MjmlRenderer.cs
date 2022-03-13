@@ -19,11 +19,15 @@ namespace Mjml.Net
             Add(new BreakpointComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
+            Add(new PreviewComponent());
             Add(new RootComponent());
+            Add(new StyleComponent());
             Add(new TitleComponent());
 
             Add(new BreakpointHelper());
             Add(new FontHelper());
+            Add(new PreviewHelper());
+            Add(new StyleHelper());
             Add(new TitleHelper());
         }
 

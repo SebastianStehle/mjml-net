@@ -122,6 +122,30 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=&quot;display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;&quot;&gt;
+        ///  Hello MJML
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string Preview {
+            get {
+                return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style type=&quot;text/css&quot;&gt;
+        ///  .red-text div {
+        ///    color: red !important;
+        ///  }
+        ///&lt;/style&gt;.
+        /// </summary>
+        internal static string Style {
+            get {
+                return ResourceManager.GetString("Style", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;title&gt;
         ///  Hello MJML
         ///&lt;/title&gt;.

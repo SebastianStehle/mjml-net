@@ -6,6 +6,7 @@ namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : INode
     {
+        private static readonly char[] TrimChars = new[] { ' ', '\n', '\r' };
         private readonly GlobalData globalData = new GlobalData();
         private readonly Dictionary<string, Dictionary<string, string>> defaultAttributes = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
@@ -29,21 +30,21 @@ namespace Mjml.Net
 
         public void Setup(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
         {
-            Clear();
-
             this.renderer = renderer;
             this.reader = reader;
             this.options = options;
         }
 
-        private void Clear()
+        internal void Clear()
         {
             context.Clear();
+            currentAttributes.Clear();
             currentComponent = null;
             currentElement = null;
             currentName = null;
             currentText = null;
             defaultAttributes.Clear();
+            globalData.Clear();
             reader = null!;
             renderer = null!;
 
@@ -85,7 +86,7 @@ namespace Mjml.Net
 
                 if (type == XmlNodeType.Text)
                 {
-                    currentText = reader.Value;
+                    currentText = reader.Value.Trim(TrimChars);
                     break;
                 }
                 else if (type == XmlNodeType.Element || type == XmlNodeType.EndElement)

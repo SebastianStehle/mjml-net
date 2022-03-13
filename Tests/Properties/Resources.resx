@@ -212,6 +212,18 @@
 &lt;/style&gt;
 &lt;!--&lt;![endif]--&gt;</value>
   </data>
+  <data name="Preview" xml:space="preserve">
+    <value>&lt;div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"&gt;
+  Hello MJML
+&lt;/div&gt;</value>
+  </data>
+  <data name="Style" xml:space="preserve">
+    <value>&lt;style type="text/css"&gt;
+  .red-text div {
+    color: red !important;
+  }
+&lt;/style&gt;</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>&lt;title&gt;
   Hello MJML

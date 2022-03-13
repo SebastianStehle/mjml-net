@@ -24,7 +24,7 @@ namespace Tests
 
         private static string Trim(string value)
         {
-            var lines = value.Split(Environment.NewLine);
+            var lines = value.Split('\n');
 
             return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
