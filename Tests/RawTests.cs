@@ -11,7 +11,7 @@ namespace Tests
             yield return new object[]
             {
                 @"
-<button type=""submit"">Submit1</button>",
+<button type=""submit"">Submit1</button>"
             };
 
             yield return new object[]
@@ -19,7 +19,7 @@ namespace Tests
                 @"
 <div>
   <button type=""submit"">Submit1</button>
-</div>",
+</div>"
             };
 
             yield return new object[]
@@ -28,7 +28,7 @@ namespace Tests
 <div>
   <button type=""submit"">Submit1</button>
   <button type=""submit"">Submit2</button>
-</div>",
+</div>"
             };
 
             yield return new object[]
@@ -39,7 +39,7 @@ namespace Tests
     <button type=""submit"">Submit1</button>
     <button type=""submit"">Submit2</button>
   </table>
-</div>",
+</div>"
             };
         }
 
@@ -59,7 +59,7 @@ namespace Tests
 
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
-                Beautify = true,
+                Beautify = true
             });
 
             TestHelpers.TrimmedContains(html, result);

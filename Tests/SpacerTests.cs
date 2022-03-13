@@ -19,7 +19,7 @@ namespace Tests
 
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
-                Beautify = true,
+                Beautify = true
             });
 
             TestHelpers.TrimmedContains(Resources.Spacer, result);
@@ -38,7 +38,7 @@ namespace Tests
 
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
-                Beautify = true,
+                Beautify = true
             });
 
             TestHelpers.TrimmedContains(Resources.SpacerWithHeight, result);
