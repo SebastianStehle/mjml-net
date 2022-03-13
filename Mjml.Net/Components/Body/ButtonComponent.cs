@@ -71,16 +71,16 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            string? backgroundColor = node.GetAttribute("background-color");
-            string? width = node.GetAttribute("width");
-            string? height = node.GetAttribute("height");
-            string? href = node.GetAttribute("href");
-            string? fontStyle = node.GetAttribute("font-style");
-            string? borderRadius = node.GetAttribute("border-radius");
-            string? textAlign = node.GetAttribute("text-align");
-            string? innerPadding = node.GetAttribute("inner-padding");
+            var backgroundColor = node.GetAttribute("background-color");
+            var width = node.GetAttribute("width");
+            var height = node.GetAttribute("height");
+            var href = node.GetAttribute("href");
+            var fontStyle = node.GetAttribute("font-style");
+            var borderRadius = node.GetAttribute("border-radius");
+            var textAlign = node.GetAttribute("text-align");
+            var innerPadding = node.GetAttribute("inner-padding");
 
-            string buttonHtmlTag = !string.IsNullOrEmpty(href) ? "a" : "p";
+            var buttonHtmlTag = !string.IsNullOrEmpty(href) ? "a" : "p";
 
             renderer.ElementStart("table")
                 .Attr("border", "0")
@@ -144,23 +144,23 @@ namespace Mjml.Net.Components.Body
 
         private static string? CalculateButtonWidth(INode node)
         {
-            string? width = node.GetAttribute("width");
+            var width = node.GetAttribute("width");
 
             if (string.IsNullOrEmpty(width) || !width.Contains("px", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
 
-            if (!double.TryParse(width?.Replace("px", string.Empty, StringComparison.InvariantCultureIgnoreCase), NumberStyles.Integer, CultureInfo.InvariantCulture, out double widthParsed))
+            if (!double.TryParse(width?.Replace("px", string.Empty, StringComparison.InvariantCultureIgnoreCase), NumberStyles.Integer, CultureInfo.InvariantCulture, out var widthParsed))
             {
                 return null;
             }
 
-            double borders =
+            var borders =
                 node.GetShorthandBorderValue("left") +
                 node.GetShorthandBorderValue("right");
 
-            double innerPadding =
+            var innerPadding =
                 node.GetShorthandAttributeValue("inner-padding", "left") +
                 node.GetShorthandAttributeValue("inner-padding", "right");
 
