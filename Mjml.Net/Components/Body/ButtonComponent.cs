@@ -142,7 +142,7 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
         }
 
-        private string? CalculateButtonWidth(IHtmlRenderer renderer, INode node)
+        private static string? CalculateButtonWidth(IHtmlRenderer renderer, INode node)
         {
             string? width = node.GetAttribute("width");
 
