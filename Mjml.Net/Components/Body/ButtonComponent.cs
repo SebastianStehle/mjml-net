@@ -13,38 +13,38 @@ namespace Mjml.Net.Components.Body
         public override AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
-                ["name"] = AttributeType.String,
-                ["href"] = AttributeType.String,
-                ["height"] = AttributeType.PixelsOrPercent,
-                ["width"] = AttributeType.PixelsOrPercent,
-                ["rel"] = AttributeType.String,
-                ["target"] = AttributeType.String,
-                ["text-align"] = AttributeType.String,
-                ["text-decoration"] = AttributeType.String,
-                ["text-transform"] = AttributeType.String,
-                ["vertical-align"] = AttributeType.String,
-                ["align"] = AttributeType.String,
-                ["color"] = AttributeType.Color,
-                ["container-background-color"] = AttributeType.Color,
-                ["background-color"] = AttributeType.Color,
-                ["padding"] = AttributeType.PixelsOrPercent,
-                ["padding-bottom"] = AttributeType.PixelsOrPercent,
-                ["padding-left"] = AttributeType.PixelsOrPercent,
-                ["padding-right"] = AttributeType.PixelsOrPercent,
-                ["padding-top"] = AttributeType.PixelsOrPercent,
-                ["border-top"] = AttributeType.Pixels,
-                ["border-right"] = AttributeType.Pixels,
-                ["border-bottom"] = AttributeType.Pixels,
-                ["border-left"] = AttributeType.Pixels,
-                ["border"] = AttributeType.String,
-                ["border-radius"] = AttributeType.Pixels,
-                ["inner-padding"] = AttributeType.String,
-                ["font-family"] = AttributeType.String,
-                ["font-size"] = AttributeType.Pixels,
-                ["font-style"] = AttributeType.String,
-                ["font-weight"] = AttributeType.String,
-                ["letter-spacing"] = AttributeType.Pixels,
-                ["line-height"] = AttributeType.PixelsOrPercent,
+                ["name"] = AttributeTypes.String,
+                ["href"] = AttributeTypes.String,
+                ["height"] = AttributeTypes.PixelsOrPercent,
+                ["width"] = AttributeTypes.PixelsOrPercent,
+                ["rel"] = AttributeTypes.String,
+                ["target"] = AttributeTypes.String,
+                ["text-align"] = AttributeTypes.String,
+                ["text-decoration"] = AttributeTypes.String,
+                ["text-transform"] = AttributeTypes.String,
+                ["vertical-align"] = AttributeTypes.String,
+                ["align"] = AttributeTypes.String,
+                ["color"] = AttributeTypes.Color,
+                ["container-background-color"] = AttributeTypes.Color,
+                ["background-color"] = AttributeTypes.Color,
+                ["padding"] = AttributeTypes.PixelsOrPercent,
+                ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
+                ["padding-left"] = AttributeTypes.PixelsOrPercent,
+                ["padding-right"] = AttributeTypes.PixelsOrPercent,
+                ["padding-top"] = AttributeTypes.PixelsOrPercent,
+                ["border-top"] = AttributeTypes.Pixels,
+                ["border-right"] = AttributeTypes.Pixels,
+                ["border-bottom"] = AttributeTypes.Pixels,
+                ["border-left"] = AttributeTypes.Pixels,
+                ["border"] = AttributeTypes.String,
+                ["border-radius"] = AttributeTypes.Pixels,
+                ["inner-padding"] = AttributeTypes.String,
+                ["font-family"] = AttributeTypes.String,
+                ["font-size"] = AttributeTypes.Pixels,
+                ["font-style"] = AttributeTypes.String,
+                ["font-weight"] = AttributeTypes.String,
+                ["letter-spacing"] = AttributeTypes.Pixels,
+                ["line-height"] = AttributeTypes.PixelsOrPercent,
             };
 
         public override Attributes? DefaultAttributes { get; } =
@@ -152,7 +152,7 @@ namespace Mjml.Net.Components.Body
         }
 
         // TODO
-        private string CalculateButtonWidth(INode node)
+        private string? CalculateButtonWidth(INode node)
         {
             return node.GetAttribute("width");
         }
