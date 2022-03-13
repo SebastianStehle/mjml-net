@@ -50,6 +50,7 @@ namespace Mjml.Net.Components.Body
         public override Attributes? DefaultAttributes { get; } =
             new Attributes
             {
+                ["target"] = "_blank",
                 ["text-align"] = "center",
                 ["text-decoration"] = "none",
                 ["text-transform"] = "none",
@@ -112,7 +113,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("href", node.GetAttribute("href"))
                 .Attr("rel", node.GetAttribute("rel"))
                 .Attr("name", node.GetAttribute("name"))
-                .Attr("target", node.GetAttribute("target"))
+                .Attr("target", !string.IsNullOrEmpty(href) ? node.GetAttribute("target") : null)
                 .Style("display", "inline-block")
                 .Style("width", CalculateButtonWidth(node))
                 .Style("background", backgroundColor)

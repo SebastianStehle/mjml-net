@@ -108,6 +108,24 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;&quot;&gt; Button&lt;/p&gt;.
+        /// </summary>
+        internal static string Button {
+            get {
+                return ResourceManager.GetString("Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;&quot; target=&quot;_blank&quot;&gt; Button Link &lt;/a&gt;.
+        /// </summary>
+        internal static string ButtonLink {
+            get {
+                return ResourceManager.GetString("ButtonLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!--[if !mso]&gt;&lt;!--&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Raleway&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
         ///&lt;style type=&quot;text/css&quot;&gt;
