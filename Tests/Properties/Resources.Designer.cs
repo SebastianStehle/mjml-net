@@ -108,6 +108,25 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p style=&quot;border-top:solid 4px #000000;font-size:1px;margin:0px auto;width:100%;&quot;&gt;
+        ///&lt;/p&gt;
+        ///&lt;!--[if mso | IE]&gt;
+        ///  &lt;table align=&quot;center&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;border-top:solid 4px #000000;font-size:1px;margin:0px auto;width:550px;&quot; role=&quot;presentation&quot; width=&quot;550px&quot; &gt;
+        ///    &lt;tr&gt;
+        ///      &lt;td style=&quot;height:0;line-height:0;&quot;&gt; 
+        ///        &amp;nbsp;
+        ///    &lt;/td&gt;
+        ///  &lt;/tr&gt;
+        ///&lt;/table&gt;
+        ///&lt;![endif]--&gt;.
+        /// </summary>
+        internal static string Divider {
+            get {
+                return ResourceManager.GetString("Divider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!--[if !mso]&gt;&lt;!--&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Raleway&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
         ///&lt;style type=&quot;text/css&quot;&gt;
