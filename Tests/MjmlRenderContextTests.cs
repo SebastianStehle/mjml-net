@@ -70,7 +70,7 @@ namespace Tests
 
             AssertText(new[]
             {
-                "<div style='style1: 1; style2: 2'>",
+                "<div style='style1:1;style2:2;'>",
                 "</div>"
             });
         }

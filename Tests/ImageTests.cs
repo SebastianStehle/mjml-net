@@ -9,39 +9,21 @@ namespace Tests
         [Fact]
         public void Should_render_image()
         {
-            var source = @"
- <mjml>
-  <mj-body>
-    <mj-image width=""300px"" src=""https://www.online-image-editor.com//styles/2014/images/example_image.png"" />
-  </mj-body>
-</mjml>
-";
+            var source = @"<mj-image width=""300px"" src=""https://www.online-image-editor.com//styles/2014/images/example_image.png"" />";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.Image, result);
+            AssertHelpers.HtmlAssert(Resources.Image, result);
         }
 
         [Fact]
         public void Should_render_image_with_link()
         {
-            var source = @"
- <mjml>
-  <mj-body>
-    <mj-image width=""300px"" src=""https://www.online-image-editor.com//styles/2014/images/example_image.png"" href=""link/to/website"" />
-  </mj-body>
-</mjml>
-";
+            var source = @"<mj-image width=""300px"" src=""https://www.online-image-editor.com//styles/2014/images/example_image.png"" href=""link/to/website"" />";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.ImageWithLink, result);
+            AssertHelpers.HtmlAssert(Resources.ImageWithLink, result);
         }
     }
 }

@@ -8,23 +8,44 @@ namespace Mjml.Net.Components
 
         public AllowedParents? AllowedParents { get; } = null;
 
+        public AllowedAttributes? AllowedAttributes { get; } =
+            new AllowedAttributes
+            {
+                ["plain"] = AttributeTypes.Boolean
+            };
+
         public void Render(IHtmlRenderer renderer, INode node)
         {
+            var isPlain = node.GetAttribute("plain") == "plain";
+
             renderer.RenderChildren();
 
-            renderer.Content("<!doctype html>");
-            renderer.Content("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
-            renderer.Content(string.Empty);
+            if (!isPlain)
+            {
+                renderer.Content("<!doctype html>");
+                renderer.Content("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
+                renderer.Content(string.Empty);
 
-            RenderHead(renderer);
+                RenderHead(renderer);
 
-            renderer.Content(string.Empty);
+                renderer.Content(string.Empty);
 
-            RenderBody(renderer);
+                RenderBody(renderer);
 
-            renderer.Content(string.Empty);
+                renderer.Content(string.Empty);
 
-            renderer.Content("</html>");
+                renderer.Content("</html>");
+            }
+            else
+            {
+                renderer.RenderHelpers(HelperTarget.HeadStart);
+                renderer.Plain(renderer.GetContext("head") as string);
+                renderer.RenderHelpers(HelperTarget.HeadEnd);
+
+                renderer.RenderHelpers(HelperTarget.BodyStart);
+                renderer.Plain(renderer.GetContext("body") as string);
+                renderer.RenderHelpers(HelperTarget.BodyEnd);
+            }
         }
 
         private static void RenderHead(IHtmlRenderer renderer)

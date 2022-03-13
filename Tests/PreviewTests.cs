@@ -1,4 +1,5 @@
 ﻿using Mjml.Net;
+using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace Tests
         public void Should_render_preview()
         {
             var source = @"
- <mjml>
+ <mjml plain=""plain"">
   <mj-head>
     <mj-preview>Hello MJML</mj-preview>
   </mj-head>
@@ -19,12 +20,9 @@ namespace Tests
 </mjml>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new PreviewHelper());
 
-            TestHelpers.TrimmedContains(Resources.Preview, result);
+            AssertHelpers.HtmlAssert(Resources.Preview, result);
         }
     }
 }

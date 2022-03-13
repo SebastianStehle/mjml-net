@@ -1,4 +1,4 @@
-﻿using Mjml.Net;
+﻿using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace Tests
         public void Should_render_style()
         {
             var source = @"
-<mjml>
+<mjml plain=""plain"">
   <mj-head>
     <mj-style>
       .red-text div {
@@ -23,19 +23,16 @@ namespace Tests
 </mjml>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new StyleHelper());
 
-            TestHelpers.TrimmedContains(Resources.Style, result);
+            AssertHelpers.HtmlAssert(Resources.Style, result);
         }
 
         [Fact]
         public void Should_render_inline_just_normal_as_fallback()
         {
             var source = @"
-<mjml>
+<mjml plain=""plain"">
   <mj-head>
     <mj-style inline=""inline"">
       .red-text div {
@@ -48,12 +45,9 @@ namespace Tests
 </mjml>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new StyleHelper());
 
-            TestHelpers.TrimmedContains(Resources.Style, result);
+            AssertHelpers.HtmlAssert(Resources.Style, result);
         }
     }
 }
