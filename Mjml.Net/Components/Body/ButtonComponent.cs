@@ -116,7 +116,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("name", node.GetAttribute("name"))
                 .Attr("target", !string.IsNullOrEmpty(href) ? node.GetAttribute("target") : null)
                 .Style("display", "inline-block")
-                .Style("width", CalculateButtonWidth(renderer, node))
+                .Style("width", CalculateButtonWidth(node))
                 .Style("background", backgroundColor)
                 .Style("color", node.GetAttribute("color"))
                 .Style("font-family", node.GetAttribute("font-family"))
@@ -142,7 +142,7 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
         }
 
-        private static string? CalculateButtonWidth(IHtmlRenderer renderer, INode node)
+        private static string? CalculateButtonWidth(INode node)
         {
             string? width = node.GetAttribute("width");
 
