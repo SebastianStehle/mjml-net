@@ -1,5 +1,4 @@
-﻿using Mjml.Net;
-using Tests.Properties;
+﻿using Tests.Properties;
 using Xunit;
 
 namespace Tests
@@ -9,39 +8,21 @@ namespace Tests
         [Fact]
         public void Should_render_spacer()
         {
-            var source = @"
-<mjml>
-  <mj-body>
-    <mj-spacer />
-  </mj-body>
-</mjml>
-";
+            var source = @"<mj-spacer />";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.Spacer, result);
+            AssertHelpers.HtmlAssert(Resources.Spacer, result);
         }
 
         [Fact]
         public void Should_render_inline_just_normal_as_fallback()
         {
-            var source = @"
-<mjml>
-  <mj-body>
-    <mj-spacer height=""100px"" />
-  </mj-body>
-</mjml>
-";
+            var source = @"<mj-spacer height=""100px"" />";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.SpacerWithHeight, result);
+            AssertHelpers.HtmlAssert(Resources.SpacerWithHeight, result);
         }
     }
 }

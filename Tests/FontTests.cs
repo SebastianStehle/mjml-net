@@ -1,4 +1,4 @@
-﻿using Mjml.Net;
+﻿using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -10,21 +10,18 @@ namespace Tests
         public void Should_render_font()
         {
             var source = @"
- <mjml>
+<mjml-test>
   <mj-head>
     <mj-font name=""Raleway"" href=""https://fonts.googleapis.com/css?family=Raleway"" />
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new FontHelper());
 
-            TestHelpers.TrimmedContains(Resources.Font, result);
+            AssertHelpers.HtmlAssert(Resources.Font, result);
         }
     }
 }

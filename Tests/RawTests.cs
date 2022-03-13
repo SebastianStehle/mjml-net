@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mjml.Net;
 using Xunit;
 
 namespace Tests
@@ -48,21 +47,11 @@ namespace Tests
         public void Should_render_raw_nested(string html)
         {
             var source = $@"
- <mjml>
-  <mj-head>
-    <mj-raw>{html}</mj-raw>
-  </mj-head>
-  <mj-body>
-  </mj-body>
-</mjml>
-";
+<mj-raw>{html}</mj-raw>";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(html, result);
+            AssertHelpers.HtmlAssert(html, result);
         }
     }
 }

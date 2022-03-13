@@ -2,9 +2,13 @@
 {
     public interface IMjmlRenderer
     {
-        void Add(IComponent component);
+        IMjmlRenderer Add(IComponent component);
 
-        void Add(IHelper helper);
+        IMjmlRenderer Add(IHelper helper);
+
+        IMjmlRenderer ClearComponents();
+
+        IMjmlRenderer ClearHelpers();
 
         string Render(string mjml, MjmlOptions options = default);
 

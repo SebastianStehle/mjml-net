@@ -1,4 +1,4 @@
-﻿using Mjml.Net;
+﻿using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -10,21 +10,18 @@ namespace Tests
         public void Should_render_title()
         {
             var source = @"
- <mjml>
+<mjml-test>
   <mj-head>
     <mj-title>Hello MJML</mj-title>
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new TitleHelper());
 
-            TestHelpers.TrimmedContains(Resources.Title, result);
+            AssertHelpers.HtmlAssert(Resources.Title, result);
         }
     }
 }
