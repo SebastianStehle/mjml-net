@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,11 +116,12 @@ namespace Mjml.Net.Components.Body
                 .Attr("name", node.GetAttribute("name"))
                 .Attr("target", !string.IsNullOrEmpty(href) ? node.GetAttribute("target") : null)
                 .Style("display", "inline-block")
-                .Style("width", CalculateButtonWidth(node))
+                .Style("width", CalculateButtonWidth(renderer, node))
                 .Style("background", backgroundColor)
                 .Style("color", node.GetAttribute("color"))
                 .Style("font-family", node.GetAttribute("font-family"))
                 .Style("font-style", fontStyle)
+                .Style("font-size", node.GetAttribute("font-size"))
                 .Style("font-weight", node.GetAttribute("font-weight"))
                 .Style("line-height", node.GetAttribute("line-height"))
                 .Style("letter-spacing", node.GetAttribute("letter-spacing"))
@@ -140,9 +142,29 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
         }
 
-        private string? CalculateButtonWidth(INode node)
+        private string? CalculateButtonWidth(IHtmlRenderer renderer, INode node)
         {
-            return node.GetAttribute("width");
+            string? width = node.GetAttribute("width");
+
+            if (string.IsNullOrEmpty(width) || !width.Contains("px", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            if (!double.TryParse(width?.Replace("px", string.Empty, StringComparison.InvariantCultureIgnoreCase), NumberStyles.Integer, CultureInfo.InvariantCulture, out double widthParsed))
+            {
+                return null;
+            }
+
+            double borders =
+                node.GetShorthandBorderValue("left") +
+                node.GetShorthandBorderValue("right");
+
+            double innerPadding =
+                node.GetShorthandAttributeValue("inner-padding", "left") +
+                node.GetShorthandAttributeValue("inner-padding", "right");
+
+            return $"{widthParsed - innerPadding - borders}px";
         }
     }
 }
