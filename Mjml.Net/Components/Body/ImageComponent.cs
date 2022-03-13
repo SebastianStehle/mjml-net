@@ -65,23 +65,23 @@ namespace Mjml.Net.Components.Body
             var href = node.GetAttribute("href");
 
             renderer.ElementStart("table")
-                .Style("border-collapse", "collapse")
-                .Style("border-spacing", "0px")
-                .Style("max-width", fullWidth ? "100%" : null)
-                .Style("min-width", fullWidth ? "100%" : null)
-                .Style("width", fullWidth ? $"{widthMin}px" : null)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Class(fluidOnMobile ? "mj-full-width-mobile" : null);
+                .Class(fluidOnMobile ? "mj-full-width-mobile" : null)
+                .Style("border-collapse", "collapse")
+                .Style("border-spacing", "0px")
+                .Style("max-width", fullWidth ? "100%" : null)
+                .Style("min-width", fullWidth ? "100%" : null)
+                .Style("width", fullWidth ? $"{widthMin}px" : null);
 
             renderer.ElementStart("tbody");
             renderer.ElementStart("tr");
 
             renderer.ElementStart("td")
-                .Class(fluidOnMobile ? "mj-full-width-mobile" : null)
-                .Style("width", fullWidth ? null : $"{widthMin}px");
+                .Style("width", fullWidth ? null : $"{widthMin}px")
+                .Class(fluidOnMobile ? "mj-full-width-mobile" : null);
 
             if (!string.IsNullOrWhiteSpace(href))
             {
@@ -121,6 +121,14 @@ namespace Mjml.Net.Components.Body
         private static void RenderImage(IHtmlRenderer renderer, INode node, double width, bool fullWidth)
         {
             renderer.ElementStart("img", true)
+                .Attr("alt", node.GetAttribute("alt"))
+                .Attr("height", node.GetAttributeNumberOrAuto("height"))
+                .Attr("sizes", node.GetAttribute("sizes"))
+                .Attr("src", node.GetAttribute("src"))
+                .Attr("srcset", node.GetAttribute("srcset"))
+                .Attr("title", node.GetAttribute("title"))
+                .Attr("usemap", node.GetAttribute("usemap"))
+                .Attr("width", width.ToInvariantString())
                 .Style("border", node.GetAttribute("border"))
                 .Style("border-bottom", node.GetAttribute("border-bottom"))
                 .Style("border-left", node.GetAttribute("border-left"))
@@ -135,15 +143,7 @@ namespace Mjml.Net.Components.Body
                 .Style("min-width", fullWidth ? "100%" : null)
                 .Style("outline", "none")
                 .Style("text-decoration", "none")
-                .Style("width", "100%")
-                .Attr("alt", node.GetAttribute("alt"))
-                .Attr("height", node.GetAttributeNumberOrAuto("height"))
-                .Attr("sizes", node.GetAttribute("sizes"))
-                .Attr("src", node.GetAttribute("src"))
-                .Attr("srcset", node.GetAttribute("srcset"))
-                .Attr("title", node.GetAttribute("title"))
-                .Attr("usemap", node.GetAttribute("usemap"))
-                .Attr("width", width.ToInvariantString());
+                .Style("width", "100%");
         }
     }
 }
