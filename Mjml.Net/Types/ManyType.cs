@@ -1,12 +1,12 @@
-﻿namespace Mjml.Net.AttributeValues
+﻿namespace Mjml.Net.Types
 {
-    public sealed class ManyAttribute : IAttribute
+    public sealed class ManyType : IType
     {
-        private readonly IAttribute unit;
+        private readonly IType unit;
         private readonly int min;
         private readonly int max;
 
-        public ManyAttribute(IAttribute unit, int min, int max)
+        public ManyType(IType unit, int min, int max)
         {
             this.unit = unit;
             this.min = min;
@@ -17,7 +17,7 @@
         {
             var parts = value.Split(" ");
 
-            return parts.Length >= min && parts.Length <= max && parts.All(x => unit.Validate(x));
+            return parts.Length >= min && parts.Length <= max && parts.All(unit.Validate);
         }
     }
 }

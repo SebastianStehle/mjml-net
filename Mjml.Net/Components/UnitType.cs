@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Components
 {
-    public enum Unit
+    public enum UnitType
     {
         Unknown,
         Pixels,

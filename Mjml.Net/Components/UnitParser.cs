@@ -4,11 +4,11 @@ namespace Mjml.Net.Components
 {
     public static class UnitParser
     {
-        public static (double Value, Unit Unit) Parse(string? rawValue)
+        public static (double Value, UnitType Unit) Parse(string? rawValue)
         {
             if (string.IsNullOrWhiteSpace(rawValue))
             {
-                return (0, Unit.Unknown);
+                return (0, UnitType.Unknown);
             }
 
             var span = rawValue.AsSpan().Trim();
@@ -25,17 +25,17 @@ namespace Mjml.Net.Components
             }
 
             var unitSpan = span[i..].Trim();
-            var unitType = Unit.Unknown;
+            var unitType = UnitType.Unknown;
 
             var f = new string(unitSpan);
 
             if (unitSpan.SequenceEqual("px"))
             {
-                unitType = Unit.Pixels;
+                unitType = UnitType.Pixels;
             }
             else if (unitSpan.SequenceEqual("%"))
             {
-                unitType = Unit.Percent;
+                unitType = UnitType.Percent;
             }
 
             var valueSpan = span[..i];

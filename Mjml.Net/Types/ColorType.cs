@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Mjml.Net.AttributeValues
+namespace Mjml.Net.Types
 {
-    public sealed class ColorAttribute : IAttribute
+    public sealed class ColorType : IType
     {
         private static readonly HashSet<string> Colors = new HashSet<string>
         {
@@ -158,9 +158,9 @@ namespace Mjml.Net.AttributeValues
             "yellowgreen",
         };
 
-        private static readonly Regex Rgba = new Regex(@"rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d(\.\d{1,3})?\)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-        private static readonly Regex Rgb = new Regex(@"rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-        private static readonly Regex Hex = new Regex(@"#([0-9a-f]{3}){1,2}", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private static readonly Regex Rgba = new Regex(@"^rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d(\.\d{1,3})?\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private static readonly Regex Rgb = new Regex(@"^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private static readonly Regex Hex = new Regex(@"^#([0-9a-f]{3}){1,2}?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
         public bool Validate(string value)
         {
@@ -169,7 +169,35 @@ namespace Mjml.Net.AttributeValues
                 return true;
             }
 
-            return Rgba.IsMatch(value) || Rgb.IsMatch(value) || Hex.IsMatch(value);
+            var trimmed = value.Trim();
+
+            if (Colors.Contains(trimmed))
+            {
+                return true;
+            }
+
+            return Rgba.IsMatch(trimmed) || Rgb.IsMatch(trimmed) || Hex.IsMatch(trimmed);
+        }
+
+        public string Coerce(string value)
+        {
+            var trimmed = value.AsSpan().Trim();
+
+            if (trimmed.Length == 4 && trimmed[0] == '#')
+            {
+                return new string(new char[]
+                {
+                    trimmed[0],
+                    trimmed[1],
+                    trimmed[1],
+                    trimmed[2],
+                    trimmed[2],
+                    trimmed[3],
+                    trimmed[3]
+                });
+            }
+
+            return value;
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Mjml.Net.Components;
 
-namespace Mjml.Net.AttributeValues
+namespace Mjml.Net.Types
 {
-    public sealed class NumberAttribute : IAttribute
+    public sealed class NumberType : IType
     {
-        private readonly Unit[] units;
+        private readonly UnitType[] units;
 
-        public NumberAttribute(params Unit[] units)
+        public NumberType(params UnitType[] units)
         {
             this.units = units;
         }
