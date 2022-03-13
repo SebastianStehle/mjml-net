@@ -108,6 +108,42 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
+        ///      &lt;tbody&gt;&lt;tr&gt;
+        ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
+        ///          &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Button {
+            get {
+                return ResourceManager.GetString("Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
+        ///      &lt;tbody&gt;&lt;tr&gt;
+        ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
+        ///          &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration: [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ButtonLink {
+            get {
+                return ResourceManager.GetString("ButtonLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
+        ///      &lt;tbody&gt;&lt;tr&gt;
+        ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
+        ///          &lt;a href=&quot;https://mjml.io/&quot; rel=&quot;relly good&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ButtonLinkWithRel {
+            get {
+                return ResourceManager.GetString("ButtonLinkWithRel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p style=&quot;border-top:solid 4px #000000;font-size:1px;margin:0px auto;width:100%;&quot;&gt;
         ///&lt;/p&gt;
         ///&lt;!--[if mso | IE]&gt;

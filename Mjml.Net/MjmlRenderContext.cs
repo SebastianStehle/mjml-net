@@ -165,21 +165,31 @@ namespace Mjml.Net
 
         public string? GetAttribute(string name, string? fallback = null)
         {
+            string ProvideValue(string name, string value)
+            {
+                if (currentComponent?.AllowedAttributes?.TryGetValue(name, out var attribute) == true)
+                {
+                    return attribute.Coerce(value);
+                }
+
+                return value;
+            }
+
             if (currentAttributes.TryGetValue(name, out var attribute))
             {
-                return attribute;
+                return ProvideValue(name, attribute);
             }
 
             if (attributesByName.TryGetValue(name, out var byType))
             {
                 if (byType.TryGetValue(currentElement!, out attribute))
                 {
-                    return attribute;
+                    return ProvideValue(name, attribute);
                 }
 
                 if (byType.TryGetValue(Constants.All, out attribute))
                 {
-                    return attribute;
+                    return ProvideValue(name, attribute);
                 }
             }
 
@@ -196,7 +206,7 @@ namespace Mjml.Net
                     {
                         if (byName.TryGetValue(name, out attribute))
                         {
-                            return attribute;
+                            return ProvideValue(name, attribute);
                         }
                     }
                 }
@@ -206,7 +216,7 @@ namespace Mjml.Net
 
             if (defaultAttributes != null && defaultAttributes.TryGetValue(name, out attribute))
             {
-                return attribute;
+                return ProvideValue(name, attribute);
             }
 
             return fallback;

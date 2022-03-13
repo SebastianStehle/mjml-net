@@ -1,10 +1,10 @@
-﻿namespace Mjml.Net.AttributeValues
+﻿namespace Mjml.Net.Types
 {
-    public sealed class EnumAttribute : IAttribute
+    public sealed class EnumType : IType
     {
         private readonly HashSet<string> allowedValues;
 
-        public EnumAttribute(params string[] values)
+        public EnumType(params string[] values)
         {
             allowedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);
         }
