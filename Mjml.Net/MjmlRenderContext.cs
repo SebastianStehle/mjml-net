@@ -153,7 +153,9 @@ namespace Mjml.Net
                 }
             }
 
-            if (currentComponent?.DefaultAttributes?.TryGetValue(name, out attribute) == true)
+            var defaultAttributes = currentComponent?.DefaultAttributes;
+
+            if (defaultAttributes != null && defaultAttributes.TryGetValue(name, out attribute))
             {
                 return attribute;
             }

@@ -4,6 +4,7 @@
     {
         Color,
         Pixels,
+        PixelsOrPercent,
         String
     }
 }

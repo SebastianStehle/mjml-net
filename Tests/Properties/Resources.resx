@@ -217,6 +217,16 @@
   Hello MJML
 &lt;/div&gt;</value>
   </data>
+  <data name="Spacer" xml:space="preserve">
+    <value>&lt;div style="height:20px;line-height:20px;"&gt;
+  &amp;#8202;
+&lt;/div&gt;</value>
+  </data>
+  <data name="SpacerWithHeight" xml:space="preserve">
+    <value>&lt;div style="height:100px;line-height:100px;"&gt;
+  &amp;#8202;
+&lt;/div&gt;</value>
+  </data>
   <data name="Style" xml:space="preserve">
     <value>&lt;style type="text/css"&gt;
   .red-text div {
