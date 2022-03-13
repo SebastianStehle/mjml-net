@@ -10,42 +10,42 @@ namespace Tests
         public void Should_render_button()
         {
             var source = @"
-<mjml>
-    <mj-body>
-        <mj-button font-family=""Helvetica"" background-color=""#f45e43"" color=""white"">
-            Button
-        </mj-button>
-    </mj-body>
-</mjml>
+<mj-button font-family=""Helvetica"" background-color=""#f45e43"" color=""white"">
+    Button
+</mj-button>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true,
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.Button, result);
+            AssertHelpers.HtmlAssert(Resources.Button, result);
         }
 
         [Fact]
         public void Should_render_button_link()
         {
             var source = @"
-<mjml>
-    <mj-body>
-        <mj-button href=""https://mjml.io/"" font-family=""Helvetica"" background-color=""#f45e43"" color=""white"">
-            Button Link
-        </mj-button>
-    </mj-body>
-</mjml>
+<mj-button href=""https://mjml.io/"" font-family=""Helvetica"" background-color=""#f45e43"" color=""white"">
+    Button Link
+</mj-button>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true,
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.ButtonLink, result);
+            AssertHelpers.HtmlAssert(Resources.ButtonLink, result);
+        }
+
+        [Fact]
+        public void Should_render_button_link_with_rel()
+        {
+            var source = @"
+<mj-button href=""https://mjml.io/"" font-family=""Helvetica"" background-color=""#f45e43"" color=""white"" rel=""relly good"">
+    Button Link
+</mj-button>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlAssert(Resources.ButtonLinkWithRel, result);
         }
     }
 }
