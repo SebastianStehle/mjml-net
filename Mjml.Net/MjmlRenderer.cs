@@ -27,6 +27,7 @@ namespace Mjml.Net
             Add(new SpacerComponent());
             Add(new StyleComponent());
             Add(new TitleComponent());
+            Add(new TextComponent());
 
             Add(new BreakpointHelper());
             Add(new FontHelper());
