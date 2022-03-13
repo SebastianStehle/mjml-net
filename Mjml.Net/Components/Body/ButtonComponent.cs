@@ -151,10 +151,7 @@ namespace Mjml.Net.Components.Body
                 return null;
             }
 
-            if (!double.TryParse(width?.Replace("px", string.Empty, StringComparison.InvariantCultureIgnoreCase), NumberStyles.Integer, CultureInfo.InvariantCulture, out var widthParsed))
-            {
-                return null;
-            }
+            var widthParsed = node.GetAttributeNumber("width");
 
             var borders =
                 node.GetShorthandBorderValue("left") +
