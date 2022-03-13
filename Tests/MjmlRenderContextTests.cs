@@ -181,7 +181,7 @@ namespace Tests
                 "1",
                 "2",
                 "</div>",
-                "after",
+                "after"
             });
         }
 

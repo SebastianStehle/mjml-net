@@ -21,7 +21,7 @@ namespace Tests
 
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
-                Beautify = true,
+                Beautify = true
             });
 
             TestHelpers.TrimmedContains(Resources.Font, result);
