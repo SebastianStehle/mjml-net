@@ -106,9 +106,9 @@
 
             switch (unit)
             {
-                case UnitType.Percent:
+                case Unit.Percent:
                     return $"{(containerWidth - paddingSize) * (parsedWidth / 100)}px";
-                case UnitType.Pixels:
+                case Unit.Pixels:
                     return width;
                 default:
                     return $"{containerWidth - paddingSize}px";

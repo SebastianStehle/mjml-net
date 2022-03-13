@@ -18,7 +18,7 @@ namespace Tests
         {
             var result = UnitParser.Parse(value);
 
-            Assert.Equal((0, UnitType.Unknown), result);
+            Assert.Equal((0, Unit.Unknown), result);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Tests
         {
             var result = UnitParser.Parse("60.5");
 
-            Assert.Equal((60.5, UnitType.Unknown), result);
+            Assert.Equal((60.5, Unit.Unknown), result);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace Tests
         {
             var result = UnitParser.Parse("px");
 
-            Assert.Equal((0, UnitType.Pixels), result);
+            Assert.Equal((0, Unit.Pixels), result);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Tests
         {
             var result = UnitParser.Parse("invalid");
 
-            Assert.Equal((0, UnitType.Unknown), result);
+            Assert.Equal((0, Unit.Unknown), result);
         }
 
         [Theory]
@@ -54,7 +54,7 @@ namespace Tests
         {
             var result = UnitParser.Parse(value);
 
-            Assert.Equal((100, UnitType.Pixels), result);
+            Assert.Equal((100, Unit.Pixels), result);
         }
 
         [Theory]
@@ -66,7 +66,7 @@ namespace Tests
         {
             var result = UnitParser.Parse(value);
 
-            Assert.Equal((54.3, UnitType.Percent), result);
+            Assert.Equal((54.3, Unit.Percent), result);
         }
     }
 }

@@ -164,11 +164,7 @@ namespace Mjml.Net.Types
 
         public bool Validate(string value)
         {
-            if (Colors.Contains(value))
-            {
-                return true;
-            }
-
+            // Unfortunately we cannot avoid the allocation here, but it is only necessary in strict validation mode.
             var trimmed = value.Trim();
 
             if (Colors.Contains(trimmed))

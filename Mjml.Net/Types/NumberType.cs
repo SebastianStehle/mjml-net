@@ -4,9 +4,9 @@ namespace Mjml.Net.Types
 {
     public sealed class NumberType : IType
     {
-        private readonly UnitType[] units;
+        private readonly Unit[] units;
 
-        public NumberType(params UnitType[] units)
+        public NumberType(params Unit[] units)
         {
             this.units = units;
         }

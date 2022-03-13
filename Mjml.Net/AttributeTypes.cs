@@ -11,11 +11,11 @@ namespace Mjml.Net
 
         public static readonly IType Color = new ColorType();
 
-        public static readonly IType Pixels = new NumberType(UnitType.Pixels);
+        public static readonly IType Pixels = new NumberType(Unit.Pixels);
 
         public static readonly IType PixelsOrAuto = new OneOfType(new EnumType("auto"), Pixels);
 
-        public static readonly IType PixelsOrPercent = new NumberType(UnitType.Pixels, UnitType.Percent);
+        public static readonly IType PixelsOrPercent = new NumberType(Unit.Pixels, Unit.Percent);
 
         public static readonly IType FourPixelsOrPercent = new ManyType(PixelsOrPercent, 1, 4);
 
