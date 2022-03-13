@@ -204,6 +204,19 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=&quot;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-style:normal;letter-spacing:none;line-height:1;text-align:left;color:#000000;&quot;&gt;
+        ///    &lt;h1&gt;
+        ///    Hey Title!
+        ///    &lt;/h1&gt;
+        ///    &lt;/div&gt;.
+        /// </summary>
+        internal static string Text {
+            get {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;title&gt;
         ///  Hello MJML
         ///&lt;/title&gt;.

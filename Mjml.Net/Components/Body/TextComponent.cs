@@ -1,4 +1,5 @@
-﻿
+﻿using Mjml.Net.Helpers;
+
 namespace Mjml.Net.Components.Body
 {
     public sealed class TextComponent : BodyComponentBase
@@ -8,36 +9,36 @@ namespace Mjml.Net.Components.Body
         public override AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
+                ["align"] = AttributeTypes.Align,
                 ["color"] = AttributeTypes.Color,
+                ["container-background-color"] = AttributeTypes.Color,
+                ["css-class"] = AttributeTypes.String,
                 ["font-family"] = AttributeTypes.String,
                 ["font-size"] = AttributeTypes.Pixels,
                 ["font-style"] = AttributeTypes.String,
                 ["font-weight"] = AttributeTypes.String,
-                ["line-height"] = AttributeTypes.Pixels,
-                ["letter-spacing"] = AttributeTypes.Pixels,
                 ["height"] = AttributeTypes.Pixels,
-                ["text-decoration"] = AttributeTypes.String,
-                ["text-transform"] = AttributeTypes.String,
-                ["align"] = AttributeTypes.Align,
-                ["container-background-color"] = AttributeTypes.Color,
+                ["letter-spacing"] = AttributeTypes.Pixels,
+                ["line-height"] = AttributeTypes.Pixels,
                 ["padding"] = AttributeTypes.FourPixelsOrPercent,
                 ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
                 ["padding-left"] = AttributeTypes.PixelsOrPercent,
                 ["padding-right"] = AttributeTypes.PixelsOrPercent,
                 ["padding-top"] = AttributeTypes.PixelsOrPercent,
-                ["css-class"] = AttributeTypes.String,
+                ["text-decoration"] = AttributeTypes.String,
+                ["text-transform"] = AttributeTypes.String,
             };
 
         public override Attributes? DefaultAttributes { get; } =
             new Attributes
             {
+                ["align"] = "left",
                 ["color"] = "#000000",
                 ["font-family"] = "Ubuntu, Helvetica, Arial, sans-serif",
                 ["font-size"] = "13px",
                 ["font-style"] = "normal",
-                ["line-height"] = "1",
                 ["letter-spacing"] = "none",
-                ["align"] = "left",
+                ["line-height"] = "1",
                 ["padding"] = "10px 25px",
             };
 
@@ -51,7 +52,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                renderer.Content("<!--[if mso | IE]>");
+                renderer.Content(ConditionalTags.StartConditional);
                 renderer.ElementStart("table")
                     .Attr("role", "presentation")
                     .Attr("border", "0")
@@ -63,19 +64,19 @@ namespace Mjml.Net.Components.Body
                     .Attr("height", height)
                     .Style("vertical-align", "top")
                     .Style("height", height);
-                renderer.Content("<![endif]-->");
+                renderer.Content(ConditionalTags.EndConditional);
 
                 RenderTextContent(renderer, node);
 
-                renderer.Content("<!--[if mso | IE]>");
+                renderer.Content(ConditionalTags.StartConditional);
                 renderer.ElementEnd("td");
                 renderer.ElementEnd("tr");
                 renderer.ElementEnd("table");
-                renderer.Content("<![endif]-->");
+                renderer.Content(ConditionalTags.EndConditional);
             }
         }
 
-        private void RenderTextContent(IHtmlRenderer renderer, INode node)
+        private static void RenderTextContent(IHtmlRenderer renderer, INode node)
         {
             renderer.ElementStart("div")
                 .Style("font-family", node.GetAttribute("font-family"))
@@ -90,17 +91,12 @@ namespace Mjml.Net.Components.Body
                 .Style("color", node.GetAttribute("color"))
                 .Style("height", node.GetAttribute("height"));
 
-            RenderChildren(renderer, node);
-
-            renderer.ElementEnd("div");
-        }
-
-        private void RenderChildren(IHtmlRenderer renderer, INode node)
-        {
             renderer.RenderChildren(new ChildOptions
             {
                 RawXML = true
             });
+
+            renderer.ElementEnd("div");
         }
     }
 }
