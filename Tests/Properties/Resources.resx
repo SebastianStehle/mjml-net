@@ -117,8 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DefaultComments" xml:space="preserve">
-    <value>&lt;!--[if mso]&gt;
+  <data name="BodyOnly" xml:space="preserve">
+    <value>&lt;!doctype html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"&gt;
+
+&lt;head&gt;
+  &lt;title&gt;
+  &lt;/title&gt;
+  &lt;!--[if !mso]&gt;&lt;!--&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;!--&lt;![endif]--&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;style type="text/css"&gt;
+    #outlook a {
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    p {
+      display: block;
+      margin: 13px 0;
+    }
+  &lt;/style&gt;
+  &lt;!--[if mso]&gt;
         &lt;noscript&gt;
         &lt;xml&gt;
         &lt;o:OfficeDocumentSettings&gt;
@@ -132,46 +176,45 @@
         &lt;style type="text/css"&gt;
           .mj-outlook-group-fix { width:100% !important; }
         &lt;/style&gt;
-        &lt;![endif]--&gt;</value>
+        &lt;![endif]--&gt;
+  &lt;style type="text/css"&gt;
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body style="word-spacing:normal;"&gt;
+  &lt;div style=""&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</value>
   </data>
-  <data name="DefaultMeta" xml:space="preserve">
+  <data name="Breakpoint" xml:space="preserve">
+    <value>&lt;style type="text/css"&gt;
+  @media only screen and (min-width:300px) {
+    .mj-column-per-100 {
+      width: 100% !important;
+      max-width: 100%;
+    }
+  }
+&lt;/style&gt;
+&lt;style media="screen and (min-width:300px)"&gt;
+  .moz-text-html .mj-column-per-100 {
+    width: 100% !important;
+    max-width: 100%;
+  }
+&lt;/style&gt;</value>
+  </data>
+  <data name="Font" xml:space="preserve">
     <value>&lt;!--[if !mso]&gt;&lt;!--&gt;
-&lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
-&lt;!--&lt;![endif]--&gt;
-&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
-&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</value>
+&lt;link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css"&gt;
+&lt;style type="text/css"&gt;
+  @import url(https://fonts.googleapis.com/css?family=Raleway);
+&lt;/style&gt;
+&lt;!--&lt;![endif]--&gt;</value>
   </data>
-  <data name="DefaultStyles" xml:space="preserve">
-    <value>#outlook a {
-  padding: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-}
-
-table,
-td {
-  border-collapse: collapse;
-  mso-table-lspace: 0pt;
-  mso-table-rspace: 0pt;
-}
-
-img {
-  border: 0;
-  height: auto;
-  line-height: 100%;
-  outline: none;
-  text-decoration: none;
-  -ms-interpolation-mode: bicubic;
-}
-
-p {
-  display: block;
-  margin: 13px 0;
-}</value>
+  <data name="Title" xml:space="preserve">
+    <value>&lt;title&gt;
+  Hello MJML
+&lt;/title&gt;</value>
   </data>
 </root>

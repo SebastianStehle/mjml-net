@@ -1,4 +1,8 @@
-﻿using System.Xml;
+﻿using Mjml.Net.Components;
+using Mjml.Net.Components.Body;
+using Mjml.Net.Components.Head;
+using Mjml.Net.Helpers;
+using System.Xml;
 
 namespace Mjml.Net
 {
@@ -8,6 +12,20 @@ namespace Mjml.Net
         private readonly List<IHelper> helpers = new List<IHelper>();
 
         public IEnumerable<IHelper> Helpers => helpers;
+
+        public MjmlRenderer()
+        {
+            Add(new BodyComponent());
+            Add(new BreakpointComponent());
+            Add(new FontComponent());
+            Add(new HeadComponent());
+            Add(new RootComponent());
+            Add(new TitleComponent());
+
+            Add(new BreakpointHelper());
+            Add(new FontHelper());
+            Add(new TitleHelper());
+        }
 
         public void Add(IComponent component)
         {
@@ -19,9 +37,9 @@ namespace Mjml.Net
             helpers.Add(helper);
         }
 
-        internal IComponent GetComponent(string previousElement)
+        internal IComponent? GetComponent(string previousElement)
         {
-            return components[previousElement];
+            return components.GetValueOrDefault(previousElement);
         }
 
         public string Render(string mjml, MjmlOptions options = default)
@@ -51,9 +69,10 @@ namespace Mjml.Net
             try
             {
                 context.Setup(this, xml, options);
+                context.BufferStart();
                 context.Read();
 
-                return context.ToString()!;
+                return context.BufferFlush()!;
             }
             finally
             {

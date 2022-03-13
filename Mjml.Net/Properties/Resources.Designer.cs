@@ -85,10 +85,10 @@ namespace Mjml.Net.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!--[if !mso]&gt;&lt;!--&gt;
-        ///  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
-        ///  &lt;!--&lt;![endif]--&gt;
-        ///  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-        ///  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;.
+        ///&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+        ///&lt;!--&lt;![endif]--&gt;
+        ///&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        ///&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;.
         /// </summary>
         internal static string DefaultMeta {
             get {

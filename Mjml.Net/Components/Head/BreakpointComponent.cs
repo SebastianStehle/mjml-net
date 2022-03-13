@@ -2,9 +2,9 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public sealed class BreakpointComponent : IComponent
+    public sealed class BreakpointComponent : HeadComponentBase
     {
-        public string ComponentName => "mj-breakpoint";
+        public override string ComponentName => "mj-breakpoint";
 
         public bool SelfClosed => true;
 
@@ -14,7 +14,7 @@ namespace Mjml.Net.Components.Head
                 ["width"] = AttributeType.String
             };
 
-        public void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, INode node)
         {
             var width = node.GetAttribute("width");
 

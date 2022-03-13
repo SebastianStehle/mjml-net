@@ -4,6 +4,12 @@
     {
         public string ComponentName => "mj-head";
 
+        public AllowedParents? AllowedParents { get; } =
+            new AllowedParents
+            {
+                "mjml"
+            };
+
         public void Render(IHtmlRenderer renderer, INode node)
         {
             renderer.BufferStart();

@@ -72,23 +72,25 @@ namespace Mjml.Net
             currentText = null;
             currentAttributes.Clear();
 
-            var isStopped = false;
-
-            while (!isStopped && reader.Read())
+            for (var i = 0; i < reader.AttributeCount; i++)
             {
-                switch (reader.NodeType)
+                reader.MoveToAttribute(i);
+
+                currentAttributes[reader.Name] = reader.Value;
+            }
+
+            while (reader.Read())
+            {
+                var type = reader.NodeType;
+
+                if (type == XmlNodeType.Text)
                 {
-                    case XmlNodeType.Attribute:
-                        currentAttributes[reader.Value] = reader.Name;
-                        break;
-                    case XmlNodeType.Text:
-                        currentText = reader.Value;
-                        isStopped = true;
-                        break;
-                    case XmlNodeType.Element:
-                    case XmlNodeType.EndElement:
-                        isStopped = true;
-                        break;
+                    currentText = reader.Value;
+                    break;
+                }
+                else if (type == XmlNodeType.Element || type == XmlNodeType.EndElement)
+                {
+                    break;
                 }
             }
 
@@ -156,7 +158,7 @@ namespace Mjml.Net
 
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
         {
-            var type = value.GetType().Name;
+            var type = value.GetType();
 
             if (skipIfAdded && globalData.ContainsKey((type, name)))
             {

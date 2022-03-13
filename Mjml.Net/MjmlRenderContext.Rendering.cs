@@ -11,6 +11,7 @@ namespace Mjml.Net
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
         private readonly RenderStack<ChildOptions> childOptions = new RenderStack<ChildOptions>();
         private string? currentRenderElement;
+        private bool currentRenderElementSelfClosed;
         private int intend;
 
         public XmlReader Reader => reader;
@@ -24,6 +25,7 @@ namespace Mjml.Net
             currentRenderAttributes.Clear();
             currentRenderClasses.Clear();
             currentRenderElement = null;
+            currentRenderElementSelfClosed = false;
             currentRenderStyles.Clear();
             intend = 0;
         }
@@ -67,7 +69,7 @@ namespace Mjml.Net
             }
         }
 
-        public IElementHtmlRenderer ElementStart(string elementName)
+        public IElementHtmlRenderer ElementStart(string elementName, bool selfClosed = false)
         {
             Flush();
 
@@ -77,6 +79,7 @@ namespace Mjml.Net
             }
 
             currentRenderElement = elementName;
+            currentRenderElementSelfClosed = selfClosed;
 
             return this;
         }
@@ -146,7 +149,7 @@ namespace Mjml.Net
 
             Flush();
 
-            if (string.IsNullOrWhiteSpace(value))
+            if (value == null)
             {
                 return;
             }
@@ -275,7 +278,6 @@ namespace Mjml.Net
             if (options.RawXML)
             {
                 var level = -1;
-
                 var isStopped = false;
 
                 while (reader.Read() && !isStopped)
@@ -284,13 +286,18 @@ namespace Mjml.Net
                     {
                         case XmlNodeType.Element:
                             ElementStart(reader.Name);
+
+                            for (var i = 0; i < reader.AttributeCount; i++)
+                            {
+                                reader.MoveToAttribute(i);
+
+                                currentAttributes[reader.Value] = reader.Name;
+                            }
+
                             level++;
                             break;
                         case XmlNodeType.Text:
                             Content(reader.Value);
-                            break;
-                        case XmlNodeType.Attribute:
-                            Attr(reader.Name, reader.Value);
                             break;
                         case XmlNodeType.EndElement:
                             level--;
@@ -393,12 +400,16 @@ namespace Mjml.Net
 
             WriteLineEnd();
 
+            if (!currentRenderElementSelfClosed)
+            {
+                intend++;
+            }
+
             currentRenderElement = null;
+            currentRenderElementSelfClosed = false;
             currentRenderClasses.Clear();
             currentRenderStyles.Clear();
             currentRenderAttributes.Clear();
-
-            intend++;
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public sealed class FontComponent : IComponent
+    public sealed class FontComponent : HeadComponentBase
     {
-        public string ComponentName => "mj-font";
+        public override string ComponentName => "mj-font";
 
         public bool SelfClosed => true;
 
@@ -15,7 +15,7 @@ namespace Mjml.Net.Components.Head
                 ["href"] = AttributeType.String
             };
 
-        public void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, INode node)
         {
             var href = node.GetAttribute("href");
 

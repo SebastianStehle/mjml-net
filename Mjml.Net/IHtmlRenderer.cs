@@ -2,7 +2,7 @@
 {
     public interface IHtmlRenderer
     {
-        IElementHtmlRenderer ElementStart(string elementName);
+        IElementHtmlRenderer ElementStart(string elementName, bool selfClosed = false);
 
         void ElementEnd(string elementName);
 
