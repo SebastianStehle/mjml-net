@@ -11,7 +11,7 @@ namespace Mjml.Net.Components.Head
         public AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
-                ["inline"] = AttributeType.String
+                ["inline"] = AttributeTypes.String
             };
 
         public override void Render(IHtmlRenderer renderer, INode node)

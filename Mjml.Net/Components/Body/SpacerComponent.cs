@@ -7,18 +7,18 @@
         public override AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
-                ["border"] = AttributeType.String,
-                ["border-bottom"] = AttributeType.String,
-                ["border-left"] = AttributeType.String,
-                ["border-right"] = AttributeType.String,
-                ["border-top"] = AttributeType.String,
-                ["container-background-color"] = AttributeType.Color,
-                ["height"] = AttributeType.PixelsOrPercent,
-                ["padding"] = AttributeType.PixelsOrPercent,
-                ["padding-bottom"] = AttributeType.PixelsOrPercent,
-                ["padding-left"] = AttributeType.PixelsOrPercent,
-                ["padding-right"] = AttributeType.PixelsOrPercent,
-                ["padding-top"] = AttributeType.PixelsOrPercent,
+                ["border"] = AttributeTypes.String,
+                ["border-bottom"] = AttributeTypes.String,
+                ["border-left"] = AttributeTypes.String,
+                ["border-right"] = AttributeTypes.String,
+                ["border-top"] = AttributeTypes.String,
+                ["container-background-color"] = AttributeTypes.Color,
+                ["height"] = AttributeTypes.PixelsOrPercent,
+                ["padding"] = AttributeTypes.PixelsOrPercent,
+                ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
+                ["padding-left"] = AttributeTypes.PixelsOrPercent,
+                ["padding-right"] = AttributeTypes.PixelsOrPercent,
+                ["padding-top"] = AttributeTypes.PixelsOrPercent,
             };
 
         public override Attributes? DefaultAttributes { get; } =
