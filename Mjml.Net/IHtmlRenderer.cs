@@ -89,7 +89,7 @@
         /// Sets a attribute by class.
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
-        /// <param name="className">The class name of the attribute.
+        /// <param name="className">The class name of the attribute.</param>
         /// <param name="value">The value of the attribute.</param>
         void SetClassAttribute(string name, string className, string value);
 

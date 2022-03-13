@@ -90,9 +90,9 @@
             renderer.EndElement("table");
         }
 
-        private static string CalculateWidth(string? width) 
+        private static string CalculateWidth(string? width)
         {
-        return null;
+            return String.Empty;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : INode
     {
-        private static readonly char[] TrimChars = new[] { ' ', '\n', '\r' };
+        private static readonly char[] TrimChars = { ' ', '\n', '\r' };
         private readonly GlobalData globalData = new GlobalData();
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);

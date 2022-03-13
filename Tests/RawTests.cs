@@ -1,6 +1,5 @@
-﻿using Mjml.Net;
-using System.Collections.Generic;
-using Tests.Properties;
+﻿using System.Collections.Generic;
+using Mjml.Net;
 using Xunit;
 
 namespace Tests

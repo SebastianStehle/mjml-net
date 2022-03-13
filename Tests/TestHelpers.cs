@@ -13,13 +13,13 @@ namespace Tests
 
             Assert.Equal(lhsTrimmed, rhsTrimmed);
         }
-        
+
         public static void TrimmedContains(string lhs, string rhs)
         {
             var lhsTrimmed = Trim(lhs);
             var rhsTrimmed = Trim(rhs);
 
-            Assert.Contains(lhsTrimmed, rhsTrimmed);
+            Assert.Contains(lhsTrimmed, rhsTrimmed, StringComparison.Ordinal);
         }
 
         private static string Trim(string value)

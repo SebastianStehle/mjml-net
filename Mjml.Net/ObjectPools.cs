@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.ObjectPool;
-using System.Text;
+﻿using System.Text;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Mjml.Net
 {
@@ -11,7 +11,7 @@ namespace Mjml.Net
         public static readonly ObjectPool<MjmlRenderContext> Contexts =
             new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
 
-        class MjmlRenderContextPolicy : PooledObjectPolicy<MjmlRenderContext>
+        private sealed class MjmlRenderContextPolicy : PooledObjectPolicy<MjmlRenderContext>
         {
             public override MjmlRenderContext Create()
             {

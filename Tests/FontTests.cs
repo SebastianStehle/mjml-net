@@ -1,6 +1,4 @@
 ﻿using Mjml.Net;
-using System;
-using System.Linq;
 using Tests.Properties;
 using Xunit;
 

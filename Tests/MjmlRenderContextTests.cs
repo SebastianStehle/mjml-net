@@ -1,6 +1,6 @@
-using Mjml.Net;
-using System;
+﻿using System;
 using System.Text;
+using Mjml.Net;
 using Xunit;
 
 namespace Tests

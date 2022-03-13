@@ -24,7 +24,7 @@ namespace ConsoleApp22
 
         internal IComponent GetComponent(string previousElement)
         {
-            return components[previousElement]; 
+            return components[previousElement];
         }
     }
 }

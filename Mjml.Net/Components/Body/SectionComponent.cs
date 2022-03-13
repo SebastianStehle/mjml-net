@@ -1,15 +1,28 @@
-﻿using Mjml.Net.Helpers;
-
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
-    public sealed class ColumnComponent : BodyComponentBase
+    public sealed class SectionComponent : BodyComponentBase
     {
-        public override string ComponentName => "mj-column";
+        public override string ComponentName => "mj-section";
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            // Set the breakpoint if not set before.
-            renderer.SetGlobalData("default", Breakpoint.Default, true);
+            RenderChildren(renderer, node);
+        }
+
+        private static void RenderChildren(IHtmlRenderer renderer, INode node)
+        {
+            renderer.RenderChildren(new ChildOptions
+            {
+                Renderer = child =>
+                {
+                    renderer.ElementStart("div")
+                        .Attr("width", node.GetAttribute("width"));
+
+                    child.Render();
+
+                    renderer.ElementEnd("link");
+                }
+            });
         }
     }
 }
