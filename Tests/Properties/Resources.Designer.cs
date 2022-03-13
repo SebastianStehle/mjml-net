@@ -133,6 +133,28 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=&quot;height:20px;line-height:20px;&quot;&gt;
+        ///  &amp;#8202;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string Spacer {
+            get {
+                return ResourceManager.GetString("Spacer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=&quot;height:100px;line-height:100px;&quot;&gt;
+        ///  &amp;#8202;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string SpacerWithHeight {
+            get {
+                return ResourceManager.GetString("SpacerWithHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style type=&quot;text/css&quot;&gt;
         ///  .red-text div {
         ///    color: red !important;

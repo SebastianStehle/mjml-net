@@ -324,20 +324,12 @@ namespace Mjml.Net
             {
                 buffers.Current.Append(" style=\"");
 
-                var index = 0;
                 foreach (var (key, value) in currentRenderStyles)
                 {
                     buffers.Current.Append(key);
                     buffers.Current.Append(':');
-                    buffers.Current.Append(' ');
                     buffers.Current.Append(value);
-
-                    if (index < currentRenderStyles.Count - 1)
-                    {
-                        buffers.Current.Append("; ");
-                    }
-
-                    index++;
+                    buffers.Current.Append(';');
                 }
 
                 buffers.Current.Append('"');

@@ -4,21 +4,15 @@ using Xunit;
 
 namespace Tests
 {
-    public class StyleTests
+    public class SpacerTests
     {
         [Fact]
-        public void Should_render_style()
+        public void Should_render_spacer()
         {
             var source = @"
 <mjml>
-  <mj-head>
-    <mj-style>
-      .red-text div {
-        color: red !important;
-      }
-    </mj-style>
-  </mj-head>
   <mj-body>
+    <mj-spacer />
   </mj-body>
 </mjml>
 ";
@@ -28,7 +22,7 @@ namespace Tests
                 Beautify = true,
             });
 
-            TestHelpers.TrimmedContains(Resources.Style, result);
+            TestHelpers.TrimmedContains(Resources.Spacer, result);
         }
 
         [Fact]
@@ -36,14 +30,8 @@ namespace Tests
         {
             var source = @"
 <mjml>
-  <mj-head>
-    <mj-style inline=""inline"">
-      .red-text div {
-        color: red !important;
-      }
-    </mj-style>
-  </mj-head>
   <mj-body>
+    <mj-spacer height=""100px"" />
   </mj-body>
 </mjml>
 ";
@@ -53,7 +41,7 @@ namespace Tests
                 Beautify = true,
             });
 
-            TestHelpers.TrimmedContains(Resources.Style, result);
+            TestHelpers.TrimmedContains(Resources.SpacerWithHeight, result);
         }
     }
 }
