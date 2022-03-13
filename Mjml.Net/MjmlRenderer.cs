@@ -18,6 +18,7 @@ namespace Mjml.Net
             Add(new AttributesComponent());
             Add(new BodyComponent());
             Add(new BreakpointComponent());
+            Add(new DividerComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
             Add(new ImageComponent());
@@ -36,14 +37,32 @@ namespace Mjml.Net
             Add(new TitleHelper());
         }
 
-        public void Add(IComponent component)
+        public IMjmlRenderer Add(IComponent component)
         {
             components[component.ComponentName] = component;
+
+            return this;
         }
 
-        public void Add(IHelper helper)
+        public IMjmlRenderer Add(IHelper helper)
         {
             helpers.Add(helper);
+
+            return this;
+        }
+
+        public IMjmlRenderer ClearComponents()
+        {
+            components.Clear();
+
+            return this;
+        }
+
+        public IMjmlRenderer ClearHelpers()
+        {
+            helpers.Clear();
+
+            return this;
         }
 
         internal IComponent? GetComponent(string previousElement)

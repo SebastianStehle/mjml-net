@@ -1,4 +1,4 @@
-﻿using Mjml.Net;
+﻿using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace Tests
         public void Should_render_font_with_attributes()
         {
             var source = @"
- <mjml>
+<mjml-test>
   <mj-head>
     <mj-attributes>
       <mj-font name=""Raleway"" href=""https://fonts.googleapis.com/css?family=Raleway"" />
@@ -19,22 +19,19 @@ namespace Tests
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new FontHelper());
 
-            TestHelpers.TrimmedContains(Resources.Font, result);
+            AssertHelpers.HtmlAssert(Resources.Font, result);
         }
 
         [Fact]
         public void Should_render_font_with_class_attribute()
         {
             var source = @"
- <mjml>
+<mjml-test>
   <mj-head>
     <mj-attributes>
       <mj-class name=""blue"" href=""https://fonts.googleapis.com/css?family=Raleway"" />
@@ -43,22 +40,19 @@ namespace Tests
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new FontHelper());
 
-            TestHelpers.TrimmedContains(Resources.Font, result);
+            AssertHelpers.HtmlAssert(Resources.Font, result);
         }
 
         [Fact]
         public void Should_render_font_with_multiple_attributes()
         {
             var source = @"
- <mjml>
+<mjml-test>
   <mj-head>
     <mj-attributes>
       <mj-other />
@@ -73,15 +67,12 @@ namespace Tests
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source, new FontHelper());
 
-            TestHelpers.TrimmedContains(Resources.Font, result);
+            AssertHelpers.HtmlAssert(Resources.Font, result);
         }
     }
 }

@@ -204,6 +204,19 @@
   }
 &lt;/style&gt;</value>
   </data>
+  <data name="Divider" xml:space="preserve">
+    <value>&lt;p style="border-top:solid 4px #000000;font-size:1px;margin:0px auto;width:100%;"&gt;
+&lt;/p&gt;
+&lt;!--[if mso | IE]&gt;
+  &lt;table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #000000;font-size:1px;margin:0px auto;width:550px;" role="presentation" width="550px" &gt;
+    &lt;tr&gt;
+      &lt;td style="height:0;line-height:0;"&gt; 
+        &amp;nbsp;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;![endif]--&gt;</value>
+  </data>
   <data name="Font" xml:space="preserve">
     <value>&lt;!--[if !mso]&gt;&lt;!--&gt;
 &lt;link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css"&gt;
