@@ -272,6 +272,9 @@
 &lt;/style&gt;</value>
   </data>
   <data name="Text" xml:space="preserve">
+    <value>&lt;div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;"&gt;Hey Title!&lt;/div&gt;</value>
+  </data>
+  <data name="TextWithHtml" xml:space="preserve">
     <value>&lt;div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-style:normal;letter-spacing:none;line-height:1;text-align:left;color:#000000;"&gt;
     &lt;h1&gt;
     Hey Title!
