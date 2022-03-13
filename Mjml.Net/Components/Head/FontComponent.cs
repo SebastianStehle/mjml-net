@@ -6,9 +6,9 @@ namespace Mjml.Net.Components.Head
     {
         public override string ComponentName => "mj-font";
 
-        public bool SelfClosed => true;
+        public override bool SelfClosed => true;
 
-        public AllowedAttributes? AllowedAttributes { get; } =
+        public override AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
                 ["name"] = AttributeTypes.String,

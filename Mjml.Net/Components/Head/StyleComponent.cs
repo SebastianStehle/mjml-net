@@ -6,9 +6,9 @@ namespace Mjml.Net.Components.Head
     {
         public override string ComponentName => "mj-style";
 
-        public bool NeedsContent => true;
+        public override bool NeedsContent => true;
 
-        public AllowedAttributes? AllowedAttributes { get; } =
+        public override AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
                 ["inline"] = AttributeTypes.String

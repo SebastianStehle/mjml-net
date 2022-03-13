@@ -16,6 +16,11 @@
         IElementHtmlRenderer ElementStart(string elementName, bool selfClosed = false);
 
         /// <summary>
+        /// Gets the global data.
+        /// </summary>
+        GlobalData GlobalData { get; }
+
+        /// <summary>
         /// Ends an element.
         /// </summary>
         /// <param name="elementName">The name of the element.</param>

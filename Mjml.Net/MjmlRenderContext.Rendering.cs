@@ -18,6 +18,8 @@ namespace Mjml.Net
 
         public INode Node => this;
 
+        public GlobalData GlobalData => globalData;
+
         private void ClearRenderData()
         {
             buffers.Clear();

@@ -6,7 +6,7 @@ namespace Mjml.Net.Components.Head
     {
         public override string ComponentName => "mj-preview";
 
-        public bool NeedsContent => true;
+        public override bool NeedsContent => true;
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {

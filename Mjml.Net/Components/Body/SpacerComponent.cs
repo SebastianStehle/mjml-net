@@ -18,7 +18,7 @@
                 ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
                 ["padding-left"] = AttributeTypes.PixelsOrPercent,
                 ["padding-right"] = AttributeTypes.PixelsOrPercent,
-                ["padding-top"] = AttributeTypes.PixelsOrPercent,
+                ["padding-top"] = AttributeTypes.PixelsOrPercent
             };
 
         public override Attributes? DefaultAttributes { get; } =

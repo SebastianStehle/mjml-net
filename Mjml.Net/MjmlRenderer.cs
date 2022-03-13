@@ -20,6 +20,7 @@ namespace Mjml.Net
             Add(new BreakpointComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
+            Add(new ImageComponent());
             Add(new PreviewComponent());
             Add(new RawComponent());
             Add(new RootComponent());

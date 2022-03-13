@@ -212,6 +212,30 @@
 &lt;/style&gt;
 &lt;!--&lt;![endif]--&gt;</value>
   </data>
+  <data name="Image" xml:space="preserve">
+    <value>&lt;table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="width:300px;"&gt;
+        &lt;img height="auto" src="https://www.online-image-editor.com//styles/2014/images/example_image.png" width="300" style="border:0;display:block;font-size:13px;height:auto;outline:none;text-decoration:none;width:100%;"&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</value>
+  </data>
+  <data name="ImageWithLink" xml:space="preserve">
+    <value>&lt;table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="width:300px;"&gt;
+&lt;a href="link/to/website" target="_blank"&gt;
+&lt;img height="auto" src="https://www.online-image-editor.com//styles/2014/images/example_image.png" width="300" style="border:0;display:block;font-size:13px;height:auto;outline:none;text-decoration:none;width:100%;"&gt;
+&lt;/a&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</value>
+  </data>
   <data name="Preview" xml:space="preserve">
     <value>&lt;div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"&gt;
   Hello MJML
