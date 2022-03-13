@@ -83,9 +83,12 @@ namespace Mjml.Net
             ClearRenderData();
         }
 
-        public void Validate()
+        public void Validate(bool complete = true)
         {
-            validator.Complete(errors);
+            if (complete)
+            {
+                validator.Complete(errors);
+            }
 
             if (errors.Any())
             {
@@ -115,15 +118,25 @@ namespace Mjml.Net
             currentText = null;
             currentAttributes.Clear();
 
-            currentComponent = renderer.GetComponent(currentElement);
+            var currentLine = CurrentLine;
+            var currentColumn = CurrentColumn;
 
-            if (currentComponent == null)
+            var component = currentComponent = renderer.GetComponent(currentElement);
+
+            if (component == null)
             {
-                errors.Add($"Invalid element '{currentElement}'.", CurrentLine, CurrentColumn);
-                Validate();
+                errors.Add($"'{currentElement}' is not a known tag.", currentLine, currentColumn);
+
+                // The subtree is corrupt, just render it.
+                RenderChildren(new ChildOptions
+                {
+                    RawXML = true
+                });
+
+                return;
             }
 
-            validator.ValidateComponent(currentComponent!, errors, CurrentLine, CurrentColumn);
+            validator.BeforeComponent(currentComponent!, errors, currentLine, currentColumn);
 
             for (var i = 0; i < reader.AttributeCount; i++)
             {
@@ -131,7 +144,7 @@ namespace Mjml.Net
 
                 currentAttributes[reader.Name] = reader.Value;
 
-                validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors, CurrentLine, CurrentColumn);
+                validator.Attribute(reader.Name, reader.Value, currentComponent!, errors, CurrentLine, CurrentColumn);
             }
 
             while (reader.Read())
@@ -159,6 +172,8 @@ namespace Mjml.Net
             {
                 currentComponent!.Render(this, this);
             }
+
+            validator.AfterComponent(component, errors, currentLine, currentColumn);
         }
 
         public string? GetAttribute(string name, string? fallback = null)
