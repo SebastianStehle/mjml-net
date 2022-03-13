@@ -11,6 +11,12 @@
     {
         public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
         {
+            if (target != HelperTarget.HeadStart)
+            {
+                renderer.SetGlobalData("default", new Breakpoint("300px"));
+                return;
+            }
+
             if (target != HelperTarget.HeadEnd)
             {
                 return;

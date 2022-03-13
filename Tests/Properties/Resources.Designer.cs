@@ -144,6 +144,42 @@ namespace Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:collapse;border-spacing:0px;&quot;&gt;
+        ///  &lt;tbody&gt;
+        ///    &lt;tr&gt;
+        ///      &lt;td style=&quot;width:300px;&quot;&gt;
+        ///        &lt;img height=&quot;auto&quot; src=&quot;https://www.online-image-editor.com//styles/2014/images/example_image.png&quot; width=&quot;300&quot; style=&quot;border:0;display:block;font-size:13px;height:auto;outline:none;text-decoration:none;width:100%;&quot;&gt;
+        ///      &lt;/td&gt;
+        ///    &lt;/tr&gt;
+        ///  &lt;/tbody&gt;
+        ///&lt;/table&gt;.
+        /// </summary>
+        internal static string Image {
+            get {
+                return ResourceManager.GetString("Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:collapse;border-spacing:0px;&quot;&gt;
+        ///&lt;tbody&gt;
+        ///&lt;tr&gt;
+        ///&lt;td style=&quot;width:300px;&quot;&gt;
+        ///&lt;a href=&quot;link/to/website&quot; target=&quot;_blank&quot;&gt;
+        ///&lt;img height=&quot;auto&quot; src=&quot;https://www.online-image-editor.com//styles/2014/images/example_image.png&quot; width=&quot;300&quot; style=&quot;border:0;display:block;font-size:13px;height:auto;outline:none;text-decoration:none;width:100%;&quot;&gt;
+        ///&lt;/a&gt;
+        ///&lt;/td&gt;
+        ///&lt;/tr&gt;
+        ///&lt;/tbody&gt;
+        ///&lt;/table&gt;.
+        /// </summary>
+        internal static string ImageWithLink {
+            get {
+                return ResourceManager.GetString("ImageWithLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;div style=&quot;display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;&quot;&gt;
         ///  Hello MJML
         ///&lt;/div&gt;.

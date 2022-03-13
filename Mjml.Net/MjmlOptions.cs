@@ -9,5 +9,7 @@
         public bool Beautify { get; set; } = true;
 
         public bool Minify { get; set; }
+
+        public IValidator? Validator { get; set; }
     }
 }
