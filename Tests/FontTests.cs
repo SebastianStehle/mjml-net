@@ -1,5 +1,4 @@
-﻿using Mjml.Net;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -11,13 +10,13 @@ namespace Tests
         public void Should_render_font()
         {
             var source = @"
- <mjml plain=""plain"">
+<mjml-test>
   <mj-head>
     <mj-font name=""Raleway"" href=""https://fonts.googleapis.com/css?family=Raleway"" />
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
             var result = TestHelper.Render(source, new FontHelper());

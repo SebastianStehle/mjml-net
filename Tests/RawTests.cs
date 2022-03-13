@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mjml.Net;
 using Xunit;
 
 namespace Tests

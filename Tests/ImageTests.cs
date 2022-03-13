@@ -1,5 +1,4 @@
-﻿using Mjml.Net;
-using Tests.Properties;
+﻿using Tests.Properties;
 using Xunit;
 
 namespace Tests

@@ -10,13 +10,13 @@ namespace Tests
         public void Should_render_breakpoint()
         {
             var source = @"
- <mjml plain=""plain"">
+<mjml-test>
   <mj-head>
     <mj-breakpoint width=""300px"" />
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
             var result = TestHelper.Render(source, new BreakpointHelper());

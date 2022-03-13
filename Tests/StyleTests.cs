@@ -10,7 +10,7 @@ namespace Tests
         public void Should_render_style()
         {
             var source = @"
-<mjml plain=""plain"">
+<mjml-test>
   <mj-head>
     <mj-style>
       .red-text div {
@@ -20,7 +20,7 @@ namespace Tests
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
             var result = TestHelper.Render(source, new StyleHelper());
@@ -32,7 +32,7 @@ namespace Tests
         public void Should_render_inline_just_normal_as_fallback()
         {
             var source = @"
-<mjml plain=""plain"">
+<mjml-test>
   <mj-head>
     <mj-style inline=""inline"">
       .red-text div {
@@ -42,7 +42,7 @@ namespace Tests
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
             var result = TestHelper.Render(source, new StyleHelper());

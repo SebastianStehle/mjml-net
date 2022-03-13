@@ -1,5 +1,4 @@
-﻿using Mjml.Net;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 using Tests.Properties;
 using Xunit;
 
@@ -11,13 +10,13 @@ namespace Tests
         public void Should_render_preview()
         {
             var source = @"
- <mjml plain=""plain"">
+<mjml-test>
   <mj-head>
     <mj-preview>Hello MJML</mj-preview>
   </mj-head>
   <mj-body>
   </mj-body>
-</mjml>
+</mjml-test>
 ";
 
             var result = TestHelper.Render(source, new PreviewHelper());

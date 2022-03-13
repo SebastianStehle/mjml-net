@@ -6,7 +6,7 @@ namespace Tests
     {
         public static string Render(string source)
         {
-            var renderer = new MjmlRenderer();
+            var renderer = new MjmlRenderer().Add(new TestComponent());
 
             return renderer.Render(source, new MjmlOptions
             {
@@ -16,7 +16,7 @@ namespace Tests
 
         public static string Render(string source, params IHelper[] helpers)
         {
-            var renderer = new MjmlRenderer().ClearHelpers();
+            var renderer = new MjmlRenderer().Add(new TestComponent()).ClearHelpers();
 
             foreach (var helper in helpers)
             {
