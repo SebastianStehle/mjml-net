@@ -132,7 +132,6 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", textAlign)
                 .Style("border-radius", borderRadius);
 
-
             RenderChildren(renderer, node);
 
             renderer.ElementEnd(buttonHtmlTag);
@@ -152,7 +151,6 @@ namespace Mjml.Net.Components.Body
             });
         }
 
-        // TODO
         private string? CalculateButtonWidth(INode node)
         {
             return node.GetAttribute("width");
