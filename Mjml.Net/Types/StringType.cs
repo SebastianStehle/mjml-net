@@ -1,6 +1,6 @@
-﻿namespace Mjml.Net.AttributeValues
+﻿namespace Mjml.Net.Types
 {
-    public sealed class StringAttribute : IAttribute
+    public sealed class StringType : IType
     {
         public bool Validate(string value)
         {
