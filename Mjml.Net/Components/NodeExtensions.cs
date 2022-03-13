@@ -6,9 +6,7 @@ namespace Mjml.Net.Components
     {
         public static (double TotalWidth, double Borders, double Paddings, double Box) GetBoxWidths(this INode node, IHtmlRenderer renderer)
         {
-            var width = renderer.GetContext("containerWidth");
-
-            var containerWidth = width is double i ? i : 600;
+            var containerWidth = renderer.GetContainerWidth();
 
             var paddings =
                 node.GetShorthandAttributeValue("padding-right", "padding") +
@@ -21,6 +19,13 @@ namespace Mjml.Net.Components
             return (containerWidth, borders, paddings, containerWidth - paddings - borders);
         }
 
+        public static double GetContainerWidth(this IHtmlRenderer renderer)
+        {
+            var width = renderer.GetContext("containerWidth");
+
+            return width is double i ? i : 600;
+        }
+
         public static string ToInvariantString(this double value)
         {
             return value.ToString(CultureInfo.InvariantCulture);
@@ -30,7 +35,7 @@ namespace Mjml.Net.Components
         {
             var value = node.GetAttribute(property);
 
-            return ParseNumber(value);
+            return UnitParser.Parse(value).Value;
         }
 
         public static string GetAttributeNumberOrAuto(this INode node, string property)
@@ -42,7 +47,7 @@ namespace Mjml.Net.Components
                 return "auto";
             }
 
-            return ParseNumber(value).ToInvariantString();
+            return UnitParser.Parse(value).Value.ToInvariantString();
         }
 
         public static double GetShorthandBorderValue(this INode node, string property)
@@ -51,7 +56,7 @@ namespace Mjml.Net.Components
                 node.GetAttribute(property) ??
                 node.GetAttribute("border");
 
-            return ParseNumber(rawValue);
+            return UnitParser.Parse(rawValue).Value;
         }
 
         public static double GetShorthandAttributeValue(this INode node, string property, string fallback)
@@ -60,7 +65,7 @@ namespace Mjml.Net.Components
 
             if (!string.IsNullOrWhiteSpace(rawValue))
             {
-                return ParseNumber(rawValue);
+                return UnitParser.Parse(rawValue).Value;
             }
 
             rawValue = node.GetAttribute(fallback);
@@ -108,53 +113,25 @@ namespace Mjml.Net.Components
 
             if (property.EndsWith("-top", StringComparison.OrdinalIgnoreCase))
             {
-                return ParseNumber(t);
+                return UnitParser.Parse(t).Value;
             }
 
             if (property.EndsWith("-right", StringComparison.OrdinalIgnoreCase))
             {
-                return ParseNumber(r);
+                return UnitParser.Parse(r).Value;
             }
 
             if (property.EndsWith("-bottom", StringComparison.OrdinalIgnoreCase))
             {
-                return ParseNumber(b);
+                return UnitParser.Parse(b).Value;
             }
 
             if (property.EndsWith("-left", StringComparison.OrdinalIgnoreCase))
             {
-                return ParseNumber(l);
+                return UnitParser.Parse(l).Value;
             }
 
             return 0;
-        }
-
-        private static double ParseNumber(string? rawValue)
-        {
-            if (string.IsNullOrWhiteSpace(rawValue))
-            {
-                return 0;
-            }
-
-            var span = rawValue.AsSpan().Trim();
-
-            for (var i = 0; i < span.Length; i++)
-            {
-                if (!char.IsNumber(span[i]))
-                {
-                    span = span[..i];
-                    break;
-                }
-            }
-
-            if (span.Length == 0)
-            {
-                return 0;
-            }
-
-            double.TryParse(span, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
-
-            return temp;
         }
     }
 }
