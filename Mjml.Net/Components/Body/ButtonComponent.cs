@@ -132,24 +132,12 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", textAlign)
                 .Style("border-radius", borderRadius);
 
-            // RenderChildren(renderer, node);
             renderer.Content(node.GetContent());
 
             renderer.ElementEnd(buttonHtmlTag);
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
-        }
-
-        private static void RenderChildren(IHtmlRenderer renderer, INode node)
-        {
-            renderer.RenderChildren(new ChildOptions
-            {
-                Renderer = child =>
-                {
-                    child.Render();
-                }
-            });
         }
 
         private string? CalculateButtonWidth(INode node)
