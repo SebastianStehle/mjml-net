@@ -7,21 +7,23 @@ namespace Mjml.Net.Components
         public string ComponentName => "mjml";
 
         public AllowedParents? AllowedParents { get; } = null;
-
+#if DEBUG
         public AllowedAttributes? AllowedAttributes { get; } =
             new AllowedAttributes
             {
                 ["plain"] = AttributeTypes.Boolean
             };
-
+#endif
         public void Render(IHtmlRenderer renderer, INode node)
         {
+#if DEBUG
             var isPlain = node.GetAttribute("plain") == "plain";
-
+#endif
             renderer.RenderChildren();
-
+#if DEBUG
             if (!isPlain)
             {
+#endif
                 renderer.Content("<!doctype html>");
                 renderer.Content("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
                 renderer.Content(string.Empty);
@@ -35,6 +37,7 @@ namespace Mjml.Net.Components
                 renderer.Content(string.Empty);
 
                 renderer.Content("</html>");
+#if DEBUG
             }
             else
             {
@@ -46,6 +49,7 @@ namespace Mjml.Net.Components
                 renderer.Plain(renderer.GetContext("body") as string);
                 renderer.RenderHelpers(HelperTarget.BodyEnd);
             }
+#endif
         }
 
         private static void RenderHead(IHtmlRenderer renderer)
