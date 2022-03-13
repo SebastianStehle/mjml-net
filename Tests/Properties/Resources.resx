@@ -213,6 +213,7 @@ Button
     <value>&lt;a href="https://mjml.io/" target="_blank" style="display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;text-align:center;border-radius:3px;"&gt;
 Button Link
 &lt;/a&gt;</value>
+  </data>
   <data name="Divider" xml:space="preserve">
     <value>&lt;p style="border-top:solid 4px #000000;font-size:1px;margin:0px auto;width:100%;"&gt;
 &lt;/p&gt;
