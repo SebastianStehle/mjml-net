@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Xml;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
@@ -9,7 +10,6 @@ namespace Mjml.Net
         private readonly Dictionary<string, string> currentRenderAttributes = new Dictionary<string, string>(10);
         private readonly HashSet<string> currentRenderClasses = new HashSet<string>(10);
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
-        private readonly RenderStack<ChildOptions> childOptions = new RenderStack<ChildOptions>();
         private string? currentRenderElement;
         private bool currentRenderElementSelfClosed;
         private int intend;
@@ -23,7 +23,7 @@ namespace Mjml.Net
         private void ClearRenderData()
         {
             buffers.Clear();
-            childOptions.Clear();
+            contextStack.Clear();
             currentRenderAttributes.Clear();
             currentRenderClasses.Clear();
             currentRenderElement = null;
@@ -285,11 +285,11 @@ namespace Mjml.Net
             }
             else
             {
-                childOptions.Push(options);
+                contextStack.Push(new ComponentContext(contextStack.Current, options));
 
                 Read();
 
-                childOptions.Pop();
+                contextStack.Pop();
             }
         }
 

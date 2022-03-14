@@ -21,6 +21,7 @@ namespace Mjml.Net
             Add(new DividerComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
+            Add(new HeroComponent());
             Add(new ImageComponent());
             Add(new PreviewComponent());
             Add(new RawComponent());

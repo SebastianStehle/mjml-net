@@ -94,7 +94,7 @@
 
         private static string GetOutlookWidth(IHtmlRenderer renderer, INode node)
         {
-            var containerWidth = renderer.GetContainerWidth();
+            var containerWidth = renderer.GetContainerWidth().Value;
 
             var paddingSize =
                 node.GetShorthandAttributeValue("padding-left", "padding") +

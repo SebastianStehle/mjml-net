@@ -111,7 +111,7 @@ namespace Tests.Properties {
         ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
         ///      &lt;tbody&gt;&lt;tr&gt;
         ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
-        ///          &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none [rest of string was truncated]&quot;;.
+        ///          &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:n [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Button {
             get {
@@ -123,7 +123,7 @@ namespace Tests.Properties {
         ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
         ///      &lt;tbody&gt;&lt;tr&gt;
         ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
-        ///          &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration: [rest of string was truncated]&quot;;.
+        ///          &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decorati [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ButtonLink {
             get {
@@ -135,7 +135,7 @@ namespace Tests.Properties {
         ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
         ///      &lt;tbody&gt;&lt;tr&gt;
         ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
-        ///          &lt;a href=&quot;https://mjml.io/&quot; rel=&quot;relly good&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0 [rest of string was truncated]&quot;;.
+        ///          &lt;a href=&quot;https://mjml.io/&quot; rel=&quot;relly good&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ButtonLinkWithRel {
             get {
@@ -173,6 +173,22 @@ namespace Tests.Properties {
         internal static string Font {
             get {
                 return ResourceManager.GetString("Font", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!--[if mso | IE]&gt;
+        ///&lt;table align=&quot;center&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;width:600px;&quot; width=&quot;600&quot; &gt;
+        ///  &lt;tr&gt;
+        ///    &lt;td style=&quot;line-height:0;font-size:0;mso-line-height-rule:exactly;&quot;&gt;
+        ///      &lt;v:image style=&quot;border:0;mso-position-horizontal:center;position:absolute;top:0;width:600px;z-index:-3;&quot; xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot; /&gt;
+        ///      &lt;![endif]--&gt;
+        ///      &lt;div style=&quot;margin:0 auto;max-width:600px;&quot;&gt;
+        ///        &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Hero {
+            get {
+                return ResourceManager.GetString("Hero", resourceCulture);
             }
         }
         

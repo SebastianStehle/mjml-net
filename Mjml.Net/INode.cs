@@ -29,5 +29,10 @@ namespace Mjml.Net
         /// This is needed for components such as mj-attributes.
         /// </remarks>
         XmlReader Reader { get; }
+
+        /// <summary>
+        /// The current component.
+        /// </summary>
+        IComponent Component { get; }
     }
 }

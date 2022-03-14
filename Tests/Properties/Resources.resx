@@ -252,6 +252,53 @@
 &lt;/style&gt;
 &lt;!--&lt;![endif]--&gt;</value>
   </data>
+  <data name="Hero" xml:space="preserve">
+    <value>&lt;!--[if mso | IE]&gt;
+&lt;table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:600px;" width="600" &gt;
+  &lt;tr&gt;
+    &lt;td style="line-height:0;font-size:0;mso-line-height-rule:exactly;"&gt;
+      &lt;v:image style="border:0;mso-position-horizontal:center;position:absolute;top:0;width:600px;z-index:-3;" xmlns:v="urn:schemas-microsoft-com:vml" /&gt;
+      &lt;![endif]--&gt;
+      &lt;div style="margin:0 auto;max-width:600px;"&gt;
+        &lt;table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;"&gt;
+          &lt;tbody&gt;
+            &lt;tr style="vertical-align:top;"&gt;
+              &lt;td style="background:#ffffff;background-position:center center;background-repeat:no-repeat;padding:0px;vertical-align:top;" height="0"&gt;
+                &lt;!--[if mso | IE]&gt;
+                &lt;table border="0" cellpadding="0" cellspacing="0" style="width:600px;" width="600" &gt;
+                  &lt;tr&gt;
+                    &lt;td style=""&gt;
+                      &lt;![endif]--&gt;
+                      &lt;div class="mj-hero-content" style="margin:0px auto;"&gt;
+                        &lt;table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;margin:0px;"&gt;
+                          &lt;tbody&gt;
+                            &lt;tr&gt;
+                              &lt;td style=""&gt;
+                                &lt;table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;margin:0px;"&gt;
+                                  &lt;tbody&gt;
+                                  &lt;/tbody&gt;
+                                &lt;/table&gt;
+                              &lt;/td&gt;
+                            &lt;/tr&gt;
+                          &lt;/tbody&gt;
+                        &lt;/table&gt;
+                      &lt;/div&gt;
+                      &lt;!--[if mso | IE]&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/table&gt;
+                &lt;![endif]--&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+      &lt;!--[if mso | IE]&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;![endif]--&gt;</value>
+  </data>
   <data name="Image" xml:space="preserve">
     <value>&lt;table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"&gt;
   &lt;tbody&gt;

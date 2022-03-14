@@ -1,5 +1,8 @@
 ﻿using System.Xml;
+using Mjml.Net.Internal;
 using Mjml.Net.Validators;
+
+#pragma warning disable SA1401 // Fields should be private
 
 namespace Mjml.Net
 {
@@ -10,7 +13,7 @@ namespace Mjml.Net
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
-        private readonly Dictionary<string, object?> context = new Dictionary<string, object?>(10);
+        private readonly RenderStack<ComponentContext> contextStack = new RenderStack<ComponentContext>();
         private readonly ValidationErrors errors = new ValidationErrors();
         private IComponent? currentComponent;
         private MjmlOptions options;
@@ -20,6 +23,8 @@ namespace Mjml.Net
         private string? currentText;
         private string? currentElement;
         private string[]? currentClasses;
+
+        public IComponent Component => currentComponent!;
 
         private int? CurrentLine
         {
@@ -69,7 +74,7 @@ namespace Mjml.Net
         {
             attributesByClass.Clear();
             attributesByName.Clear();
-            context.Clear();
+            contextStack.Clear();
             currentAttributes.Clear();
             currentClasses = null;
             currentComponent = null;
@@ -149,7 +154,7 @@ namespace Mjml.Net
                 }
             }
 
-            var childRenderer = childOptions.Current.Renderer;
+            var childRenderer = contextStack.Current?.Options.Renderer;
 
             if (childRenderer != null)
             {
@@ -222,12 +227,12 @@ namespace Mjml.Net
 
         public void SetContext(string name, object? value)
         {
-            context[name] = value;
+            contextStack.Current?.Set(name, value);
         }
 
         public object? GetContext(string name)
         {
-            return context.GetValueOrDefault(name);
+            return contextStack.Current?.Get(name);
         }
 
         public string? GetContent()

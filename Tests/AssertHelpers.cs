@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AngleSharp.Diffing;
+using AngleSharp.Diffing.Core;
 using AngleSharp.Diffing.Strategies.AttributeStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
 using Xunit;
@@ -48,15 +50,41 @@ namespace Tests
                     )
                     .Build();
 
-            var sb = new StringBuilder();
+            Assert.True(!diffs.Any(), PrintDiffs(diffs));
+        }
 
-            foreach (var diff in diffs)
+        private static string PrintDiffs(IEnumerable<IDiff> diffs)
+        {
+            return string.Join(Environment.NewLine, diffs.Select((x, i) =>
             {
-                sb.Append(" - ");
-                sb.AppendLine(diff.ToString());
-            }
+                var diffText = x switch
+                {
+                    NodeDiff diff when diff.Target == DiffTarget.Text && diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal)
+                        => $"The text in {diff.Control.Path} is different.",
+                    NodeDiff diff when diff.Target == DiffTarget.Text
+                        => $"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} is different.",
+                    NodeDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal)
+                        => $"The {NodeName(diff.Control)}s at {diff.Control.Path} are different.",
+                    NodeDiff diff
+                        => $"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} are different.",
+                    AttrDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal)
+                        => $"The values of the attributes at {diff.Control.Path} are different.",
+                    AttrDiff diff
+                        => $"The value of the attribute {diff.Control.Path} and actual attribute {diff.Test.Path} are different.",
+                    MissingNodeDiff diff
+                        => $"The {NodeName(diff.Control)} at {diff.Control.Path} is missing.",
+                    MissingAttrDiff diff
+                        => $"The attribute at {diff.Control.Path} is missing.",
+                    UnexpectedNodeDiff diff
+                        => $"The {NodeName(diff.Test)} at {diff.Test.Path} was not expected.",
+                    UnexpectedAttrDiff diff
+                        => $"The attribute at {diff.Test.Path} was not expected.",
+                    _ => throw new InvalidOperationException($"Unknown diff type detected: {x.GetType()}"),
+                };
+                return $"  {i + 1}: {diffText}";
+            })) + Environment.NewLine;
 
-            Assert.True(!diffs.Any(), sb.ToString());
+            static string NodeName(ComparisonSource source) => source.Node.NodeType.ToString().ToLowerInvariant();
         }
 
         private static string Trim(string value)

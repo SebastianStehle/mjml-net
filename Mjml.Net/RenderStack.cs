@@ -7,6 +7,8 @@
 
         public T? Current => current;
 
+        public IEnumerable<T> Elements => stack;
+
         public void Push(T element)
         {
             current = element;

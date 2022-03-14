@@ -10,6 +10,8 @@
 
         public bool SelfClosed => false;
 
+        public bool Raw => false;
+
         public bool NeedsContent => false;
 
         public string ComponentName { get; }

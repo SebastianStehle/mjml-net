@@ -14,6 +14,8 @@
 
         public virtual bool SelfClosed => false;
 
+        public virtual bool Raw => false;
+
         public virtual bool NeedsContent => false;
 
         public abstract string ComponentName { get; }
