@@ -34,6 +34,8 @@ namespace Tests
 
         public static void HtmlAssert(string expected, string actual)
         {
+            // We use a lot of conditional comments in html. These comments are treated as comments, which makes them hard to diff.
+            // If we replace them as normal comments the inner html become normal nodes and we can compare them.
             static string Cleanup(string source)
             {
                 var regex = new Regex(@"<!--\d{0,}\[(.*)\]\d{0,}>");
@@ -69,7 +71,7 @@ namespace Tests
 
             var cleaned = diffs.Where(d =>
             {
-                // Ingore unexpected empty attributes.
+                // Ingore unexpected empty attributes, because mjml sometimes renders style=""
                 if (d is UnexpectedAttrDiff u && string.IsNullOrEmpty(u.Test.Attribute.Value))
                 {
                     return false;
