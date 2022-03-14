@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Mjml.Net
+﻿namespace Mjml.Net
 {
     public sealed class ValidationException : Exception
     {

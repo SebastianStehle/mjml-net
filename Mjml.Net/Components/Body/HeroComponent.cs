@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Helpers;
-
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public sealed class HeroComponent : BodyComponentBase
     {
@@ -95,7 +93,7 @@ namespace Mjml.Net.Components.Body
 
             renderer.ElementStart("v:image") // Style: outlook-image
                 .Attr("src", node.GetAttribute("background-url"))
-                .Attr("xmlns", "urn:schemas-microsoft-com:vml")
+                .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Style("border", "0")
                 .Style("height", backgroundHeight)
                 .Style("mso-position-horizontal", "center")
@@ -222,7 +220,7 @@ namespace Mjml.Net.Components.Body
                 .Style("inner-padding-right", node.GetAttribute("inner-padding-right"))
                 .Style("inner-padding-top", node.GetAttribute("inner-padding-top"));
 
-            renderer.Plain("<![endif]-->");
+            renderer.Content("<![endif]-->");
 
             renderer.ElementStart("div") // Style: inner-div
                 .Attr("align", align)
@@ -276,7 +274,7 @@ namespace Mjml.Net.Components.Body
                         renderer.ElementStart("tr");
 
                         renderer.ElementStart("td")
-                            .Attr("align", align)
+                            .Attr("align", child.Node.GetAttribute("align"))
                             .Attr("background", backgroundColor)
                             .Attr("class", child.Node.GetAttribute("css-class"))
                             .Style("background", backgroundColor)

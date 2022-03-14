@@ -2,8 +2,6 @@
 using Mjml.Net.Internal;
 using Mjml.Net.Validators;
 
-#pragma warning disable SA1401 // Fields should be private
-
 namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : INode

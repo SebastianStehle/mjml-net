@@ -295,7 +295,7 @@ namespace Mjml.Net
 
         void IChildRenderer.Render()
         {
-            Read();
+            currentComponent!.Render(this, this);
         }
 
         private void Flush()
