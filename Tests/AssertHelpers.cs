@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
+using AngleSharp.Diffing.Strategies;
 using AngleSharp.Diffing.Strategies.AttributeStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
 using Xunit;
@@ -50,7 +52,17 @@ namespace Tests
                     )
                     .Build();
 
-            Assert.True(!diffs.Any(), PrintDiffs(diffs));
+            var cleaned = diffs.Where(d =>
+            {
+                if (d is UnexpectedAttrDiff diff && string.IsNullOrEmpty(diff.Test.Attribute.Value))
+                {
+                    return false;
+                }
+
+                return true;
+            });
+
+            Assert.True(!cleaned.Any(), PrintDiffs(cleaned));
         }
 
         private static string PrintDiffs(IEnumerable<IDiff> diffs)
@@ -68,7 +80,7 @@ namespace Tests
                     NodeDiff diff
                         => $"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} are different.",
                     AttrDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal)
-                        => $"The values of the attributes at {diff.Control.Path} are different.",
+                        => $"The values of the attributes at {diff.Control.Path} are different. Test: '{diff.Test.Attribute.Value}', Control: '{diff.Control.Attribute.Value}'.",
                     AttrDiff diff
                         => $"The value of the attribute {diff.Control.Path} and actual attribute {diff.Test.Path} are different.",
                     MissingNodeDiff diff

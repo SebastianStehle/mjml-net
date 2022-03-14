@@ -187,13 +187,13 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
             renderer.ElementEnd("div");
 
-            renderer.Plain("<!--[if mso | IE]>");
+            renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
 
-            renderer.Plain("<![endif]-->");
+            renderer.Content("<![endif]-->");
         }
 
         private static void RenderContent(IHtmlRenderer renderer, INode node, ContainerWidth containerWidth)
@@ -202,7 +202,7 @@ namespace Mjml.Net.Components.Body
 
             var align = node.GetAttribute("align");
 
-            renderer.Plain("<!--[if mso | IE]>");
+            renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table") // Style: outlook-inner-table
                 .Attr("align", align)
@@ -236,7 +236,9 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("role", "presentation");
+                .Attr("role", "presentation")
+                .Style("width", "100%")
+                .Style("margin", "0px");
 
             renderer.ElementStart("tbody");
             renderer.ElementStart("tr");
@@ -246,7 +248,9 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("role", "presentation");
+                .Attr("role", "presentation")
+                .Style("width", "100%")
+                .Style("margin", "0px");
 
             renderer.ElementStart("tbody");
 
@@ -300,13 +304,13 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
             renderer.ElementEnd("div");
 
-            renderer.Plain("<!--[if mso | IE]>");
+            renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
 
-            renderer.Plain("<![endif]-->");
+            renderer.Content("<![endif]-->");
         }
     }
 }
