@@ -1,39 +1,55 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public sealed class SpacerComponent : BodyComponentBase
+    public partial struct SpacerProps
+    {
+        [Bind("border")]
+        public string? Border;
+
+        [Bind("border-bottom")]
+        public string? BorderBottom;
+
+        [Bind("border-left")]
+        public string? BorderLeft;
+
+        [Bind("border-right")]
+        public string? BorderRight;
+
+        [Bind("border-top")]
+        public string? BorderTop;
+
+        [Bind("container-background-color", BindType.Color)]
+        public string? ContainerBackgroundColor;
+
+        [Bind("height", BindType.Pixels)]
+        public string Height = "20px";
+
+        [Bind("padding", BindType.PixelsOrPercent)]
+        public string? Padding;
+
+        [Bind("padding-bottom", BindType.PixelsOrPercent)]
+        public string? PaddingBottom;
+
+        [Bind("padding-left", BindType.PixelsOrPercent)]
+        public string? PaddingLeft;
+
+        [Bind("padding-right", BindType.PixelsOrPercent)]
+        public string? PaddingRight;
+
+        [Bind("padding-top", BindType.PixelsOrPercent)]
+        public string? PaddingTop;
+    }
+
+    public sealed class SpacerComponent : BodyComponentBase<SpacerProps>
     {
         public override string ComponentName => "mj-spacer";
 
-        public override AllowedAttributes? AllowedAttributes { get; } =
-            new AllowedAttributes
-            {
-                ["border"] = AttributeTypes.String,
-                ["border-bottom"] = AttributeTypes.String,
-                ["border-left"] = AttributeTypes.String,
-                ["border-right"] = AttributeTypes.String,
-                ["border-top"] = AttributeTypes.String,
-                ["container-background-color"] = AttributeTypes.Color,
-                ["height"] = AttributeTypes.PixelsOrPercent,
-                ["padding"] = AttributeTypes.PixelsOrPercent,
-                ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
-                ["padding-left"] = AttributeTypes.PixelsOrPercent,
-                ["padding-right"] = AttributeTypes.PixelsOrPercent,
-                ["padding-top"] = AttributeTypes.PixelsOrPercent
-            };
-
-        public override Attributes? DefaultAttributes { get; } =
-            new Attributes
-            {
-                ["height"] = "20px"
-            };
-
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var height = node.GetAttribute("height");
+            var props = new SpacerProps(node);
 
             renderer.ElementStart("div")
-                .Style("height", height)
-                .Style("line-height", height);
+                .Style("height", props.Height)
+                .Style("line-height", props.Height);
 
             renderer.Content("&#8202;");
 
