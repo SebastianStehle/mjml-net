@@ -2,49 +2,72 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public sealed class TextComponent : BodyComponentBase
+    public partial struct TextProps
+    {
+        [Bind("align", BindType.Align)]
+        public string? Align = "left";
+
+        [Bind("color", BindType.Color)]
+        public string? Color = "#000000";
+
+        [Bind("container-background-color", BindType.Color)]
+        public string? ContainerBackgroundColor;
+
+        [Bind("css-class")]
+        public string? CssClass;
+
+        [Bind("font-family")]
+        public string? FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
+
+        [Bind("font-size", BindType.Pixels)]
+        public string? FontSize = "13px";
+
+        [Bind("font-style")]
+        public string? FontStyle = "normal";
+
+        [Bind("font-weight")]
+        public string? FontWeight;
+
+        [Bind("height", BindType.Pixels)]
+        public string? Height;
+
+        [Bind("letter-spacing", BindType.Pixels)]
+        public string? LetterSpacing = "none";
+
+        [Bind("line-height", BindType.Pixels)]
+        public string? LineHeight = "1";
+
+        [Bind("padding", BindType.FourPixelsOrPercent)]
+        public string? Padding = "10px 25px";
+
+        [Bind("padding-bottom", BindType.PixelsOrPercent)]
+        public string? PaddingBottom;
+
+        [Bind("padding-left", BindType.PixelsOrPercent)]
+        public string? PaddingLeft;
+
+        [Bind("padding-right", BindType.PixelsOrPercent)]
+        public string? PaddingRight;
+
+        [Bind("padding-top", BindType.PixelsOrPercent)]
+        public string? PaddingTop;
+
+        [Bind("text-decoration")]
+        public string? TextDecoration;
+
+        [Bind("text-transform")]
+        public string? TextTransform;
+    }
+
+    public sealed class TextComponent : BodyComponentBase<TextProps>
     {
         public override string ComponentName => "mj-text";
 
-        public override AllowedAttributes? AllowedAttributes { get; } =
-            new AllowedAttributes
-            {
-                ["align"] = AttributeTypes.Align,
-                ["color"] = AttributeTypes.Color,
-                ["container-background-color"] = AttributeTypes.Color,
-                ["css-class"] = AttributeTypes.String,
-                ["font-family"] = AttributeTypes.String,
-                ["font-size"] = AttributeTypes.Pixels,
-                ["font-style"] = AttributeTypes.String,
-                ["font-weight"] = AttributeTypes.String,
-                ["height"] = AttributeTypes.Pixels,
-                ["letter-spacing"] = AttributeTypes.Pixels,
-                ["line-height"] = AttributeTypes.Pixels,
-                ["padding"] = AttributeTypes.FourPixelsOrPercent,
-                ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
-                ["padding-left"] = AttributeTypes.PixelsOrPercent,
-                ["padding-right"] = AttributeTypes.PixelsOrPercent,
-                ["padding-top"] = AttributeTypes.PixelsOrPercent,
-                ["text-decoration"] = AttributeTypes.String,
-                ["text-transform"] = AttributeTypes.String,
-            };
-
-        public override Attributes? DefaultAttributes { get; } =
-            new Attributes
-            {
-                ["align"] = "left",
-                ["color"] = "#000000",
-                ["font-family"] = "Ubuntu, Helvetica, Arial, sans-serif",
-                ["font-size"] = "13px",
-                ["font-style"] = "normal",
-                ["letter-spacing"] = "none",
-                ["line-height"] = "1",
-                ["padding"] = "10px 25px",
-            };
-
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var height = node.GetAttribute("height");
+            var props = new TextProps(node);
+
+            var height = props.Height;
 
             if (string.IsNullOrEmpty(height))
             {
@@ -76,20 +99,20 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private static void RenderTextContent(IHtmlRenderer renderer, INode node)
+        private void RenderTextContent(IHtmlRenderer renderer, INode node)
         {
             renderer.ElementStart("div")
-                .Style("font-family", node.GetAttribute("font-family"))
-                .Style("font-size", node.GetAttribute("font-size"))
-                .Style("font-style", node.GetAttribute("font-style"))
-                .Style("font-weight", node.GetAttribute("font-weight"))
-                .Style("letter-spacing", node.GetAttribute("letter-spacing"))
-                .Style("line-height", node.GetAttribute("line-height"))
-                .Style("text-align", node.GetAttribute("align"))
-                .Style("text-decoration", node.GetAttribute("text-decoration"))
-                .Style("text-transform", node.GetAttribute("text-transform"))
-                .Style("color", node.GetAttribute("color"))
-                .Style("height", node.GetAttribute("height"));
+                .Style("font-family", props.FontFamily)
+                .Style("font-size", props.FontSize)
+                .Style("font-style", props.FontStyle)
+                .Style("font-weight", props.FontWeight)
+                .Style("letter-spacing", props.LetterSpacing)
+                .Style("line-height", props.LineHeight)
+                .Style("text-align", props.Align)
+                .Style("text-decoration", props.TextDecoration)
+                .Style("text-transform", props.TextTransform)
+                .Style("color", props.Color)
+                .Style("height", props.Height);
 
             var rawContent = node.GetContentRaw();
 
