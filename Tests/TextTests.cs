@@ -9,24 +9,21 @@ namespace Tests
         [Fact]
         public void Should_render_text()
         {
-            var source = @"
-<mjml>
-    <mj-body>
-        <mj-text>
-            <h1>
-                Hey Title!
-            </h1>
-        </mj-text>
-    </mj-body>
-</mjml>
-";
+            var source = @"<mj-text>Hey Title!</mj-text>";
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            });
+            var result = TestHelper.Render(source);
 
-            TestHelpers.TrimmedContains(Resources.Text, result);
+            AssertHelpers.HtmlAssert(Resources.Text, result);
+        }
+
+        [Fact]
+        public void Should_render_text_with_html()
+        {
+            var source = @"<mj-text><h1>Hey <span>Title!</span></h1></mj-text>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlAssert(Resources.TextWithHtml, result);
         }
     }
 }
