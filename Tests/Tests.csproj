@@ -20,6 +20,7 @@
     <None Remove="Tests\Image.html" />
     <None Remove="Tests\ImageWithLink.html" />
     <None Remove="Tests\Preview.html" />
+    <None Remove="Tests\SocialEmpty.html" />
     <None Remove="Tests\Spacer.html" />
     <None Remove="Tests\SpacerWIthHeight.html" />
     <None Remove="Tests\Style.html" />
@@ -49,6 +50,10 @@
 
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Tests\SocialEmpty.html" />
   </ItemGroup>
 
   <ItemGroup>
