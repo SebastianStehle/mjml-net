@@ -1,4 +1,4 @@
-﻿using Mjml.Net.Helpers;
+﻿using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
@@ -52,7 +52,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                renderer.Content(ConditionalTags.StartConditional);
+                renderer.StartConditionalTag();
                 renderer.ElementStart("table")
                     .Attr("role", "presentation")
                     .Attr("border", "0")
@@ -64,15 +64,15 @@ namespace Mjml.Net.Components.Body
                     .Attr("height", height)
                     .Style("vertical-align", "top")
                     .Style("height", height);
-                renderer.Content(ConditionalTags.EndConditional);
+                renderer.EndConditionalTag();
 
                 RenderTextContent(renderer, node);
 
-                renderer.Content(ConditionalTags.StartConditional);
+                renderer.StartConditionalTag();
                 renderer.ElementEnd("td");
                 renderer.ElementEnd("tr");
                 renderer.ElementEnd("table");
-                renderer.Content(ConditionalTags.EndConditional);
+                renderer.EndConditionalTag();
             }
         }
 
