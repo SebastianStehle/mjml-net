@@ -45,6 +45,7 @@
             var props = new DividerProps(node);
 
             var borderSetting = $"{props.BorderStyle} {props.BorderWidth} {props.BorderColor}";
+
             var margin = GetMargin(props.Align);
 
             renderer.ElementStart("p")

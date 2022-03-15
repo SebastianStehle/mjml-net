@@ -85,18 +85,12 @@
 
             var containerWidth = renderer.GetContainerWidth();
 
-            var backgroundColor = props.BackgroundColor;
-            var backgroundHeight = props.BackgroundHeight;
-            var backgroundPosition = props.BackgroundPosition;
-            var backgroundUrl = props.BackgroundUrl;
-            var backgroundWidth = props.BackgroundWidth;
-            var parsedBackgroundHeight = UnitParser.Parse(backgroundHeight);
-            var parsedBackgroundWidth = UnitParser.Parse(backgroundWidth);
-
-            var backgroundString = backgroundColor;
-            if (backgroundUrl != null)
+            var parsedBackgroundHeight = UnitParser.Parse(props.BackgroundHeight);
+            var parsedBackgroundWidth = UnitParser.Parse(props.BackgroundWidth);
+            var backgroundString = props.BackgroundColor;
+            if (props.BackgroundUrl != null)
             {
-                backgroundString = $"{backgroundString} url({backgroundUrl}) no-repeat {backgroundPosition} / cover";
+                backgroundString = $"{backgroundString} url({props.BackgroundUrl}) no-repeat {props.BackgroundPosition} / cover";
             }
 
             var backgroundRatioValue = Math.Round(100 *
@@ -134,7 +128,7 @@
                 .Attr("src", props.BackgroundUrl)
                 .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Style("border", "0")
-                .Style("height", backgroundHeight)
+                .Style("height", props.BackgroundHeight)
                 .Style("mso-position-horizontal", "center")
                 .Style("position", "absolute")
                 .Style("top", "0")
@@ -175,9 +169,9 @@
                 MagicId(renderer, backgroundRatio);
 
                 renderer.ElementStart("td") // Style: hero
-                    .Attr("background", backgroundUrl)
+                    .Attr("background", props.BackgroundUrl)
                     .Style("background", backgroundString)
-                    .Style("background-position", backgroundPosition)
+                    .Style("background-position", props.BackgroundPosition)
                     .Style("background-repeat", "no-repeat")
                     .Style("border-radius", props.BorderRadius)
                     .Style("padding", props.Padding)
@@ -201,10 +195,10 @@
                     UnitParser.Parse(props.PaddingBottom).Value;
 
                 renderer.ElementStart("td") // Style: hero
-                    .Attr("background", backgroundUrl)
+                    .Attr("background", props.BackgroundUrl)
                     .Attr("height", height.ToInvariantString())
                     .Style("background", backgroundString)
-                    .Style("background-position", backgroundPosition)
+                    .Style("background-position", props.BackgroundPosition)
                     .Style("background-repeat", "no-repeat")
                     .Style("border-radius", props.BorderRadius)
                     .Style("padding", props.Padding)

@@ -1,4 +1,4 @@
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial struct ButtonProps
     {
@@ -107,16 +107,7 @@ namespace Mjml.Net.Components.Body
         {
             var props = new ButtonProps(node);
 
-            var backgroundColor = props.BackgroundColor;
-            var borderRadius = props.BorderRadius;
-            var fontStyle = props.FontStyle;
-            var height = props.Height;
-            var href = props.Href;
-            var innerPadding = props.InnerPadding;
-            var textAlign = props.TextAlign;
-            var width = props.Width;
-
-            var buttonHtmlTag = !string.IsNullOrEmpty(href) ? "a" : "p";
+            var buttonHtmlTag = !string.IsNullOrEmpty(props.Href) ? "a" : "p";
 
             renderer.ElementStart("table")
                 .Attr("border", "0")
@@ -124,13 +115,13 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Style("border-collapse", "separate")
-                .Style("width", width)
+                .Style("width", props.Width)
                 .Style("line-height", "100%");
 
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
                 .Attr("align", "center")
-                .Attr("bgcolor", backgroundColor)
+                .Attr("bgcolor", props.BackgroundColor)
                 .Attr("role", "presentation")
                 .Attr("valign", props.VerticalAlign)
                 .Style("border", props.Border)
@@ -138,25 +129,25 @@ namespace Mjml.Net.Components.Body
                 .Style("border-left", props.BorderLeft)
                 .Style("border-right", props.BorderRight)
                 .Style("border-top", props.BorderTop)
-                .Style("border-radius", borderRadius)
+                .Style("border-radius", props.BorderRadius)
                 .Style("cursor", "auto")
-                .Style("font-style", fontStyle)
-                .Style("height", height)
-                .Style("mso-padding-alt", innerPadding)
-                .Style("text-align", textAlign)
-                .Style("background", backgroundColor);
+                .Style("font-style", props.FontStyle)
+                .Style("height", props.Height)
+                .Style("mso-padding-alt", props.InnerPadding)
+                .Style("text-align", props.TextAlign)
+                .Style("background", props.BackgroundColor);
 
             renderer.ElementStart(buttonHtmlTag)
                 .Attr("href", props.Href)
                 .Attr("rel", props.Rel)
                 .Attr("name", props.Name)
-                .Attr("target", !string.IsNullOrEmpty(href) ? props.Target : null)
+                .Attr("target", !string.IsNullOrEmpty(props.Href) ? props.Target : null)
                 .Style("display", "inline-block")
                 .Style("width", CalculateButtonWidth(ref props))
-                .Style("background", backgroundColor)
+                .Style("background", props.BackgroundColor)
                 .Style("color", props.Color)
                 .Style("font-family", props.FontFamily)
-                .Style("font-style", fontStyle)
+                .Style("font-style", props.FontStyle)
                 .Style("font-size", props.FontSize)
                 .Style("font-weight", props.FontWeight)
                 .Style("line-height", props.LineHeight)
@@ -165,10 +156,10 @@ namespace Mjml.Net.Components.Body
                 .Style("text-decoration", props.TextDecoration)
                 .Style("text-transform", props.TextTransform)
                 .Style("letter-spacing", props.LetterSpacing)
-                .Style("padding", innerPadding)
+                .Style("padding", props.InnerPadding)
                 .Style("mso-padding-alt", "0px")
-                .Style("text-align", textAlign)
-                .Style("border-radius", borderRadius);
+                .Style("text-align", props.TextAlign)
+                .Style("border-radius", props.BorderRadius);
 
             renderer.Content(node.GetContent());
 
@@ -180,9 +171,7 @@ namespace Mjml.Net.Components.Body
 
         private static string? CalculateButtonWidth(ref ButtonProps props)
         {
-            var width = props.Width;
-
-            if (string.IsNullOrEmpty(width) || !width.Contains("px", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(props.Width) || !props.Width.Contains("px", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
