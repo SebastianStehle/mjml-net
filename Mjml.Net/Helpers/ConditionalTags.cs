@@ -7,7 +7,7 @@
         internal const string EndConditional = "<![endif]-->";
 
         internal const string StartNotConditional = "<!--[if !mso | IE]><!-->";
-        internal const string StartNotMsoConditional = "<!--[if !mso><!-->";
+        internal const string StartNotMsoConditional = "<!--[if !mso]><!-->";
         internal const string EndNotConditional = "<!--<![endif]-->";
     }
 }
