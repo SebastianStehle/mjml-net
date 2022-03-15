@@ -234,6 +234,10 @@ namespace Mjml.Net
         {
             return currentText;
         }
+        public string? GetContentRaw()
+        {
+            return reader?.ReadOuterXml();
+        }
 
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
         {
