@@ -99,20 +99,23 @@ namespace Mjml.Net
             currentAttributes.Clear();
             currentComponent = renderer.GetComponent(currentElement);
 
+            var component = currentComponent;
+
             var currentLine = CurrentLine(reader);
             var currentColumn = CurrentColumn(reader);
 
-            if (currentComponent == null)
+            if (component == null)
             {
                 errors.Add($"Invalid element '{currentElement}'.",
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                    currentLine,
+                    currentColumn);
                 Validate();
+                return;
             }
 
-            validator.ValidateComponent(currentComponent!, errors,
-                CurrentLine(reader),
-                CurrentColumn(reader));
+            validator.BeforeComponent(component, errors,
+                currentLine,
+                currentColumn);
 
             reader.Read();
 
@@ -122,7 +125,9 @@ namespace Mjml.Net
 
                 currentAttributes[reader.Name] = reader.Value;
 
-                validator.Attribute(reader.Name, reader.Value, currentComponent!, errors, CurrentLine, CurrentColumn);
+                validator.Attribute(reader.Name, reader.Value, component, errors,
+                    CurrentLine(reader),
+                    CurrentColumn(reader));
             }
 
             var childRenderer = contextStack.Current?.Options.Renderer;
@@ -137,7 +142,7 @@ namespace Mjml.Net
             }
 
             validator.AfterComponent(component, errors, currentLine, currentColumn);
-            
+
             contextStack.Pop();
 
             reader.Close();

@@ -21,12 +21,14 @@
 
         public void Attribute(string name, string value, IComponent component, ValidationErrors errors, int? line, int? column)
         {
-            if (component.AllowedAttributes == null)
+            var allowedAttributes = component.Props?.GetFields();
+
+            if (allowedAttributes == null)
             {
                 return;
             }
 
-            if (!component.AllowedAttributes.TryGetValue(name, out var attribute))
+            if (!allowedAttributes.TryGetValue(name, out var attribute))
             {
                 errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.", line, column);
             }
