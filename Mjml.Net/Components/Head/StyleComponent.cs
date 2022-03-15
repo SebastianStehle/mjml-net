@@ -1,24 +1,18 @@
-﻿using Mjml.Net.Helpers;
+using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Head
 {
-    public partial struct StyleProperties
+    public partial struct StyleProps
     {
         [Bind("inline")]
         public string? Inline;
     }
 
-    public sealed class StyleComponent : HeadComponentBase
+    public sealed class StyleComponent : HeadComponentBase<StyleProps>
     {
         public override string ComponentName => "mj-style";
 
         public override bool NeedsContent => true;
-
-        public override AllowedAttributes? AllowedAttributes { get; } =
-            new AllowedAttributes
-            {
-                ["inline"] = AttributeTypes.String
-            };
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {

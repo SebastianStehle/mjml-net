@@ -74,7 +74,7 @@ namespace Mjml.Net.Generator
 // Auto-generated code
 namespace {namespaceName}
 {{
-    public partial struct {classSymbol.Name} : IValidationSource
+    public partial struct {classSymbol.Name} : IProps
     {{
         public {classSymbol.Name}(INode node)
             : this()
@@ -105,6 +105,21 @@ namespace {namespaceName}
             source.Append($@"
             return result;
         }}
+
+        public string? DefaultValue(string? name)
+        {{
+            switch (name)
+            {{
+");
+            foreach (var field in allFields.Values.Where(x => x.Value != null))
+            {
+                ProcessFieldDefault(source, field);
+            }
+
+            source.Append($@"
+            }}
+            return null;
+        }}
     }}
 }}");
 
@@ -118,6 +133,14 @@ namespace {namespaceName}
 ");
         }
 
+        private void ProcessFieldDefault(StringBuilder source, FieldInfo field)
+        {
+            source.Append($@"
+                case ""{field.Attribute}"":
+                    return {field.Value};
+");
+        }
+
         private void ProcessField(StringBuilder source, FieldInfo field)
         {
             var assignment = $"source{field.Name}";
@@ -128,7 +151,7 @@ namespace {namespaceName}
             }
 
             source.Append($@"
-            var source{field.Name} = node.GetAttribute(""{field.Attribute}"");
+            var source{field.Name} = node.GetAttribute(""{field.Attribute}"", true);
             if (source{field.Name} != null)
             {{
                 this.{field.Name} = {assignment};

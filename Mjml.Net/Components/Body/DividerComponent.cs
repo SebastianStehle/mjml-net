@@ -1,59 +1,66 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public sealed class DividerComponent : BodyComponentBase
+    public partial struct DividerProps
+    {
+        [Bind("align", BindType.Align)]
+        public string? Align = "center";
+
+        [Bind("border-color", BindType.Color)]
+        public string? BorderColor = "#000000";
+
+        [Bind("border-style")]
+        public string? BorderStyle = "solid";
+
+        [Bind("border-width", BindType.Pixels)]
+        public string? BorderWidth = "4px";
+
+        [Bind("container-background-color", BindType.Color)]
+        public string? ContainerBackgroundColor;
+
+        [Bind("padding", BindType.FourPixelsOrPercent)]
+        public string? Padding = "10px 25px";
+
+        [Bind("padding-bottom", BindType.PixelsOrPercent)]
+        public string? PaddingBottom;
+
+        [Bind("padding-left", BindType.PixelsOrPercent)]
+        public string? PaddingLeft;
+
+        [Bind("padding-right", BindType.PixelsOrPercent)]
+        public string? PaddingRight;
+
+        [Bind("padding-top", BindType.PixelsOrPercent)]
+        public string? PaddingTop;
+
+        [Bind("width", BindType.PixelsOrPercent)]
+        public string? Width = "100%";
+    }
+
+    public sealed class DividerComponent : BodyComponentBase<DividerProps>
     {
         public override string ComponentName => "mj-divider";
 
-        public override AllowedAttributes? AllowedAttributes { get; } =
-            new AllowedAttributes
-            {
-                ["align"] = AttributeTypes.Align,
-                ["border-color"] = AttributeTypes.Color,
-                ["border-style"] = AttributeTypes.String,
-                ["border-width"] = AttributeTypes.Pixels,
-                ["container-background-color"] = AttributeTypes.Color,
-                ["padding"] = AttributeTypes.FourPixelsOrPercent,
-                ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
-                ["padding-left"] = AttributeTypes.PixelsOrPercent,
-                ["padding-right"] = AttributeTypes.PixelsOrPercent,
-                ["padding-top"] = AttributeTypes.PixelsOrPercent,
-                ["width"] = AttributeTypes.PixelsOrPercent,
-            };
-
-        public override Attributes? DefaultAttributes { get; } =
-            new Attributes
-            {
-                ["align"] = "center",
-                ["border-color"] = "#000000",
-                ["border-style"] = "solid",
-                ["border-width"] = "4px",
-                ["padding"] = "10px 25px",
-                ["width"] = "100%",
-            };
-
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var align = node.GetAttribute("align");
-            var borderStyle = node.GetAttribute("border-style");
-            var borderWidth = node.GetAttribute("border-width");
-            var borderColor = node.GetAttribute("border-color");
-            var borderSetting = $"{borderStyle} {borderWidth} {borderColor}";
-            var margin = GetMargin(node.GetAttribute("align"));
+            var props = new DividerProps(node);
+
+            var borderSetting = $"{props.BorderStyle} {props.BorderWidth} {props.BorderColor}";
+            var margin = GetMargin(props.Align);
 
             renderer.ElementStart("p")
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", node.GetAttribute("width"));
+                .Style("width", props.Width);
 
             renderer.ElementEnd("p");
 
-            var outlookWidth = GetOutlookWidth(renderer, node);
+            var outlookWidth = GetOutlookWidth(renderer, ref props);
 
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", align)
+                .Attr("align", props.Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -91,15 +98,15 @@
             }
         }
 
-        private static string GetOutlookWidth(IHtmlRenderer renderer, INode node)
+        private static string GetOutlookWidth(IHtmlRenderer renderer, ref DividerProps props)
         {
             var containerWidth = renderer.GetContainerWidth().Value;
 
             var paddingSize =
-                node.GetShorthandAttributeValue("padding-left", "padding") +
-                node.GetShorthandAttributeValue("padding-right", "padding");
+                UnitParser.Parse(props.PaddingLeft).Value +
+                UnitParser.Parse(props.PaddingRight).Value;
 
-            var width = node.GetAttribute("width")!;
+            var width = props.Width!;
 
             var (parsedWidth, unit) = UnitParser.Parse(width);
 

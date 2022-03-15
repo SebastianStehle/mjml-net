@@ -1,7 +1,9 @@
 ﻿namespace Mjml.Net
 {
-    public interface IValidationSource
+    public interface IProps
     {
         AllowedAttributes GetFields();
+
+        string? DefaultValue(string name);
     }
 }

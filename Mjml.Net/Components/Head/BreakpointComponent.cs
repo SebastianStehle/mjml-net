@@ -2,13 +2,13 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public partial struct BreakpointProperties
+    public partial struct BreakpointProps
     {
         [Bind("width")]
         public string Width;
     }
 
-    public sealed class BreakpointComponent : HeadComponentBase
+    public sealed class BreakpointComponent : HeadComponentBase<BreakpointProps>
     {
         public override string ComponentName => "mj-breakpoint";
 
@@ -16,7 +16,7 @@ namespace Mjml.Net.Components.Head
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var args = new BreakpointProperties(node);
+            var args = new BreakpointProps(node);
 
             // Just in case that validation is disabled.
             if (args.Width != null)

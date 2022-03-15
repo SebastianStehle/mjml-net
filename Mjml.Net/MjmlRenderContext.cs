@@ -87,7 +87,7 @@ namespace Mjml.Net
 
             var newContext = new ComponentContext(contextStack.Current, reader, childOptions);
 
-            currentComponent?.AddToChildContext(newContext, contextStack.Current!, this);
+            childOptions.ChildContext?.Invoke(newContext);
             contextStack.Push(newContext);
 
             currentElement = name;
@@ -140,33 +140,23 @@ namespace Mjml.Net
             reader.Close();
         }
 
-        public string? GetAttribute(string name, string? fallback = null)
+        public string? GetAttribute(string name, bool withoutDefaults = false)
         {
-            string ProvideValue(string name, string value)
-            {
-                if (currentComponent?.AllowedAttributes?.TryGetValue(name, out var attribute) == true)
-                {
-                    return attribute.Coerce(value);
-                }
-
-                return value;
-            }
-
             if (currentAttributes.TryGetValue(name, out var attribute))
             {
-                return ProvideValue(name, attribute);
+                return attribute;
             }
 
             if (attributesByName.TryGetValue(name, out var byType))
             {
                 if (byType.TryGetValue(currentElement!, out attribute))
                 {
-                    return ProvideValue(name, attribute);
+                    return attribute;
                 }
 
                 if (byType.TryGetValue(Constants.All, out attribute))
                 {
-                    return ProvideValue(name, attribute);
+                    return attribute;
                 }
             }
 
@@ -183,20 +173,18 @@ namespace Mjml.Net
                     {
                         if (byName.TryGetValue(name, out attribute))
                         {
-                            return ProvideValue(name, attribute);
+                            return attribute;
                         }
                     }
                 }
             }
 
-            var defaultAttributes = currentComponent?.DefaultAttributes;
-
-            if (defaultAttributes != null && defaultAttributes.TryGetValue(name, out attribute))
+            if (!withoutDefaults)
             {
-                return ProvideValue(name, attribute);
+                return currentComponent?.Props?.DefaultValue(name);
             }
 
-            return fallback;
+            return null;
         }
 
         public object? Set(string name, object? value)

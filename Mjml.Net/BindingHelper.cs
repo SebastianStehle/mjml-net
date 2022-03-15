@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net
 {
-    internal static class BindingHelper
+    public static class BindingHelper
     {
         public static (string?, string?, string?, string?) ParseShorthandValue(string value)
         {

@@ -28,7 +28,7 @@ namespace Tests.Types
         [InlineData("#ff00bb", "#f0b ")]
         public void Should_coerce_value(string expected, string value)
         {
-            var result = AttributeTypes.Color.Coerce(value);
+            var result = BindingHelper.CoerceColor(value);
 
             Assert.Equal(expected, result);
         }

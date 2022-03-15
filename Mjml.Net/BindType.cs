@@ -2,9 +2,14 @@
 {
     public enum BindType
     {
-        String,
+        Align,
+        Boolean,
         Color,
-        PixelsOrPercent,
+        FourPixelsOrPercent,
         Pixels,
+        PixelsOrAuto,
+        PixelsOrPercent,
+        String,
+        VerticalAlign,
     }
 }
