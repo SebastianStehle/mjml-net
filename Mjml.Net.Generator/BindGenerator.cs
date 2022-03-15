@@ -179,7 +179,7 @@ namespace {namespaceName}
             }
 
             source.Append($@"
-            if ({fieldName} != null && {fieldName}Top == null || {fieldName}Right == null || {fieldName}Bottom == null || {fieldName}Left == null)
+            if ({fieldName} != null && ({fieldName}Top == null || {fieldName}Right == null || {fieldName}Bottom == null || {fieldName}Left == null))
             {{
                 var (t, r, b, l) = BindingHelper.ParseShorthandValue({fieldName});
 

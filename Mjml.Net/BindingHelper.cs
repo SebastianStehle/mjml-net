@@ -4,6 +4,11 @@
     {
         public static (string?, string?, string?, string?) ParseShorthandValue(string value)
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                return (null, null, null, null);
+            }
+
             var parts = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             string? t = null;
