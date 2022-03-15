@@ -220,7 +220,7 @@ namespace Mjml.Net
 
         public string? GetContentRaw()
         {
-            return contextStack.Current!.Reader?.ReadOuterXml();
+            return contextStack.Current!.Reader?.ReadInnerXml();
         }
 
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
