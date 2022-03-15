@@ -127,9 +127,9 @@
                 static void MagicId(IHtmlRenderer renderer, string backgroundRatio)
                 {
                     renderer.ElementStart("td") // Style td-fluid
-                        .Style("width", "0.01%")
+                        .Style("mso-padding-bottom-alt", "0")
                         .Style("padding-bottom", backgroundRatio)
-                        .Style("mso-padding-bottom-alt", "0");
+                        .Style("width", "0.01%");
                     renderer.ElementEnd("td");
                 }
 

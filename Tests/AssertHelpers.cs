@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using AngleSharp.Css.Dom;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
 using AngleSharp.Diffing.Strategies.AttributeStrategies;
@@ -62,7 +63,7 @@ namespace Tests
                         .AddElementComparer()
                         .AddIgnoreElementSupport()
                         .AddSearchingNodeMatcher()
-                        .AddStyleAttributeComparer()
+                        .AddStyleAttributeComparer(ignoreOrder: true)
                         .AddStyleSheetComparer()
                         .AddTextComparer(WhitespaceOption.Normalize, ignoreCase: false)
                         .IgnoreDiffAttributes()
@@ -110,8 +111,8 @@ namespace Tests
                 {
                     case NodeDiff diff when diff.Target == DiffTarget.Text && diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
                         sb.AppendLine($"The text in {diff.Control.Path} is different.");
-                        sb.AppendLine($"    Test:    '{diff.Test.Node.Text()}'.");
-                        sb.AppendLine($"    Control: '{diff.Control.Node.Text()}'.");
+                        sb.AppendLine($" * Test:    '{diff.Test.Node.Text()}'.");
+                        sb.AppendLine($" * Control: '{diff.Control.Node.Text()}'.");
                         break;
                     case NodeDiff diff when diff.Target == DiffTarget.Text:
                         sb.AppendLine($"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} is different.");
@@ -124,8 +125,8 @@ namespace Tests
                         break;
                     case AttrDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
                         sb.AppendLine($"The values of the attributes at {diff.Control.Path} are different.");
-                        sb.AppendLine($"    Test:    '{diff.Test.Attribute.Value}'.");
-                        sb.AppendLine($"    Control: '{diff.Control.Attribute.Value}'.");
+                        sb.AppendLine($" * Test:    '{diff.Test.Attribute.Value}'.");
+                        sb.AppendLine($" * Control: '{diff.Control.Attribute.Value}'.");
                         break;
                     case AttrDiff diff:
                         sb.AppendLine($"The value of the attribute {diff.Control.Path} and actual attribute {diff.Test.Path} are different.");
