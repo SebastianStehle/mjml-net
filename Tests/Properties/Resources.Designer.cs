@@ -111,7 +111,7 @@ namespace Tests.Properties {
         ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
         ///      &lt;tbody&gt;&lt;tr&gt;
         ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
-        ///          &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none [rest of string was truncated]&quot;;.
+        ///          &lt;p style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:n [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Button {
             get {
@@ -123,7 +123,7 @@ namespace Tests.Properties {
         ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
         ///      &lt;tbody&gt;&lt;tr&gt;
         ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
-        ///          &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration: [rest of string was truncated]&quot;;.
+        ///          &lt;a href=&quot;https://mjml.io/&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0;text-decorati [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ButtonLink {
             get {
@@ -135,7 +135,7 @@ namespace Tests.Properties {
         ///   Looks up a localized string similar to &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; role=&quot;presentation&quot; style=&quot;border-collapse:separate;line-height:100%;&quot;&gt;
         ///      &lt;tbody&gt;&lt;tr&gt;
         ///        &lt;td align=&quot;center&quot; bgcolor=&quot;#f45e43&quot; role=&quot;presentation&quot; style=&quot;border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#f45e43;&quot; valign=&quot;middle&quot;&gt;
-        ///          &lt;a href=&quot;https://mjml.io/&quot; rel=&quot;relly good&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margin:0 [rest of string was truncated]&quot;;.
+        ///          &lt;a href=&quot;https://mjml.io/&quot; rel=&quot;relly good&quot; style=&quot;display:inline-block;background:#f45e43;color:white;font-family:Helvetica;font-size:13px;font-weight:normal;line-height:120%;margi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ButtonLinkWithRel {
             get {
@@ -269,10 +269,8 @@ namespace Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div style=&quot;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-style:normal;letter-spacing:none;line-height:1;text-align:left;color:#000000;&quot;&gt;
-        ///    &lt;h1&gt;
-        ///    Hey Title!
-        ///    &lt;/h1&gt;
-        ///    &lt;/div&gt;.
+        ///  &lt;h1&gt;Hey &lt;span&gt;Title!&lt;/span&gt;&lt;/h1&gt;
+        ///&lt;/div&gt;.
         /// </summary>
         internal static string TextWithHtml {
             get {
