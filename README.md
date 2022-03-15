@@ -27,7 +27,7 @@ You can find out more about MJML 4 from the official website.
 <p align="center">
 | <b><a href="https://mjml.io/">Official Website</a></b>
   | <b><a href="https://documentation.mjml.io/">Official Documentation</a></b>
-  | <b><a href="https://mjml.io/getting-started-onboard">Official Oboarding</a></b>
+  | <b><a href="https://mjml.io/getting-started-onboard">Official Onboarding</a></b>
   |
 </p>
 
