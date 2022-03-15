@@ -1,5 +1,4 @@
-﻿using Tests.Properties;
-using Xunit;
+﻿using Xunit;
 
 namespace Tests
 {
@@ -12,7 +11,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(Resources.Divider, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("Divider.html"), result);
         }
     }
 }

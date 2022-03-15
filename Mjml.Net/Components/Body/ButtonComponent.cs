@@ -56,7 +56,6 @@
                 ["line-height"] = "120%",
                 ["padding"] = "10px 25px",
                 ["target"] = "_blank",
-                ["text-align"] = "center",
                 ["text-decoration"] = "none",
                 ["text-transform"] = "none",
                 ["vertical-align"] = "middle",
@@ -65,13 +64,13 @@
         public override void Render(IHtmlRenderer renderer, INode node)
         {
             var backgroundColor = node.GetAttribute("background-color");
-            var width = node.GetAttribute("width");
+            var borderRadius = node.GetAttribute("border-radius");
+            var fontStyle = node.GetAttribute("font-style");
             var height = node.GetAttribute("height");
             var href = node.GetAttribute("href");
-            var fontStyle = node.GetAttribute("font-style");
-            var borderRadius = node.GetAttribute("border-radius");
-            var textAlign = node.GetAttribute("text-align");
             var innerPadding = node.GetAttribute("inner-padding");
+            var textAlign = node.GetAttribute("text-align");
+            var width = node.GetAttribute("width");
 
             var buttonHtmlTag = !string.IsNullOrEmpty(href) ? "a" : "p";
 

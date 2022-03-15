@@ -1,5 +1,4 @@
 ﻿using Mjml.Net.Helpers;
-using Tests.Properties;
 using Xunit;
 
 namespace Tests
@@ -25,7 +24,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlAssert(Resources.Style, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("Style.html"), result);
         }
 
         [Fact]
@@ -47,7 +46,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlAssert(Resources.Style, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("Style.html"), result);
         }
     }
 }

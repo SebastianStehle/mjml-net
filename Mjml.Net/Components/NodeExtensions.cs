@@ -6,7 +6,7 @@ namespace Mjml.Net.Components
     {
         public static (double TotalWidth, double Borders, double Paddings, double Box) GetBoxWidths(this INode node, IHtmlRenderer renderer)
         {
-            var containerWidth = renderer.GetContainerWidth();
+            var containerWidth = renderer.GetContainerWidth().Value;
 
             var paddings =
                 node.GetShorthandAttributeValue("padding-right", "padding") +
@@ -19,11 +19,14 @@ namespace Mjml.Net.Components
             return (containerWidth, borders, paddings, containerWidth - paddings - borders);
         }
 
-        public static double GetContainerWidth(this IHtmlRenderer renderer)
+        public static ContainerWidth GetContainerWidth(this IContext renderer)
         {
-            var width = renderer.GetContext("containerWidth");
+            return renderer.Get("containerWidth") as ContainerWidth ?? ContainerWidth.Default;
+        }
 
-            return width is double i ? i : 600;
+        public static void SetContainerWidth(this IContext context, double value)
+        {
+            context.Set("containerWidth", new ContainerWidth(value, $"{value}", $"{value}px"));
         }
 
         public static string ToInvariantString(this double value)

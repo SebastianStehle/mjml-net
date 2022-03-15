@@ -33,55 +33,54 @@
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var borderStyle = $"{node.GetAttribute("border-width")} {node.GetAttribute("border-style")} {node.GetAttribute("border-color")}";
+            var align = node.GetAttribute("align");
+            var borderStyle = node.GetAttribute("border-style");
+            var borderWidth = node.GetAttribute("border-width");
+            var borderColor = node.GetAttribute("border-color");
+            var borderSetting = $"{borderStyle} {borderWidth} {borderColor}";
+            var margin = GetMargin(node.GetAttribute("align"));
 
-            RenderDefault(renderer, node, borderStyle);
-            RenderOutlook(renderer, node, borderStyle);
-        }
-
-        private static void RenderDefault(IHtmlRenderer renderer, INode node, string borderStyle)
-        {
             renderer.ElementStart("p")
+                .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
-                .Style("border-top", borderStyle)
+                .Style("margin", margin)
                 .Style("width", node.GetAttribute("width"));
 
             renderer.ElementEnd("p");
-        }
 
-        private static void RenderOutlook(IHtmlRenderer renderer, INode node, string borderStyle)
-        {
             var outlookWidth = GetOutlookWidth(renderer, node);
 
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", GetAlign(node))
+                .Attr("align", align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
-                .Attr("cellpadding", "0")
+                .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Attr("width", outlookWidth)
+                .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
-                .Style("border-top", borderStyle)
-                .Style("width", node.GetAttribute("width"));
+                .Style("margin", margin)
+                .Style("width", outlookWidth);
 
             renderer.ElementStart("tr");
 
             renderer.ElementStart("td")
                 .Attr("style", "height:0; line-height:0;");
 
-            renderer.Content("&nbsp");
+            renderer.Content("&nbsp;");
 
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
+            renderer.ElementEnd("table");
 
             renderer.Content("<![endif]-->");
         }
 
-        private static string GetAlign(INode node)
+        private static string GetMargin(string? align)
         {
-            switch (node.GetAttribute("align"))
+            switch (align)
             {
                 case "left":
                     return "0px";
@@ -94,7 +93,7 @@
 
         private static string GetOutlookWidth(IHtmlRenderer renderer, INode node)
         {
-            var containerWidth = renderer.GetContainerWidth();
+            var containerWidth = renderer.GetContainerWidth().Value;
 
             var paddingSize =
                 node.GetShorthandAttributeValue("padding-left", "padding") +
