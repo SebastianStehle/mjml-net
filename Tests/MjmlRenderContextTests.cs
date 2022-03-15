@@ -8,7 +8,7 @@ namespace Tests
 {
     public class MjmlRenderContextTests
     {
-        private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), null!, new MjmlOptions
+        private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
         {
             Beautify = true
         });

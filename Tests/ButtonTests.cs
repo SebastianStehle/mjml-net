@@ -1,6 +1,4 @@
-﻿using Mjml.Net;
-using Tests.Properties;
-using Xunit;
+﻿using Xunit;
 
 namespace Tests
 {
@@ -17,7 +15,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(Resources.Button, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("Button.html"), result);
         }
 
         [Fact]
@@ -31,7 +29,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(Resources.ButtonLink, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("ButtonLink.html"), result);
         }
 
         [Fact]
@@ -45,7 +43,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(Resources.ButtonLinkWithRel, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("ButtonLinkWithRel.html"), result);
         }
     }
 }

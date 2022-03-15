@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Xml;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
@@ -9,12 +10,11 @@ namespace Mjml.Net
         private readonly Dictionary<string, string> currentRenderAttributes = new Dictionary<string, string>(10);
         private readonly HashSet<string> currentRenderClasses = new HashSet<string>(10);
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
-        private readonly RenderStack<ChildOptions> childOptions = new RenderStack<ChildOptions>();
         private string? currentRenderElement;
         private bool currentRenderElementSelfClosed;
         private int intend;
 
-        public XmlReader Reader => reader;
+        public XmlReader Reader => contextStack.Current!.Reader;
 
         public INode Node => this;
 
@@ -23,7 +23,7 @@ namespace Mjml.Net
         private void ClearRenderData()
         {
             buffers.Clear();
-            childOptions.Clear();
+            contextStack.Clear();
             currentRenderAttributes.Clear();
             currentRenderClasses.Clear();
             currentRenderElement = null;
@@ -277,25 +277,33 @@ namespace Mjml.Net
 
         public void RenderChildren(ChildOptions options)
         {
+            var reader = contextStack.Current!.Reader;
+
             if (options.RawXML)
             {
-                var inner = reader.ReadOuterXml().Trim();
+                var inner = reader.ReadInnerXml().Trim();
 
                 Content(inner);
             }
             else
             {
-                childOptions.Push(options);
+                reader.Read();
 
-                Read();
-
-                childOptions.Pop();
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            ReadElement(reader.Name, reader, options);
+                            break;
+                    }
+                }
             }
         }
 
         void IChildRenderer.Render()
         {
-            Read();
+            currentComponent!.Render(this, this);
         }
 
         private void Flush()

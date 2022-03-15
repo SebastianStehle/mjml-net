@@ -21,6 +21,7 @@ namespace Mjml.Net
             Add(new DividerComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
+            Add(new HeroComponent());
             Add(new ImageComponent());
             Add(new PreviewComponent());
             Add(new RawComponent());
@@ -97,9 +98,9 @@ namespace Mjml.Net
             var context = ObjectPools.Contexts.Get();
             try
             {
-                context.Setup(this, xml, options);
+                context.Setup(this, options);
                 context.BufferStart();
-                context.Read();
+                context.Read(xml);
 
                 return context.BufferFlush()!;
             }

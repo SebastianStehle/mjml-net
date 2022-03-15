@@ -14,7 +14,7 @@
         {
             renderer.BufferStart();
             renderer.RenderChildren();
-            renderer.SetContext("head", renderer.BufferFlush());
+            renderer.SetGlobalData("head", renderer.BufferFlush());
         }
     }
 }

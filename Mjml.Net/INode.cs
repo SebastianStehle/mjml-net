@@ -8,11 +8,11 @@ namespace Mjml.Net
         /// Get the attribute of the node with the given name.
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
-        /// <param name="fallback">The fallback value.</param>
+        /// <param name="withoutDefaults">Ignore defaults.</param>
         /// <returns>
         /// The attribute of the node or null if not found.
         /// </returns>
-        string? GetAttribute(string name, string? fallback = null);
+        string? GetAttribute(string name, bool withoutDefaults = false);
 
         /// <summary>
         /// Get the text content of the node.
@@ -33,5 +33,10 @@ namespace Mjml.Net
         /// This is needed for components such as mj-attributes.
         /// </remarks>
         XmlReader Reader { get; }
+
+        /// <summary>
+        /// The current component.
+        /// </summary>
+        IComponent Component { get; }
     }
 }

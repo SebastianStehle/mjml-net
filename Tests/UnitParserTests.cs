@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mjml.Net.Components;
+﻿using Mjml.Net.Components;
 using Xunit;
 
 namespace Tests
