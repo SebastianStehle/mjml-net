@@ -20,5 +20,7 @@ namespace Mjml.Net
         public static readonly IType FourPixelsOrPercent = new ManyType(PixelsOrPercent, 1, 4);
 
         public static readonly IType String = new StringType();
+
+        public static readonly IType VerticalAlign = new EnumType("top", "middle", "bottom");
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Mjml.Net.Helpers;
-using Tests.Properties;
 using Xunit;
 
 namespace Tests
@@ -21,7 +20,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new BreakpointHelper());
 
-            AssertHelpers.HtmlAssert(Resources.Breakpoint, result);
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("Breakpoint.html"), result);
         }
     }
 }
