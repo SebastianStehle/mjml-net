@@ -2,6 +2,12 @@
 
 namespace Mjml.Net.Components.Head
 {
+    public partial struct StyleProperties
+    {
+        [Bind("inline")]
+        public string? Inline;
+    }
+
     public sealed class StyleComponent : HeadComponentBase
     {
         public override string ComponentName => "mj-style";
