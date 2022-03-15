@@ -71,7 +71,7 @@ namespace Mjml.Net.Components.Body
 
             if (string.IsNullOrEmpty(height))
             {
-                RenderTextContent(renderer, node, props);
+                RenderTextContent(renderer, node, ref props);
             }
             else
             {
@@ -89,7 +89,7 @@ namespace Mjml.Net.Components.Body
                     .Style("height", height);
                 renderer.EndConditionalTag();
 
-                RenderTextContent(renderer, node, props);
+                RenderTextContent(renderer, node, ref props);
 
                 renderer.StartConditionalTag();
                 renderer.ElementEnd("td");
@@ -99,7 +99,7 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private void RenderTextContent(IHtmlRenderer renderer, INode node, TextProps props)
+        private void RenderTextContent(IHtmlRenderer renderer, INode node, ref TextProps props)
         {
             renderer.ElementStart("div")
                 .Style("font-family", props.FontFamily)
