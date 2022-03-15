@@ -16,6 +16,10 @@
 
         public string ComponentName { get; }
 
+        public void AddToChildContext(IContext context, IContext parentContext, INode parentNode)
+        {
+        }
+
         public void Render(IHtmlRenderer renderer, INode node);
     }
 }

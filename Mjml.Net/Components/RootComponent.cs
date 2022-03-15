@@ -44,7 +44,10 @@ namespace Mjml.Net.Components
             renderer.Content(Resources.DefaultComments);
 
             // Already formatted properly.
-            renderer.Plain(renderer.GetContext("head") as string);
+            if (renderer.GlobalData.TryGetValue((typeof(string), "head"), out var head))
+            {
+                renderer.Plain(head.ToString());
+            }
 
             // Helpers right before head ends.
             renderer.RenderHelpers(HelperTarget.HeadEnd);
@@ -59,7 +62,10 @@ namespace Mjml.Net.Components
             renderer.RenderHelpers(HelperTarget.BodyStart);
 
             // Already formatted properly.
-            renderer.Plain(renderer.GetContext("body") as string);
+            if (renderer.GlobalData.TryGetValue((typeof(string), "body"), out var head))
+            {
+                renderer.Plain(head.ToString());
+            }
 
             // Helpers right before body ends.
             renderer.RenderHelpers(HelperTarget.BodyEnd);

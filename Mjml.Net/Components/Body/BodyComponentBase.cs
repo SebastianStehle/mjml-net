@@ -20,6 +20,10 @@
 
         public abstract string ComponentName { get; }
 
+        public virtual void AddToChildContext(IContext context, IContext parentContext, INode parentNode)
+        {
+        }
+
         public abstract void Render(IHtmlRenderer renderer, INode node);
     }
 }

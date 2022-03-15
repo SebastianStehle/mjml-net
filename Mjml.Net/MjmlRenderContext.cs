@@ -16,7 +16,6 @@ namespace Mjml.Net
         private IComponent? currentComponent;
         private MjmlOptions options;
         private MjmlRenderer renderer;
-        private XmlReader reader;
         private IValidator validator;
         private string? currentText;
         private string? currentElement;
@@ -24,45 +23,18 @@ namespace Mjml.Net
 
         public IComponent Component => currentComponent!;
 
-        private int? CurrentLine
-        {
-            get
-            {
-                if (reader is IXmlLineInfo lineInfo)
-                {
-                    return lineInfo.LineNumber;
-                }
-
-                return null;
-            }
-        }
-
-        private int? CurrentColumn
-        {
-            get
-            {
-                if (reader is IXmlLineInfo lineInfo)
-                {
-                    return lineInfo.LinePosition;
-                }
-
-                return null;
-            }
-        }
-
         public MjmlRenderContext()
         {
         }
 
-        public MjmlRenderContext(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
+        public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions options = default)
         {
-            Setup(renderer, reader, options);
+            Setup(renderer,  options);
         }
 
-        public void Setup(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
+        public void Setup(MjmlRenderer renderer, MjmlOptions options = default)
         {
             this.renderer = renderer;
-            this.reader = reader;
             this.options = options;
 
             validator = options.Validator ?? SoftValidator.Instance;
@@ -80,7 +52,6 @@ namespace Mjml.Net
             currentText = null;
             errors.Clear();
             globalData.Clear();
-            reader = null!;
             renderer = null!;
 
             ClearRenderData();
@@ -97,36 +68,50 @@ namespace Mjml.Net
             }
         }
 
-        public void Read()
+        public void Read(XmlReader reader)
         {
-            do
+            while (reader.Read())
             {
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        ReadElement(reader.Name);
+                        ReadElement(reader.Name, reader, default);
                         break;
                 }
             }
-            while (reader.Read());
         }
 
-        private void ReadElement(string name)
+        private void ReadElement(string name, XmlReader parentReader, ChildOptions childOptions)
         {
+            var reader = parentReader.ReadSubtree();
+
+            var newContext = new ComponentContext(contextStack.Current, reader, childOptions);
+
+            currentComponent?.AddToChildContext(newContext, contextStack.Current!, this);
+            contextStack.Push(newContext);
+
             currentElement = name;
             currentClasses = null;
             currentText = null;
             currentAttributes.Clear();
-
             currentComponent = renderer.GetComponent(currentElement);
+
+            var currentLine = CurrentLine(reader);
+            var currentColumn = CurrentColumn(reader);
 
             if (currentComponent == null)
             {
-                errors.Add($"Invalid element '{currentElement}'.", CurrentLine, CurrentColumn);
+                errors.Add($"Invalid element '{currentElement}'.",
+                    CurrentLine(reader),
+                    CurrentColumn(reader));
                 Validate();
             }
 
-            validator.ValidateComponent(currentComponent!, errors, CurrentLine, CurrentColumn);
+            validator.ValidateComponent(currentComponent!, errors,
+                CurrentLine(reader),
+                CurrentColumn(reader));
+
+            reader.Read();
 
             for (var i = 0; i < reader.AttributeCount; i++)
             {
@@ -134,22 +119,9 @@ namespace Mjml.Net
 
                 currentAttributes[reader.Name] = reader.Value;
 
-                validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors, CurrentLine, CurrentColumn);
-            }
-
-            while (reader.Read())
-            {
-                var type = reader.NodeType;
-
-                if (type == XmlNodeType.Text)
-                {
-                    currentText = reader.Value.Trim(TrimChars);
-                    break;
-                }
-                else if (type == XmlNodeType.Element || type == XmlNodeType.EndElement)
-                {
-                    break;
-                }
+                validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors,
+                    CurrentLine(reader),
+                    CurrentColumn(reader));
             }
 
             var childRenderer = contextStack.Current?.Options.Renderer;
@@ -162,6 +134,10 @@ namespace Mjml.Net
             {
                 currentComponent!.Render(this, this);
             }
+
+            contextStack.Pop();
+
+            reader.Close();
         }
 
         public string? GetAttribute(string name, string? fallback = null)
@@ -223,18 +199,34 @@ namespace Mjml.Net
             return fallback;
         }
 
-        public void SetContext(string name, object? value)
+        public object? Set(string name, object? value)
         {
-            contextStack.Current?.Set(name, value);
+            return contextStack.Current?.Set(name, value);
         }
 
-        public object? GetContext(string name)
+        public object? Get(string name)
         {
             return contextStack.Current?.Get(name);
         }
 
         public string? GetContent()
         {
+            var reader = contextStack.Current!.Reader;
+
+            if (currentText == null)
+            {
+                while (reader.Read())
+                {
+                    if (reader.NodeType == XmlNodeType.Text)
+                    {
+                        currentText = reader.Value.Trim(TrimChars);
+                        break;
+                    }
+                }
+
+                currentText ??= string.Empty;
+            }
+
             return currentText;
         }
 
@@ -272,6 +264,26 @@ namespace Mjml.Net
             }
 
             attributes[name] = value;
+        }
+
+        private static int? CurrentLine(XmlReader reader)
+        {
+            if (reader is IXmlLineInfo lineInfo)
+            {
+                return lineInfo.LineNumber;
+            }
+
+            return null;
+        }
+
+        private static int? CurrentColumn(XmlReader reader)
+        {
+            if (reader is IXmlLineInfo lineInfo)
+            {
+                return lineInfo.LineNumber;
+            }
+
+            return null;
         }
     }
 }

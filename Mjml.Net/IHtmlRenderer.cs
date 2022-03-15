@@ -3,7 +3,7 @@
     /// <summary>
     /// Renders html for MJML.
     /// </summary>
-    public interface IHtmlRenderer
+    public interface IHtmlRenderer : IContext
     {
         /// <summary>
         /// Starts a new element.
@@ -68,13 +68,6 @@
         void RenderChildren(ChildOptions options);
 
         /// <summary>
-        /// Sets the context for all nested elements.
-        /// </summary>
-        /// <param name="name">The name of the context value.</param>
-        /// <param name="value">The context value.</param>
-        void SetContext(string name, object? value);
-
-        /// <summary>
         /// Sets a global context for all elements.
         /// </summary>
         /// <param name="name">The name of the context value.</param>
@@ -97,13 +90,6 @@
         /// <param name="className">The class name of the attribute.</param>
         /// <param name="value">The value of the attribute.</param>
         void SetClassAttribute(string name, string className, string value);
-
-        /// <summary>
-        /// Sets a context value by name.
-        /// </summary>
-        /// <param name="name">The name of the context value.</param>
-        /// <returns>The value if found or <c>null</c> otherwise.</returns>
-        object? GetContext(string name);
     }
 
     public interface IChildRenderer

@@ -97,9 +97,9 @@ namespace Mjml.Net
             var context = ObjectPools.Contexts.Get();
             try
             {
-                context.Setup(this, xml, options);
+                context.Setup(this, options);
                 context.BufferStart();
-                context.Read();
+                context.Read(xml);
 
                 return context.BufferFlush()!;
             }

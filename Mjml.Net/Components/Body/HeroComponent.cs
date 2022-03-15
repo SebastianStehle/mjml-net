@@ -194,6 +194,18 @@
             renderer.Content("<![endif]-->");
         }
 
+        public override void AddToChildContext(IContext context, IContext parentContext, INode parentNode)
+        {
+            var containerWidth = parentContext.GetContainerWidth();
+
+            var innerWidth =
+                containerWidth.Value -
+                    parentNode.GetShorthandAttributeValue("padding-left", "padding") -
+                    parentNode.GetShorthandAttributeValue("padding-right", "padding");
+
+            context.SetContainerWidth(innerWidth);
+        }
+
         private static void RenderContent(IHtmlRenderer renderer, INode node, ContainerWidth containerWidth)
         {
             var innerBackgroundColor = node.GetAttribute("inner-background-color");
@@ -252,17 +264,10 @@
 
             renderer.ElementStart("tbody");
 
-            var innerWidth =
-                containerWidth.Value -
-                    node.GetShorthandAttributeValue("padding-left", "padding") -
-                    node.GetShorthandAttributeValue("padding-right", "padding");
-
             renderer.RenderChildren(new ChildOptions
             {
                 Renderer = child =>
                 {
-                    renderer.SetContainerWidth(innerWidth);
-
                     if (child.Node.Component.Raw)
                     {
                         child.Render();

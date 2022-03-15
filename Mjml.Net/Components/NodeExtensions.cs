@@ -19,14 +19,14 @@ namespace Mjml.Net.Components
             return (containerWidth, borders, paddings, containerWidth - paddings - borders);
         }
 
-        public static ContainerWidth GetContainerWidth(this IHtmlRenderer renderer)
+        public static ContainerWidth GetContainerWidth(this IContext renderer)
         {
-            return renderer.GetContext("containerWidth") as ContainerWidth ?? ContainerWidth.Default;
+            return renderer.Get("containerWidth") as ContainerWidth ?? ContainerWidth.Default;
         }
 
-        public static void SetContainerWidth(this IHtmlRenderer renderer, double value)
+        public static void SetContainerWidth(this IContext context, double value)
         {
-            renderer.SetContext("containerWidth", new ContainerWidth(value, $"{value}", $"{value}px"));
+            context.Set("containerWidth", new ContainerWidth(value, $"{value}", $"{value}px"));
         }
 
         public static string ToInvariantString(this double value)

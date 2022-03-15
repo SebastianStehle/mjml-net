@@ -55,7 +55,7 @@ namespace Mjml.Net.Components.Body
             renderer.SetGlobalData("mj-image", new DynamicStyle(HeadStyle));
 
             var fluidOnMobile = node.GetAttribute("fluid-on-mobile") == "true";
-            var fullWidth = Equals(renderer.GetContext("full-width"), true);
+            var fullWidth = Equals(renderer.Get("full-width"), true);
 
             var widthConfigured = node.GetAttributeNumber("width");
             var widthAvailable = node.GetBoxWidths(renderer).Box;

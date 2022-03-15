@@ -14,7 +14,7 @@ namespace Mjml.Net
         private bool currentRenderElementSelfClosed;
         private int intend;
 
-        public XmlReader Reader => reader;
+        public XmlReader Reader => contextStack.Current!.Reader;
 
         public INode Node => this;
 
@@ -277,19 +277,27 @@ namespace Mjml.Net
 
         public void RenderChildren(ChildOptions options)
         {
+            var reader = contextStack.Current!.Reader;
+
             if (options.RawXML)
             {
-                var inner = reader.ReadOuterXml().Trim();
+                var inner = reader.ReadInnerXml().Trim();
 
                 Content(inner);
             }
             else
             {
-                contextStack.Push(new ComponentContext(contextStack.Current, options));
+                reader.Read();
 
-                Read();
-
-                contextStack.Pop();
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            ReadElement(reader.Name, reader, options);
+                            break;
+                    }
+                }
             }
         }
 

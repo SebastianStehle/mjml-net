@@ -30,5 +30,20 @@ namespace Tests
 
             AssertHelpers.HtmlAssert(TestHelper.GetContent("HeroDivider.html"), result);
         }
+
+        [Fact]
+        public void Should_render_hero_with_children()
+        {
+            var source = @"
+<mj-hero>
+  <mj-divider />
+  <mj-divider />
+</mj-hero>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("HeroDividers.html"), result);
+        }
     }
 }

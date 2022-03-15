@@ -1,8 +1,10 @@
 ﻿#pragma warning disable SA1401 // Fields should be private
 
+using System.Xml;
+
 namespace Mjml.Net.Internal
 {
-    internal sealed class ComponentContext
+    internal sealed class ComponentContext : IContext
     {
         private bool isCopied;
 
@@ -10,25 +12,21 @@ namespace Mjml.Net.Internal
 
         public Dictionary<string, object?>? Values;
 
-        public ComponentContext(ComponentContext? source, ChildOptions options)
+        public XmlReader Reader { get; }
+
+        public ComponentContext(ComponentContext? source, XmlReader reader, ChildOptions options)
         {
+            Reader = reader;
+
             if (source != null)
             {
                 Values = source.Values;
             }
 
             Options = options;
-
-            if (options.Values != null)
-            {
-                foreach (var (key, value) in options.Values)
-                {
-                    Set(key, value);
-                }
-            }
         }
 
-        public void Set(string key, object? value)
+        public object? Set(string key, object? value)
         {
             if (Values == null)
             {
@@ -42,6 +40,8 @@ namespace Mjml.Net.Internal
             }
 
             Values[key] = value;
+
+            return value;
         }
 
         public object? Get(string key)
