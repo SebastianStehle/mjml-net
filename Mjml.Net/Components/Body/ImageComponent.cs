@@ -21,7 +21,6 @@ namespace Mjml.Net.Components.Body
                 ["fluid-on-mobile"] = AttributeTypes.Boolean,
                 ["font-size"] = AttributeTypes.Pixels,
                 ["height"] = AttributeTypes.PixelsOrAuto,
-                ["height"] = AttributeTypes.PixelsOrPercent,
                 ["href"] = AttributeTypes.String,
                 ["max-height"] = AttributeTypes.PixelsOrPercent,
                 ["name"] = AttributeTypes.String,

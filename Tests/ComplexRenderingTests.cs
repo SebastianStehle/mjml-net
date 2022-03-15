@@ -20,7 +20,7 @@ namespace Tests
                 Beautify = true
             });
 
-            // TrimmedEqual(Resources.BodyOnly, result);
+            AssertHelpers.TrimmedContains("</body>", result);
         }
     }
 }
