@@ -91,10 +91,7 @@ namespace Mjml.Net.Components.Body
                 .Style("color", node.GetAttribute("color"))
                 .Style("height", node.GetAttribute("height"));
 
-            renderer.RenderChildren(new ChildOptions
-            {
-                RawXML = true
-            });
+            renderer.Content(node.GetContentRaw());
 
             renderer.ElementEnd("div");
         }
