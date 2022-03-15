@@ -29,6 +29,8 @@
     <None Remove="Tests\Spacer.html" />
     <None Remove="Tests\SpacerWIthHeight.html" />
     <None Remove="Tests\Style.html" />
+    <None Remove="Tests\Text.html" />
+    <None Remove="Tests\TextWithHtml.html" />
     <None Remove="Tests\Title.html" />
   </ItemGroup>
 
@@ -59,6 +61,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Tests\HeroDividers.html" />
+    <EmbeddedResource Include="Tests\TextWithHtml.html" />
+    <EmbeddedResource Include="Tests\Text.html" />
     <EmbeddedResource Include="Tests\Title.html" />
     <EmbeddedResource Include="Tests\Style.html" />
     <EmbeddedResource Include="Tests\SpacerWithHeight.html" />

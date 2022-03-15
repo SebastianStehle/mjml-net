@@ -218,6 +218,11 @@ namespace Mjml.Net
             return currentText;
         }
 
+        public string? GetContentRaw()
+        {
+            return contextStack.Current!.Reader?.ReadInnerXml();
+        }
+
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
         {
             var type = value.GetType();
