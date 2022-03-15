@@ -5,5 +5,6 @@
         String,
         Color,
         PixelsOrPercent,
+        Pixels,
     }
 }

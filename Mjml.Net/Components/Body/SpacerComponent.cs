@@ -20,7 +20,7 @@
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
 
-        [Bind("height", BindType.Color)]
+        [Bind("height", BindType.Pixels)]
         public string Height = "20px";
 
         [Bind("padding", BindType.PixelsOrPercent)]
