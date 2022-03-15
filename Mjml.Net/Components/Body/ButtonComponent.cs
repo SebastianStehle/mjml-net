@@ -171,12 +171,12 @@
 
         private static string? CalculateButtonWidth(ref ButtonProps props)
         {
-            if (string.IsNullOrEmpty(props.Width) || !props.Width.Contains("px", StringComparison.OrdinalIgnoreCase))
+            var widthParsed = UnitParser.Parse(props.Width);
+
+            if (widthParsed.Value <= 0 || widthParsed.Unit != Unit.Pixels)
             {
                 return null;
             }
-
-            var widthParsed = UnitParser.Parse(props.Width).Value;
 
             var borders =
                 UnitParser.Parse(props.BorderLeft).Value +
@@ -186,7 +186,7 @@
                 UnitParser.Parse(props.PaddingLeft).Value +
                 UnitParser.Parse(props.PaddingRight).Value;
 
-            return $"{widthParsed - innerPadding - borders}px";
+            return $"{widthParsed.Value - innerPadding - borders}px";
         }
     }
 }
