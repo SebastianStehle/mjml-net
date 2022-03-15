@@ -44,12 +44,12 @@ namespace Mjml.Net.Generator
 
             var allFields = new Dictionary<string, FieldInfo>();
 
-            foreach (var field in fields)
+            foreach (var (fiel, value) in fields)
             {
-                var fieldName = field.Field.Name;
+                var fieldName = fiel.Name;
 
-                // get the AutoNotify attribute from the field, and any associated data
-                var attributeData = field.Field.GetAttributes().Single(a => a.AttributeClass.Equals(attribute, SymbolEqualityComparer.Default));
+                // Get the attribute name and the type.
+                var attributeData = fiel.GetAttributes().Single(a => a.AttributeClass.Equals(attribute, SymbolEqualityComparer.Default));
                 var attributeName = attributeData.ConstructorArguments.First().Value;
 
                 var type = "String";
@@ -58,13 +58,14 @@ namespace Mjml.Net.Generator
                 {
                     var argument = attributeData.ConstructorArguments.Last();
 
+                    // Value is an integer here so we need to convert it to its Enum.
                     var valueNumber = (int)attributeData.ConstructorArguments.Last().Value;
                     var valueString = argument.Type.GetMembers()[valueNumber].Name;
 
                     type = valueString;
                 }
 
-                allFields[fieldName] = new FieldInfo(fieldName, attributeName.ToString(), field.Value ?? "null", type);
+                allFields[fieldName] = new FieldInfo(fieldName, attributeName.ToString(), value ?? "null", type);
             }
 
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
