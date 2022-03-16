@@ -15,7 +15,7 @@ namespace Mjml.Net
         private IComponent? currentComponent;
         private MjmlOptions options;
         private MjmlRenderer renderer;
-        private IValidator validator;
+        private IValidator? validator;
         private string? currentElement;
         private string[]? currentClasses;
 
@@ -48,7 +48,7 @@ namespace Mjml.Net
             this.renderer = renderer;
             this.options = options;
 
-            validator = options.Validator ?? SoftValidator.Instance;
+            validator = options.Validator;
         }
 
         internal void Clear()
@@ -68,7 +68,7 @@ namespace Mjml.Net
 
         public List<ValidationError> Validate()
         {
-            validator.Complete(errors);
+            validator?.Complete(errors);
 
             return errors.ToList();
         }
@@ -111,20 +111,23 @@ namespace Mjml.Net
                 return;
             }
 
-            validator.ValidateComponent(currentComponent!, errors,
-                CurrentLine(reader),
-                CurrentColumn(reader));
-
-            reader.Read();
-
-            for (var i = 0; i < reader.AttributeCount; i++)
+            if (validator != null)
             {
-                reader.MoveToAttribute(i);
-
-                validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors,
+                validator.ValidateComponent(currentComponent!, errors,
                     CurrentLine(reader),
                     CurrentColumn(reader));
+
+                for (var i = 0; i < reader.AttributeCount; i++)
+                {
+                    reader.MoveToAttribute(i);
+
+                    validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors,
+                        CurrentLine(reader),
+                        CurrentColumn(reader));
+                }
             }
+
+            reader.Read();
 
             var childRenderer = contextStack.Current?.Options.Renderer;
 
