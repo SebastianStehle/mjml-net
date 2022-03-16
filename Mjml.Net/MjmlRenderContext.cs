@@ -21,7 +21,20 @@ namespace Mjml.Net
         private string? currentElement;
         private string[]? currentClasses;
 
-        public IComponent Component => currentComponent!;
+        public INode Node
+        {
+            get => this;
+        }
+
+        public IComponent Component
+        {
+            get => currentComponent!;
+        }
+
+        public GlobalData GlobalData
+        {
+            get => globalData;
+        }
 
         public MjmlRenderContext()
         {
@@ -57,15 +70,11 @@ namespace Mjml.Net
             ClearRenderData();
         }
 
-        public void Validate()
+        public List<ValidationError> Validate()
         {
             validator.Complete(errors);
 
-            if (errors.Any())
-            {
-                // Create a copy because the error list could be reused.
-                throw new ValidationException(errors.ToList());
-            }
+            return errors.ToList();
         }
 
         public void Read(XmlReader reader)

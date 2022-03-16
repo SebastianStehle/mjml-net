@@ -12,19 +12,9 @@ namespace Mjml.Net
         private int currentIntend;
         private bool currentlyWriting;
 
-        public INode Node
-        {
-            get => this;
-        }
-
         public XmlReader Reader
         {
             get => contextStack.Current!.Reader!;
-        }
-
-        public GlobalData GlobalData
-        {
-            get => globalData;
         }
 
         private StringBuilder Buffer
@@ -126,6 +116,7 @@ namespace Mjml.Net
 
             if (numClasses == 0)
             {
+                // Open the class attribute.
                 Buffer.Append(" class=\"");
             }
             else
@@ -149,13 +140,16 @@ namespace Mjml.Net
 
             if (numClasses > 0)
             {
+                // Close the open class attribute.
                 Buffer.Append("\" ");
 
+                // Reset the number of classes so we do not close it again in the flush.
                 numClasses = 0;
             }
 
             if (numStyles == 0)
             {
+                // Open the styles attribute.
                 Buffer.Append(" style=\"");
             }
 
@@ -352,6 +346,7 @@ namespace Mjml.Net
 
             if (numClasses > 0 || numStyles > 0)
             {
+                // Close the open class or style attribute.
                 Buffer.Append('\"');
             }
 

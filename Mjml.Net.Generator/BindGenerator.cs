@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Mjml.Net.Generator
 {
@@ -111,7 +111,7 @@ namespace {namespaceName}
             switch (name)
             {{
 ");
-            foreach (var field in allFields.Values.Where(x => x.Value != null))
+            foreach (var field in allFields.Values.Where(x => x.AttributeDefault != null))
             {
                 ProcessFieldDefault(source, field);
             }
@@ -137,7 +137,7 @@ namespace {namespaceName}
         {
             source.Append($@"
                 case ""{field.Attribute}"":
-                    return {field.Value};
+                    return {field.AttributeDefault};
 ");
         }
 
@@ -158,7 +158,7 @@ namespace {namespaceName}
             }}
             else
             {{
-                this.{field.Name} = {field.Value};
+                this.{field.Name} = {field.AttributeDefault};
             }}
 ");
         }
@@ -171,11 +171,11 @@ namespace {namespaceName}
 
             bool IsCandidate(string name)
             {
-                if (attribute.Contains(name) && 
-                   !attribute.EndsWith($"{name}-top") &&
-                   !attribute.EndsWith($"{name}-right") &&
-                   !attribute.EndsWith($"{name}-bottom") &&
-                   !attribute.EndsWith($"{name}-left"))
+                if (attribute.Contains(name) &&
+                   !attribute.EndsWith($"{name}-top", StringComparison.Ordinal) &&
+                   !attribute.EndsWith($"{name}-right", StringComparison.Ordinal) &&
+                   !attribute.EndsWith($"{name}-bottom", StringComparison.Ordinal) &&
+                   !attribute.EndsWith($"{name}-left", StringComparison.Ordinal))
                 {
                     return true;
                 }
@@ -231,20 +231,23 @@ namespace {namespaceName}
         }
     }
 
-    class FieldInfo
+    internal sealed class FieldInfo
     {
-        public FieldInfo(string name, string attribute, string value, string type)
+        public string Name { get; }
+
+        public string Attribute { get; }
+
+        public string AttributeDefault { get; }
+
+        public string Type { get; }
+
+        public FieldInfo(string name, string attribute, string attributeDefault, string type)
         {
             Name = name;
             Attribute = attribute;
-            Value = value;
+            AttributeDefault = attributeDefault;
             Type = type;
         }
-
-        public string Name { get; }
-        public string Attribute { get; }
-        public string Value { get; }
-        public string Type { get; }
     }
 
     internal sealed class SyntaxReceiver : ISyntaxContextReceiver

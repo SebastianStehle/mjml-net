@@ -1,33 +1,35 @@
-﻿
+﻿using System.Diagnostics;
 using Mjml.Net;
-using System.Diagnostics;
 
-public static class Program
+namespace TestRunner
 {
-    public static void Main(string[] args)
+    public static class Program
     {
-        var mjmlRenderer = new MjmlRenderer();
-
-        Console.WriteLine("Many Heroes");
-
-        for (var i = 0; i < 20; i++)
+        public static void Main(string[] args)
         {
-            Run("ManyHeroes.mjml", mjmlRenderer);
+            var mjmlRenderer = new MjmlRenderer();
+
+            Console.WriteLine("Many Heroes");
+
+            for (var i = 0; i < 20; i++)
+            {
+                Run("ManyHeroes.mjml", mjmlRenderer);
+            }
         }
-    }
 
-    private static void Run(string file, MjmlRenderer mjmlRenderer)
-    {
-        var text = File.ReadAllText(file);
+        private static void Run(string file, MjmlRenderer mjmlRenderer)
+        {
+            var text = File.ReadAllText(file);
 
-        var watch = Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
 
-        var html = mjmlRenderer.Render(text);
+            var html = mjmlRenderer.Render(text).Html;
 
-        watch.Stop();
+            watch.Stop();
 
-        File.WriteAllText($"{file}.html", html);
+            File.WriteAllText($"{file}.html", html);
 
-        Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
+            Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
+        }
     }
 }
