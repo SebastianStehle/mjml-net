@@ -3,22 +3,22 @@
     public partial struct SocialComponentProps
     {
         [Bind("align", BindType.Align)]
-        public string? Align = "center";
+        public string Align = "center";
 
         [Bind("border-radius")]
-        public string? BorderRadius = "3px";
+        public string BorderRadius = "3px";
 
         [Bind("color")]
-        public string? Color = "#333333";
+        public string Color = "#333333";
 
         [Bind("container-background-color", BindType.Color)]
-        public string? ContainerBackgroundColor;
+        public string ContainerBackgroundColor;
 
         [Bind("font-family")]
-        public string? FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
+        public string FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
 
         [Bind("font-size", BindType.Pixels)]
-        public string? FontSize = "13px";
+        public string FontSize = "13px";
 
         [Bind("font-style")]
         public string? FontStyle;
@@ -33,19 +33,19 @@
         public string? IconPadding;
 
         [Bind("icon-size", BindType.PixelsOrPercent)]
-        public string? IconSize = "20px";
+        public string IconSize = "20px";
 
         [Bind("inner-padding", BindType.FourPixelsOrPercent)]
         public string? InnerPadding;
 
         [Bind("line-height", BindType.PixelsOrPercent)]
-        public string? LineHeight = "22px";
+        public string LineHeight = "22px";
 
         [Bind("mode", BindType.SocialMode)]
-        public string? Mode;
+        public string Mode = "horizontal";
 
         [Bind("padding", BindType.FourPixelsOrPercent)]
-        public string? Padding = "10px 25px";
+        public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
         public string? PaddingBottom;
@@ -63,7 +63,7 @@
         public string? TableLayout;
 
         [Bind("text-decoration")]
-        public string? TextDecoration = "none";
+        public string TextDecoration = "none";
 
         [Bind("text-padding", BindType.FourPixelsOrPercent)]
         public string? TextPadding;
