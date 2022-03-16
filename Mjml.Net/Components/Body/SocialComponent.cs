@@ -2,75 +2,102 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public sealed class SocialComponent : BodyComponentBase
+    public partial struct SocialComponentProps
+    {
+        [Bind("align", BindType.Align)]
+        public string? Align = "center";
+
+        [Bind("border-radius")]
+        public string? BorderRadius = "3px";
+
+        [Bind("color")]
+        public string? Color = "#333333";
+
+        [Bind("container-background-color", BindType.Color)]
+        public string? ContainerBackgroundColor;
+
+        [Bind("font-family")]
+        public string? FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
+
+        [Bind("font-size", BindType.Pixels)]
+        public string? FontSize = "13px";
+
+        [Bind("font-style")]
+        public string? FontStyle;
+
+        [Bind("font-weight")]
+        public string? FontWeight;
+
+        [Bind("icon-height", BindType.PixelsOrPercent)]
+        public string? IconHeight;
+
+        [Bind("icon-padding", BindType.FourPixelsOrPercent)]
+        public string? IconPadding;
+
+        [Bind("icon-size", BindType.PixelsOrPercent)]
+        public string? IconSize = "20px";
+
+        [Bind("inner-padding", BindType.FourPixelsOrPercent)]
+        public string? InnerPadding;
+
+        [Bind("line-height", BindType.PixelsOrPercent)]
+        public string? LineHeight = "22px";
+
+        [Bind("mode", BindType.SocialMode)]
+        public string? Mode;
+
+        [Bind("padding", BindType.FourPixelsOrPercent)]
+        public string? Padding = "10px 25px";
+
+        [Bind("padding-bottom", BindType.PixelsOrPercent)]
+        public string? PaddingBottom;
+
+        [Bind("padding-left", BindType.PixelsOrPercent)]
+        public string? PaddingLeft;
+
+        [Bind("padding-right", BindType.PixelsOrPercent)]
+        public string? PaddingRight;
+
+        [Bind("padding-top", BindType.PixelsOrPercent)]
+        public string? PaddingTop;
+
+        [Bind("table-layout", BindType.SocialTableLayout)]
+        public string? TableLayout;
+
+        [Bind("text-decoration")]
+        public string? TextDecoration = "none";
+
+        [Bind("text-padding", BindType.FourPixelsOrPercent)]
+        public string? TextPadding;
+
+        [Bind("vertical-align", BindType.VerticalAlign)]
+        public string? VerticalAlign;
+    }
+
+    public sealed class SocialComponent : BodyComponentBase<SocialComponentProps>
     {
         public override string ComponentName => "mj-social";
 
-        public override AllowedAttributes? AllowedAttributes { get; } =
-            new AllowedAttributes
-            {
-                ["align"] = AttributeTypes.Align,
-                ["border-radius"] = AttributeTypes.String,
-                ["color"] = AttributeTypes.String,
-                ["container-background-color"] = AttributeTypes.Color,
-                ["font-family"] = AttributeTypes.String,
-                ["font-size"] = AttributeTypes.Pixels,
-                ["font-style"] = AttributeTypes.String,
-                ["font-weight"] = AttributeTypes.String,
-                ["icon-height"] = AttributeTypes.PixelsOrPercent,
-                ["icon-padding"] = AttributeTypes.FourPixelsOrPercent,
-                ["icon-size"] = AttributeTypes.PixelsOrPercent,
-                ["inner-padding"] = AttributeTypes.FourPixelsOrPercent,
-                ["line-height"] = AttributeTypes.PixelsOrPercent,
-                ["mode"] = new EnumType("horizontal", "vertical"),
-                ["padding"] = AttributeTypes.FourPixelsOrPercent,
-                ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
-                ["padding-left"] = AttributeTypes.PixelsOrPercent,
-                ["padding-right"] = AttributeTypes.PixelsOrPercent,
-                ["padding-top"] = AttributeTypes.PixelsOrPercent,
-                ["table-layout"] = new EnumType("auto", "fixed"),
-                ["text-decoration"] = AttributeTypes.String,
-                ["text-padding"] = AttributeTypes.FourPixelsOrPercent,
-                ["vertical-align"] = AttributeTypes.VerticalAlign
-            };
-
-        public override Attributes? DefaultAttributes { get; } =
-            new Attributes
-            {
-                ["align"] = "center",
-                ["border-radius"] = "3px",
-                ["color"] = "#333333",
-                ["font-family"] = "Ubuntu, Helvetica, Arial, sans-serif",
-                ["font-size"] = "13px",
-                ["icon-size"] = "20px",
-                ["line-height"] = "22px",
-                ["mode"] = "horizontal",
-                ["padding"] = "10px 25px",
-                ["text-decoration"] = "none"
-            };
-
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var mode = node.GetAttribute("mode");
+            var props = new SocialComponentProps(node);
 
-            if (mode == "horizontal")
+            if (props.Mode == "horizontal")
             {
-                RenderHorizontal(renderer, node);
+                RenderHorizontal(renderer, node, ref props);
             }
             else
             {
-                RenderVertical(renderer, node);
+                RenderVertical(renderer);
             }
         }
 
-        private static void RenderHorizontal(IHtmlRenderer renderer, INode node)
+        private static void RenderHorizontal(IHtmlRenderer renderer, INode node, ref SocialComponentProps props)
         {
-            var align = node.GetAttribute("align");
-
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", align)
+                .Attr("align", props.Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -125,7 +152,7 @@ namespace Mjml.Net.Components.Body
             renderer.Content("<![endif]-->");
         }
 
-        private static void RenderVertical(IHtmlRenderer renderer, INode node)
+        private static void RenderVertical(IHtmlRenderer renderer)
         {
             renderer.ElementStart("table") // Table-vertical
                 .Attr("border", "0")

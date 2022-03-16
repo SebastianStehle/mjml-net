@@ -11,5 +11,7 @@
         PixelsOrPercent,
         String,
         VerticalAlign,
+        SocialMode,
+        SocialTableLayout,
     }
 }

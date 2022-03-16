@@ -22,5 +22,9 @@ namespace Mjml.Net
         public static readonly IType String = new StringType();
 
         public static readonly IType VerticalAlign = new EnumType("top", "middle", "bottom");
+
+        public static readonly IType SocialTableLayout = new EnumType("auto", "fixed");
+
+        public static readonly IType SocialMode = new EnumType("vertical", "horizontal");
     }
 }

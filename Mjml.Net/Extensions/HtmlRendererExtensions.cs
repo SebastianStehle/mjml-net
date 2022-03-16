@@ -25,7 +25,7 @@ namespace Mjml.Net.Extensions
         /// <summary>
         /// Renders the start of conditional tag to NOT target Internet Explorer and Mso.
         /// </summary>
-        /// <param name="renderer">The Html renderer to output too.</param> 
+        /// <param name="renderer">The Html renderer to output too.</param>
         public static void StartConditionalNotTag(this IHtmlRenderer renderer)
         {
             renderer.Content(ConditionalTags.StartNotConditional);

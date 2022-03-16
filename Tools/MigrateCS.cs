@@ -68,6 +68,8 @@ namespace Tools
                 }
 
                 File.WriteAllText(file.FullName, changed);
+
+                Console.WriteLine("{0} changed", file.FullName);
             }
         }
     }
