@@ -13,7 +13,5 @@
         RenderResult Render(string mjml, MjmlOptions options = default);
 
         RenderResult Render(Stream mjml, MjmlOptions options = default);
-
-        RenderResult Render(TextReader mjml, MjmlOptions options = default);
     }
 }

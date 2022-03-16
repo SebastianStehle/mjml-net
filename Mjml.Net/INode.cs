@@ -1,4 +1,4 @@
-﻿using System.Xml;
+﻿using U8Xml;
 
 namespace Mjml.Net
 {
@@ -26,7 +26,7 @@ namespace Mjml.Net
         /// <remarks>
         /// This is needed for components such as mj-attributes.
         /// </remarks>
-        XmlReader Reader { get; }
+        XmlNode XmlNode { get; }
 
         /// <summary>
         /// The current component.
