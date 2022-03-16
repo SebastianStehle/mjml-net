@@ -28,6 +28,6 @@ public static class Program
 
         File.WriteAllText($"{file}.html", html);
 
-        Console.WriteLine("* Elapsed after {0}. Length {1}", watch.Elapsed, html.Length);
+        Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
     }
 }

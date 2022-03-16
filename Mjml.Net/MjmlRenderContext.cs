@@ -42,6 +42,7 @@ namespace Mjml.Net
 
         internal void Clear()
         {
+            globalData.Clear();
             attributesByClass.Clear();
             attributesByName.Clear();
             contextStack.Clear();
@@ -51,7 +52,6 @@ namespace Mjml.Net
             currentElement = null;
             currentText = null;
             errors.Clear();
-            globalData.Clear();
             renderer = null!;
 
             ClearRenderData();
@@ -88,6 +88,7 @@ namespace Mjml.Net
             var newContext = new ComponentContext(contextStack.Current, reader, childOptions);
 
             childOptions.ChildContext?.Invoke(newContext);
+
             contextStack.Push(newContext);
 
             currentElement = name;
