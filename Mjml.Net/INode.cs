@@ -8,19 +8,23 @@ namespace Mjml.Net
         /// Get the attribute of the node with the given name.
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
-        /// <param name="fallback">The fallback value.</param>
+        /// <param name="withoutDefaults">Ignore defaults.</param>
         /// <returns>
         /// The attribute of the node or null if not found.
         /// </returns>
-        string? GetAttribute(string name, string? fallback = null);
+        string? GetAttribute(string name, bool withoutDefaults = false);
 
         /// <summary>
-        /// Get the content of the node.
+        /// Get the text content of the node.
         /// </summary>
-        /// <returns>
-        /// The content of the node or null if not found.
-        /// </returns>
+        /// <returns>The content of the node or null if not found.</returns>
         string? GetContent();
+
+        /// <summary>
+        /// Get the raw content of the node.
+        /// </summary>
+        /// <returns>The content of the node or null if not found.</returns>
+        string? GetContentRaw();
 
         /// <summary>
         /// Get raw access to the reader.

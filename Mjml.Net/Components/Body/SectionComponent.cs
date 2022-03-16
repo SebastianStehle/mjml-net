@@ -6,21 +6,16 @@
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            RenderChildren(renderer, node);
+            RenderChildren(renderer);
         }
 
-        private static void RenderChildren(IHtmlRenderer renderer, INode node)
+        private static void RenderChildren(IHtmlRenderer renderer)
         {
             renderer.RenderChildren(new ChildOptions
             {
                 Renderer = child =>
                 {
-                    renderer.ElementStart("div")
-                        .Attr("width", node.GetAttribute("width"));
-
                     child.Render();
-
-                    renderer.ElementEnd("link");
                 }
             });
         }
