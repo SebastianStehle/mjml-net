@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Types;
-
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial struct SocialComponentProps
     {

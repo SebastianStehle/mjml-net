@@ -5,6 +5,8 @@
         public static void Main(string[] args)
         {
             MigrateCS.Run();
+
+            ConvertJS.Run();
         }
     }
 }

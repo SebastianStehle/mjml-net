@@ -9,10 +9,10 @@ namespace Tools
         {
             var directory = new DirectoryInfo("../../../../Mjml.Net");
 
-            var argumentRegex = new Regex("\\[\"(?<Name>.*)\"\\] = AttributeTypes\\.(?<Type>[^,]*),?");
-            var argumentAccessRegex = new Regex("node\\.GetAttribute\\(\"(?<Name>[^\"]*)\"\\)");
+            var argumentRegex = new Regex("\\[\"(?<Name>.*)\"\\] = AttributeTypes\\.(?<Type>[^,]*),?", RegexOptions.Singleline | RegexOptions.Compiled);
+            var argumentAccessRegex = new Regex("node\\.GetAttribute\\(\"(?<Name>[^\"]*)\"\\)", RegexOptions.Singleline | RegexOptions.Compiled);
 
-            var defaultRegex = new Regex("\\[\"(?<Name>.*)\"\\] = \"(?<Value>.*)\"");
+            var defaultRegex = new Regex("\\[\"(?<Name>.*)\"\\] = \"(?<Value>.*)\"", RegexOptions.Singleline | RegexOptions.Compiled);
 
             foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
             {
@@ -33,7 +33,6 @@ namespace Tools
                     defaultAttributes[name] = value;
                 }
 
-
                 var changed = argumentRegex.Replace(text, x =>
                 {
                     var name = x.Groups["Name"].Value;
@@ -49,10 +48,13 @@ namespace Tools
 
                     if (defaultAttributes.TryGetValue(name, out var value) && value.Length > 0)
                     {
-                        assignment = $" = \"{value}\"";
+                        return $"{attribute}\npublic string {name.ToPascalCase()} = \"{value}\";\n";
+                    }
+                    else
+                    {
+                        return $"{attribute}\npublic string? {name.ToPascalCase()};\n";
                     }
 
-                    return $"{attribute}\npublic string? {name.ToPascalCase()}{assignment}; \n";
                 });
 
                 changed = argumentAccessRegex.Replace(changed, x =>
