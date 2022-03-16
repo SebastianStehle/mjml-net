@@ -114,9 +114,7 @@ namespace Mjml.Net.Components.Body
                 .Style("color", props.Color)
                 .Style("height", props.Height);
 
-            var rawContent = node.GetContentRaw();
-
-            renderer.Content(string.IsNullOrEmpty(rawContent) ? node.GetContent() : rawContent);
+            renderer.RenderChildrenRaw();
 
             renderer.ElementEnd("div");
         }
