@@ -209,7 +209,7 @@ namespace Mjml.Net
             return contextStack.Current?.Get(name);
         }
 
-        public string? GetContent()
+        public string? GetText()
         {
             var reader = Reader;
 

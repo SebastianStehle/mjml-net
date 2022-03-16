@@ -1,4 +1,4 @@
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Head
 {
@@ -6,6 +6,9 @@ namespace Mjml.Net.Components.Head
     {
         [Bind("inline")]
         public string? Inline;
+
+        [BindText]
+        public string? Text;
     }
 
     public sealed class StyleComponent : HeadComponentBase<StyleProps>
@@ -16,13 +19,13 @@ namespace Mjml.Net.Components.Head
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            var style = node.GetContent();
+            var props = new StyleProps(node);
 
             // Just in case that validation is disabled.
-            if (style != null)
+            if (props.Text != null)
             {
                 // Allow multiple styles.
-                renderer.SetGlobalData(Guid.NewGuid().ToString(), new Style(style));
+                renderer.SetGlobalData(Guid.NewGuid().ToString(), new Style(props.Text));
             }
         }
     }
