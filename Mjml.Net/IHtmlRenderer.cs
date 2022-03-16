@@ -57,15 +57,15 @@
         string BufferFlush();
 
         /// <summary>
-        /// Render all children.
-        /// </summary>
-        void RenderChildren();
-
-        /// <summary>
         /// Render all children using the defined options.
         /// </summary>
         /// <param name="options">The options.</param>
-        void RenderChildren(ChildOptions options);
+        void RenderChildren(ChildOptions options = default);
+
+        /// <summary>
+        /// Render all children as raw XML.
+        /// </summary>
+        void RenderChildrenRaw();
 
         /// <summary>
         /// Sets a global context for all elements.

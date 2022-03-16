@@ -301,33 +301,43 @@ namespace Mjml.Net
             }
         }
 
-        public void RenderChildren()
-        {
-            RenderChildren(default);
-        }
-
-        public void RenderChildren(ChildOptions options)
+        public void RenderChildrenRaw()
         {
             var reader = contextStack.Current!.Reader;
 
-            if (options.RawXML)
+            while (reader.Read())
             {
-                var inner = reader.ReadInnerXml().Trim();
-
-                Content(inner);
-            }
-            else
-            {
-                reader.Read();
-
-                while (reader.Read())
+                switch (reader.NodeType)
                 {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            ReadElement(reader.Name, reader, options);
-                            break;
-                    }
+                    case XmlNodeType.Text:
+                        Content(reader.Value);
+                        break;
+                    case XmlNodeType.Element:
+                        Content(reader.ReadOuterXml().Trim());
+
+                        if (reader.NodeType == XmlNodeType.Text)
+                        {
+                            Content(reader.Value);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        public void RenderChildren(ChildOptions options = default)
+        {
+            var reader = contextStack.Current!.Reader;
+
+            reader.Read();
+
+            while (reader.Read())
+            {
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        ReadElement(reader.Name, reader, options);
+                        break;
                 }
             }
         }

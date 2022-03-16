@@ -99,7 +99,7 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private void RenderTextContent(IHtmlRenderer renderer, INode node, ref TextProps props)
+        private static void RenderTextContent(IHtmlRenderer renderer, INode node, ref TextProps props)
         {
             renderer.ElementStart("div")
                 .Style("font-family", props.FontFamily)

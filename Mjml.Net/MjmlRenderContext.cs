@@ -114,7 +114,7 @@ namespace Mjml.Net
                 errors.Add($"Invalid element '{currentElement}'.",
                     CurrentLine(reader),
                     CurrentColumn(reader));
-                Validate();
+                return;
             }
 
             validator.ValidateComponent(currentComponent!, errors,
