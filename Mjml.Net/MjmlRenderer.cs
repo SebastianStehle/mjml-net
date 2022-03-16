@@ -3,6 +3,7 @@ using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
 using Mjml.Net.Helpers;
+using U8Xml;
 
 namespace Mjml.Net
 {
@@ -74,39 +75,31 @@ namespace Mjml.Net
 
         public RenderResult Render(string mjml, MjmlOptions options = default)
         {
-            var xml = XmlReader.Create(new StringReader(mjml));
-
-            return Render(xml, options);
+            return RenderCore(XmlParser.Parse(mjml), options);
         }
 
         public RenderResult Render(Stream mjml, MjmlOptions options = default)
         {
-            var xml = XmlReader.Create(mjml);
-
-            return Render(xml, options);
+            return RenderCore(XmlParser.Parse(mjml), options);
         }
 
-        public RenderResult Render(TextReader mjml, MjmlOptions options = default)
+        private RenderResult RenderCore(XmlObject xml, MjmlOptions options)
         {
-            var xml = XmlReader.Create(mjml);
-
-            return Render(xml, options);
-        }
-
-        private RenderResult Render(XmlReader xml, MjmlOptions options)
-        {
-            var context = ObjectPools.Contexts.Get();
-            try
+            using (xml)
             {
-                context.Setup(this, options);
-                context.BufferStart();
-                context.Read(xml);
+                var context = ObjectPools.Contexts.Get();
+                try
+                {
+                    context.Setup(this, options);
+                    context.BufferStart();
+                    context.Read(xml);
 
-                return new RenderResult(context.BufferFlush(), context.Validate());
-            }
-            finally
-            {
-                ObjectPools.Contexts.Return(context);
+                    return new RenderResult(context.BufferFlush(), context.Validate());
+                }
+                finally
+                {
+                    ObjectPools.Contexts.Return(context);
+                }
             }
         }
     }

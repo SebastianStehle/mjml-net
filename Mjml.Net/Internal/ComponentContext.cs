@@ -1,6 +1,6 @@
 ﻿#pragma warning disable SA1401 // Fields should be private
 
-using System.Xml;
+using U8Xml;
 
 namespace Mjml.Net.Internal
 {
@@ -12,11 +12,11 @@ namespace Mjml.Net.Internal
 
         public Dictionary<string, object?>? Values;
 
-        public XmlReader Reader { get; }
+        public XmlNode Node { get; }
 
-        public ComponentContext(ComponentContext? source, XmlReader reader, ChildOptions options)
+        public ComponentContext(ComponentContext? source, XmlNode node, ChildOptions options)
         {
-            Reader = reader;
+            Node = node;
 
             if (source != null)
             {

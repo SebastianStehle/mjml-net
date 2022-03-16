@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Xml;
 
 namespace Mjml.Net
 {
@@ -11,11 +10,6 @@ namespace Mjml.Net
         private int numStyles;
         private int currentIntend;
         private bool currentlyWriting;
-
-        public XmlReader Reader
-        {
-            get => contextStack.Current!.Reader!;
-        }
 
         private StringBuilder Buffer
         {
@@ -303,42 +297,14 @@ namespace Mjml.Net
 
         public void RenderChildrenRaw()
         {
-            var reader = Reader;
-
-            while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Text:
-                        Content(reader.Value);
-                        break;
-                    case XmlNodeType.Element:
-                        Content(reader.ReadOuterXml().Trim());
-
-                        if (reader.NodeType == XmlNodeType.Text)
-                        {
-                            Content(reader.Value);
-                        }
-
-                        break;
-                }
-            }
+            Content(XmlNode.InnerText.ToString());
         }
 
         public void RenderChildren(ChildOptions options = default)
         {
-            var reader = Reader;
-
-            reader.Read();
-
-            while (reader.Read())
+            foreach (var child in XmlNode.Children)
             {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, options);
-                        break;
-                }
+                ReadElement(child.Name.ToString(), child, options);
             }
         }
 

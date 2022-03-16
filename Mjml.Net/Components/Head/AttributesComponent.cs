@@ -8,6 +8,7 @@ namespace Mjml.Net.Components.Head
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
+            /*
             var reader = node.Reader;
 
             using var subtree = reader.ReadSubtree();
@@ -48,6 +49,7 @@ namespace Mjml.Net.Components.Head
             }
 
             subtree.Close();
+            */
         }
     }
 }

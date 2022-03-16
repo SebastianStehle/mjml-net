@@ -1,6 +1,6 @@
-﻿using System.Xml;
-using Mjml.Net.Internal;
+﻿using Mjml.Net.Internal;
 using Mjml.Net.Validators;
+using U8Xml;
 
 namespace Mjml.Net
 {
@@ -32,6 +32,11 @@ namespace Mjml.Net
         public GlobalData GlobalData
         {
             get => globalData;
+        }
+
+        public XmlNode XmlNode
+        {
+            get => contextStack.Current!.Node!;
         }
 
         public MjmlRenderContext()
@@ -73,24 +78,14 @@ namespace Mjml.Net
             return errors.ToList();
         }
 
-        public void Read(XmlReader reader)
+        public void Read(XmlObject xml)
         {
-            while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, default);
-                        break;
-                }
-            }
+            ReadElement(xml.Root.Name.ToString(), xml.Root, default);
         }
 
-        private void ReadElement(string name, XmlReader parentReader, ChildOptions childOptions)
+        private void ReadElement(string name, XmlNode node, ChildOptions childOptions)
         {
-            var reader = parentReader.ReadSubtree();
-
-            var newContext = new ComponentContext(contextStack.Current, reader, childOptions);
+            var newContext = new ComponentContext(contextStack.Current, node, childOptions);
 
             childOptions.ChildContext?.Invoke(newContext);
 
@@ -100,23 +95,17 @@ namespace Mjml.Net
             currentClasses = null;
             currentComponent = renderer.GetComponent(currentElement);
 
-            var currentLine = CurrentLine(reader);
-            var currentColumn = CurrentColumn(reader);
-
             if (currentComponent == null)
             {
-                errors.Add($"Invalid element '{currentElement}'.",
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                errors.Add($"Invalid element '{currentElement}'.");
                 return;
             }
 
             if (validator != null)
             {
-                validator.ValidateComponent(currentComponent!, errors,
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                /* validator.ValidateComponent(currentComponent!, errors);
 
+                foreach (var attribute in )
                 for (var i = 0; i < reader.AttributeCount; i++)
                 {
                     reader.MoveToAttribute(i);
@@ -124,10 +113,8 @@ namespace Mjml.Net
                     validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors,
                         CurrentLine(reader),
                         CurrentColumn(reader));
-                }
+                }*/
             }
-
-            reader.Read();
 
             var childRenderer = contextStack.Current?.Options.Renderer;
 
@@ -141,15 +128,13 @@ namespace Mjml.Net
             }
 
             contextStack.Pop();
-
-            reader.Close();
         }
 
         public string? GetAttribute(string name, bool withoutDefaults = false)
         {
-            if (Reader.MoveToAttribute(name))
+            if (XmlNode.TryFindAttribute(name, out var xmlAttribute))
             {
-                return Reader.Value;
+                return xmlAttribute.Value.ToString();
             }
 
             if (attributesByName.TryGetValue(name, out var byType))
@@ -169,9 +154,9 @@ namespace Mjml.Net
             {
                 if (currentClasses == null)
                 {
-                    if (Reader.MoveToAttribute(Constants.MjClass))
+                    if (XmlNode.TryFindAttribute(name, out xmlAttribute))
                     {
-                        currentClasses = Reader.Value.Split(' ');
+                        currentClasses = xmlAttribute.Value.ToString().Split(' ');
                     }
                     else
                     {
@@ -211,17 +196,7 @@ namespace Mjml.Net
 
         public string? GetContent()
         {
-            var reader = Reader;
-
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Text)
-                {
-                    return Reader.Value.Trim(TrimChars);
-                }
-            }
-
-            return null;
+            return XmlNode.InnerText.ToString();
         }
 
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
@@ -260,6 +235,8 @@ namespace Mjml.Net
             attributes[name] = value;
         }
 
+        /*
+
         private static int? CurrentLine(XmlReader reader)
         {
             if (reader is IXmlLineInfo lineInfo)
@@ -279,5 +256,6 @@ namespace Mjml.Net
 
             return null;
         }
+        */
     }
 }
