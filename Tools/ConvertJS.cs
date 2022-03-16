@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Tools
 {
-    internal class ConvertJS
+    internal static class ConvertJS
     {
         public static void Run()
         {
@@ -14,22 +14,25 @@ namespace Tools
 
             foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
             {
-                if (!file.Name.EndsWith("Component.cs"))
+                var suffix = "Component.cs";
+
+                if (!file.Name.EndsWith(suffix))
                 {
                     continue;
                 }
 
-                var text = File.ReadAllText(file.FullName);
+                var fileProps = file.Name.Substring(0, file.Name.Length - suffix.Length);
+                var fileText = File.ReadAllText(file.FullName);
 
                 var defaultAttributes = new Dictionary<string, string>();
 
-                var startOfDefaultAttribute = text.IndexOf("static defaultAttributes = {");
+                var startOfDefaultAttribute = fileText.IndexOf("static defaultAttributes = {");
 
                 if (startOfDefaultAttribute >= 0)
                 {
-                    var end = text.IndexOf("}", startOfDefaultAttribute);
+                    var end = fileText.IndexOf("}", startOfDefaultAttribute);
 
-                    var range = text.Substring(startOfDefaultAttribute + 1, end - startOfDefaultAttribute);
+                    var range = fileText.Substring(startOfDefaultAttribute + 1, end - startOfDefaultAttribute);
 
                     foreach (Match match in propertyRegex.Matches(range))
                     {
@@ -42,13 +45,13 @@ namespace Tools
 
                 var sb = new StringBuilder();
 
-                var startOfAllowedAttributes = text.IndexOf("static allowedAttributes = {");
+                var startOfAllowedAttributes = fileText.IndexOf("static allowedAttributes = {");
 
                 if (startOfAllowedAttributes >= 0)
                 {
-                    var end = text.IndexOf("}", startOfAllowedAttributes);
+                    var end = fileText.IndexOf("}", startOfAllowedAttributes);
 
-                    var range = text.Substring(startOfAllowedAttributes + 1, end - startOfAllowedAttributes);
+                    var range = fileText.Substring(startOfAllowedAttributes + 1, end - startOfAllowedAttributes);
 
                     var matches = propertyRegex.Matches(range).OfType<Match>().Select(match =>
                     {
@@ -56,8 +59,17 @@ namespace Tools
                         var type = match.Groups["Value"].Value;
 
                         return (name, type);
-                    }).OrderBy(x => x.name);
+                    }).OrderBy(x => x.name).ToList();
 
+                    if (matches.Count > 0)
+                    {
+                        sb.AppendTabbed(0, "namespace Mjml.Net.Components.Body");
+                        sb.AppendTabbed(0, "{");
+                        sb.AppendTabbed(1, $"public partial struct {fileProps}Props");
+                        sb.AppendTabbed(1, "{");
+                    }
+
+                    var i = 1;
                     foreach (var (name, type) in matches)
                     {
                         var actualType = "String";
@@ -95,19 +107,27 @@ namespace Tools
                             actualType = type;
                         }
 
-                        sb.AppendLine($"[Bind(\"{name}\", BindType.{actualType})]");
+                        sb.AppendTabbed(2, $"[Bind(\"{name}\", BindType.{actualType})]");
 
                         if (defaultAttributes.TryGetValue(name, out var defaultValue) && defaultValue.Length > 0)
                         {
-                            sb.AppendLine($"public string {name.ToPascalCase()} = \"{defaultValue}\";");
+                            sb.AppendTabbed(2, $"public string {name.ToPascalCase()} = \"{defaultValue}\";");
                         }
                         else
                         {
-                            sb.AppendLine($"public string? {name.ToPascalCase()};");
+                            sb.AppendTabbed(2, $"public string? {name.ToPascalCase()};");
                         }
 
-                        sb.AppendLine();
+                        if (i != matches.Count)
+                        {
+                            sb.AppendLine();
+                        }
+
+                        i++;
                     }
+
+                    sb.AppendTabbed(1, "}");
+                    sb.AppendTabbed(0, "}");
                 }
 
                 if (sb.Length > 0)
@@ -115,9 +135,14 @@ namespace Tools
                     File.WriteAllText(file.FullName, sb.ToString());
 
                     Console.WriteLine("{0} changed", file.FullName);
-
                 }
             }
+        }
+
+        private static void AppendTabbed(this StringBuilder sb, int tabs, string line)
+        {
+            sb.Append(new string(' ', tabs * 4));
+            sb.AppendLine(line);
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Mjml.Net.Components.Body
 {
-    public partial struct SocialElementComponentProps
+    public partial struct SocialElementProps
     {
         [Bind("align", BindType.Align)]
         public string Align = "left";

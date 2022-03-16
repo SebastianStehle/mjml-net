@@ -21,11 +21,11 @@ namespace Tools
                     continue;
                 }
 
-                var text = File.ReadAllText(file.FullName);
+                var fileText = File.ReadAllText(file.FullName);
 
                 var defaultAttributes = new Dictionary<string, string>();
 
-                foreach (Match match in defaultRegex.Matches(text))
+                foreach (Match match in defaultRegex.Matches(fileText))
                 {
                     var name = match.Groups["Name"].Value;
                     var value = match.Groups["Value"].Value;
@@ -33,7 +33,7 @@ namespace Tools
                     defaultAttributes[name] = value;
                 }
 
-                var changed = argumentRegex.Replace(text, x =>
+                var changed = argumentRegex.Replace(fileText, x =>
                 {
                     var name = x.Groups["Name"].Value;
                     var type = x.Groups["Type"].Value;
@@ -64,7 +64,7 @@ namespace Tools
                     return $"props.{name.ToPascalCase()}";
                 });
 
-                if (changed == text)
+                if (changed == fileText)
                 {
                     continue;
                 }
