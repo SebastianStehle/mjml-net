@@ -303,7 +303,7 @@ namespace Mjml.Net
 
         public void RenderChildrenRaw()
         {
-            var reader = contextStack.Current!.Reader;
+            var reader = Reader;
 
             while (reader.Read())
             {
@@ -327,7 +327,7 @@ namespace Mjml.Net
 
         public void RenderChildren(ChildOptions options = default)
         {
-            var reader = contextStack.Current!.Reader;
+            var reader = Reader;
 
             reader.Read();
 

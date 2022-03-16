@@ -10,14 +10,12 @@ namespace Mjml.Net
         private readonly GlobalData globalData = new GlobalData();
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
-        private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
         private readonly RenderStack<ComponentContext> contextStack = new RenderStack<ComponentContext>();
         private readonly ValidationErrors errors = new ValidationErrors();
         private IComponent? currentComponent;
         private MjmlOptions options;
         private MjmlRenderer renderer;
         private IValidator validator;
-        private string? currentText;
         private string? currentElement;
         private string[]? currentClasses;
 
@@ -59,11 +57,9 @@ namespace Mjml.Net
             attributesByClass.Clear();
             attributesByName.Clear();
             contextStack.Clear();
-            currentAttributes.Clear();
             currentClasses = null;
             currentComponent = null;
             currentElement = null;
-            currentText = null;
             errors.Clear();
             renderer = null!;
 
@@ -102,8 +98,6 @@ namespace Mjml.Net
 
             currentElement = name;
             currentClasses = null;
-            currentText = null;
-            currentAttributes.Clear();
             currentComponent = renderer.GetComponent(currentElement);
 
             var currentLine = CurrentLine(reader);
@@ -126,8 +120,6 @@ namespace Mjml.Net
             for (var i = 0; i < reader.AttributeCount; i++)
             {
                 reader.MoveToAttribute(i);
-
-                currentAttributes[reader.Name] = reader.Value;
 
                 validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors,
                     CurrentLine(reader),
@@ -152,14 +144,14 @@ namespace Mjml.Net
 
         public string? GetAttribute(string name, bool withoutDefaults = false)
         {
-            if (currentAttributes.TryGetValue(name, out var attribute))
+            if (Reader.MoveToAttribute(name))
             {
-                return attribute;
+                return Reader.Value;
             }
 
             if (attributesByName.TryGetValue(name, out var byType))
             {
-                if (byType.TryGetValue(currentElement!, out attribute))
+                if (byType.TryGetValue(currentElement!, out var attribute))
                 {
                     return attribute;
                 }
@@ -174,14 +166,21 @@ namespace Mjml.Net
             {
                 if (currentClasses == null)
                 {
-                    currentClasses = currentAttributes.GetValueOrDefault(Constants.MjClass)?.Split() ?? Array.Empty<string>();
+                    if (Reader.MoveToAttribute(Constants.MjClass))
+                    {
+                        currentClasses = Reader.Value.Split(' ');
+                    }
+                    else
+                    {
+                        currentClasses = Array.Empty<string>();
+                    }
                 }
 
                 foreach (var className in currentClasses)
                 {
                     if (attributesByClass.TryGetValue(className, out var byName))
                     {
-                        if (byName.TryGetValue(name, out attribute))
+                        if (byName.TryGetValue(name, out var attribute))
                         {
                             return attribute;
                         }
@@ -209,23 +208,17 @@ namespace Mjml.Net
 
         public string? GetContent()
         {
-            var reader = contextStack.Current!.Reader;
+            var reader = Reader;
 
-            if (currentText == null)
+            while (reader.Read())
             {
-                while (reader.Read())
+                if (reader.NodeType == XmlNodeType.Text)
                 {
-                    if (reader.NodeType == XmlNodeType.Text)
-                    {
-                        currentText = reader.Value.Trim(TrimChars);
-                        break;
-                    }
+                    return Reader.Value.Trim(TrimChars);
                 }
-
-                currentText ??= string.Empty;
             }
 
-            return currentText;
+            return null;
         }
 
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
