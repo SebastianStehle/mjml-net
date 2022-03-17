@@ -6,7 +6,7 @@ namespace Tests
     {
         public string ComponentName => "mjml-test";
 
-        public AllowedParents? AllowedParents { get; } = null;
+        public AllowedParents? AllowedAsDescendant { get; } = null;
 
         public void Render(IHtmlRenderer renderer, INode node)
         {

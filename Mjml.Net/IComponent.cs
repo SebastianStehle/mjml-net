@@ -2,7 +2,9 @@
 {
     public interface IComponent
     {
-        public AllowedParents? AllowedParents { get; }
+        public AllowedParents? AllowedAsDescendant => null;
+
+        public AllowedParents? AllowedAsChild => null;
 
         public IProps? Props => null;
 

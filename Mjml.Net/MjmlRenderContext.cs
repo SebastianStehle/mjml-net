@@ -1,6 +1,5 @@
 ﻿using System.Xml;
 using Mjml.Net.Internal;
-using Mjml.Net.Validators;
 
 namespace Mjml.Net
 {
@@ -48,7 +47,7 @@ namespace Mjml.Net
             this.renderer = renderer;
             this.options = options;
 
-            validator = options.Validator;
+            validator = options.ValidatorFactory?.Create();
         }
 
         internal void Clear()
@@ -57,6 +56,7 @@ namespace Mjml.Net
             attributesByClass.Clear();
             attributesByName.Clear();
             contextStack.Clear();
+            validator = null;
             currentClasses = null;
             currentComponent = null;
             currentElement = null;
@@ -66,11 +66,9 @@ namespace Mjml.Net
             ClearRenderData();
         }
 
-        public List<ValidationError> Validate()
+        public ValidationErrors Validate()
         {
-            validator?.Complete(errors);
-
-            return errors.ToList();
+            return validator?.Complete() ?? new ValidationErrors();
         }
 
         public void Read(XmlReader reader)
@@ -113,9 +111,11 @@ namespace Mjml.Net
                 return;
             }
 
+            reader.Read();
+
             if (validator != null)
             {
-                validator.BeforeComponent(currentComponent!, errors,
+                validator.BeforeComponent(component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
 
@@ -123,13 +123,11 @@ namespace Mjml.Net
                 {
                     reader.MoveToAttribute(i);
 
-                    validator.Attribute(reader.Name, reader.Value, currentComponent!, errors,
+                    validator.Attribute(reader.Name, reader.Value, component,
                         CurrentLine(reader),
                         CurrentColumn(reader));
                 }
             }
-
-            reader.Read();
 
             var childRenderer = contextStack.Current?.Options.Renderer;
 
@@ -144,7 +142,7 @@ namespace Mjml.Net
 
             if (validator != null)
             {
-                validator.AfterComponent(component, errors, currentLine, currentColumn);
+                validator.AfterComponent(component, currentLine, currentColumn);
             }
 
             contextStack.Pop();

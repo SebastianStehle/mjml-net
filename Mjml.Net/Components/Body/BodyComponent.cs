@@ -4,7 +4,7 @@
     {
         public string ComponentName => "mj-body";
 
-        public AllowedParents? AllowedParents { get; } =
+        public AllowedParents? AllowedAsChild { get; } =
             new AllowedParents
             {
                 "mjml"

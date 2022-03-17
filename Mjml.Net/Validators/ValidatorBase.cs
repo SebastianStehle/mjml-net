@@ -4,6 +4,7 @@
     {
         private readonly bool validateAttributeValue;
         private readonly Stack<string> componentStack = new Stack<string>();
+        private readonly ValidationErrors errors = new ValidationErrors();
         private bool hasBody;
 
         protected ValidatorBase(bool validateAttributeValue)
@@ -11,15 +12,17 @@
             this.validateAttributeValue = validateAttributeValue;
         }
 
-        public void Complete(ValidationErrors errors)
+        public ValidationErrors Complete()
         {
             if (!hasBody)
             {
-                errors.Add("Document must have mj-body tag.");
+                errors.Add("Document must have 'mj-body' tag.");
             }
+
+            return errors;
         }
 
-        public void Attribute(string name, string value, IComponent component, ValidationErrors errors, int? line, int? column)
+        public void Attribute(string name, string value, IComponent component, int? line, int? column)
         {
             var allowedAttributes = component.Props?.GetFields();
 
@@ -34,11 +37,11 @@
             }
             else if (validateAttributeValue && !attribute.Validate(value))
             {
-                errors.Add($"'{value}' is not a valid for attribute '{name}' of '{component.ComponentName}'.", line, column);
+                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.", line, column);
             }
         }
 
-        public void BeforeComponent(IComponent component, ValidationErrors errors, int? line, int? column)
+        public void BeforeComponent(IComponent component, int? line, int? column)
         {
             var name = component.ComponentName;
 
@@ -47,29 +50,39 @@
                 hasBody = true;
             }
 
-            if (component.AllowedParents == null)
+            if (component.AllowedAsDescendant == null && component.AllowedAsChild == null)
             {
                 if (componentStack.Count > 0)
                 {
-                    errors.Add($"'{name}' must be the root tag'.", line, column);
+                    errors.Add($"'{name}' must be the root tag.", line, column);
                 }
             }
             else
             {
                 if (!componentStack.TryPeek(out var previous))
                 {
-                    errors.Add($"'{name}' cannot be the root tag'.", line, column);
+                    errors.Add($"'{name}' cannot be the root tag.", line, column);
                 }
-                else if (!component.AllowedParents.Contains(previous))
+                else if (component.AllowedAsChild != null)
                 {
-                    errors.Add($"'{name}' can only be part of '{string.Join(", ", component.AllowedParents)}.", line, column);
+                    if (!component.AllowedAsChild.Contains(previous))
+                    {
+                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedAsChild)}'.", line, column);
+                    }
+                }
+                else if (component.AllowedAsDescendant != null)
+                {
+                    if (component.AllowedAsDescendant.All(x => !componentStack.Contains(x)))
+                    {
+                        errors.Add($"'{name}' must be descendant of '{string.Join(", ", component.AllowedAsDescendant)}'.", line, column);
+                    }
                 }
             }
 
             componentStack.Push(component.ComponentName);
         }
 
-        public void AfterComponent(IComponent component, ValidationErrors errors, int? line, int? column)
+        public void AfterComponent(IComponent component, int? line, int? column)
         {
             componentStack.TryPop(out var _);
         }
