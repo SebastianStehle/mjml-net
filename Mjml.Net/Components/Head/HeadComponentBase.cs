@@ -2,6 +2,8 @@
 {
     public abstract class HeadComponentBase : IComponent
     {
+        public virtual AllowedParents? AllowedAsChild => null;
+
         public virtual AllowedParents? AllowedAsDescendant { get; } =
             new AllowedParents
             {
