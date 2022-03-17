@@ -15,22 +15,22 @@ namespace Mjml.Net
 
         public MjmlRenderer()
         {
-            Add<AttributesComponent>("mj-attributes");
-            Add<BodyComponent>("mj-body");
-            Add<BreakpointComponent>("mj-breakpoint");
-            Add<ButtonComponent>("mj-button");
-            Add<DividerComponent>("mj-divider");
-            Add<FontComponent>("mj-font");
-            Add<HeadComponent>("mj-head");
-            Add<HeroComponent>("mj-hero");
-            Add<ImageComponent>("mj-image");
-            Add<PreviewComponent>("mj-preview");
-            Add<RawComponent>("mj-raw");
-            Add<RootComponent>("mjml");
-            Add<SpacerComponent>("mj-spacer");
-            Add<StyleComponent>("mj-style");
-            Add<TextComponent>("mj-text");
-            Add<TitleComponent>("mj-title");
+            Add<AttributesComponent>();
+            Add<BodyComponent>();
+            Add<BreakpointComponent>();
+            Add<ButtonComponent>();
+            Add<DividerComponent>();
+            Add<FontComponent>();
+            Add<HeadComponent>();
+            Add<HeroComponent>();
+            Add<ImageComponent>();
+            Add<PreviewComponent>();
+            Add<RawComponent>();
+            Add<RootComponent>();
+            Add<SpacerComponent>();
+            Add<StyleComponent>();
+            Add<TextComponent>();
+            Add<TitleComponent>();
 
             Add(new BreakpointHelper());
             Add(new FontHelper());
@@ -39,9 +39,9 @@ namespace Mjml.Net
             Add(new TitleHelper());
         }
 
-        public IMjmlRenderer Add<T>(string name) where T : IComponent, new()
+        public IMjmlRenderer Add<T>() where T : IComponent, new()
         {
-            components[name] = () => new T();
+            components[new T().Name] = () => new T();
 
             return this;
         }

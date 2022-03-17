@@ -1,6 +1,4 @@
-﻿#pragma warning disable SA1401 // Fields should be private
-
-namespace Mjml.Net.Internal
+﻿namespace Mjml.Net.Internal
 {
     internal sealed class TransitiveContext : IContext
     {

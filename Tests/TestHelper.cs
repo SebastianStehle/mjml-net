@@ -7,7 +7,7 @@ namespace Tests
     {
         public static string Render(string source)
         {
-            var renderer = new MjmlRenderer().Add<TestComponent>("mjml-test");
+            var renderer = new MjmlRenderer().Add<TestComponent>();
 
             return renderer.Render(source, new MjmlOptions
             {
@@ -17,7 +17,7 @@ namespace Tests
 
         public static string Render(string source, params IHelper[] helpers)
         {
-            var renderer = new MjmlRenderer().Add<TestComponent>("mjml-test").ClearHelpers();
+            var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
 
             foreach (var helper in helpers)
             {

@@ -3,13 +3,13 @@
     public partial class ButtonProps
     {
         [Bind("align")]
-        public string? Align = "center";
+        public string Align = "center";
 
         [Bind("background-color", BindType.Color)]
-        public string? BackgroundColor = "#414141";
+        public string BackgroundColor = "#414141";
 
         [Bind("border")]
-        public string? Border = "none";
+        public string Border = "none";
 
         [Bind("border-bottom", BindType.Pixels)]
         public string? BorderBottom;
@@ -18,7 +18,7 @@
         public string? BorderLeft;
 
         [Bind("border-radius", BindType.Pixels)]
-        public string? BorderRadius = "3px";
+        public string BorderRadius = "3px";
 
         [Bind("border-right", BindType.Pixels)]
         public string? BorderRight;
@@ -27,22 +27,22 @@
         public string? BorderTop;
 
         [Bind("color", BindType.Color)]
-        public string? Color = "#FFFFFF";
+        public string Color = "#FFFFFF";
 
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
 
         [Bind("font-family")]
-        public string? FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
+        public string FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
 
         [Bind("font-size", BindType.Pixels)]
-        public string? FontSize = "13px";
+        public string FontSize = "13px";
 
         [Bind("font-style")]
         public string? FontStyle;
 
         [Bind("font-weight")]
-        public string? FontWeight = "normal";
+        public string FontWeight = "normal";
 
         [Bind("height", BindType.PixelsOrPercent)]
         public string? Height;
@@ -51,19 +51,19 @@
         public string? Href;
 
         [Bind("inner-padding", BindType.FourPixelsOrPercent)]
-        public string? InnerPadding = "10px 25px";
+        public string InnerPadding = "10px 25px";
 
         [Bind("letter-spacing", BindType.Pixels)]
         public string? LetterSpacing;
 
         [Bind("line-height", BindType.PixelsOrPercent)]
-        public string? LineHeight = "120%";
+        public string LineHeight = "120%";
 
         [Bind("name")]
         public string? Name;
 
         [Bind("padding", BindType.FourPixelsOrPercent)]
-        public string? Padding = "10px 25px";
+        public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
         public string? PaddingBottom;
@@ -81,19 +81,19 @@
         public string? Rel;
 
         [Bind("target")]
-        public string? Target = "_blank";
+        public string Target = "_blank";
 
         [Bind("text-align")]
         public string? TextAlign;
 
         [Bind("text-decoration")]
-        public string? TextDecoration = "none";
+        public string TextDecoration = "none";
 
         [Bind("text-transform")]
-        public string? TextTransform = "none";
+        public string TextTransform = "none";
 
         [Bind("vertical-align")]
-        public string? VerticalAlign = "middle";
+        public string VerticalAlign = "middle";
 
         [Bind("width", BindType.PixelsOrPercent)]
         public string? Width;
@@ -102,6 +102,8 @@
     public sealed class ButtonComponent : BodyComponentBase<ButtonProps>
     {
         public override ComponentType Type => ComponentType.Raw;
+
+        public override string Name => "mj-button";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

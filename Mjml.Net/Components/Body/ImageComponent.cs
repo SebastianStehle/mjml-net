@@ -5,13 +5,13 @@ namespace Mjml.Net.Components.Body
     public partial class ImageProps
     {
         [Bind("align", BindType.Align)]
-        public string? Align = "center";
+        public string Align = "center";
 
         [Bind("alt")]
         public string? Alt;
 
         [Bind("border")]
-        public string? Border = "0";
+        public string Border = "0";
 
         [Bind("border-bottom")]
         public string? BorderBottom;
@@ -35,10 +35,10 @@ namespace Mjml.Net.Components.Body
         public string? FluidOnMobile;
 
         [Bind("font-size", BindType.Pixels)]
-        public string? FontSize = "13px";
+        public string FontSize = "13px";
 
         [Bind("height", BindType.PixelsOrAuto)]
-        public string? Height = "auto";
+        public string Height = "auto";
 
         [Bind("href")]
         public string? Href;
@@ -50,7 +50,7 @@ namespace Mjml.Net.Components.Body
         public string? Name;
 
         [Bind("padding", BindType.FourPixelsOrPercent)]
-        public string? Padding = "10px 25px";
+        public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
         public string? PaddingBottom;
@@ -77,7 +77,7 @@ namespace Mjml.Net.Components.Body
         public string? Srcset;
 
         [Bind("target")]
-        public string? Target = "_blank";
+        public string Target = "_blank";
 
         [Bind("title")]
         public string? Title;
@@ -91,6 +91,8 @@ namespace Mjml.Net.Components.Body
 
     public sealed class ImageComponent : BodyComponentBase<ImageProps>
     {
+        public override string Name => "mj-image";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             context.SetGlobalData("mj-image", new DynamicStyle(HeadStyle));

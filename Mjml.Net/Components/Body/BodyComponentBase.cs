@@ -6,9 +6,9 @@
         private static readonly AllowedParents Parents = new AllowedParents
 #pragma warning restore RECS0108 // Warns about static fields in generic types
         {
-            "mj-Body"
+            "mj-body"
         };
 
-        public override AllowedParents? AllowedAsChild => Parents;
+        public override AllowedParents? AllowedAsDescendant => Parents;
     }
 }

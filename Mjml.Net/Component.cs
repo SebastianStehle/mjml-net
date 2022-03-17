@@ -1,6 +1,4 @@
-﻿#pragma warning disable SA1401 // Fields should be private
-
-using System.Xml;
+﻿using System.Xml;
 
 namespace Mjml.Net
 {
@@ -17,6 +15,8 @@ namespace Mjml.Net
         IProps IComponent.Props => Props;
 
         public INode Node { get; private set; }
+
+        public abstract string Name { get; }
 
         public virtual AllowedParents? AllowedAsDescendant => null;
 

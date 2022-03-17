@@ -145,6 +145,9 @@ dotnet_diagnostic.SA1202.severity = none
 # SA1204: Static elements should appear before instance elements
 dotnet_diagnostic.SA1204.severity = none
 
+# SA1402: Fields should be privat
+dotnet_diagnostic.SA1401.severity = none
+
 # SA1402: File may only contain a single type
 dotnet_diagnostic.SA1402.severity = none
 

@@ -3,22 +3,22 @@
     public partial class DividerProps
     {
         [Bind("align", BindType.Align)]
-        public string? Align = "center";
+        public string Align = "center";
 
         [Bind("border-color", BindType.Color)]
-        public string? BorderColor = "#000000";
+        public string BorderColor = "#000000";
 
         [Bind("border-style")]
-        public string? BorderStyle = "solid";
+        public string BorderStyle = "solid";
 
         [Bind("border-width", BindType.Pixels)]
-        public string? BorderWidth = "4px";
+        public string BorderWidth = "4px";
 
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
 
         [Bind("padding", BindType.FourPixelsOrPercent)]
-        public string? Padding = "10px 25px";
+        public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
         public string? PaddingBottom;
@@ -33,11 +33,13 @@
         public string? PaddingTop;
 
         [Bind("width", BindType.PixelsOrPercent)]
-        public string? Width = "100%";
+        public string Width = "100%";
     }
 
     public sealed class DividerComponent : BodyComponentBase<DividerProps>
     {
+        public override string Name => "mj-divider";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             var borderSetting = $"{Props.BorderStyle} {Props.BorderWidth} {Props.BorderColor}";

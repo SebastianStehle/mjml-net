@@ -27,7 +27,7 @@ namespace Mjml.Net
             this.renderer = renderer;
             this.options = options;
 
-            validator = options.Validator;
+            validator = options.ValidatorFactory?.Create();
         }
 
         internal void Clear()
@@ -40,11 +40,9 @@ namespace Mjml.Net
             ClearRenderData();
         }
 
-        public List<ValidationError> Validate()
+        public ValidationErrors Validate()
         {
-            validator?.Complete(errors);
-
-            return errors.ToList();
+            return validator?.Complete() ?? new ValidationErrors();
         }
 
         public void Read(XmlReader reader)
@@ -84,7 +82,7 @@ namespace Mjml.Net
 
             var binder = new Binder(context, component, parent, name);
 
-            validator?.ValidateComponent(component, errors,
+            validator?.BeforeComponent(component,
                 currentLine,
                 currentColumn);
 
@@ -96,7 +94,7 @@ namespace Mjml.Net
 
                 binder.SetAttribute(reader.Name, reader.Value);
 
-                validator?.ValidateAttribute(reader.Name, reader.Value, component, errors,
+                validator?.Attribute(reader.Name, reader.Value, component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
             }
@@ -156,6 +154,10 @@ namespace Mjml.Net
             {
                 component.Render(this, context);
             }
+
+            validator?.AfterComponent(component,
+                currentLine,
+                currentColumn);
         }
 
         public object? Set(string name, object? value)

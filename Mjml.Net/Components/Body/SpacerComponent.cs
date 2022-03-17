@@ -41,6 +41,8 @@
 
     public sealed class SpacerComponent : BodyComponentBase<SpacerProps>
     {
+        public override string Name => "mj-spacer";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.ElementStart("div")

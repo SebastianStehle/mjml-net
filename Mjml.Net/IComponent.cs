@@ -14,6 +14,8 @@ namespace Mjml.Net
 
         ComponentType Type { get; }
 
+        string Name { get; }
+
         string? GetInheritingAttribute(string name);
 
         void Bind(INode node, GlobalContext context, XmlReader reader);

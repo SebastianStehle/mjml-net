@@ -12,6 +12,8 @@ namespace Mjml.Net.Components.Head
     {
         public override ComponentType Type => ComponentType.Text;
 
+        public override string Name => "mj-title";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             // Just in case that validation is disabled.

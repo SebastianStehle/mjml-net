@@ -10,6 +10,8 @@ namespace Mjml.Net.Components
 
     public sealed class RootComponent : Component<RootProps>
     {
+        public override string Name => "mjml";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             RenderChildren(renderer, context);

@@ -15,6 +15,8 @@
 
         public override AllowedParents? AllowedAsChild => Parents;
 
+        public override string Name => "mj-head";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.BufferStart();

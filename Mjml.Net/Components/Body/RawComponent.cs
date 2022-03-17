@@ -10,6 +10,8 @@
     {
         public override ComponentType Type => ComponentType.Raw;
 
+        public override string Name => "mj-raw";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             RenderRaw(renderer);

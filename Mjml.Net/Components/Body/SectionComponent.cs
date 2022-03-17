@@ -8,6 +8,8 @@
 
     public sealed class SectionComponent : BodyComponentBase<SectionProps>
     {
+        public override string Name => "mj-section";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
         }

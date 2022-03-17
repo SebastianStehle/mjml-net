@@ -26,7 +26,7 @@
 
         public void SetText(string text)
         {
-            currentText = text;
+            currentText = text.Trim(TrimChars);
         }
 
         public string? GetAttribute(string name, bool withoutDefaults = false)

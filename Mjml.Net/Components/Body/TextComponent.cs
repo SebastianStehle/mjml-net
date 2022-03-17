@@ -5,10 +5,10 @@ namespace Mjml.Net.Components.Body
     public partial class TextProps
     {
         [Bind("align", BindType.Align)]
-        public string? Align = "left";
+        public string Align = "left";
 
         [Bind("color", BindType.Color)]
-        public string? Color = "#000000";
+        public string Color = "#000000";
 
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
@@ -17,13 +17,13 @@ namespace Mjml.Net.Components.Body
         public string? CssClass;
 
         [Bind("font-family")]
-        public string? FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
+        public string FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
 
         [Bind("font-size", BindType.Pixels)]
-        public string? FontSize = "13px";
+        public string FontSize = "13px";
 
         [Bind("font-style")]
-        public string? FontStyle = "normal";
+        public string FontStyle = "normal";
 
         [Bind("font-weight")]
         public string? FontWeight;
@@ -32,13 +32,13 @@ namespace Mjml.Net.Components.Body
         public string? Height;
 
         [Bind("letter-spacing", BindType.Pixels)]
-        public string? LetterSpacing = "none";
+        public string LetterSpacing = "none";
 
         [Bind("line-height", BindType.Pixels)]
-        public string? LineHeight = "1";
+        public string LineHeight = "1";
 
         [Bind("padding", BindType.FourPixelsOrPercent)]
-        public string? Padding = "10px 25px";
+        public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
         public string? PaddingBottom;
@@ -62,6 +62,8 @@ namespace Mjml.Net.Components.Body
     public sealed class TextComponent : BodyComponentBase<TextProps>
     {
         public override ComponentType Type => ComponentType.Raw;
+
+        public override string Name => "mj-text";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

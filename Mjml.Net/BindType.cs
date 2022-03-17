@@ -9,7 +9,10 @@
         Pixels,
         PixelsOrAuto,
         PixelsOrPercent,
+        PixelsOrPercentOrNone,
         String,
         VerticalAlign,
+        SocialMode,
+        SocialTableLayout,
     }
 }

@@ -13,6 +13,8 @@ namespace Mjml.Net.Components.Head
 
     public sealed class FontComponent : HeadComponentBase<FontProps>
     {
+        public override string Name => "mj-font";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             // Just in case that validation is disabled.

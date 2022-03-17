@@ -1,10 +1,12 @@
 ﻿using Mjml.Net;
-using Mjml.Net.Components;
+using Mjml.Net.Components.Head;
 
 namespace Tests
 {
-    public sealed class TestComponent : Component<FallbackProps>
+    public sealed class TestComponent : Component<HeadProps>
     {
+        public override string Name => "mjml-test";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             RenderChildren(renderer, context);

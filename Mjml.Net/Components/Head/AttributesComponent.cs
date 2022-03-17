@@ -10,6 +10,8 @@ namespace Mjml.Net.Components.Head
 
     public sealed class AttributesComponent : HeadComponentBase<AttributesProps>
     {
+        public override string Name => "mj-attributes";
+
         public override void Bind(INode node, GlobalContext context, XmlReader reader)
         {
             base.Bind(node, context, reader);

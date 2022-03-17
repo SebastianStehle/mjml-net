@@ -10,6 +10,8 @@ namespace Mjml.Net.Components.Body
 
     public sealed class ColumnComponent : BodyComponentBase<ColumnProps>
     {
+        public override string Name => "mj-col";
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             // Set the breakpoint if not set before.
