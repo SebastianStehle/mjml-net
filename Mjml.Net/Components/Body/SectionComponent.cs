@@ -1,14 +1,8 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial class SectionProps
+    public partial class SectionComponent : BodyComponentBase
     {
-        [Bind("none")]
-        public string? None;
-    }
-
-    public sealed class SectionComponent : BodyComponentBase<SectionProps>
-    {
-        public override string Name => "mj-section";
+        public override string ComponentName => "mj-section";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

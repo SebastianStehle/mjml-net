@@ -1,12 +1,6 @@
 ﻿namespace Mjml.Net.Components.Head
 {
-    public partial class HeadProps
-    {
-        [Bind("noop")]
-        public string? Noop;
-    }
-
-    public sealed class HeadComponent : Component<HeadProps>
+    public sealed class HeadComponent : Component
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
@@ -15,7 +9,7 @@
 
         public override AllowedParents? AllowedAsChild => Parents;
 
-        public override string Name => "mj-head";
+        public override string ComponentName => "mj-head";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

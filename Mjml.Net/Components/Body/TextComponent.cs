@@ -2,8 +2,12 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public partial class TextProps
+    public partial class TextComponent : BodyComponentBase
     {
+        public override ComponentType Type => ComponentType.Raw;
+
+        public override string ComponentName => "mj-text";
+
         [Bind("align", BindType.Align)]
         public string Align = "left";
 
@@ -57,17 +61,10 @@ namespace Mjml.Net.Components.Body
 
         [Bind("text-transform")]
         public string? TextTransform;
-    }
-
-    public sealed class TextComponent : BodyComponentBase<TextProps>
-    {
-        public override ComponentType Type => ComponentType.Raw;
-
-        public override string Name => "mj-text";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var height = Props.Height;
+            var height = Height;
 
             if (string.IsNullOrEmpty(height))
             {
@@ -102,17 +99,17 @@ namespace Mjml.Net.Components.Body
         private void RenderTextContent(IHtmlRenderer renderer)
         {
             renderer.ElementStart("div")
-                .Style("font-family", Props.FontFamily)
-                .Style("font-size", Props.FontSize)
-                .Style("font-style", Props.FontStyle)
-                .Style("font-weight", Props.FontWeight)
-                .Style("letter-spacing", Props.LetterSpacing)
-                .Style("line-height", Props.LineHeight)
-                .Style("text-align", Props.Align)
-                .Style("text-decoration", Props.TextDecoration)
-                .Style("text-transform", Props.TextTransform)
-                .Style("color", Props.Color)
-                .Style("height", Props.Height);
+                .Style("font-family", FontFamily)
+                .Style("font-size", FontSize)
+                .Style("font-style", FontStyle)
+                .Style("font-weight", FontWeight)
+                .Style("letter-spacing", LetterSpacing)
+                .Style("line-height", LineHeight)
+                .Style("text-align", Align)
+                .Style("text-decoration", TextDecoration)
+                .Style("text-transform", TextTransform)
+                .Style("color", Color)
+                .Style("height", Height);
 
             RenderRaw(renderer);
 

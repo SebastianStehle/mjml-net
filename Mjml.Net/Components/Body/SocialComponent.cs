@@ -1,7 +1,9 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial class SocialComponentProps
+    public partial class SocialComponent : BodyComponentBase
     {
+        public override string ComponentName => "mj-social";
+
         [Bind("align", BindType.Align)]
         public string Align = "center";
 
@@ -70,15 +72,10 @@
 
         [Bind("vertical-align", BindType.VerticalAlign)]
         public string? VerticalAlign;
-    }
-
-    public sealed class SocialComponent : BodyComponentBase<SocialComponentProps>
-    {
-        public override string Name => "mj-social";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            if (Props.Mode == "horizontal")
+            if (Mode == "horizontal")
             {
                 RenderHorizontal(renderer, context);
             }
@@ -93,7 +90,7 @@
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", Props.Align)
+                .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -117,7 +114,7 @@
                     renderer.Content("<![endif]-->");
 
                     renderer.ElementStart("table")
-                        .Attr("align", child.Node.GetAttribute("align"))
+                        .Attr("align", Align)
                         .Attr("border", "0")
                         .Attr("cellpadding", "0")
                         .Attr("cellspacing", "0")
@@ -164,27 +161,27 @@
             switch (name)
             {
                 case "border-radius":
-                    return Props.BorderRadius;
+                    return BorderRadius;
                 case "color":
-                    return Props.Color;
+                    return Color;
                 case "font-family":
-                    return Props.FontFamily;
+                    return FontFamily;
                 case "font-size":
-                    return Props.FontSize;
+                    return FontSize;
                 case "font-style":
-                    return Props.FontStyle;
+                    return FontStyle;
                 case "icon-height":
-                    return Props.IconHeight;
+                    return IconHeight;
                 case "icon-padding":
-                    return Props.IconPadding;
+                    return IconPadding;
                 case "icon-size":
-                    return Props.IconSize;
+                    return IconSize;
                 case "line-height":
-                    return Props.IconHeight;
+                    return IconHeight;
                 case "text-padding":
-                    return Props.TextPadding;
+                    return TextPadding;
                 case "text-decoration":
-                    return Props.TextDecoration;
+                    return TextDecoration;
                 default:
                     return null;
             }

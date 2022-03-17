@@ -78,9 +78,9 @@ namespace Mjml.Net.Generator
 // Auto-generated code
 namespace {namespaceName}
 {{
-    public partial class {classSymbol.Name} : IProps
+    public partial class {classSymbol.Name}
     {{
-        public void Bind(INode node)
+        protected override void BindCore(INode node)
         {{
 ");
             foreach (var field in allFields.Values.Where(x => !x.Text))
@@ -103,9 +103,11 @@ namespace {namespaceName}
             source.Append($@"
         }}
 
-        public AllowedAttributes GetFields()
+        public override AllowedAttributes AllowedFields
         {{
-            var result = new AllowedAttributes();
+            get
+            {{
+                var result = new AllowedAttributes();
 ");
             foreach (var field in allFields.Values.Where(x => !x.Text))
             {
@@ -113,10 +115,11 @@ namespace {namespaceName}
             }
 
             source.Append($@"
-            return result;
+                return result;
+            }}
         }}
 
-        public string? DefaultValue(string? name)
+        public override string? GetDefaultValue(string? name)
         {{
             switch (name)
             {{
@@ -145,7 +148,7 @@ namespace {namespaceName}
         private void ProcessFieldType(StringBuilder source, FieldInfo field)
         {
             source.Append($@"
-            result[""{field.Attribute}""] = AttributeTypes.{field.Type};");
+                result[""{field.Attribute}""] = AttributeTypes.{field.Type};");
         }
 
         private void ProcessFieldDefault(StringBuilder source, FieldInfo field)

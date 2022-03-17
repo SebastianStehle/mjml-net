@@ -103,6 +103,9 @@ dotnet_diagnostic.MA0076.severity = none
 # MA0097: A class that implements IComparable<T> or IComparable should override comparison operators
 dotnet_diagnostic.MA0097.severity = none    
 
+# RECS0001: Partial classes with single part.
+dotnet_diagnostic.RECS0001.severity = none
+
 # RECS0129: Removes 'internal' modifiers that are not required
 dotnet_diagnostic.RECS0129.severity = none
 

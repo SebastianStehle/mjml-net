@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.
-    Tasks;
-
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+﻿#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 #pragma warning disable RECS0082 // Parameter has the same name as a member and hides it
 
 namespace Mjml.Net.Components.Body

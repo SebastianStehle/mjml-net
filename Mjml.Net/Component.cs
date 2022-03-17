@@ -2,7 +2,7 @@
 
 namespace Mjml.Net
 {
-    public abstract class Component<T> : IComponent where T : IProps, new()
+    public abstract class Component : IComponent
     {
         private List<IComponent>? childNodes;
         private List<string>? childXml;
@@ -12,19 +12,17 @@ namespace Mjml.Net
             get => childNodes ?? Enumerable.Empty<IComponent>();
         }
 
-        IProps IComponent.Props => Props;
-
         public INode Node { get; private set; }
 
-        public abstract string Name { get; }
+        public abstract string ComponentName { get; }
 
         public virtual AllowedParents? AllowedAsDescendant => null;
 
         public virtual AllowedParents? AllowedAsChild => null;
 
-        public virtual ComponentType Type => ComponentType.Complex;
+        public virtual AllowedAttributes? AllowedFields => null;
 
-        public readonly T Props = new T();
+        public virtual ComponentType Type => ComponentType.Complex;
 
         public abstract void Render(IHtmlRenderer renderer, GlobalContext context);
 
@@ -59,6 +57,11 @@ namespace Mjml.Net
             return null;
         }
 
+        public virtual string? GetDefaultValue(string name)
+        {
+            return null;
+        }
+
         public void AddChild(IComponent child)
         {
             childNodes ??= new List<IComponent>();
@@ -75,7 +78,11 @@ namespace Mjml.Net
         {
             Node = node;
 
-            Props.Bind(node);
+            BindCore(node);
+        }
+
+        protected virtual void BindCore(INode node)
+        {
         }
     }
 }

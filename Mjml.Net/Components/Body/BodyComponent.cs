@@ -1,12 +1,6 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial class BodyProps
-    {
-        [Bind("noop")]
-        public string? Noop;
-    }
-
-    public sealed class BodyComponent : Component<BodyProps>
+    public partial class BodyComponent : Component
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
@@ -15,7 +9,7 @@
 
         public override AllowedParents? AllowedAsChild => Parents;
 
-        public override string Name => "mj-body";
+        public override string ComponentName => "mj-body";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

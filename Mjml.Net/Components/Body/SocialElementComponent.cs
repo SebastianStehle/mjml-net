@@ -1,7 +1,18 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial class SocialElementProps
+    public partial class SocialElementComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mg-social"
+        };
+
+        public override AllowedParents? AllowedAsChild => Parents;
+
+        public override ComponentType Type => ComponentType.Text;
+
+        public override string ComponentName => "mj-social-element";
+
         [Bind("align", BindType.Align)]
         public string Align = "left";
 
@@ -94,29 +105,17 @@
 
         [BindText]
         public string? Text;
-    }
-
-    public sealed class SocialElementComponent : BodyComponentBase<SocialElementProps>
-    {
-        private static readonly AllowedParents Parents = new AllowedParents
-        {
-            "mg-social"
-        };
-
-        public override AllowedParents? AllowedAsChild => Parents;
-
-        public override string Name => "mj-social-element";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             var (socialNetwork, href) = GetSocialAttributes();
 
             renderer.ElementStart("tr")
-                .Class(Props.Class);
+                .Class(Class);
 
             renderer.ElementStart("td") // Style td
-                .Style("padding", Props.Padding)
-                .Style("vertical-align", Props.VerticalAlign);
+                .Style("padding", Padding)
+                .Style("vertical-align", VerticalAlign);
 
             renderer.ElementStart("table") // Style table
                 .Attr("border", "0")
@@ -124,39 +123,39 @@
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Style("background", socialNetwork.BackgroundUrl)
-                .Style("border-radius", Props.BorderRadius)
-                .Style("width", Props.IconSize);
+                .Style("border-radius", BorderRadius)
+                .Style("width", IconSize);
 
             renderer.ElementStart("tbody");
             renderer.ElementStart("tr");
 
             renderer.ElementStart("td") // Style icon
                 .Style("font-size", "0")
-                .Style("height", Props.IconHeight ?? Props.IconSize)
-                .Style("padding", Props.IconPadding)
+                .Style("height", IconHeight ?? IconSize)
+                .Style("padding", IconPadding)
                 .Style("vertical-align", "middle")
-                .Style("width", Props.IconSize);
+                .Style("width", IconSize);
 
             if (href != null)
             {
                 renderer.ElementStart("a")
                     .Attr("href", href)
-                    .Attr("rel", Props.Rel)
-                    .Attr("target", Props.Target);
+                    .Attr("rel", Rel)
+                    .Attr("target", Target);
             }
 
             renderer.ElementStart("img") // Style img
-                .Attr("alt", Props.Alt)
-                .Attr("height", UnitParser.Parse(Props.IconHeight ?? Props.IconSize).Value.ToInvariantString())
-                .Attr("sizes", Props.Sizes)
+                .Attr("alt", Alt)
+                .Attr("height", UnitParser.Parse(IconHeight ?? IconSize).Value.ToInvariantString())
+                .Attr("sizes", Sizes)
                 .Attr("src", socialNetwork.ImageUrl)
-                .Attr("srcset", Props.Srcset)
-                .Attr("title", Props.Title)
-                .Attr("width", UnitParser.Parse(Props.IconSize).Value.ToInvariantString())
-                .Style("border-radius", Props.BorderRadius)
+                .Attr("srcset", Srcset)
+                .Attr("title", Title)
+                .Attr("width", UnitParser.Parse(IconSize).Value.ToInvariantString())
+                .Style("border-radius", BorderRadius)
                 .Style("display", "block");
 
-            if (Props.Href != null)
+            if (Href != null)
             {
                 renderer.ElementEnd("a");
             }
@@ -167,41 +166,41 @@
             renderer.ElementEnd("table");
             renderer.ElementEnd("td");
 
-            if (Props.Text != null)
+            if (Text != null)
             {
                 renderer.ElementStart("td") // Style tdText
-                    .Style("padding", Props.TextPadding)
+                    .Style("padding", TextPadding)
                     .Style("vertical-align", "middle");
 
-                if (Props.Href != null)
+                if (Href != null)
                 {
                     renderer.ElementStart("a") // Style text
                         .Attr("href", href)
-                        .Attr("rel", Props.Rel)
-                        .Attr("target", Props.Target)
-                        .Style("color", Props.Color)
-                        .Style("font-family", Props.FontFamily)
-                        .Style("font-size", Props.FontSize)
-                        .Style("font-style", Props.FontStyle)
-                        .Style("font-weigh", Props.FontWeight)
-                        .Style("line-height", Props.LineHeight)
-                        .Style("text-decoration", Props.TextDecoration);
+                        .Attr("rel", Rel)
+                        .Attr("target", Target)
+                        .Style("color", Color)
+                        .Style("font-family", FontFamily)
+                        .Style("font-size", FontSize)
+                        .Style("font-style", FontStyle)
+                        .Style("font-weigh", FontWeight)
+                        .Style("line-height", LineHeight)
+                        .Style("text-decoration", TextDecoration);
                 }
                 else
                 {
                     renderer.ElementStart("span") // Style text
-                        .Style("color", Props.Color)
-                        .Style("font-family", Props.FontFamily)
-                        .Style("font-size", Props.FontSize)
-                        .Style("font-style", Props.FontStyle)
-                        .Style("font-weigh", Props.FontWeight)
-                        .Style("line-height", Props.LineHeight)
-                        .Style("text-decoration", Props.TextDecoration);
+                        .Style("color", Color)
+                        .Style("font-family", FontFamily)
+                        .Style("font-size", FontSize)
+                        .Style("font-style", FontStyle)
+                        .Style("font-weigh", FontWeight)
+                        .Style("line-height", LineHeight)
+                        .Style("text-decoration", TextDecoration);
                 }
 
-                renderer.Content(Props.Text);
+                renderer.Content(Text);
 
-                if (Props.Href != null)
+                if (Href != null)
                 {
                     renderer.ElementEnd("a");
                 }
@@ -218,26 +217,26 @@
         {
             var socialNetwork = SocialNetwork.Default;
 
-            if (Props.Name != null && SocialNetwork.Defaults.TryGetValue(Props.Name, out var network))
+            if (Name != null && SocialNetwork.Defaults.TryGetValue(Name, out var network))
             {
                 socialNetwork = network;
             }
 
-            var href = Props.Href;
+            var href = Href;
 
             if (href != null && socialNetwork.ShareUrl != null)
             {
                 href = socialNetwork.ShareUrl.Replace("[[URL]]", href, StringComparison.Ordinal);
             }
 
-            if (Props.BackgroundColor != null)
+            if (BackgroundColor != null)
             {
-                socialNetwork = socialNetwork with { BackgroundUrl = Props.BackgroundColor };
+                socialNetwork = socialNetwork with { BackgroundUrl = BackgroundColor };
             }
 
-            if (Props.Src != null)
+            if (Src != null)
             {
-                socialNetwork = socialNetwork with { ImageUrl = Props.Src };
+                socialNetwork = socialNetwork with { ImageUrl = Src };
             }
 
             return (socialNetwork, href);

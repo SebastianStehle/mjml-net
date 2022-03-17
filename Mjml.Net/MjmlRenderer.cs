@@ -27,6 +27,8 @@ namespace Mjml.Net
             Add<PreviewComponent>();
             Add<RawComponent>();
             Add<RootComponent>();
+            Add<SocialComponent>();
+            Add<SocialElementComponent>();
             Add<SpacerComponent>();
             Add<StyleComponent>();
             Add<TextComponent>();
@@ -41,7 +43,7 @@ namespace Mjml.Net
 
         public IMjmlRenderer Add<T>() where T : IComponent, new()
         {
-            components[new T().Name] = () => new T();
+            components[new T().ComponentName] = () => new T();
 
             return this;
         }

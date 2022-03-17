@@ -2,15 +2,9 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public partial class AttributesProps
+    public partial class AttributesComponent : HeadComponentBase
     {
-        [Bind("none")]
-        public string? None;
-    }
-
-    public sealed class AttributesComponent : HeadComponentBase<AttributesProps>
-    {
-        public override string Name => "mj-attributes";
+        public override string ComponentName => "mj-attributes";
 
         public override void Bind(INode node, GlobalContext context, XmlReader reader)
         {

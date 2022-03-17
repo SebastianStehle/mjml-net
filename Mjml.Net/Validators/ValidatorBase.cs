@@ -24,7 +24,7 @@
 
         public void Attribute(string name, string value, IComponent component, int? line, int? column)
         {
-            var allowedAttributes = component.Props?.GetFields();
+            var allowedAttributes = component.AllowedFields;
 
             if (allowedAttributes == null)
             {
@@ -33,17 +33,17 @@
 
             if (!allowedAttributes.TryGetValue(name, out var attribute))
             {
-                errors.Add($"'{name}' is not a valid attribute of '{component.Name}'.", line, column);
+                errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.", line, column);
             }
             else if (validateAttributeValue && !attribute.Validate(value))
             {
-                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.Name}'.", line, column);
+                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.", line, column);
             }
         }
 
         public void BeforeComponent(IComponent component, int? line, int? column)
         {
-            var name = component.Name;
+            var name = component.ComponentName;
 
             if (name == "mj-body")
             {
@@ -79,7 +79,7 @@
                 }
             }
 
-            componentStack.Push(component.Name);
+            componentStack.Push(component.ComponentName);
         }
 
         public void AfterComponent(IComponent component, int? line, int? column)

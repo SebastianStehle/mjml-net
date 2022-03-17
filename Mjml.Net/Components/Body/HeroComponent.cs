@@ -1,7 +1,9 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial class HeroProps
+    public partial class HeroComponent : BodyComponentBase
     {
+        public override string ComponentName => "mj-hero";
+
         [Bind("align", BindType.Align)]
         public string? Align;
 
@@ -73,22 +75,18 @@
 
         [Bind("width", BindType.Pixels)]
         public string? Width;
-    }
-
-    public sealed class HeroComponent : BodyComponentBase<HeroProps>
-    {
-        public override string Name => "mj-hero";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             var containerWidth = renderer.GetContainerWidth();
 
-            var parsedBackgroundHeight = UnitParser.Parse(Props.BackgroundHeight);
-            var parsedBackgroundWidth = UnitParser.Parse(Props.BackgroundWidth);
-            var backgroundString = Props.BackgroundColor;
-            if (Props.BackgroundUrl != null)
+            var parsedBackgroundHeight = UnitParser.Parse(BackgroundHeight);
+            var parsedBackgroundWidth = UnitParser.Parse(BackgroundWidth);
+            var backgroundString = BackgroundColor;
+
+            if (BackgroundUrl != null)
             {
-                backgroundString = $"{backgroundString} url({Props.BackgroundUrl}) no-repeat {Props.BackgroundPosition} / cover";
+                backgroundString = $"{backgroundString} url({BackgroundUrl}) no-repeat {BackgroundPosition} / cover";
             }
 
             var backgroundRatioValue = Math.Round(100 *
@@ -123,10 +121,10 @@
                 .Style("mso-line-height-rule", "exactly"); // Style: outlook-td
 
             renderer.ElementStart("v:image") // Style: outlook-image
-                .Attr("src", Props.BackgroundUrl)
+                .Attr("src", BackgroundUrl)
                 .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Style("border", "0")
-                .Style("height", Props.BackgroundHeight)
+                .Style("height", BackgroundHeight)
                 .Style("mso-position-horizontal", "center")
                 .Style("position", "absolute")
                 .Style("top", "0")
@@ -136,8 +134,8 @@
             renderer.Content("<![endif]-->");
 
             renderer.ElementStart("div") // Style div
-                .Attr("align", Props.Align)
-                .Attr("class", Props.CssClass)
+                .Attr("align", Align)
+                .Attr("class", CssClass)
                 .Style("margin", "0 auto")
                 .Style("max-width", containerWidth.StringWithUnit);
 
@@ -153,7 +151,7 @@
             renderer.ElementStart("tr")
                 .Style("vertical-align", "top"); // Style tr
 
-            if (Props.Mode == "fluid-height")
+            if (Mode == "fluid-height")
             {
                 static void MagicId(IHtmlRenderer renderer, string backgroundRatio)
                 {
@@ -167,17 +165,17 @@
                 MagicId(renderer, backgroundRatio);
 
                 renderer.ElementStart("td") // Style: hero
-                    .Attr("background", Props.BackgroundUrl)
+                    .Attr("background", BackgroundUrl)
                     .Style("background", backgroundString)
-                    .Style("background-position", Props.BackgroundPosition)
+                    .Style("background-position", BackgroundPosition)
                     .Style("background-repeat", "no-repeat")
-                    .Style("border-radius", Props.BorderRadius)
-                    .Style("padding", Props.Padding)
-                    .Style("padding-bottom", Props.PaddingBottom)
-                    .Style("padding-left", Props.PaddingLeft)
-                    .Style("padding-right", Props.PaddingRight)
-                    .Style("padding-top", Props.PaddingTop)
-                    .Style("vertical-align", Props.VerticalAlign);
+                    .Style("border-radius", BorderRadius)
+                    .Style("padding", Padding)
+                    .Style("padding-bottom", PaddingBottom)
+                    .Style("padding-left", PaddingLeft)
+                    .Style("padding-right", PaddingRight)
+                    .Style("padding-top", PaddingTop)
+                    .Style("vertical-align", VerticalAlign);
 
                 RenderContent(renderer, containerWidth, context);
 
@@ -188,23 +186,23 @@
             else
             {
                 var height =
-                    UnitParser.Parse(Props.Height).Value -
-                    UnitParser.Parse(Props.PaddingTop).Value +
-                    UnitParser.Parse(Props.PaddingBottom).Value;
+                    UnitParser.Parse(Height).Value -
+                    UnitParser.Parse(PaddingTop).Value +
+                    UnitParser.Parse(PaddingBottom).Value;
 
                 renderer.ElementStart("td") // Style: hero
-                    .Attr("background", Props.BackgroundUrl)
+                    .Attr("background", BackgroundUrl)
                     .Attr("height", height.ToInvariantString())
                     .Style("background", backgroundString)
-                    .Style("background-position", Props.BackgroundPosition)
+                    .Style("background-position", BackgroundPosition)
                     .Style("background-repeat", "no-repeat")
-                    .Style("border-radius", Props.BorderRadius)
-                    .Style("padding", Props.Padding)
-                    .Style("padding-bottom", Props.PaddingBottom)
-                    .Style("padding-left", Props.PaddingLeft)
-                    .Style("padding-right", Props.PaddingRight)
-                    .Style("padding-top", Props.PaddingTop)
-                    .Style("vertical-align", Props.VerticalAlign);
+                    .Style("border-radius", BorderRadius)
+                    .Style("padding", Padding)
+                    .Style("padding-bottom", PaddingBottom)
+                    .Style("padding-left", PaddingLeft)
+                    .Style("padding-right", PaddingRight)
+                    .Style("padding-top", PaddingTop)
+                    .Style("vertical-align", VerticalAlign);
 
                 RenderContent(renderer, containerWidth, context);
 
@@ -230,7 +228,7 @@
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table") // Style: outlook-inner-table
-                .Attr("align", Props.Align)
+                .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -240,22 +238,22 @@
             renderer.ElementStart("tr");
 
             renderer.ElementStart("td") // Style: outlook-inner-td
-                .Style("background-color", Props.InnerBackgroundColor)
-                .Style("inner-padding", Props.InnerPadding)
-                .Style("inner-padding-bottom", Props.InnerPaddingBottom)
-                .Style("inner-padding-left", Props.InnerPaddingLeft)
-                .Style("inner-padding-right", Props.InnerPaddingRight)
-                .Style("inner-padding-top", Props.InnerPaddingTop);
+                .Style("background-color", InnerBackgroundColor)
+                .Style("inner-padding", InnerPadding)
+                .Style("inner-padding-bottom", InnerPaddingBottom)
+                .Style("inner-padding-left", InnerPaddingLeft)
+                .Style("inner-padding-right", InnerPaddingRight)
+                .Style("inner-padding-top", InnerPaddingTop);
 
             renderer.Content("<![endif]-->");
 
             renderer.ElementStart("div") // Style: inner-div
-                .Attr("align", Props.Align)
+                .Attr("align", Align)
                 .Class("mj-hero-content")
-                .Style("background-color", Props.InnerBackgroundColor)
-                .Style("float", Props.Align)
+                .Style("background-color", InnerBackgroundColor)
+                .Style("float", Align)
                 .Style("margin", "0px auto")
-                .Style("width", Props.Width);
+                .Style("width", Width);
 
             renderer.ElementStart("table") // Style: inner-table
                 .Attr("border", "0")
@@ -281,8 +279,8 @@
 
             var innerWidth =
                 containerWidth.Value -
-                UnitParser.Parse(Props.PaddingTop).Value +
-                UnitParser.Parse(Props.PaddingBottom).Value;
+                UnitParser.Parse(PaddingTop).Value +
+                UnitParser.Parse(PaddingBottom).Value;
 
             context.Push();
             context.SetContainerWidth(innerWidth);

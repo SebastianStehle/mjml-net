@@ -2,15 +2,9 @@
 
 namespace Mjml.Net.Components
 {
-    public partial class RootProps
+    public sealed class RootComponent : Component
     {
-        [Bind("noop")]
-        public string? Noop;
-    }
-
-    public sealed class RootComponent : Component<RootProps>
-    {
-        public override string Name => "mjml";
+        public override string ComponentName => "mjml";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

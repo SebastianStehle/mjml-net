@@ -3,9 +3,9 @@ using Mjml.Net.Components.Head;
 
 namespace Tests
 {
-    public sealed class TestComponent : Component<HeadProps>
+    public sealed class TestComponent : Component
     {
-        public override string Name => "mjml-test";
+        public override string ComponentName => "mjml-test";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {

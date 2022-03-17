@@ -1,7 +1,9 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial class DividerProps
+    public partial class DividerComponent : BodyComponentBase
     {
+        public override string ComponentName => "mj-divider";
+
         [Bind("align", BindType.Align)]
         public string Align = "center";
 
@@ -34,23 +36,18 @@
 
         [Bind("width", BindType.PixelsOrPercent)]
         public string Width = "100%";
-    }
-
-    public sealed class DividerComponent : BodyComponentBase<DividerProps>
-    {
-        public override string Name => "mj-divider";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var borderSetting = $"{Props.BorderStyle} {Props.BorderWidth} {Props.BorderColor}";
+            var borderSetting = $"{BorderStyle} {BorderWidth} {BorderColor}";
 
-            var margin = GetMargin(Props.Align);
+            var margin = GetMargin(Align);
 
             renderer.ElementStart("p")
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", Props.Width);
+                .Style("width", Width);
 
             renderer.ElementEnd("p");
 
@@ -59,7 +56,7 @@
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", Props.Align)
+                .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -102,10 +99,10 @@
             var containerWidth = renderer.GetContainerWidth().Value;
 
             var paddingSize =
-                UnitParser.Parse(Props.PaddingLeft).Value +
-                UnitParser.Parse(Props.PaddingRight).Value;
+                UnitParser.Parse(PaddingLeft).Value +
+                UnitParser.Parse(PaddingRight).Value;
 
-            var width = Props.Width!;
+            var width = Width!;
 
             var (parsedWidth, unit) = UnitParser.Parse(width);
 

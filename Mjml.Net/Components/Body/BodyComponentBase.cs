@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public abstract class BodyComponentBase<T> : Component<T> where T : IProps, new()
+    public abstract class BodyComponentBase : Component
     {
 #pragma warning disable RECS0108 // Warns about static fields in generic types
         private static readonly AllowedParents Parents = new AllowedParents

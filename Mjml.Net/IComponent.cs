@@ -8,13 +8,15 @@ namespace Mjml.Net
 
         AllowedParents? AllowedAsChild { get; }
 
-        IProps Props { get; }
+        AllowedAttributes? AllowedFields { get; }
 
         INode Node { get; }
 
         ComponentType Type { get; }
 
-        string Name { get; }
+        string ComponentName { get; }
+
+        string? GetDefaultValue(string name);
 
         string? GetInheritingAttribute(string name);
 

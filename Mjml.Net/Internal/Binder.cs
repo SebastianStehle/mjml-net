@@ -87,7 +87,7 @@
 
             if (!withoutDefaults)
             {
-                return component?.Props?.DefaultValue(name);
+                return component?.GetDefaultValue(name);
             }
 
             return null;
