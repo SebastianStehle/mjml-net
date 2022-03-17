@@ -28,6 +28,7 @@
     <None Remove="Tests\Image.html" />
     <None Remove="Tests\ImageWithLink.html" />
     <None Remove="Tests\Preview.html" />
+    <None Remove="Tests\Section.html" />
     <None Remove="Tests\Social.html" />
     <None Remove="Tests\SocialEmpty.html" />
     <None Remove="Tests\SocialRaw.html" />
@@ -65,6 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\Section.html" />
     <EmbeddedResource Include="Tests\ButtonMixedContent2.html" />
     <EmbeddedResource Include="Tests\ButtonMixedContent.html" />
     <EmbeddedResource Include="Tests\HeroDividers.html" />

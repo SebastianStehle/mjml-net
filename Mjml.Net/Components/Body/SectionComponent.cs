@@ -1,202 +1,304 @@
-﻿namespace Mjml.Net.Components.Body
+using Mjml.Net.Extensions;
+
+namespace Mjml.Net.Components.Body
 {
+    public partial struct SectionProps
+    {
+        [Bind("background-color", BindType.Color)]
+        public string? BackgroundColor;
+
+        [Bind("background-position", BindType.String)]
+        public string BackgroundPosition = "top center";
+
+        [Bind("background-position-x", BindType.String)]
+        public string? BackgroundPositionX;
+
+        [Bind("background-position-y", BindType.String)]
+        public string? BackgroundPositionY;
+
+        [Bind("background-repeat", BindType.String)]
+        public string BackgroundRepeat = "repeat";
+
+        [Bind("background-size", BindType.String)]
+        public string BackgroundSize = "auto";
+
+        [Bind("background-url", BindType.String)]
+        public string? BackgroundUrl;
+
+        [Bind("border", BindType.String)]
+        public string? Border;
+
+        [Bind("border-bottom", BindType.String)]
+        public string? BorderBottom;
+
+        [Bind("border-left", BindType.String)]
+        public string? BorderLeft;
+
+        [Bind("border-radius", BindType.String)]
+        public string? BorderRadius;
+
+        [Bind("border-right", BindType.String)]
+        public string? BorderRight;
+
+        [Bind("border-top", BindType.String)]
+        public string? BorderTop;
+
+        [Bind("direction", BindType.String)]
+        public string Direction = "ltr";
+
+        [Bind("full-width", BindType.String)]
+        public string? FullWidth;
+
+        [Bind("padding", BindType.PixelsOrPercent)]
+        public string Padding = "20px 0";
+
+        [Bind("padding-bottom", BindType.PixelsOrPercent)]
+        public string? PaddingBottom;
+
+        [Bind("padding-left", BindType.PixelsOrPercent)]
+        public string? PaddingLeft;
+
+        [Bind("padding-right", BindType.PixelsOrPercent)]
+        public string? PaddingRight;
+
+        [Bind("padding-top", BindType.PixelsOrPercent)]
+        public string? PaddingTop;
+
+        [Bind("text-align", BindType.Align)]
+        public string TextAlign = "center";
+
+        [Bind("text-padding", BindType.PixelsOrPercent)]
+        public string TextPadding = "4px 4px 4px 0";
+    }
+
     public sealed class SectionComponent : BodyComponentBase
     {
         public override string ComponentName => "mj-section";
 
-        public override AllowedAttributes? AllowedAttributes { get; } =
-          new AllowedAttributes
-          {
-              ["background-color"] = AttributeTypes.Color,
-              ["background-position"] = AttributeTypes.String,
-              ["background-position-x"] = AttributeTypes.String,
-              ["background-position-y"] = AttributeTypes.String,
-              ["background-repeat"] = AttributeTypes.String,
-              ["background-size"] = AttributeTypes.String,
-              ["background-url"] = AttributeTypes.String,
-              ["border"] = AttributeTypes.String,
-              ["border-bottom"] = AttributeTypes.String,
-              ["border-left"] = AttributeTypes.String,
-              ["border-radius"] = AttributeTypes.FourPixelsOrPercent,
-              ["border-right"] = AttributeTypes.String,
-              ["border-top"] = AttributeTypes.String,
-              ["css-class"] = AttributeTypes.String,
-              ["direction"] = AttributeTypes.String,
-              ["full-width"] = AttributeTypes.String,
-              ["padding"] = AttributeTypes.FourPixelsOrPercent,
-              ["padding-bottom"] = AttributeTypes.PixelsOrPercent,
-              ["padding-left"] = AttributeTypes.PixelsOrPercent,
-              ["padding-right"] = AttributeTypes.PixelsOrPercent,
-              ["padding-top"] = AttributeTypes.PixelsOrPercent,
-              ["text-align"] = AttributeTypes.Align
-          };
-
-        public override Attributes? DefaultAttributes { get; } =
-            new Attributes
-            {
-                ["background-position"] = "top center",
-                ["background-repeat"] = "repeat",
-                ["background-size"] = "auto",
-                ["border"] = "none",
-                ["direction"] = "ltr",
-                ["padding"] = "20px 0",
-                ["text-align"] = "center"
-            };
-
         public override void Render(IHtmlRenderer renderer, INode node)
         {
+            var props = new SectionProps(node);
+
             if (IsFullWidth(node))
             {
-                RenderFullWidth(renderer, node);
+                RenderFullWidth(renderer, node, ref props);
             }
             else
             {
-                RenderSimple(renderer, node);
+                RenderSimple(renderer, node, ref props);
             }
         }
 
-        private static void RenderSimple(IHtmlRenderer renderer, INode node)
+        private void RenderFullWidth(IHtmlRenderer renderer, INode node, ref SectionProps props)
         {
-            RenderSectionStart(renderer, node);
+            throw new NotImplementedException();
+        }
+
+        private static void RenderSimple(IHtmlRenderer renderer, INode node, ref SectionProps props)
+        {
+            RenderSectionStart(renderer, node, ref props);
 
             if (HasBackground(node))
             {
-                RenderSectionWithBackground(renderer, node);
+                RenderSectionWithBackground(renderer, node, ref props);
             }
             else
             {
-                RenderSection(renderer, node);
+                RenderSection(renderer, node, ref props);
             }
 
             RenderSectionEnd(renderer, node);
         }
 
-        private static void RenderSectionStart(IHtmlRenderer renderer, INode node)
+        private static void RenderSectionStart(IHtmlRenderer renderer, INode node, ref SectionProps props)
         {
-            // This may need to be changed to get the full width of the container opposed to the box width.
-            var width = renderer.GetContext("width") as string;
-
-            renderer.Content("<!--[if mso | IE]>");
-
+            renderer.StartConditionalTag();
             renderer.ElementStart("table")
                 .Attr("align", "center")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", width)
-                .Class("outlook")
-                .Class(node.GetAttribute("css-class"))
-                .Style("width", width);
+                .Attr("width", IsFullWidth(node) ? "100%" : renderer.GetContainerWidth().String)
+                .Attr("bgcolor", props.BackgroundColor)
+                .Attr("class", node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                .Style("width", IsFullWidth(node) ? "100%" : renderer.GetContainerWidth().StringWithUnit);
 
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
                 .Style("line-height", "0px")
                 .Style("font-size", "0px")
                 .Style("mso-line-height-rule", "exactly");
-
-            renderer.Content("<![endif]-->");
+            renderer.EndConditionalTag();
         }
 
-        private static void RenderSection(IHtmlRenderer renderer, INode node)
+        private static void RenderSection(IHtmlRenderer renderer, INode node, ref SectionProps props)
         {
             var isFullWidth = IsFullWidth(node);
-            var containerOuterwidth = renderer.GetContext("width") as string;
+            var hasBackground = HasBackground(node);
 
-            renderer.ElementStart("div")
-                           .Attr("class", node.GetAttribute("css-class"))
+            var containerOuterwidth = renderer.GetContainerWidth().StringWithUnit;
+
+            var divElement = renderer.ElementStart("div")
+                           .Attr("class", isFullWidth ? null : node.GetAttribute("css-class"))
                            .Style("margin", "0px auto")
-                           .Style("border-radius", node.GetAttribute("border-radius"))
+                           .Style("border-radius", props.BorderRadius)
                            .Style("max-width", containerOuterwidth);
 
-            renderer.ElementStart("table")
+            if (!isFullWidth)
+            {
+                if (hasBackground)
+                {
+                    divElement
+                        .Style("background", GetBackground(node, ref props))
+                        .Style("background-color", props.BackgroundColor)
+                        .Style("background-position", props.BackgroundPosition)
+                        .Style("background-repeat", props.BackgroundRepeat)
+                        .Style("background-size", props.BackgroundSize);
+                }
+                else
+                {
+                    divElement
+                        .Style("background", props.BackgroundColor)
+                        .Style("background-color", props.BackgroundColor);
+                }
+            }
+
+            if (hasBackground)
+            {
+                renderer.ElementStart("div")
+                    .Style("line-height", "0")
+                    .Style("font-size", "0");
+            }
+
+            var tableElement = renderer.ElementStart("table")
                 .Attr("align", "center")
+                .Attr("background", isFullWidth ? null : props.BackgroundUrl)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Style("width", "100%")
-                .Style("border-radius", node.GetAttribute("border-radius"));
+                .Style("border-radius", props.BorderRadius);
+
+            if (!isFullWidth)
+            {
+                if (hasBackground)
+                {
+                    tableElement
+                        .Style("background", GetBackground(node, ref props))
+                        .Style("background-color", props.BackgroundColor)
+                        .Style("background-position", props.BackgroundPosition)
+                        .Style("background-repeat", props.BackgroundRepeat)
+                        .Style("background-size", props.BackgroundSize);
+                }
+                else
+                {
+                    tableElement
+                        .Style("background", props.BackgroundColor)
+                        .Style("background-color", props.BackgroundColor);
+                }
+            }
 
             renderer.ElementStart("tbody");
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
-                .Style("border", node.GetAttribute("border"))
-                .Style("border-bottom", node.GetAttribute("border-bottom"))
-                .Style("border-left", node.GetAttribute("border-left"))
-                .Style("border-right", node.GetAttribute("border-right"))
-                .Style("border-top", node.GetAttribute("border-top"))
-                .Style("direction", node.GetAttribute("direction"))
+                .Style("border", props.Border)
+                .Style("border-bottom", props.BorderBottom)
+                .Style("border-left", props.BorderLeft)
+                .Style("border-right", props.BorderRight)
+                .Style("border-top", props.BorderTop)
+                .Style("direction", props.Direction)
                 .Style("font-size", "0px")
-                .Style("padding", node.GetAttribute("padding"))
-                .Style("padding-bottom", node.GetAttribute("padding-bottom"))
-                .Style("padding-left", node.GetAttribute("padding-left"))
-                .Style("padding-right", node.GetAttribute("padding-right"))
-                .Style("padding-top", node.GetAttribute("padding-top"))
-                .Style("text-align", node.GetAttribute("text-align"));
+                .Style("padding", props.Padding)
+                .Style("padding-bottom", props.PaddingBottom)
+                .Style("padding-left", props.PaddingLeft)
+                .Style("padding-right", props.PaddingRight)
+                .Style("padding-top", props.PaddingTop)
+                .Style("text-align", props.TextAlign);
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditionalTag();
             renderer.ElementStart("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditionalTag();
 
-            RenderChildren(renderer, node);
+            RenderChildren(renderer);
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditionalTag();
             renderer.ElementEnd("table");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditionalTag();
 
-            renderer.ElementEnd("table");
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("tbody");
             renderer.ElementEnd("table");
+
+            if (hasBackground)
+            {
+                renderer.ElementEnd("div");
+            }
+
             renderer.ElementEnd("div");
+        }
+
+        private static string? GetBackground(INode node, ref SectionProps props)
+        {
+            throw new NotImplementedException();
         }
 
         private static void RenderSectionEnd(IHtmlRenderer renderer, INode node)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditionalTag();
 
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditionalTag();
         }
 
-        private static void RenderSectionWithBackground(IHtmlRenderer renderer, INode node)
+        private static void RenderSectionWithBackground(IHtmlRenderer renderer, INode node, ref SectionProps props)
         {
             throw new NotImplementedException();
         }
 
         private static void RenderChildren(IHtmlRenderer renderer)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditionalTag();
             renderer.ElementStart("tr");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditionalTag();
 
             renderer.RenderChildren(new ChildOptions
             {
                 Renderer = child =>
                 {
-                    //renderer.Content("<!--[if mso | IE]>");
-                    //renderer.ElementStart("td")
-                    //    .Attr("align", node.GetAttribute("align"))
-                    //    .Class("outlook")
-                    //    .Style("");
-                    //renderer.Content("<![endif]-->");
+                    if (child.Node.Component.Raw)
+                    {
+                        child.Render();
+                    }
+                    else
+                    {
+                        if (child.Node.Component.ComponentName.Equals("mj-column", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            renderer.StartConditionalTag();
+                            renderer.ElementStart("td")
+                               .Attr("align", child.Node.GetAttribute("align"))
+                               .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                               .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
+                               .Style("width", child.Node.GetAttribute("width")); //  getWidthAsPixel
+                            renderer.EndConditionalTag();
 
-
-                    child.Render();
+                            child.Render();
+                        }
+                    }
                 }
             });
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditionalTag();
             renderer.ElementEnd("tr");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditionalTag();
         }
 
         private static bool HasBackground(INode node)
