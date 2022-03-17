@@ -45,5 +45,33 @@ namespace Tests
 
             AssertHelpers.HtmlAssert(TestHelper.GetContent("ButtonLinkWithRel.html"), result);
         }
+
+        [Fact]
+        public void Should_render_button_with_mixed_content()
+        {
+            var source = @"
+<mj-button>
+    <strong>Hello</strong> MJML 
+</mj-button>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("ButtonMixedContent.html"), result);
+        }
+
+        [Fact]
+        public void Should_render_button_with_mixed_content2()
+        {
+            var source = @"
+<mj-button>
+    Hello <strong>MJML</strong>
+</mj-button>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("ButtonMixedContent2.html"), result);
+        }
     }
 }

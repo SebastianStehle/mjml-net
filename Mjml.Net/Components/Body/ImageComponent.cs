@@ -1,4 +1,4 @@
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
 {
@@ -130,8 +130,8 @@ namespace Mjml.Net.Components.Body
             renderer.ElementStart("tr");
 
             renderer.ElementStart("td")
-                .Style("width", isFullWidth ? null : $"{widthMin}px")
-                .Class(isFluid ? "mj-full-width-mobile" : null);
+                .Class(isFluid ? "mj-full-width-mobile" : null)
+                .Style("width", isFullWidth ? null : $"{widthMin}px");
 
             if (!string.IsNullOrWhiteSpace(href))
             {

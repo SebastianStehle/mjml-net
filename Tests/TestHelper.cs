@@ -12,7 +12,7 @@ namespace Tests
             return renderer.Render(source, new MjmlOptions
             {
                 Beautify = true
-            });
+            }).Html;
         }
 
         public static string Render(string source, params IHelper[] helpers)
@@ -27,7 +27,7 @@ namespace Tests
             return renderer.Render(source, new MjmlOptions
             {
                 Beautify = true
-            });
+            }).Html;
         }
 
         public static string GetContent(string content)

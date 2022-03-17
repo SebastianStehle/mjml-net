@@ -10,10 +10,10 @@
 
         IMjmlRenderer ClearHelpers();
 
-        string Render(string mjml, MjmlOptions options = default);
+        RenderResult Render(string mjml, MjmlOptions options = default);
 
-        string Render(Stream mjml, MjmlOptions options = default);
+        RenderResult Render(Stream mjml, MjmlOptions options = default);
 
-        string Render(TextReader mjml, MjmlOptions options = default);
+        RenderResult Render(TextReader mjml, MjmlOptions options = default);
     }
 }

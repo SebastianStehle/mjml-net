@@ -15,12 +15,10 @@ namespace Mjml.Net
         string? GetAttribute(string name, bool withoutDefaults = false);
 
         /// <summary>
-        /// Get the content of the node.
+        /// Get the text content of the node.
         /// </summary>
-        /// <returns>
-        /// The content of the node or null if not found.
-        /// </returns>
-        string? GetContent();
+        /// <returns>The content of the node or null if not found.</returns>
+        string? GetText();
 
         /// <summary>
         /// Get raw access to the reader.
