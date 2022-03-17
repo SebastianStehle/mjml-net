@@ -82,13 +82,13 @@ namespace Mjml.Net
 
         public void AddChild(IComponent child)
         {
-            childNodes ??= new List<IComponent>();
+            childNodes ??= new List<IComponent>(1);
             childNodes.Add(child);
         }
 
         public void AddChild(string rawXml)
         {
-            childXml ??= new List<string>();
+            childXml ??= new List<string>(1);
             childXml.Add(rawXml);
         }
 

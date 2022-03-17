@@ -59,20 +59,20 @@ namespace Mjml.Net
 
         private void ReadElement(string name, XmlReader parentReader, IComponent? parent)
         {
-            var reader = parentReader.ReadSubtree();
-
             var component = renderer.CreateComponent(name);
 
-            var currentLine = CurrentLine(reader);
-            var currentColumn = CurrentColumn(reader);
+            var currentLine = CurrentLine(parentReader);
+            var currentColumn = CurrentColumn(parentReader);
 
             if (component == null)
             {
                 errors.Add($"Invalid element '{name}'.",
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                    currentLine,
+                    currentColumn);
                 return;
             }
+
+            var reader = parentReader.ReadSubtree();
 
             if (parent != null)
             {
