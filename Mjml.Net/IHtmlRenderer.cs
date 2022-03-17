@@ -29,10 +29,18 @@
         void Plain(string? value, bool appendLine = true);
 
         /// <summary>
+        /// Renders a plain value.
+        /// </summary>
+        /// <param name="value">The value to render.</param>
+        /// <param name="appendLine">True to append a new line.</param>
+        void Plain(ReadOnlySpan<char> value, bool appendLine = true);
+
+        /// <summary>
         /// Renders the content of an element.
         /// </summary>
         /// <param name="value">The value to render.</param>
-        void Content(string? value);
+        /// <param name="appendLine">True to append a new line.</param>
+        void Content(string? value, bool appendLine = true);
 
         /// <summary>
         /// Render all helpers.

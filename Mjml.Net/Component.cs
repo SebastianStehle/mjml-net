@@ -4,6 +4,7 @@ namespace Mjml.Net
 {
     public abstract class Component : IComponent
     {
+        private static readonly char[] TrimChars = { ' ', '\n', '\r' };
         private List<IComponent>? childNodes;
         private List<string>? childXml;
 
@@ -15,6 +16,8 @@ namespace Mjml.Net
         public INode Node { get; private set; }
 
         public abstract string ComponentName { get; }
+
+        public virtual bool Raw => false;
 
         public virtual AllowedParents? AllowedAsDescendant => null;
 
@@ -41,14 +44,29 @@ namespace Mjml.Net
 
         protected virtual void RenderRaw(IHtmlRenderer renderer)
         {
-            if (childXml == null)
+            if (childXml == null || childXml.Count == 0)
             {
                 return;
             }
 
+            renderer.Content(string.Empty, false);
+
+            var i = 0;
             foreach (var xml in childXml)
             {
-                renderer.Content(xml);
+                var toRender = xml.AsSpan();
+
+                if (i == 0)
+                {
+                    toRender = toRender.TrimStart(TrimChars);
+                }
+
+                if (i == childXml.Count - 1)
+                {
+                    toRender = toRender.TrimEnd(TrimChars);
+                }
+
+                renderer.Plain(toRender);
             }
         }
 

@@ -14,6 +14,8 @@ namespace Mjml.Net
 
         ComponentType Type { get; }
 
+        bool Raw { get; }
+
         string ComponentName { get; }
 
         string? GetDefaultValue(string name);

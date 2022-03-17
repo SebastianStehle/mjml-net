@@ -173,7 +173,7 @@ namespace Mjml.Net
             WriteLineEnd();
         }
 
-        public void Content(string? value)
+        public void Content(string? value, bool appendLine = true)
         {
             Flush();
 
@@ -188,19 +188,23 @@ namespace Mjml.Net
             {
                 WriteIntended(value);
             }
-            else if (options.Minify)
-            {
-                WriteMinified(value);
-            }
             else
             {
                 Buffer.Append(value);
             }
 
-            WriteLineEnd();
+            if (appendLine)
+            {
+                WriteLineEnd();
+            }
         }
 
         public void Plain(string? value, bool appendLine = true)
+        {
+            Plain(value.AsSpan(), appendLine);
+        }
+
+        public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
         {
             if (Buffer == null)
             {
@@ -209,19 +213,12 @@ namespace Mjml.Net
 
             Flush();
 
-            if (string.IsNullOrWhiteSpace(value))
+            if (value.Length == 0)
             {
                 return;
             }
 
-            if (options.Minify)
-            {
-                WriteMinified(value);
-            }
-            else
-            {
-                Buffer.Append(value);
-            }
+            Buffer.Append(value);
 
             if (appendLine)
             {
@@ -241,30 +238,6 @@ namespace Mjml.Net
                 if (value[i] == '\n')
                 {
                     Buffer.Append(span[.. (j + 1)]);
-
-                    WriteLineStart();
-
-                    // Start the span after the newline.
-                    span = span[(j + 1)..];
-                    j = -1;
-                }
-            }
-
-            Buffer.Append(span);
-        }
-
-        private void WriteMinified(string value)
-        {
-            Buffer.EnsureCapacity(Buffer.Length + value.Length);
-
-            // We could go over the chars but it is much faster to writer to the buffer in batches. Therefore we create a span from newline to newline.
-            var span = value.AsSpan();
-
-            for (int i = 0, j = 0; i < value.Length; i++, j++)
-            {
-                if (value[i] == '\n')
-                {
-                    Buffer.Append(span[..j].Trim());
 
                     WriteLineStart();
 

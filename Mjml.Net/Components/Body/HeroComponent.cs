@@ -287,7 +287,7 @@
 
             foreach (var child in ChildNodes)
             {
-                if (child.Type == ComponentType.Raw)
+                if (child.Raw)
                 {
                     child.Render(renderer, context);
                 }

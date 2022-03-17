@@ -6,6 +6,8 @@
 
         public override string ComponentName => "mj-raw";
 
+        public override bool Raw => true;
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             RenderRaw(renderer);
