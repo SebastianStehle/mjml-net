@@ -2,15 +2,15 @@
 {
     public abstract class HeadComponentBase : IComponent
     {
-        public virtual AllowedParents? AllowedParents { get; } =
+        public virtual AllowedParents? AllowedAsChild => null;
+
+        public virtual AllowedParents? AllowedAsDescendant { get; } =
             new AllowedParents
             {
                 "mj-head"
             };
 
-        public virtual AllowedAttributes? AllowedAttributes => null;
-
-        public virtual Attributes? DefaultAttributes => null;
+        public virtual IProps? Props => null;
 
         public virtual bool SelfClosed => false;
 
@@ -19,5 +19,10 @@
         public abstract string ComponentName { get; }
 
         public abstract void Render(IHtmlRenderer renderer, INode node);
+    }
+
+    public abstract class HeadComponentBase<T> : HeadComponentBase where T : struct, IProps
+    {
+        public override IProps Props { get; } = default(T);
     }
 }

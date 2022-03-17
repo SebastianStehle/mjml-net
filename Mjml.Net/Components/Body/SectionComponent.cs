@@ -172,7 +172,7 @@
             throw new NotImplementedException();
         }
 
-        private static void RenderChildren(IHtmlRenderer renderer, INode node)
+        private static void RenderChildren(IHtmlRenderer renderer)
         {
             renderer.Content("<!--[if mso | IE]>");
             renderer.ElementStart("tr");
@@ -188,6 +188,7 @@
                     //    .Class("outlook")
                     //    .Style("");
                     //renderer.Content("<![endif]-->");
+
 
                     child.Render();
                 }

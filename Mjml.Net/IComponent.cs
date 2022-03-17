@@ -2,13 +2,15 @@
 {
     public interface IComponent
     {
-        public AllowedParents? AllowedParents { get; }
+        public AllowedParents? AllowedAsDescendant => null;
 
-        public AllowedAttributes? AllowedAttributes => null;
+        public AllowedParents? AllowedAsChild => null;
 
-        public Attributes? DefaultAttributes => null;
+        public IProps? Props => null;
 
         public bool SelfClosed => false;
+
+        public bool Raw => false;
 
         public bool NeedsContent => false;
 

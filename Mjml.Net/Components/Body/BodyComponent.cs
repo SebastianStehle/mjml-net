@@ -4,7 +4,7 @@
     {
         public string ComponentName => "mj-body";
 
-        public AllowedParents? AllowedParents { get; } =
+        public AllowedParents? AllowedAsChild { get; } =
             new AllowedParents
             {
                 "mjml"
@@ -14,7 +14,7 @@
         {
             renderer.BufferStart();
             renderer.RenderChildren();
-            renderer.SetContext("body", renderer.BufferFlush());
+            renderer.SetGlobalData("body", renderer.BufferFlush());
         }
     }
 }

@@ -18,9 +18,9 @@ namespace Tests
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
                 Beautify = true
-            });
+            }).Html;
 
-            // TrimmedEqual(Resources.BodyOnly, result);
+            AssertHelpers.TrimmedContains("</body>", result);
         }
     }
 }

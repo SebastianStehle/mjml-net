@@ -1,7 +1,5 @@
-﻿using Mjml.Net.Validators;
-using System.Xml;
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+﻿using System.Xml;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
@@ -11,147 +9,127 @@ namespace Mjml.Net
         private readonly GlobalData globalData = new GlobalData();
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
-        private readonly Dictionary<string, string> currentAttributes = new Dictionary<string, string>(10);
-        private readonly Dictionary<string, object?> context = new Dictionary<string, object?>(10);
+        private readonly RenderStack<ComponentContext> contextStack = new RenderStack<ComponentContext>();
         private readonly ValidationErrors errors = new ValidationErrors();
         private IComponent? currentComponent;
         private MjmlOptions options;
         private MjmlRenderer renderer;
-        private XmlReader reader;
-        private IValidator validator;
-        private string? currentText;
+        private IValidator? validator;
         private string? currentElement;
         private string[]? currentClasses;
 
-        private int? CurrentLine
+        public INode Node
         {
-            get
-            {
-                if (reader is IXmlLineInfo lineInfo)
-                {
-                    return lineInfo.LineNumber;
-                }
-
-                return null;
-            }
+            get => this;
         }
 
-        private int? CurrentColumn
+        public IComponent Component
         {
-            get
-            {
-                if (reader is IXmlLineInfo lineInfo)
-                {
-                    return lineInfo.LinePosition;
-                }
+            get => currentComponent!;
+        }
 
-                return null;
-            }
+        public GlobalData GlobalData
+        {
+            get => globalData;
         }
 
         public MjmlRenderContext()
         {
         }
 
-        public MjmlRenderContext(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
+        public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions options = default)
         {
-            Setup(renderer, reader, options);
+            Setup(renderer,  options);
         }
 
-        public void Setup(MjmlRenderer renderer, XmlReader reader, MjmlOptions options = default)
+        public void Setup(MjmlRenderer renderer, MjmlOptions options = default)
         {
             this.renderer = renderer;
-            this.reader = reader;
             this.options = options;
 
-            validator = options.Validator ?? SoftValidator.Instance;
+            validator = options.ValidatorFactory?.Create();
         }
 
         internal void Clear()
         {
+            globalData.Clear();
             attributesByClass.Clear();
             attributesByName.Clear();
-            context.Clear();
-            currentAttributes.Clear();
+            contextStack.Clear();
+            validator = null;
             currentClasses = null;
             currentComponent = null;
             currentElement = null;
-            currentText = null;
             errors.Clear();
-            globalData.Clear();
-            reader = null!;
             renderer = null!;
 
             ClearRenderData();
         }
 
-        public void Validate()
+        public ValidationErrors Validate()
         {
-            validator.Complete(errors);
-
-            if (errors.Any())
-            {
-                // Create a copy because the error list could be reused.
-                throw new ValidationException(errors.ToList());
-            }
+            return validator?.Complete() ?? new ValidationErrors();
         }
 
-        public void Read()
+        public void Read(XmlReader reader)
         {
-            do
+            while (reader.Read())
             {
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        ReadElement(reader.Name);
+                        ReadElement(reader.Name, reader, default);
                         break;
                 }
             }
-            while (reader.Read());
         }
 
-        private void ReadElement(string name)
+        private void ReadElement(string name, XmlReader parentReader, ChildOptions childOptions)
         {
+            var reader = parentReader.ReadSubtree();
+
+            var newContext = new ComponentContext(contextStack.Current, reader, childOptions);
+
+            childOptions.ChildContext?.Invoke(newContext);
+
+            contextStack.Push(newContext);
+
             currentElement = name;
             currentClasses = null;
-            currentText = null;
-            currentAttributes.Clear();
-
             currentComponent = renderer.GetComponent(currentElement);
 
-            if (currentComponent == null)
+            var component = currentComponent;
+
+            var currentLine = CurrentLine(reader);
+            var currentColumn = CurrentColumn(reader);
+
+            if (component == null)
             {
-                errors.Add($"Invalid element '{currentElement}'.", CurrentLine, CurrentColumn);
-                Validate();
+                errors.Add($"Invalid element '{currentElement}'.",
+                    CurrentLine(reader),
+                    CurrentColumn(reader));
+                return;
             }
 
-            validator.ValidateComponent(currentComponent!, errors, CurrentLine, CurrentColumn);
+            reader.Read();
 
-            for (var i = 0; i < reader.AttributeCount; i++)
+            if (validator != null)
             {
-                reader.MoveToAttribute(i);
+                validator.BeforeComponent(component,
+                    CurrentLine(reader),
+                    CurrentColumn(reader));
 
-                currentAttributes[reader.Name] = reader.Value;
-
-                validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors, CurrentLine, CurrentColumn);
-            }
-
-            while (reader.Read())
-            {
-                var type = reader.NodeType;
-
-                if (type == XmlNodeType.Text)
+                for (var i = 0; i < reader.AttributeCount; i++)
                 {
-                    currentText = reader.Value.Trim(TrimChars);
-                    break;
-                }
-                else if (type == XmlNodeType.Element || type == XmlNodeType.EndElement)
-                {
-                    break;
+                    reader.MoveToAttribute(i);
+
+                    validator.Attribute(reader.Name, reader.Value, component,
+                        CurrentLine(reader),
+                        CurrentColumn(reader));
                 }
             }
 
-            var childRenderer = childOptions.Current.Renderer;
+            var childRenderer = contextStack.Current?.Options.Renderer;
 
             if (childRenderer != null)
             {
@@ -161,18 +139,37 @@ namespace Mjml.Net
             {
                 currentComponent!.Render(this, this);
             }
+
+            if (validator != null)
+            {
+                validator.AfterComponent(component, currentLine, currentColumn);
+            }
+
+            contextStack.Pop();
+
+            reader.Close();
         }
 
-        public string? GetAttribute(string name, string? fallback = null)
+        public string? GetAttribute(string name, bool withoutDefaults = false)
         {
-            if (currentAttributes.TryGetValue(name, out var attribute))
+            if (Reader.MoveToAttribute(name))
             {
-                return attribute;
+                return Reader.Value;
+            }
+
+            if (contextStack.Current?.Options.ChildResolver != null)
+            {
+                var parentAttribute = contextStack.Current?.Options.ChildResolver(name);
+
+                if (parentAttribute != null)
+                {
+                    return parentAttribute;
+                }
             }
 
             if (attributesByName.TryGetValue(name, out var byType))
             {
-                if (byType.TryGetValue(currentElement!, out attribute))
+                if (byType.TryGetValue(currentElement!, out var attribute))
                 {
                     return attribute;
                 }
@@ -187,14 +184,21 @@ namespace Mjml.Net
             {
                 if (currentClasses == null)
                 {
-                    currentClasses = currentAttributes.GetValueOrDefault(Constants.MjClass)?.Split() ?? Array.Empty<string>();
+                    if (Reader.MoveToAttribute(Constants.MjClass))
+                    {
+                        currentClasses = Reader.Value.Split(' ');
+                    }
+                    else
+                    {
+                        currentClasses = Array.Empty<string>();
+                    }
                 }
 
                 foreach (var className in currentClasses)
                 {
                     if (attributesByClass.TryGetValue(className, out var byName))
                     {
-                        if (byName.TryGetValue(name, out attribute))
+                        if (byName.TryGetValue(name, out var attribute))
                         {
                             return attribute;
                         }
@@ -202,29 +206,37 @@ namespace Mjml.Net
                 }
             }
 
-            var defaultAttributes = currentComponent?.DefaultAttributes;
-
-            if (defaultAttributes != null && defaultAttributes.TryGetValue(name, out attribute))
+            if (!withoutDefaults)
             {
-                return attribute;
+                return currentComponent?.Props?.DefaultValue(name);
             }
 
-            return fallback;
+            return null;
         }
 
-        public void SetContext(string name, object? value)
+        public object? Set(string name, object? value)
         {
-            context[name] = value;
+            return contextStack.Current?.Set(name, value);
         }
 
-        public object? GetContext(string name)
+        public object? Get(string name)
         {
-            return context.GetValueOrDefault(name);
+            return contextStack.Current?.Get(name);
         }
 
-        public string? GetContent()
+        public string? GetText()
         {
-            return currentText;
+            var reader = Reader;
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Text)
+                {
+                    return Reader.Value.Trim(TrimChars);
+                }
+            }
+
+            return null;
         }
 
         public void SetGlobalData(string name, object value, bool skipIfAdded = true)
@@ -261,6 +273,26 @@ namespace Mjml.Net
             }
 
             attributes[name] = value;
+        }
+
+        private static int? CurrentLine(XmlReader reader)
+        {
+            if (reader is IXmlLineInfo lineInfo)
+            {
+                return lineInfo.LineNumber;
+            }
+
+            return null;
+        }
+
+        private static int? CurrentColumn(XmlReader reader)
+        {
+            if (reader is IXmlLineInfo lineInfo)
+            {
+                return lineInfo.LineNumber;
+            }
+
+            return null;
         }
     }
 }

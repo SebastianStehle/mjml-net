@@ -1,4 +1,5 @@
-﻿using Mjml.Net;
+﻿using System.IO;
+using Mjml.Net;
 
 namespace Tests
 {
@@ -11,7 +12,7 @@ namespace Tests
             return renderer.Render(source, new MjmlOptions
             {
                 Beautify = true
-            });
+            }).Html;
         }
 
         public static string Render(string source, params IHelper[] helpers)
@@ -26,7 +27,14 @@ namespace Tests
             return renderer.Render(source, new MjmlOptions
             {
                 Beautify = true
-            });
+            }).Html;
+        }
+
+        public static string GetContent(string content)
+        {
+            var stream = typeof(TestHelper).Assembly.GetManifestResourceStream($"Tests.Tests.{content}")!;
+
+            return new StreamReader(stream).ReadToEnd();
         }
     }
 }

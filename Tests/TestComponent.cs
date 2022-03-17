@@ -6,18 +6,37 @@ namespace Tests
     {
         public string ComponentName => "mjml-test";
 
-        public AllowedParents? AllowedParents { get; } = null;
+        public AllowedParents? AllowedAsDescendant { get; } = null;
 
         public void Render(IHtmlRenderer renderer, INode node)
         {
             renderer.RenderChildren();
 
-            renderer.RenderHelpers(HelperTarget.HeadStart);
-            renderer.Plain(renderer.GetContext("head") as string);
-            renderer.RenderHelpers(HelperTarget.HeadEnd);
+            RenderHead(renderer);
+            RenderBody(renderer);
+        }
 
+        private static void RenderHead(IHtmlRenderer renderer)
+        {
+            renderer.RenderHelpers(HelperTarget.HeadStart);
+
+            if (renderer.GlobalData.TryGetValue((typeof(string), "head"), out var head))
+            {
+                renderer.Plain(head.ToString());
+            }
+
+            renderer.RenderHelpers(HelperTarget.HeadEnd);
+        }
+
+        private static void RenderBody(IHtmlRenderer renderer)
+        {
             renderer.RenderHelpers(HelperTarget.BodyStart);
-            renderer.Plain(renderer.GetContext("body") as string);
+
+            if (renderer.GlobalData.TryGetValue((typeof(string), "body"), out var body))
+            {
+                renderer.Plain(body.ToString());
+            }
+
             renderer.RenderHelpers(HelperTarget.BodyEnd);
         }
     }

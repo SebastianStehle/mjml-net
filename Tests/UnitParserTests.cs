@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mjml.Net.Components;
+﻿using Mjml.Net.Components;
 using Xunit;
 
 namespace Tests
@@ -26,7 +21,15 @@ namespace Tests
         {
             var result = UnitParser.Parse("60.5");
 
-            Assert.Equal((60.5, Unit.Unknown), result);
+            Assert.Equal((60.5, Unit.None), result);
+        }
+
+        [Fact]
+        public void Should_parse_without_unit2()
+        {
+            var result = UnitParser.Parse("60.5 ");
+
+            Assert.Equal((60.5, Unit.None), result);
         }
 
         [Fact]

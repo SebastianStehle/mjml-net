@@ -21,14 +21,19 @@ namespace Mjml.Net
             Add(new DividerComponent());
             Add(new FontComponent());
             Add(new HeadComponent());
+            Add(new HeroComponent());
             Add(new ImageComponent());
             Add(new PreviewComponent());
             Add(new RawComponent());
             Add(new RootComponent());
+            Add(new SocialComponent());
+            Add(new SocialElementComponent());
             Add(new SpacerComponent());
             Add(new StyleComponent());
             Add(new TitleComponent());
             Add(new SectionComponent());
+            Add(new TextComponent());
+            Add(new ButtonComponent());
 
             Add(new BreakpointHelper());
             Add(new FontHelper());
@@ -70,37 +75,37 @@ namespace Mjml.Net
             return components.GetValueOrDefault(previousElement);
         }
 
-        public string Render(string mjml, MjmlOptions options = default)
+        public RenderResult Render(string mjml, MjmlOptions options = default)
         {
             var xml = XmlReader.Create(new StringReader(mjml));
 
             return Render(xml, options);
         }
 
-        public string Render(Stream mjml, MjmlOptions options = default)
+        public RenderResult Render(Stream mjml, MjmlOptions options = default)
         {
             var xml = XmlReader.Create(mjml);
 
             return Render(xml, options);
         }
 
-        public string Render(TextReader mjml, MjmlOptions options = default)
+        public RenderResult Render(TextReader mjml, MjmlOptions options = default)
         {
             var xml = XmlReader.Create(mjml);
 
             return Render(xml, options);
         }
 
-        private string Render(XmlReader xml, MjmlOptions options)
+        private RenderResult Render(XmlReader xml, MjmlOptions options)
         {
             var context = ObjectPools.Contexts.Get();
             try
             {
-                context.Setup(this, xml, options);
+                context.Setup(this, options);
                 context.BufferStart();
-                context.Read();
+                context.Read(xml);
 
-                return context.BufferFlush()!;
+                return new RenderResult(context.BufferFlush(), context.Validate());
             }
             finally
             {

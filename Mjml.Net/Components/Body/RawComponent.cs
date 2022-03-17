@@ -4,12 +4,11 @@
     {
         public override string ComponentName => "mj-raw";
 
+        public override bool Raw => true;
+
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            renderer.RenderChildren(new ChildOptions
-            {
-                RawXML = true
-            });
+            renderer.RenderChildrenRaw();
         }
     }
 }

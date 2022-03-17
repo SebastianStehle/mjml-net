@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Text;
 using Mjml.Net;
+using Mjml.Net.Extensions;
 using Xunit;
 
 namespace Tests
 {
     public class MjmlRenderContextTests
     {
-        private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), null!, new MjmlOptions
+        private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
         {
             Beautify = true
         });
@@ -220,6 +221,72 @@ namespace Tests
                 "  </body>",
                 "</html>"
             });
+        }
+
+        [Fact]
+        public void Should_render_conditional_start()
+        {
+            sut.BufferStart();
+            sut.StartConditionalTag();
+
+            var result = sut.BufferFlush().Trim();
+
+            Assert.Equal("<!--[if mso | IE]>", result);
+        }
+
+        [Fact]
+        public void Should_render_conditional_start_mso()
+        {
+            sut.BufferStart();
+            sut.StartConditionalMsoTag();
+
+            var result = sut.BufferFlush().Trim();
+
+            Assert.Equal("<!--[if mso]>", result);
+        }
+
+        [Fact]
+        public void Should_render_conditional_start_not()
+        {
+            sut.BufferStart();
+            sut.StartConditionalNotTag();
+
+            var result = sut.BufferFlush().Trim();
+
+            Assert.Equal("<!--[if !mso | IE]><!-->", result);
+        }
+
+        [Fact]
+        public void Should_render_conditional_start_not_mso()
+        {
+            sut.BufferStart();
+            sut.StartConditionalNotMsoTag();
+
+            var result = sut.BufferFlush().Trim();
+
+            Assert.Equal("<!--[if !mso]><!-->", result);
+        }
+
+        [Fact]
+        public void Should_render_conditional_end()
+        {
+            sut.BufferStart();
+            sut.EndConditionalTag();
+
+            var result = sut.BufferFlush().Trim();
+
+            Assert.Equal("<![endif]-->", result);
+        }
+
+        [Fact]
+        public void Should_render_conditional_end_not()
+        {
+            sut.BufferStart();
+            sut.EndConditionalNotTag();
+
+            var result = sut.BufferFlush().Trim();
+
+            Assert.Equal("<!--<![endif]-->", result);
         }
 
         private void AssertText(params string[] lines)

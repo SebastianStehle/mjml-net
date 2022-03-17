@@ -8,7 +8,39 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp.Diffing" Version="0.17.0" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Tests\Breakpoint.html" />
+    <None Remove="Tests\Button.html" />
+    <None Remove="Tests\ButtonLink.html" />
+    <None Remove="Tests\ButtonLinkWithRel.html" />
+    <None Remove="Tests\ButtonMixedContent.html" />
+    <None Remove="Tests\ButtonMixedContent2.html" />
+    <None Remove="Tests\Divider.html" />
+    <None Remove="Tests\Font.html" />
+    <None Remove="Tests\Hero.html" />
+    <None Remove="Tests\HeroDivider.html" />
+    <None Remove="Tests\HeroDividers.html" />
+    <None Remove="Tests\Image.html" />
+    <None Remove="Tests\ImageWithLink.html" />
+    <None Remove="Tests\Preview.html" />
+    <None Remove="Tests\Social.html" />
+    <None Remove="Tests\SocialEmpty.html" />
+    <None Remove="Tests\SocialRaw.html" />
+    <None Remove="Tests\Spacer.html" />
+    <None Remove="Tests\SpacerWIthHeight.html" />
+    <None Remove="Tests\Style.html" />
+    <None Remove="Tests\Text.html" />
+    <None Remove="Tests\TextWithHtml.html" />
+    <None Remove="Tests\Title.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngleSharp.Diffing" Version="0.18.0-alpha-38" />
     <PackageReference Include="FakeItEasy" Version="7.3.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -33,22 +65,33 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\ButtonMixedContent2.html" />
+    <EmbeddedResource Include="Tests\ButtonMixedContent.html" />
+    <EmbeddedResource Include="Tests\HeroDividers.html" />
+    <EmbeddedResource Include="Tests\Social.html" />
+    <EmbeddedResource Include="Tests\SocialRaw.html" />
+    <EmbeddedResource Include="Tests\TextWithHtml.html" />
+    <EmbeddedResource Include="Tests\Text.html" />
+    <EmbeddedResource Include="Tests\Title.html" />
+    <EmbeddedResource Include="Tests\Style.html" />
+    <EmbeddedResource Include="Tests\SpacerWithHeight.html" />
+    <EmbeddedResource Include="Tests\Spacer.html" />
+    <EmbeddedResource Include="Tests\Preview.html" />
+    <EmbeddedResource Include="Tests\Image.html" />
+    <EmbeddedResource Include="Tests\ImageWithLink.html" />
+    <EmbeddedResource Include="Tests\ButtonLinkWithRel.html" />
+    <EmbeddedResource Include="Tests\ButtonLink.html" />
+    <EmbeddedResource Include="Tests\Button.html" />
+    <EmbeddedResource Include="Tests\Breakpoint.html" />
+    <EmbeddedResource Include="Tests\Divider.html" />
+    <EmbeddedResource Include="Tests\Font.html" />
+    <EmbeddedResource Include="Tests\Hero.html" />
+    <EmbeddedResource Include="Tests\HeroDivider.html" />
+    <EmbeddedResource Include="Tests\SocialEmpty.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
