@@ -6,13 +6,13 @@
         public string? Align;
 
         [Bind("background-color")]
-        public string? BackgroundColor = "#ffffff";
+        public string BackgroundColor = "#ffffff";
 
         [Bind("background-height", BindType.PixelsOrPercent)]
         public string? BackgroundHeight;
 
         [Bind("background-position")]
-        public string? BackgroundPosition = "center center";
+        public string BackgroundPosition = "center center";
 
         [Bind("background-url")]
         public string? BackgroundUrl;
@@ -30,7 +30,7 @@
         public string? CssClass;
 
         [Bind("height", BindType.PixelsOrPercent)]
-        public string? Height = "0px";
+        public string Height = "0px";
 
         [Bind("inner-background-color", BindType.Color)]
         public string? InnerBackgroundColor;
@@ -51,10 +51,10 @@
         public string? InnerPaddingTop;
 
         [Bind("mode")]
-        public string? Mode = "fixed-height";
+        public string Mode = "fixed-height";
 
         [Bind("padding", BindType.FourPixelsOrPercent)]
-        public string? Padding = "0px";
+        public string Padding = "0px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
         public string? PaddingBottom;
@@ -69,7 +69,7 @@
         public string? PaddingTop;
 
         [Bind("vertical-align", BindType.VerticalAlign)]
-        public string? VerticalAlign = "top";
+        public string VerticalAlign = "top";
 
         [Bind("width", BindType.Pixels)]
         public string? Width;
