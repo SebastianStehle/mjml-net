@@ -33,6 +33,7 @@ namespace Mjml.Net
             Add<StyleComponent>();
             Add<TextComponent>();
             Add<TitleComponent>();
+            Add<SectionComponent>();
 
             Add(new BreakpointHelper());
             Add(new FontHelper());
