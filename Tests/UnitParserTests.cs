@@ -21,7 +21,15 @@ namespace Tests
         {
             var result = UnitParser.Parse("60.5");
 
-            Assert.Equal((60.5, Unit.Unknown), result);
+            Assert.Equal((60.5, Unit.None), result);
+        }
+
+        [Fact]
+        public void Should_parse_without_unit2()
+        {
+            var result = UnitParser.Parse("60.5 ");
+
+            Assert.Equal((60.5, Unit.None), result);
         }
 
         [Fact]

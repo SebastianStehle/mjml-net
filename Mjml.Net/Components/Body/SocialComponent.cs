@@ -99,12 +99,9 @@
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("role", "presentation")
-                .Style("margin", "0px");
+                .Attr("role", "presentation");
 
             renderer.ElementStart("tr");
-
-            renderer.Content("<![endif]-->");
 
             renderer.RenderChildren(new ChildOptions
             {
@@ -116,11 +113,8 @@
                     }
                     else
                     {
-                        renderer.Content("<!--[if mso | IE]>");
-
                         renderer.ElementStart("td");
-
-                        renderer.ElementStart("tr");
+                        renderer.Content("<![endif]-->");
 
                         renderer.ElementStart("table")
                             .Attr("align", child.Node.GetAttribute("align"))
@@ -136,18 +130,52 @@
                         child.Render();
 
                         renderer.ElementEnd("tbody");
+                        renderer.ElementEnd("table");
 
                         renderer.Content("<!--[if mso | IE]>");
                         renderer.ElementEnd("td");
-                        renderer.Content("<![endif]-->");
                     }
-                }
+                },
+                ChildResolver = CreateResolver(props)
             });
 
-            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
             renderer.Content("<![endif]-->");
+        }
+
+        private static Func<string, string?> CreateResolver(SocialComponentProps props)
+        {
+            return name =>
+            {
+                switch (name)
+                {
+                    case "border-radius":
+                        return props.BorderRadius;
+                    case "color":
+                        return props.Color;
+                    case "font-family":
+                        return props.FontFamily;
+                    case "font-size":
+                        return props.FontSize;
+                    case "font-style":
+                        return props.FontStyle;
+                    case "icon-height":
+                        return props.IconHeight;
+                    case "icon-padding":
+                        return props.IconPadding;
+                    case "icon-size":
+                        return props.IconSize;
+                    case "line-height":
+                        return props.IconHeight;
+                    case "text-padding":
+                        return props.TextPadding;
+                    case "text-decoration":
+                        return props.TextDecoration;
+                    default:
+                        return null;
+                }
+            };
         }
 
         private static void RenderVertical(IHtmlRenderer renderer)

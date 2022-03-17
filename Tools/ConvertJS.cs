@@ -1,6 +1,6 @@
-﻿using Squidex.Text;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
+using Squidex.Text;
 
 namespace Tools
 {
@@ -8,7 +8,7 @@ namespace Tools
     {
         public static void Run()
         {
-            var propertyRegex = new Regex("'?(?<Name>[^'\\s]*)'?: '(?<Value>[^']*)'", RegexOptions.Singleline | RegexOptions.Compiled);
+            var propertyRegex = new Regex("'?(?<Name>[a-z\\-]*)'?: '(?<Value>[^']*)'");
 
             var directory = new DirectoryInfo("../../../../Mjml.Net");
 
@@ -16,21 +16,24 @@ namespace Tools
             {
                 var suffix = "Component.cs";
 
-                if (!file.Name.EndsWith(suffix))
+                if (!file.Name.EndsWith(suffix, StringComparison.Ordinal))
                 {
                     continue;
                 }
 
-                var fileProps = file.Name.Substring(0, file.Name.Length - suffix.Length);
+                var fileProps = file.Name[..^suffix.Length];
                 var fileText = File.ReadAllText(file.FullName);
+
+                // Remove this, otherwise we get issues with our ending detection.
+                fileText = fileText.Replace("{1,4}", string.Empty, StringComparison.Ordinal);
 
                 var defaultAttributes = new Dictionary<string, string>();
 
-                var startOfDefaultAttribute = fileText.IndexOf("static defaultAttributes = {");
+                var startOfDefaultAttribute = fileText.IndexOf("static defaultAttributes = {", StringComparison.Ordinal);
 
                 if (startOfDefaultAttribute >= 0)
                 {
-                    var end = fileText.IndexOf("}", startOfDefaultAttribute);
+                    var end = fileText.IndexOf("}", startOfDefaultAttribute, StringComparison.Ordinal);
 
                     var range = fileText.Substring(startOfDefaultAttribute + 1, end - startOfDefaultAttribute);
 
@@ -45,11 +48,11 @@ namespace Tools
 
                 var sb = new StringBuilder();
 
-                var startOfAllowedAttributes = fileText.IndexOf("static allowedAttributes = {");
+                var startOfAllowedAttributes = fileText.IndexOf("static allowedAttributes = {", StringComparison.Ordinal);
 
                 if (startOfAllowedAttributes >= 0)
                 {
-                    var end = fileText.IndexOf("}", startOfAllowedAttributes);
+                    var end = fileText.IndexOf("}", startOfAllowedAttributes, StringComparison.Ordinal);
 
                     var range = fileText.Substring(startOfAllowedAttributes + 1, end - startOfAllowedAttributes);
 

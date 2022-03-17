@@ -152,6 +152,16 @@ namespace Mjml.Net
                 return Reader.Value;
             }
 
+            if (contextStack.Current?.Options.ChildResolver != null)
+            {
+                var parentAttribute = contextStack.Current?.Options.ChildResolver(name);
+
+                if (parentAttribute != null)
+                {
+                    return parentAttribute;
+                }
+            }
+
             if (attributesByName.TryGetValue(name, out var byType))
             {
                 if (byType.TryGetValue(currentElement!, out var attribute))
