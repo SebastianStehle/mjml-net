@@ -109,7 +109,9 @@
                 {
                     if (child.Node.Component.Raw)
                     {
+                        renderer.Content("<![endif]-->");
                         child.Render();
+                        renderer.Content("<!--[if mso | IE]>");
                     }
                     else
                     {
