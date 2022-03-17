@@ -16,11 +16,6 @@
         IElementHtmlRenderer ElementStart(string elementName, bool selfClosed = false);
 
         /// <summary>
-        /// Gets the global data.
-        /// </summary>
-        GlobalData GlobalData { get; }
-
-        /// <summary>
         /// Ends an element.
         /// </summary>
         /// <param name="elementName">The name of the element.</param>
@@ -55,54 +50,6 @@
         /// </summary>
         /// <returns>The buffer content.</returns>
         string BufferFlush();
-
-        /// <summary>
-        /// Render all children using the defined options.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        void RenderChildren(ChildOptions options = default);
-
-        /// <summary>
-        /// Render all children as raw XML.
-        /// </summary>
-        void RenderChildrenRaw();
-
-        /// <summary>
-        /// Sets a global context for all elements.
-        /// </summary>
-        /// <param name="name">The name of the context value.</param>
-        /// <param name="value">The context value.</param>
-        /// <param name="skipIfAdded">True to not override previous context values.</param>
-        void SetGlobalData(string name, object value, bool skipIfAdded = true);
-
-        /// <summary>
-        /// Sets a attribute by type.
-        /// </summary>
-        /// <param name="name">The name of the attribute.</param>
-        /// <param name="type">The type of the attribute (e.g. component name.)</param>
-        /// <param name="value">The value of the attribute.</param>
-        void SetTypeAttribute(string name, string type, string value);
-
-        /// <summary>
-        /// Sets a attribute by class.
-        /// </summary>
-        /// <param name="name">The name of the attribute.</param>
-        /// <param name="className">The class name of the attribute.</param>
-        /// <param name="value">The value of the attribute.</param>
-        void SetClassAttribute(string name, string className, string value);
-    }
-
-    public interface IChildRenderer
-    {
-        /// <summary>
-        /// Renders the child.
-        /// </summary>
-        void Render();
-
-        /// <summary>
-        /// The node for the child.
-        /// </summary>
-        INode Node { get; }
     }
 
     public interface IElementHtmlRenderer : IElementClassWriter

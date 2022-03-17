@@ -2,52 +2,56 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public sealed class AttributesComponent : HeadComponentBase
+    public partial class AttributesProps
     {
-        public override string ComponentName => "mj-attributes";
+        [Bind("none")]
+        public string? None;
+    }
 
-        public override void Render(IHtmlRenderer renderer, INode node)
+    public sealed class AttributesComponent : HeadComponentBase<AttributesProps>
+    {
+        public override void Bind(INode node, GlobalContext context, XmlReader reader)
         {
-            var reader = node.Reader;
+            base.Bind(node, context, reader);
 
-            using var subtree = reader.ReadSubtree();
-
-            while (subtree.Read())
+            while (reader.Read())
             {
-                if (subtree.NodeType == XmlNodeType.Element)
+                if (reader.NodeType == XmlNodeType.Element)
                 {
-                    var type = subtree.Name;
+                    var type = reader.Name;
 
                     if (type == "mj-class")
                     {
                         if (reader.MoveToAttribute("name"))
                         {
-                            var className = subtree.Value;
+                            var className = reader.Value;
 
-                            for (var i = 0; i < subtree.AttributeCount; i++)
+                            for (var i = 0; i < reader.AttributeCount; i++)
                             {
-                                subtree.MoveToAttribute(i);
+                                reader.MoveToAttribute(i);
 
-                                if (subtree.Name != "name")
+                                if (reader.Name != "name")
                                 {
-                                    renderer.SetClassAttribute(subtree.Name, className, subtree.Value);
+                                    context.SetClassAttribute(reader.Name, className, reader.Value);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        for (var i = 0; i < subtree.AttributeCount; i++)
+                        for (var i = 0; i < reader.AttributeCount; i++)
                         {
-                            subtree.MoveToAttribute(i);
+                            reader.MoveToAttribute(i);
 
-                            renderer.SetTypeAttribute(subtree.Name, type, subtree.Value);
+                            context.SetTypeAttribute(reader.Name, type, reader.Value);
                         }
                     }
                 }
             }
+        }
 
-            subtree.Close();
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
+        {
         }
     }
 }

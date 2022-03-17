@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public partial struct TextProps
+    public partial class TextProps
     {
         [Bind("align", BindType.Align)]
         public string? Align = "left";
@@ -61,17 +61,15 @@ namespace Mjml.Net.Components.Body
 
     public sealed class TextComponent : BodyComponentBase<TextProps>
     {
-        public override string ComponentName => "mj-text";
+        public override ComponentType Type => ComponentType.Raw;
 
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new TextProps(node);
-
-            var height = props.Height;
+            var height = Props.Height;
 
             if (string.IsNullOrEmpty(height))
             {
-                RenderTextContent(renderer, node, ref props);
+                RenderTextContent(renderer);
             }
             else
             {
@@ -89,7 +87,7 @@ namespace Mjml.Net.Components.Body
                     .Style("height", height);
                 renderer.EndConditionalTag();
 
-                RenderTextContent(renderer, node, ref props);
+                RenderTextContent(renderer);
 
                 renderer.StartConditionalTag();
                 renderer.ElementEnd("td");
@@ -99,22 +97,22 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private static void RenderTextContent(IHtmlRenderer renderer, INode node, ref TextProps props)
+        private void RenderTextContent(IHtmlRenderer renderer)
         {
             renderer.ElementStart("div")
-                .Style("font-family", props.FontFamily)
-                .Style("font-size", props.FontSize)
-                .Style("font-style", props.FontStyle)
-                .Style("font-weight", props.FontWeight)
-                .Style("letter-spacing", props.LetterSpacing)
-                .Style("line-height", props.LineHeight)
-                .Style("text-align", props.Align)
-                .Style("text-decoration", props.TextDecoration)
-                .Style("text-transform", props.TextTransform)
-                .Style("color", props.Color)
-                .Style("height", props.Height);
+                .Style("font-family", Props.FontFamily)
+                .Style("font-size", Props.FontSize)
+                .Style("font-style", Props.FontStyle)
+                .Style("font-weight", Props.FontWeight)
+                .Style("letter-spacing", Props.LetterSpacing)
+                .Style("line-height", Props.LineHeight)
+                .Style("text-align", Props.Align)
+                .Style("text-decoration", Props.TextDecoration)
+                .Style("text-transform", Props.TextTransform)
+                .Style("color", Props.Color)
+                .Style("height", Props.Height);
 
-            renderer.RenderChildrenRaw();
+            RenderRaw(renderer);
 
             renderer.ElementEnd("div");
         }

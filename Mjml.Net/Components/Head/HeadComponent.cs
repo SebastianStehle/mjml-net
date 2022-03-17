@@ -1,20 +1,27 @@
 ﻿namespace Mjml.Net.Components.Head
 {
-    public sealed class HeadComponent : IComponent
+    public partial class HeadProps
     {
-        public string ComponentName => "mj-head";
+        [Bind("noop")]
+        public string? Noop;
+    }
 
-        public AllowedParents? AllowedParents { get; } =
-            new AllowedParents
-            {
-                "mjml"
-            };
+    public sealed class HeadComponent : Component<HeadProps>
+    {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mjml"
+        };
 
-        public void Render(IHtmlRenderer renderer, INode node)
+        public override AllowedParents? AllowedAsChild => Parents;
+
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.BufferStart();
-            renderer.RenderChildren();
-            renderer.SetGlobalData("head", renderer.BufferFlush());
+
+            RenderChildren(renderer, context);
+
+            context.SetGlobalData("head", renderer.BufferFlush());
         }
     }
 }

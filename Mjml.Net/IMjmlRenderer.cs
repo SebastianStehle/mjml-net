@@ -2,7 +2,7 @@
 {
     public interface IMjmlRenderer
     {
-        IMjmlRenderer Add(IComponent component);
+        IMjmlRenderer Add<T>(string name) where T : IComponent, new();
 
         IMjmlRenderer Add(IHelper helper);
 

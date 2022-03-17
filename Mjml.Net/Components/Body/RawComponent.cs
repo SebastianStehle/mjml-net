@@ -1,14 +1,18 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public sealed class RawComponent : BodyComponentBase
+    public partial class RawProps
     {
-        public override string ComponentName => "mj-raw";
+        [Bind("none")]
+        public string? None;
+    }
 
-        public override bool Raw => true;
+    public sealed class RawComponent : BodyComponentBase<RawProps>
+    {
+        public override ComponentType Type => ComponentType.Raw;
 
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.RenderChildrenRaw();
+            RenderRaw(renderer);
         }
     }
 }

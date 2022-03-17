@@ -5,5 +5,7 @@
         AllowedAttributes GetFields();
 
         string? DefaultValue(string name);
+
+        void Bind(INode node);
     }
 }

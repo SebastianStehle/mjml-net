@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial struct SpacerProps
+    public partial class SpacerProps
     {
         [Bind("border")]
         public string? Border;
@@ -41,15 +41,11 @@
 
     public sealed class SpacerComponent : BodyComponentBase<SpacerProps>
     {
-        public override string ComponentName => "mj-spacer";
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new SpacerProps(node);
-
             renderer.ElementStart("div")
-                .Style("height", props.Height)
-                .Style("line-height", props.Height);
+                .Style("height", Props.Height)
+                .Style("line-height", Props.Height);
 
             renderer.Content("&#8202;");
 

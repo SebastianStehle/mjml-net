@@ -8,29 +8,29 @@ namespace Mjml.Net
 {
     public sealed class MjmlRenderer : IMjmlRenderer
     {
-        private readonly Dictionary<string, IComponent> components = new Dictionary<string, IComponent>();
+        private readonly Dictionary<string, Func<IComponent>> components = new Dictionary<string, Func<IComponent>>();
         private readonly List<IHelper> helpers = new List<IHelper>();
 
         public IEnumerable<IHelper> Helpers => helpers;
 
         public MjmlRenderer()
         {
-            Add(new AttributesComponent());
-            Add(new BodyComponent());
-            Add(new BreakpointComponent());
-            Add(new DividerComponent());
-            Add(new FontComponent());
-            Add(new HeadComponent());
-            Add(new HeroComponent());
-            Add(new ImageComponent());
-            Add(new PreviewComponent());
-            Add(new RawComponent());
-            Add(new RootComponent());
-            Add(new SpacerComponent());
-            Add(new StyleComponent());
-            Add(new TitleComponent());
-            Add(new TextComponent());
-            Add(new ButtonComponent());
+            Add<AttributesComponent>("mj-attributes");
+            Add<BodyComponent>("mj-body");
+            Add<BreakpointComponent>("mj-breakpoint");
+            Add<ButtonComponent>("mj-button");
+            Add<DividerComponent>("mj-divider");
+            Add<FontComponent>("mj-font");
+            Add<HeadComponent>("mj-head");
+            Add<HeroComponent>("mj-hero");
+            Add<ImageComponent>("mj-image");
+            Add<PreviewComponent>("mj-preview");
+            Add<RawComponent>("mj-raw");
+            Add<RootComponent>("mjml");
+            Add<SpacerComponent>("mj-spacer");
+            Add<StyleComponent>("mj-style");
+            Add<TextComponent>("mj-text");
+            Add<TitleComponent>("mj-title");
 
             Add(new BreakpointHelper());
             Add(new FontHelper());
@@ -39,9 +39,9 @@ namespace Mjml.Net
             Add(new TitleHelper());
         }
 
-        public IMjmlRenderer Add(IComponent component)
+        public IMjmlRenderer Add<T>(string name) where T : IComponent, new()
         {
-            components[component.ComponentName] = component;
+            components[name] = () => new T();
 
             return this;
         }
@@ -67,9 +67,9 @@ namespace Mjml.Net
             return this;
         }
 
-        internal IComponent? GetComponent(string previousElement)
+        internal IComponent? CreateComponent(string name)
         {
-            return components.GetValueOrDefault(previousElement);
+            return components.GetValueOrDefault(name)?.Invoke();
         }
 
         public RenderResult Render(string mjml, MjmlOptions options = default)

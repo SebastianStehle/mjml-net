@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial struct DividerProps
+    public partial class DividerProps
     {
         [Bind("align", BindType.Align)]
         public string? Align = "center";
@@ -38,30 +38,26 @@
 
     public sealed class DividerComponent : BodyComponentBase<DividerProps>
     {
-        public override string ComponentName => "mj-divider";
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new DividerProps(node);
+            var borderSetting = $"{Props.BorderStyle} {Props.BorderWidth} {Props.BorderColor}";
 
-            var borderSetting = $"{props.BorderStyle} {props.BorderWidth} {props.BorderColor}";
-
-            var margin = GetMargin(props.Align);
+            var margin = GetMargin(Props.Align);
 
             renderer.ElementStart("p")
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", props.Width);
+                .Style("width", Props.Width);
 
             renderer.ElementEnd("p");
 
-            var outlookWidth = GetOutlookWidth(renderer, ref props);
+            var outlookWidth = GetOutlookWidth(renderer);
 
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", props.Align)
+                .Attr("align", Props.Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -99,15 +95,15 @@
             }
         }
 
-        private static string GetOutlookWidth(IHtmlRenderer renderer, ref DividerProps props)
+        private string GetOutlookWidth(IHtmlRenderer renderer)
         {
             var containerWidth = renderer.GetContainerWidth().Value;
 
             var paddingSize =
-                UnitParser.Parse(props.PaddingLeft).Value +
-                UnitParser.Parse(props.PaddingRight).Value;
+                UnitParser.Parse(Props.PaddingLeft).Value +
+                UnitParser.Parse(Props.PaddingRight).Value;
 
-            var width = props.Width!;
+            var width = Props.Width!;
 
             var (parsedWidth, unit) = UnitParser.Parse(width);
 

@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public partial struct BreakpointProps
+    public partial class BreakpointProps
     {
         [Bind("width")]
         public string Width;
@@ -10,18 +10,12 @@ namespace Mjml.Net.Components.Head
 
     public sealed class BreakpointComponent : HeadComponentBase<BreakpointProps>
     {
-        public override string ComponentName => "mj-breakpoint";
-
-        public override bool SelfClosed => true;
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var args = new BreakpointProps(node);
-
             // Just in case that validation is disabled.
-            if (args.Width != null)
+            if (Props.Width != null)
             {
-                renderer.SetGlobalData("default", new Breakpoint(args.Width));
+                context.SetGlobalData("default", new Breakpoint(Props.Width));
             }
         }
     }

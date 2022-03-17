@@ -1,20 +1,27 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public sealed class BodyComponent : IComponent
+    public partial class BodyProps
     {
-        public string ComponentName => "mj-body";
+        [Bind("noop")]
+        public string? Noop;
+    }
 
-        public AllowedParents? AllowedParents { get; } =
-            new AllowedParents
-            {
-                "mjml"
-            };
+    public sealed class BodyComponent : Component<BodyProps>
+    {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mjml"
+        };
 
-        public void Render(IHtmlRenderer renderer, INode node)
+        public override AllowedParents? AllowedAsChild => Parents;
+
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.BufferStart();
-            renderer.RenderChildren();
-            renderer.SetGlobalData("body", renderer.BufferFlush());
+
+            RenderChildren(renderer, context);
+
+            context.SetGlobalData("body", renderer.BufferFlush());
         }
     }
 }

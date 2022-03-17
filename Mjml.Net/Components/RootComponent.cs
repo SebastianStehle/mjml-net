@@ -2,32 +2,33 @@
 
 namespace Mjml.Net.Components
 {
-    public sealed class RootComponent : IComponent
+    public partial class RootProps
     {
-        public string ComponentName => "mjml";
+        [Bind("noop")]
+        public string? Noop;
+    }
 
-        public AllowedParents? AllowedParents { get; } = null;
-
-        public void Render(IHtmlRenderer renderer, INode node)
+    public sealed class RootComponent : Component<RootProps>
+    {
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.RenderChildren();
+            RenderChildren(renderer, context);
 
             renderer.Content("<!doctype html>");
             renderer.Content("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
             renderer.Content(string.Empty);
 
-            RenderHead(renderer);
+            RenderHead(renderer, context);
 
             renderer.Content(string.Empty);
 
-            RenderBody(renderer);
+            RenderBody(renderer, context);
 
             renderer.Content(string.Empty);
-
             renderer.Content("</html>");
         }
 
-        private static void RenderHead(IHtmlRenderer renderer)
+        private static void RenderHead(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.ElementStart("head");
 
@@ -44,7 +45,7 @@ namespace Mjml.Net.Components
             renderer.Content(Resources.DefaultComments);
 
             // Already formatted properly.
-            if (renderer.GlobalData.TryGetValue((typeof(string), "head"), out var head))
+            if (context.GlobalData.TryGetValue((typeof(string), "head"), out var head))
             {
                 renderer.Plain(head.ToString());
             }
@@ -54,7 +55,7 @@ namespace Mjml.Net.Components
             renderer.ElementEnd("head");
         }
 
-        private static void RenderBody(IHtmlRenderer renderer)
+        private static void RenderBody(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.ElementStart("body");
 
@@ -62,7 +63,7 @@ namespace Mjml.Net.Components
             renderer.RenderHelpers(HelperTarget.BodyStart);
 
             // Already formatted properly.
-            if (renderer.GlobalData.TryGetValue((typeof(string), "body"), out var head))
+            if (context.GlobalData.TryGetValue((typeof(string), "body"), out var head))
             {
                 renderer.Plain(head.ToString());
             }

@@ -2,14 +2,18 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public sealed class ColumnComponent : BodyComponentBase
+    public partial class ColumnProps
     {
-        public override string ComponentName => "mj-column";
+        [Bind("none")]
+        public string? None;
+    }
 
-        public override void Render(IHtmlRenderer renderer, INode node)
+    public sealed class ColumnComponent : BodyComponentBase<ColumnProps>
+    {
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             // Set the breakpoint if not set before.
-            renderer.SetGlobalData("default", Breakpoint.Default, true);
+            context.SetGlobalData("default", Breakpoint.Default, true);
         }
     }
 }

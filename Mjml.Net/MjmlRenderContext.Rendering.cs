@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer, IChildRenderer
+    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
         private bool currentSelfClosed;
@@ -11,11 +11,6 @@ namespace Mjml.Net
         private int numStyles;
         private int currentIntend;
         private bool currentlyWriting;
-
-        public XmlReader Reader
-        {
-            get => contextStack.Current!.Reader!;
-        }
 
         private StringBuilder Buffer
         {
@@ -65,7 +60,7 @@ namespace Mjml.Net
         {
             foreach (var helper in renderer.Helpers)
             {
-                helper.Render(this, target, globalData);
+                helper.Render(this, target, context);
             }
         }
 
@@ -299,52 +294,6 @@ namespace Mjml.Net
                     Buffer.Append("  ");
                 }
             }
-        }
-
-        public void RenderChildrenRaw()
-        {
-            var reader = Reader;
-
-            while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Text:
-                        Content(reader.Value);
-                        break;
-                    case XmlNodeType.Element:
-                        Content(reader.ReadOuterXml().Trim());
-
-                        if (reader.NodeType == XmlNodeType.Text)
-                        {
-                            Content(reader.Value);
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        public void RenderChildren(ChildOptions options = default)
-        {
-            var reader = Reader;
-
-            reader.Read();
-
-            while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, options);
-                        break;
-                }
-            }
-        }
-
-        void IChildRenderer.Render()
-        {
-            currentComponent!.Render(this, this);
         }
 
         private void Flush()

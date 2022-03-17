@@ -78,10 +78,9 @@ namespace Mjml.Net.Generator
 // Auto-generated code
 namespace {namespaceName}
 {{
-    public partial struct {classSymbol.Name} : IProps
+    public partial class {classSymbol.Name} : IProps
     {{
-        public {classSymbol.Name}(INode node)
-            : this()
+        public void Bind(INode node)
         {{
 ");
             foreach (var field in allFields.Values.Where(x => !x.Text))

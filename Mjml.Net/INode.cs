@@ -19,18 +19,5 @@ namespace Mjml.Net
         /// </summary>
         /// <returns>The content of the node or null if not found.</returns>
         string? GetText();
-
-        /// <summary>
-        /// Get raw access to the reader.
-        /// </summary>
-        /// <remarks>
-        /// This is needed for components such as mj-attributes.
-        /// </remarks>
-        XmlReader Reader { get; }
-
-        /// <summary>
-        /// The current component.
-        /// </summary>
-        IComponent Component { get; }
     }
 }

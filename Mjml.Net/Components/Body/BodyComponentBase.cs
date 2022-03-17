@@ -1,28 +1,14 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public abstract class BodyComponentBase : IComponent
+    public abstract class BodyComponentBase<T> : Component<T> where T : IProps, new()
     {
-        public virtual AllowedParents? AllowedParents { get; } =
-            new AllowedParents
-            {
-                "mj-body"
-            };
+#pragma warning disable RECS0108 // Warns about static fields in generic types
+        private static readonly AllowedParents Parents = new AllowedParents
+#pragma warning restore RECS0108 // Warns about static fields in generic types
+        {
+            "mj-Body"
+        };
 
-        public virtual IProps? Props => null;
-
-        public virtual bool SelfClosed => false;
-
-        public virtual bool Raw => false;
-
-        public virtual bool NeedsContent => false;
-
-        public abstract string ComponentName { get; }
-
-        public abstract void Render(IHtmlRenderer renderer, INode node);
-    }
-
-    public abstract class BodyComponentBase<T> : BodyComponentBase where T : struct, IProps
-    {
-        public override IProps Props { get; } = default(T);
+        public override AllowedParents? AllowedAsChild => Parents;
     }
 }
