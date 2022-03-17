@@ -103,6 +103,9 @@ dotnet_diagnostic.MA0076.severity = none
 # MA0097: A class that implements IComparable<T> or IComparable should override comparison operators
 dotnet_diagnostic.MA0097.severity = none    
 
+# RECS0001: Partial classes with single part.
+dotnet_diagnostic.RECS0001.severity = none
+
 # RECS0129: Removes 'internal' modifiers that are not required
 dotnet_diagnostic.RECS0129.severity = none
 
@@ -144,6 +147,9 @@ dotnet_diagnostic.SA1202.severity = none
 
 # SA1204: Static elements should appear before instance elements
 dotnet_diagnostic.SA1204.severity = none
+
+# SA1402: Fields should be privat
+dotnet_diagnostic.SA1401.severity = none
 
 # SA1402: File may only contain a single type
 dotnet_diagnostic.SA1402.severity = none

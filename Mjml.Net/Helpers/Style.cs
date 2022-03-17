@@ -5,33 +5,33 @@
     {
     }
 
-    public sealed record DynamicStyle(Func<IHtmlRenderer, string> Renderer)
+    public sealed record DynamicStyle(Func<GlobalContext, string> Renderer)
 #pragma warning restore SA1313 // Parameter names should begin with lower-case letter
     {
     }
 
     public sealed class StyleHelper : IHelper
     {
-        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
+        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
         {
             if (target != HelperTarget.HeadEnd)
             {
                 return;
             }
 
-            if (data.Values.Any(x => x is Style || x is DynamicStyle))
+            if (context.GlobalData.Values.Any(x => x is Style || x is DynamicStyle))
             {
                 renderer.ElementStart("style")
                     .Attr("type", "text/css");
 
-                foreach (var preview in data.Values.OfType<Style>())
+                foreach (var style in context.GlobalData.Values.OfType<Style>())
                 {
-                    renderer.Content(preview.Value);
+                    renderer.Content(style.Value);
                 }
 
-                foreach (var preview in data.Values.OfType<DynamicStyle>())
+                foreach (var style in context.GlobalData.Values.OfType<DynamicStyle>())
                 {
-                    renderer.Content(preview.Renderer(renderer));
+                    renderer.Content(style.Renderer(context));
                 }
 
                 renderer.ElementEnd("style");

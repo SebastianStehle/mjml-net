@@ -1,7 +1,11 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial struct ButtonProps
+    public partial class ButtonComponent : BodyComponentBase
     {
+        public override ComponentType Type => ComponentType.Raw;
+
+        public override string ComponentName => "mj-button";
+
         [Bind("align")]
         public string Align = "center";
 
@@ -97,17 +101,10 @@
 
         [Bind("width", BindType.PixelsOrPercent)]
         public string? Width;
-    }
 
-    public sealed class ButtonComponent : BodyComponentBase<ButtonProps>
-    {
-        public override string ComponentName => "mj-button";
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new ButtonProps(node);
-
-            var buttonHtmlTag = !string.IsNullOrEmpty(props.Href) ? "a" : "p";
+            var buttonHtmlTag = !string.IsNullOrEmpty(Href) ? "a" : "p";
 
             renderer.ElementStart("table")
                 .Attr("border", "0")
@@ -115,53 +112,53 @@
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Style("border-collapse", "separate")
-                .Style("width", props.Width)
+                .Style("width", Width)
                 .Style("line-height", "100%");
 
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
                 .Attr("align", "center")
-                .Attr("bgcolor", props.BackgroundColor)
+                .Attr("bgcolor", BackgroundColor)
                 .Attr("role", "presentation")
-                .Attr("valign", props.VerticalAlign)
-                .Style("border", props.Border)
-                .Style("border-bottom", props.BorderBottom)
-                .Style("border-left", props.BorderLeft)
-                .Style("border-right", props.BorderRight)
-                .Style("border-top", props.BorderTop)
-                .Style("border-radius", props.BorderRadius)
+                .Attr("valign", VerticalAlign)
+                .Style("border", Border)
+                .Style("border-bottom", BorderBottom)
+                .Style("border-left", BorderLeft)
+                .Style("border-right", BorderRight)
+                .Style("border-top", BorderTop)
+                .Style("border-radius", BorderRadius)
                 .Style("cursor", "auto")
-                .Style("font-style", props.FontStyle)
-                .Style("height", props.Height)
-                .Style("mso-padding-alt", props.InnerPadding)
-                .Style("text-align", props.TextAlign)
-                .Style("background", props.BackgroundColor);
+                .Style("font-style", FontStyle)
+                .Style("height", Height)
+                .Style("mso-padding-alt", InnerPadding)
+                .Style("text-align", TextAlign)
+                .Style("background", BackgroundColor);
 
             renderer.ElementStart(buttonHtmlTag)
-                .Attr("href", props.Href)
-                .Attr("rel", props.Rel)
-                .Attr("name", props.Name)
-                .Attr("target", !string.IsNullOrEmpty(props.Href) ? props.Target : null)
+                .Attr("href", Href)
+                .Attr("rel", Rel)
+                .Attr("name", Name)
+                .Attr("target", !string.IsNullOrEmpty(Href) ? Target : null)
                 .Style("display", "inline-block")
-                .Style("width", CalculateButtonWidth(ref props))
-                .Style("background", props.BackgroundColor)
-                .Style("color", props.Color)
-                .Style("font-family", props.FontFamily)
-                .Style("font-style", props.FontStyle)
-                .Style("font-size", props.FontSize)
-                .Style("font-weight", props.FontWeight)
-                .Style("line-height", props.LineHeight)
-                .Style("letter-spacing", props.LetterSpacing)
+                .Style("width", CalculateButtonWidth())
+                .Style("background", BackgroundColor)
+                .Style("color", Color)
+                .Style("font-family", FontFamily)
+                .Style("font-style", FontStyle)
+                .Style("font-size", FontSize)
+                .Style("font-weight", FontWeight)
+                .Style("line-height", LineHeight)
+                .Style("letter-spacing", LetterSpacing)
                 .Style("margin", "0")
-                .Style("text-decoration", props.TextDecoration)
-                .Style("text-transform", props.TextTransform)
-                .Style("letter-spacing", props.LetterSpacing)
-                .Style("padding", props.InnerPadding)
+                .Style("text-decoration", TextDecoration)
+                .Style("text-transform", TextTransform)
+                .Style("letter-spacing", LetterSpacing)
+                .Style("padding", InnerPadding)
                 .Style("mso-padding-alt", "0px")
-                .Style("text-align", props.TextAlign)
-                .Style("border-radius", props.BorderRadius);
+                .Style("text-align", TextAlign)
+                .Style("border-radius", BorderRadius);
 
-            renderer.RenderChildrenRaw();
+            RenderRaw(renderer);
 
             renderer.ElementEnd(buttonHtmlTag);
             renderer.ElementEnd("td");
@@ -169,9 +166,9 @@
             renderer.ElementEnd("table");
         }
 
-        private static string? CalculateButtonWidth(ref ButtonProps props)
+        private string? CalculateButtonWidth()
         {
-            var widthParsed = UnitParser.Parse(props.Width);
+            var widthParsed = UnitParser.Parse(Width);
 
             if (widthParsed.Value <= 0 || widthParsed.Unit != Unit.Pixels)
             {
@@ -179,12 +176,12 @@
             }
 
             var borders =
-                UnitParser.Parse(props.BorderLeft).Value +
-                UnitParser.Parse(props.BorderRight).Value;
+                UnitParser.Parse(BorderLeft).Value +
+                UnitParser.Parse(BorderRight).Value;
 
             var innerPadding =
-                UnitParser.Parse(props.PaddingLeft).Value +
-                UnitParser.Parse(props.PaddingRight).Value;
+                UnitParser.Parse(PaddingLeft).Value +
+                UnitParser.Parse(PaddingRight).Value;
 
             return $"{widthParsed.Value - innerPadding - borders}px";
         }

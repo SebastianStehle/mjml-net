@@ -1,33 +1,23 @@
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Head
 {
-    public partial struct FontProps
+    public partial class FontComponent : HeadComponentBase
     {
+        public override string ComponentName => "mj-font";
+
         [Bind("name")]
         public string? Name;
 
         [Bind("href")]
         public string? Href;
-    }
 
-    public sealed class FontComponent : HeadComponentBase<FontProps>
-    {
-        public override string ComponentName => "mj-font";
-
-        public override bool SelfClosed => true;
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new FontProps(node);
-
             // Just in case that validation is disabled.
-            if (props.Href != null)
+            if (Href != null)
             {
-                // The name does not really matter.
-                var name = props.Name;
-
-                renderer.SetGlobalData(name ?? Guid.NewGuid().ToString(), new Font(props.Href));
+                context.SetGlobalData(Name ?? Guid.NewGuid().ToString(), new Font(Href));
             }
         }
     }

@@ -24,7 +24,7 @@
 
         public void Attribute(string name, string value, IComponent component, int? line, int? column)
         {
-            var allowedAttributes = component.Props?.GetFields();
+            var allowedAttributes = component.AllowedFields;
 
             if (allowedAttributes == null)
             {

@@ -1,29 +1,17 @@
-﻿#pragma warning disable SA1401 // Fields should be private
-
-using System.Xml;
-
-namespace Mjml.Net.Internal
+﻿namespace Mjml.Net.Internal
 {
-    internal sealed class ComponentContext : IContext
+    internal sealed class TransitiveContext : IContext
     {
         private bool isCopied;
 
-        public readonly ChildOptions Options;
-
         public Dictionary<string, object?>? Values;
 
-        public XmlReader Reader { get; }
-
-        public ComponentContext(ComponentContext? source, XmlReader reader, ChildOptions options)
+        public TransitiveContext(TransitiveContext? source)
         {
-            Reader = reader;
-
             if (source != null)
             {
                 Values = source.Values;
             }
-
-            Options = options;
         }
 
         public object? Set(string key, object? value)

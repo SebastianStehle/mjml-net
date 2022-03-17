@@ -8,14 +8,14 @@
 
     public sealed class TitleHelper : IHelper
     {
-        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
+        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
         {
             if (target != HelperTarget.HeadStart)
             {
                 return;
             }
 
-            var title = data.Values.OfType<Title>().FirstOrDefault()?.Value;
+            var title = context.GlobalData.Values.OfType<Title>().FirstOrDefault()?.Value;
 
             renderer.ElementStart("title");
             renderer.Content(title);

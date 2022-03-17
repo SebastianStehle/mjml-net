@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer, IChildRenderer
+    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
         private bool currentSelfClosed;
@@ -11,11 +11,6 @@ namespace Mjml.Net
         private int numStyles;
         private int currentIntend;
         private bool currentlyWriting;
-
-        public XmlReader Reader
-        {
-            get => contextStack.Current!.Reader!;
-        }
 
         private StringBuilder Buffer
         {
@@ -65,7 +60,7 @@ namespace Mjml.Net
         {
             foreach (var helper in renderer.Helpers)
             {
-                helper.Render(this, target, globalData);
+                helper.Render(this, target, context);
             }
         }
 
@@ -178,7 +173,7 @@ namespace Mjml.Net
             WriteLineEnd();
         }
 
-        public void Content(string? value)
+        public void Content(string? value, bool appendLine = true)
         {
             Flush();
 
@@ -193,19 +188,23 @@ namespace Mjml.Net
             {
                 WriteIntended(value);
             }
-            else if (options.Minify)
-            {
-                WriteMinified(value);
-            }
             else
             {
                 Buffer.Append(value);
             }
 
-            WriteLineEnd();
+            if (appendLine)
+            {
+                WriteLineEnd();
+            }
         }
 
         public void Plain(string? value, bool appendLine = true)
+        {
+            Plain(value.AsSpan(), appendLine);
+        }
+
+        public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
         {
             if (Buffer == null)
             {
@@ -214,19 +213,12 @@ namespace Mjml.Net
 
             Flush();
 
-            if (string.IsNullOrWhiteSpace(value))
+            if (value.Length == 0)
             {
                 return;
             }
 
-            if (options.Minify)
-            {
-                WriteMinified(value);
-            }
-            else
-            {
-                Buffer.Append(value);
-            }
+            Buffer.Append(value);
 
             if (appendLine)
             {
@@ -258,30 +250,6 @@ namespace Mjml.Net
             Buffer.Append(span);
         }
 
-        private void WriteMinified(string value)
-        {
-            Buffer.EnsureCapacity(Buffer.Length + value.Length);
-
-            // We could go over the chars but it is much faster to writer to the buffer in batches. Therefore we create a span from newline to newline.
-            var span = value.AsSpan();
-
-            for (int i = 0, j = 0; i < value.Length; i++, j++)
-            {
-                if (value[i] == '\n')
-                {
-                    Buffer.Append(span[..j].Trim());
-
-                    WriteLineStart();
-
-                    // Start the span after the newline.
-                    span = span[(j + 1)..];
-                    j = -1;
-                }
-            }
-
-            Buffer.Append(span);
-        }
-
         private void WriteLineEnd()
         {
             if (options.Beautify)
@@ -299,52 +267,6 @@ namespace Mjml.Net
                     Buffer.Append("  ");
                 }
             }
-        }
-
-        public void RenderChildrenRaw()
-        {
-            var reader = Reader;
-
-            while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Text:
-                        Content(reader.Value);
-                        break;
-                    case XmlNodeType.Element:
-                        Content(reader.ReadOuterXml().Trim());
-
-                        if (reader.NodeType == XmlNodeType.Text)
-                        {
-                            Content(reader.Value);
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        public void RenderChildren(ChildOptions options = default)
-        {
-            var reader = Reader;
-
-            reader.Read();
-
-            while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, options);
-                        break;
-                }
-            }
-        }
-
-        void IChildRenderer.Render()
-        {
-            currentComponent!.Render(this, this);
         }
 
         private void Flush()

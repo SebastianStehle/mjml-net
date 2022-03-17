@@ -9,11 +9,11 @@
 
     public sealed class BreakpointHelper : IHelper
     {
-        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
+        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
         {
             if (target == HelperTarget.HeadStart)
             {
-                renderer.SetGlobalData("default", new Breakpoint("300px"));
+                context.SetGlobalData("default", new Breakpoint("300px"));
                 return;
             }
 
@@ -22,7 +22,7 @@
                 return;
             }
 
-            foreach (var (_, value) in data)
+            foreach (var (_, value) in context.GlobalData)
             {
                 if (value is Breakpoint breakpoint)
                 {

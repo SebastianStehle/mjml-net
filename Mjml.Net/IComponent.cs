@@ -1,21 +1,33 @@
-﻿namespace Mjml.Net
+﻿using System.Xml;
+
+namespace Mjml.Net
 {
     public interface IComponent
     {
-        public AllowedParents? AllowedAsDescendant => null;
+        AllowedParents? AllowedAsDescendant { get; }
 
-        public AllowedParents? AllowedAsChild => null;
+        AllowedParents? AllowedAsChild { get; }
 
-        public IProps? Props => null;
+        AllowedAttributes? AllowedFields { get; }
 
-        public bool SelfClosed => false;
+        INode Node { get; }
 
-        public bool Raw => false;
+        ComponentType Type { get; }
 
-        public bool NeedsContent => false;
+        bool Raw { get; }
 
-        public string ComponentName { get; }
+        string ComponentName { get; }
 
-        public void Render(IHtmlRenderer renderer, INode node);
+        string? GetDefaultValue(string name);
+
+        string? GetInheritingAttribute(string name);
+
+        void Bind(INode node, GlobalContext context, XmlReader reader);
+
+        void AddChild(IComponent child);
+
+        void AddChild(string rawXml);
+
+        void Render(IHtmlRenderer renderer, GlobalContext context);
     }
 }
