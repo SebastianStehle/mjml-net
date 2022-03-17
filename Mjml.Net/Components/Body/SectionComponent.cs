@@ -89,12 +89,62 @@ namespace Mjml.Net.Components.Body
 
         private void RenderFullWidth(IHtmlRenderer renderer, ref GlobalContext context)
         {
-            throw new NotImplementedException();
+            var hasBackground = HasBackground();
+
+            var tableElement = renderer.ElementStart("table")
+                .Attr("align", "center")
+                .Attr("background", BackgroundUrl)
+                .Attr("border", "0")
+                .Attr("cellpadding", "0")
+                .Attr("cellspacing", "0")
+                .Attr("role", "presentation")
+                .Class(CssClass)
+                .Style("width", "100%")
+                .Style("border-radius", BorderRadius);
+
+            if (IsFullWidth())
+            {
+                if (hasBackground)
+                {
+                    tableElement
+                        .Style("background", GetBackground())
+                        .Style("background-color", BackgroundColor)
+                        .Style("background-position", BackgroundPosition)
+                        .Style("background-repeat", BackgroundRepeat)
+                        .Style("background-size", BackgroundSize);
+                }
+                else
+                {
+                    tableElement
+                        .Style("background", BackgroundColor)
+                        .Style("background-color", BackgroundColor);
+                }
+            }
+
+            renderer.ElementStart("tbody");
+            renderer.ElementStart("tr");
+            renderer.ElementStart("td");
+
+            if (hasBackground)
+            {
+                RenderSectionWithBackground(renderer, ref context);
+            }
+            else
+            {
+                RenderSectionStart(renderer);
+                RenderSection(renderer, ref context);
+                RenderSectionEnd(renderer);
+            }
+
+            renderer.ElementEnd("td");
+            renderer.ElementEnd("tr");
+            renderer.ElementEnd("tbody");
+            renderer.ElementEnd("table");
         }
 
         private void RenderSimple(IHtmlRenderer renderer, ref GlobalContext context)
         {
-            RenderSectionStart(renderer, ref context);
+            RenderSectionStart(renderer);
 
             if (HasBackground())
             {
@@ -105,10 +155,10 @@ namespace Mjml.Net.Components.Body
                 RenderSection(renderer, ref context);
             }
 
-            RenderSectionEnd(renderer, ref context);
+            RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderSectionStart(IHtmlRenderer renderer)
         {
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
@@ -147,7 +197,7 @@ namespace Mjml.Net.Components.Body
                 if (hasBackground)
                 {
                     divElement
-                        .Style("background", GetBackground(ref context))
+                        .Style("background", GetBackground())
                         .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
                         .Style("background-repeat", BackgroundRepeat)
@@ -183,7 +233,7 @@ namespace Mjml.Net.Components.Body
                 if (hasBackground)
                 {
                     tableElement
-                        .Style("background", GetBackground(ref context))
+                        .Style("background", GetBackground())
                         .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
                         .Style("background-repeat", BackgroundRepeat)
@@ -241,12 +291,64 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("div");
         }
 
-        private string? GetBackground(ref GlobalContext context)
+        private string? GetBackground()
         {
-            throw new NotImplementedException();
+            if (!HasBackground())
+            {
+                return BackgroundColor;
+            }
+
+            return $"{BackgroundColor} url({BackgroundUrl}) {GetBackgroundPositionString()} / {BackgroundSize} {BackgroundRepeat}";
         }
 
-        private void RenderSectionEnd(IHtmlRenderer renderer, ref GlobalContext context)
+        private string? GetBackgroundPositionString()
+        {
+            (string parsedX, string parsedY) = ParseBackgroundPosition();
+
+            var x = string.IsNullOrEmpty(BackgroundPositionX) ? parsedX : BackgroundPositionX;
+            var y = string.IsNullOrEmpty(BackgroundPositionY) ? parsedY : BackgroundPositionY;
+
+            return $"{x} {y}";
+        }
+
+        private (string x, string y) ParseBackgroundPosition()
+        {
+            var positions = BackgroundPosition.Split(' ');
+
+            bool IsTopOrBottom(ref string axis)
+            {
+                if (axis.Equals("top", StringComparison.OrdinalIgnoreCase) || axis.Equals("bottom", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            switch (positions.Length)
+            {
+                case 1:
+                    if (IsTopOrBottom(ref positions[0]))
+                    {
+                        return ("center", positions[0]);
+                    }
+
+                    return (positions[0], "center");
+
+                case 2:
+                    if (IsTopOrBottom(ref positions[0]) || (positions[0].Equals("center", StringComparison.OrdinalIgnoreCase) && IsTopOrBottom(ref positions[1])))
+                    {
+                        return (positions[1], positions[0]);
+                    }
+
+                    return (positions[0], positions[1]);
+
+                default:
+                    return ("center", "top");
+            }
+        }
+
+        private static void RenderSectionEnd(IHtmlRenderer renderer)
         {
             renderer.StartConditionalTag();
 
@@ -276,6 +378,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
+                    // ONCE MJ-COLUMN is complete this will be updated
                     renderer.StartConditionalTag();
                     renderer.ElementStart("td")
                         .Attr("align", child.Node.GetAttribute("align"))
@@ -309,7 +412,7 @@ namespace Mjml.Net.Components.Body
                 return false;
             }
 
-            return FullWidth.Equals("full-width", StringComparison.InvariantCultureIgnoreCase);
+            return FullWidth.Equals("full-width", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
