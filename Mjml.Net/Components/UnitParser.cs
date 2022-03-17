@@ -37,6 +37,10 @@ namespace Mjml.Net.Components
             {
                 unitType = Unit.Percent;
             }
+            else if (unitSpan.Length == 0)
+            {
+                unitType = Unit.None;
+            }
 
             var valueSpan = span[..i];
 

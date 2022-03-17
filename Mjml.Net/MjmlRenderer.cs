@@ -26,6 +26,8 @@ namespace Mjml.Net
             Add(new PreviewComponent());
             Add(new RawComponent());
             Add(new RootComponent());
+            Add(new SocialComponent());
+            Add(new SocialElementComponent());
             Add(new SpacerComponent());
             Add(new StyleComponent());
             Add(new TitleComponent());

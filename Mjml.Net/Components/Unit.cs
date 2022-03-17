@@ -4,6 +4,7 @@
     {
         Unknown,
         Pixels,
-        Percent
+        Percent,
+        None
     }
 }

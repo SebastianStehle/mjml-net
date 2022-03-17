@@ -7,6 +7,8 @@
 
         public BindType Type { get; }
 
+        public bool Inherited { get; set; }
+
         public BindAttribute(string name, BindType type = BindType.String)
         {
             Name = name;
