@@ -2,10 +2,12 @@
 {
     public interface IValidator
     {
-        void ValidateAttribute(string name, string value, IComponent component, ValidationErrors errors, int? line, int? column);
+        void Attribute(string name, string value, IComponent component, int? line, int? column);
 
-        void ValidateComponent(IComponent component, ValidationErrors errors, int? line, int? column);
+        void BeforeComponent(IComponent component, int? line, int? column);
 
-        void Complete(ValidationErrors errors);
+        void AfterComponent(IComponent component, int? line, int? column);
+
+        ValidationErrors Complete();
     }
 }

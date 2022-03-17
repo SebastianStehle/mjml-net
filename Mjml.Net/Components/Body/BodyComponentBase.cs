@@ -2,7 +2,9 @@
 {
     public abstract class BodyComponentBase : IComponent
     {
-        public virtual AllowedParents? AllowedParents { get; } =
+        public virtual AllowedParents? AllowedAsChild => null;
+
+        public virtual AllowedParents? AllowedAsDescendant { get; } =
             new AllowedParents
             {
                 "mj-body"

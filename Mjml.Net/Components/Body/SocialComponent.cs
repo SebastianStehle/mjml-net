@@ -74,7 +74,7 @@
 
     public sealed class SocialComponent : BodyComponentBase<SocialComponentProps>
     {
-        public override string ComponentName => "mj-social";
+        public override string ComponentName => "mj-social"; 
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {

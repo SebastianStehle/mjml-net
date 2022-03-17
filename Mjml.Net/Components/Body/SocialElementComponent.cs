@@ -100,6 +100,12 @@
     {
         private const string ImageBaseUrl = "https://www.mailjet.com/images/theme/v1/icons/ico-social/";
 
+        public override AllowedParents? AllowedAsChild { get; } =
+            new AllowedParents
+            {
+                "mj-social"
+            };
+
         private readonly Dictionary<string, SocialNetwork> socialNetworks = new Dictionary<string, SocialNetwork>
         {
             ["facebook"] = new SocialNetwork(

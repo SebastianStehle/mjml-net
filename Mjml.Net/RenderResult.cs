@@ -2,7 +2,7 @@
 
 namespace Mjml.Net
 {
-    public sealed record RenderResult(string Html, List<ValidationError> Errors)
+    public sealed record RenderResult(string Html, ValidationErrors Errors)
     {
     }
 }

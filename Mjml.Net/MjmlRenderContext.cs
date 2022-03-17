@@ -1,6 +1,5 @@
 ﻿using System.Xml;
 using Mjml.Net.Internal;
-using Mjml.Net.Validators;
 
 namespace Mjml.Net
 {
@@ -48,7 +47,7 @@ namespace Mjml.Net
             this.renderer = renderer;
             this.options = options;
 
-            validator = options.Validator;
+            validator = options.ValidatorFactory?.Create();
         }
 
         internal void Clear()
@@ -57,6 +56,7 @@ namespace Mjml.Net
             attributesByClass.Clear();
             attributesByName.Clear();
             contextStack.Clear();
+            validator = null;
             currentClasses = null;
             currentComponent = null;
             currentElement = null;
@@ -66,11 +66,9 @@ namespace Mjml.Net
             ClearRenderData();
         }
 
-        public List<ValidationError> Validate()
+        public ValidationErrors Validate()
         {
-            validator?.Complete(errors);
-
-            return errors.ToList();
+            return validator?.Complete() ?? new ValidationErrors();
         }
 
         public void Read(XmlReader reader)
@@ -100,10 +98,12 @@ namespace Mjml.Net
             currentClasses = null;
             currentComponent = renderer.GetComponent(currentElement);
 
+            var component = currentComponent;
+
             var currentLine = CurrentLine(reader);
             var currentColumn = CurrentColumn(reader);
 
-            if (currentComponent == null)
+            if (component == null)
             {
                 errors.Add($"Invalid element '{currentElement}'.",
                     CurrentLine(reader),
@@ -111,9 +111,11 @@ namespace Mjml.Net
                 return;
             }
 
+            reader.Read();
+
             if (validator != null)
             {
-                validator.ValidateComponent(currentComponent!, errors,
+                validator.BeforeComponent(component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
 
@@ -121,13 +123,11 @@ namespace Mjml.Net
                 {
                     reader.MoveToAttribute(i);
 
-                    validator.ValidateAttribute(reader.Name, reader.Value, currentComponent!, errors,
+                    validator.Attribute(reader.Name, reader.Value, component,
                         CurrentLine(reader),
                         CurrentColumn(reader));
                 }
             }
-
-            reader.Read();
 
             var childRenderer = contextStack.Current?.Options.Renderer;
 
@@ -138,6 +138,11 @@ namespace Mjml.Net
             else
             {
                 currentComponent!.Render(this, this);
+            }
+
+            if (validator != null)
+            {
+                validator.AfterComponent(component, currentLine, currentColumn);
             }
 
             contextStack.Pop();

@@ -6,7 +6,7 @@ namespace Mjml.Net.Components
     {
         public string ComponentName => "mjml";
 
-        public AllowedParents? AllowedParents { get; } = null;
+        public AllowedParents? AllowedAsDescendant { get; } = null;
 
         public void Render(IHtmlRenderer renderer, INode node)
         {
