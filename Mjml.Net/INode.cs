@@ -18,13 +18,7 @@ namespace Mjml.Net
         /// Get the text content of the node.
         /// </summary>
         /// <returns>The content of the node or null if not found.</returns>
-        string? GetContent();
-
-        /// <summary>
-        /// Get the raw content of the node.
-        /// </summary>
-        /// <returns>The content of the node or null if not found.</returns>
-        string? GetContentRaw();
+        string? GetText();
 
         /// <summary>
         /// Get raw access to the reader.

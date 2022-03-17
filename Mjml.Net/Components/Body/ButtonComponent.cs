@@ -161,7 +161,7 @@
                 .Style("text-align", props.TextAlign)
                 .Style("border-radius", props.BorderRadius);
 
-            renderer.Content(node.GetContent());
+            renderer.RenderChildrenRaw();
 
             renderer.ElementEnd(buttonHtmlTag);
             renderer.ElementEnd("td");

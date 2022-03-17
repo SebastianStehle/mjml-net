@@ -18,7 +18,7 @@ namespace Tests
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
                 Beautify = true
-            });
+            }).Html;
 
             AssertHelpers.TrimmedContains("</body>", result);
         }

@@ -10,6 +10,30 @@ namespace Tests
             yield return new object[]
             {
                 @"
+Hello MJML"
+            };
+
+            yield return new object[]
+            {
+                @"
+<strong>Hello</strong> MJML"
+            };
+
+            yield return new object[]
+            {
+                @"
+<strong>Hello</strong> <strong>MJML</strong>"
+            };
+
+            yield return new object[]
+            {
+                @"
+<strong>Hello</strong> MJML <strong>Whats Up</strong>"
+            };
+
+            yield return new object[]
+            {
+                @"
 <button type=""submit"">Submit1</button>"
             };
 
@@ -17,7 +41,7 @@ namespace Tests
             {
                 @"
 <div>
-  <button type=""submit"">Submit1</button>
+    <button type=""submit"">Submit1</button>
 </div>"
             };
 
@@ -25,19 +49,19 @@ namespace Tests
             {
                 @"
 <div>
-  <button type=""submit"">Submit1</button>
-  <button type=""submit"">Submit2</button>
-</div>"
-            };
-
-            yield return new object[]
-            {
-                @"
-<div>
-  <table>
     <button type=""submit"">Submit1</button>
     <button type=""submit"">Submit2</button>
-  </table>
+</div>"
+            };
+
+            yield return new object[]
+            {
+                @"
+<div>
+    <table>
+    <button type=""submit"">Submit1</button>
+    <button type=""submit"">Submit2</button>
+    </table>
 </div>"
             };
         }
@@ -46,8 +70,7 @@ namespace Tests
         [MemberData(nameof(Tests))]
         public void Should_render_raw_nested(string html)
         {
-            var source = $@"
-<mj-raw>{html}</mj-raw>";
+            var source = $@"<mj-raw>{html}</mj-raw>";
 
             var result = TestHelper.Render(source);
 

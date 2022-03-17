@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Mjml.Net.Generator
 {
@@ -35,7 +35,7 @@ namespace Mjml.Net.Generator
             }
         }
 
-        private string ProcessClass(INamedTypeSymbol classSymbol, List<(IFieldSymbol Field, string Value)> fields, ISymbol attribute)
+        private string ProcessClass(INamedTypeSymbol classSymbol, List<(IFieldSymbol Field, string Value, bool AsText)> fields, ISymbol attribute)
         {
             if (!classSymbol.ContainingSymbol.Equals(classSymbol.ContainingNamespace, SymbolEqualityComparer.Default))
             {
@@ -44,28 +44,32 @@ namespace Mjml.Net.Generator
 
             var allFields = new Dictionary<string, FieldInfo>();
 
-            foreach (var (fiel, value) in fields)
+            foreach (var (field, value, text) in fields)
             {
-                var fieldName = fiel.Name;
+                var fieldName = field.Name;
+                var fieldType = "String";
+                var fieldAttribute = "none";
 
                 // Get the attribute name and the type.
-                var attributeData = fiel.GetAttributes().Single(a => a.AttributeClass.Equals(attribute, SymbolEqualityComparer.Default));
-                var attributeName = attributeData.ConstructorArguments.First().Value;
+                var bindAttribute = field.GetAttributes().FirstOrDefault(a => a.AttributeClass.Equals(attribute, SymbolEqualityComparer.Default));
 
-                var type = "String";
-
-                if (attributeData.ConstructorArguments.Length >= 2)
+                if (bindAttribute != null)
                 {
-                    var argument = attributeData.ConstructorArguments.Last();
+                    fieldAttribute = bindAttribute.ConstructorArguments.First().Value.ToString();
 
-                    // Value is an integer here so we need to convert it to its Enum.
-                    var valueNumber = (int)attributeData.ConstructorArguments.Last().Value;
-                    var valueString = argument.Type.GetMembers()[valueNumber].Name;
+                    if (bindAttribute.ConstructorArguments.Length >= 2)
+                    {
+                        var argument = bindAttribute.ConstructorArguments.Last();
 
-                    type = valueString;
+                        // Value is an integer here so we need to convert it to its Enum.
+                        var valueNumber = (int)bindAttribute.ConstructorArguments.Last().Value;
+                        var valueString = argument.Type.GetMembers()[valueNumber].Name;
+
+                        fieldType = valueString;
+                    }
                 }
 
-                allFields[fieldName] = new FieldInfo(fieldName, attributeName.ToString(), value ?? "null", type);
+                allFields[fieldName] = new FieldInfo(fieldName, fieldAttribute, value ?? "null", fieldType, text);
             }
 
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
@@ -80,14 +84,21 @@ namespace {namespaceName}
             : this()
         {{
 ");
-            foreach (var field in allFields.Values)
+            foreach (var field in allFields.Values.Where(x => !x.Text))
             {
                 ProcessField(source, field);
             }
 
-            foreach (var field in allFields.Values)
+            foreach (var field in allFields.Values.Where(x => !x.Text))
             {
                 ProcessFieldExpand(source, field, allFields);
+            }
+
+            var textField = allFields.Values.FirstOrDefault(x => x.Text);
+
+            if (textField != null)
+            {
+                ProcessFieldText(source, textField);
             }
 
             source.Append($@"
@@ -97,7 +108,7 @@ namespace {namespaceName}
         {{
             var result = new AllowedAttributes();
 ");
-            foreach (var field in allFields.Values)
+            foreach (var field in allFields.Values.Where(x => !x.Text))
             {
                 ProcessFieldType(source, field);
             }
@@ -111,7 +122,7 @@ namespace {namespaceName}
             switch (name)
             {{
 ");
-            foreach (var field in allFields.Values.Where(x => x.Value != null))
+            foreach (var field in allFields.Values.Where(x => x.AttributeDefault != null && !x.Text))
             {
                 ProcessFieldDefault(source, field);
             }
@@ -126,19 +137,23 @@ namespace {namespaceName}
             return source.ToString();
         }
 
+        private void ProcessFieldText(StringBuilder source, FieldInfo field)
+        {
+            source.Append($@"
+            {field.Name} = node.GetText();");
+        }
+
         private void ProcessFieldType(StringBuilder source, FieldInfo field)
         {
             source.Append($@"
-            result[""{field.Attribute}""] = AttributeTypes.{field.Type};
-");
+            result[""{field.Attribute}""] = AttributeTypes.{field.Type};");
         }
 
         private void ProcessFieldDefault(StringBuilder source, FieldInfo field)
         {
             source.Append($@"
                 case ""{field.Attribute}"":
-                    return {field.Value};
-");
+                    return {field.AttributeDefault};");
         }
 
         private void ProcessField(StringBuilder source, FieldInfo field)
@@ -158,9 +173,8 @@ namespace {namespaceName}
             }}
             else
             {{
-                this.{field.Name} = {field.Value};
-            }}
-");
+                this.{field.Name} = {field.AttributeDefault};
+            }}");
         }
 
         private void ProcessFieldExpand(StringBuilder source, FieldInfo field, Dictionary<string, FieldInfo> allFields)
@@ -171,11 +185,11 @@ namespace {namespaceName}
 
             bool IsCandidate(string name)
             {
-                if (attribute.Contains(name) && 
-                   !attribute.EndsWith($"{name}-top") &&
-                   !attribute.EndsWith($"{name}-right") &&
-                   !attribute.EndsWith($"{name}-bottom") &&
-                   !attribute.EndsWith($"{name}-left"))
+                if (attribute.Contains(name) &&
+                   !attribute.EndsWith($"{name}-top", StringComparison.Ordinal) &&
+                   !attribute.EndsWith($"{name}-right", StringComparison.Ordinal) &&
+                   !attribute.EndsWith($"{name}-bottom", StringComparison.Ordinal) &&
+                   !attribute.EndsWith($"{name}-left", StringComparison.Ordinal))
                 {
                     return true;
                 }
@@ -231,25 +245,31 @@ namespace {namespaceName}
         }
     }
 
-    class FieldInfo
+    internal sealed class FieldInfo
     {
-        public FieldInfo(string name, string attribute, string value, string type)
+        public string Name { get; }
+
+        public string Attribute { get; }
+
+        public string AttributeDefault { get; }
+
+        public string Type { get; }
+
+        public bool Text { get; }
+
+        public FieldInfo(string name, string attribute, string attributeDefault, string type, bool text)
         {
             Name = name;
             Attribute = attribute;
-            Value = value;
+            AttributeDefault = attributeDefault;
             Type = type;
+            Text = text;
         }
-
-        public string Name { get; }
-        public string Attribute { get; }
-        public string Value { get; }
-        public string Type { get; }
     }
 
     internal sealed class SyntaxReceiver : ISyntaxContextReceiver
     {
-        public List<(IFieldSymbol Field, string Value)> Fields { get; } = new List<(IFieldSymbol Field, string Value)>();
+        public List<(IFieldSymbol Field, string Value, bool AsText)> Fields { get; } = new List<(IFieldSymbol Field, string Value, bool AsText)>();
 
         public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
         {
@@ -261,7 +281,11 @@ namespace {namespaceName}
 
                     if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass.ToDisplayString() == "Mjml.Net.BindAttribute"))
                     {
-                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString()));
+                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString(), false));
+                    }
+                    else if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass.ToDisplayString() == "Mjml.Net.BindTextAttribute"))
+                    {
+                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString(), true));
                     }
                 }
             }

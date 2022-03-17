@@ -1,5 +1,5 @@
-﻿using Squidex.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Squidex.Text;
 
 namespace Tools
 {
@@ -16,7 +16,7 @@ namespace Tools
 
             foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
             {
-                if (!file.Name.EndsWith("Component.cs"))
+                if (!file.Name.EndsWith("Component.cs", StringComparison.Ordinal))
                 {
                     continue;
                 }

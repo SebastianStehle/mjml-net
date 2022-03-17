@@ -8,10 +8,7 @@
 
         public override void Render(IHtmlRenderer renderer, INode node)
         {
-            renderer.RenderChildren(new ChildOptions
-            {
-                RawXML = true
-            });
+            renderer.RenderChildrenRaw();
         }
     }
 }

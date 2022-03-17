@@ -21,4 +21,14 @@
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ManyHeroes.mjml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

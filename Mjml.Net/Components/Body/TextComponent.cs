@@ -99,7 +99,7 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private void RenderTextContent(IHtmlRenderer renderer, INode node, ref TextProps props)
+        private static void RenderTextContent(IHtmlRenderer renderer, INode node, ref TextProps props)
         {
             renderer.ElementStart("div")
                 .Style("font-family", props.FontFamily)
@@ -114,9 +114,7 @@ namespace Mjml.Net.Components.Body
                 .Style("color", props.Color)
                 .Style("height", props.Height);
 
-            var rawContent = node.GetContentRaw();
-
-            renderer.Content(string.IsNullOrEmpty(rawContent) ? node.GetContent() : rawContent);
+            renderer.RenderChildrenRaw();
 
             renderer.ElementEnd("div");
         }

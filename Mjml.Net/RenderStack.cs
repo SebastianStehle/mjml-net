@@ -3,15 +3,16 @@
     internal sealed class RenderStack<T>
     {
         private readonly Stack<T> stack = new Stack<T>(10);
-        private T? current;
 
-        public T? Current => current;
+#pragma warning disable SA1401 // Fields should be private
+        public T? Current;
+#pragma warning restore SA1401 // Fields should be private
 
         public IEnumerable<T> Elements => stack;
 
         public void Push(T element)
         {
-            current = element;
+            Current = element;
 
             stack.Push(element);
         }
@@ -27,11 +28,11 @@
 
             if (stack.Count > 0)
             {
-                current = stack.Peek();
+                Current = stack.Peek();
             }
             else
             {
-                current = default;
+                Current = default;
             }
 
             return top;
@@ -41,7 +42,7 @@
         {
             stack.Clear();
 
-            current = default;
+            Current = default;
         }
     }
 }
