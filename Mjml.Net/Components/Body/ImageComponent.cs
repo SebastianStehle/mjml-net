@@ -2,8 +2,10 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public partial struct ImageProps
+    public partial class ImageComponent : BodyComponentBase
     {
+        public override string ComponentName => "mj-image";
+
         [Bind("align", BindType.Align)]
         public string Align = "center";
 
@@ -87,32 +89,25 @@ namespace Mjml.Net.Components.Body
 
         [Bind("width", BindType.Pixels)]
         public string? Width;
-    }
 
-    public sealed class ImageComponent : BodyComponentBase<ImageProps>
-    {
-        public override string ComponentName => "mj-image";
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.SetGlobalData("mj-image", new DynamicStyle(HeadStyle));
+            context.SetGlobalData("mj-image", new DynamicStyle(HeadStyle));
 
-            var props = new ImageProps(node);
-
-            var isFluid = props.FluidOnMobile == "true";
+            var isFluid = FluidOnMobile == "true";
             var isFullWidth = Equals(renderer.Get("full-width"), true);
 
-            var widthConfigured = UnitParser.Parse(props.Width).Value;
+            var widthConfigured = UnitParser.Parse(Width).Value;
             var widthAvailable =
                 renderer.GetContainerWidth().Value -
-                UnitParser.Parse(props.BorderLeft).Value -
-                UnitParser.Parse(props.BorderRight).Value -
-                UnitParser.Parse(props.PaddingLeft).Value -
-                UnitParser.Parse(props.PaddingRight).Value;
+                UnitParser.Parse(BorderLeft).Value -
+                UnitParser.Parse(BorderRight).Value -
+                UnitParser.Parse(PaddingLeft).Value -
+                UnitParser.Parse(PaddingRight).Value;
 
             var widthMin = Math.Min(widthConfigured, widthAvailable);
 
-            var href = props.Href;
+            var href = Href;
 
             renderer.ElementStart("table")
                 .Attr("border", "0")
@@ -136,19 +131,19 @@ namespace Mjml.Net.Components.Body
             if (!string.IsNullOrWhiteSpace(href))
             {
                 renderer.ElementStart("a")
-                  .Attr("href", props.Href)
-                  .Attr("name", props.Name)
-                  .Attr("rel", props.Rel)
-                  .Attr("target", props.Target)
-                  .Attr("title", props.Title);
+                  .Attr("href", Href)
+                  .Attr("name", Name)
+                  .Attr("rel", Rel)
+                  .Attr("target", Target)
+                  .Attr("title", Title);
 
-                RenderImage(renderer, widthMin, isFullWidth, ref props);
+                RenderImage(renderer, widthMin, isFullWidth);
 
                 renderer.ElementEnd("a");
             }
             else
             {
-                RenderImage(renderer, widthMin, isFullWidth, ref props);
+                RenderImage(renderer, widthMin, isFullWidth);
             }
 
             renderer.ElementEnd("td");
@@ -157,9 +152,9 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
         }
 
-        private static string HeadStyle(IHtmlRenderer renderer)
+        private static string HeadStyle(GlobalContext context)
         {
-            var breakpoint = renderer.GlobalData.Values.OfType<Breakpoint>().First();
+            var breakpoint = context.GlobalData.Values.OfType<Breakpoint>().First();
 
             return $@"
 @media only screen and (max-width:${breakpoint.Value}) {{
@@ -168,27 +163,27 @@ namespace Mjml.Net.Components.Body
 }}";
         }
 
-        private static void RenderImage(IHtmlRenderer renderer, double width, bool fullWidth, ref ImageProps props)
+        private void RenderImage(IHtmlRenderer renderer, double width, bool fullWidth)
         {
             renderer.ElementStart("img", true)
-                .Attr("alt", props.Alt)
-                .Attr("height", props.Height.GetNumberOrAuto())
-                .Attr("sizes", props.Sizes)
-                .Attr("src", props.Src)
-                .Attr("srcset", props.Srcset)
-                .Attr("title", props.Title)
-                .Attr("usemap", props.Usemap)
+                .Attr("alt", Alt)
+                .Attr("height", Height.GetNumberOrAuto())
+                .Attr("sizes", Sizes)
+                .Attr("src", Src)
+                .Attr("srcset", Srcset)
+                .Attr("title", Title)
+                .Attr("usemap", Usemap)
                 .Attr("width", width.ToInvariantString())
-                .Style("border", props.Border)
-                .Style("border-bottom", props.BorderBottom)
-                .Style("border-left", props.BorderLeft)
-                .Style("border-radius", props.BorderRadius)
-                .Style("border-right", props.BorderRight)
-                .Style("border-top", props.BorderTop)
+                .Style("border", Border)
+                .Style("border-bottom", BorderBottom)
+                .Style("border-left", BorderLeft)
+                .Style("border-radius", BorderRadius)
+                .Style("border-right", BorderRight)
+                .Style("border-top", BorderTop)
                 .Style("display", "block")
-                .Style("font-size", props.FontSize)
-                .Style("height", props.Height)
-                .Style("max-height", props.MaxHeight)
+                .Style("font-size", FontSize)
+                .Style("height", Height)
+                .Style("max-height", MaxHeight)
                 .Style("max-width", fullWidth ? "100%" : null)
                 .Style("min-width", fullWidth ? "100%" : null)
                 .Style("outline", "none")

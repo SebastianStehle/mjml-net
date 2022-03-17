@@ -1,7 +1,9 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public partial struct SocialComponentProps
+    public partial class SocialComponent : BodyComponentBase
     {
+        public override string ComponentName => "mj-social";
+
         [Bind("align", BindType.Align)]
         public string Align = "center";
 
@@ -70,32 +72,25 @@
 
         [Bind("vertical-align", BindType.VerticalAlign)]
         public string? VerticalAlign;
-    }
 
-    public sealed class SocialComponent : BodyComponentBase<SocialComponentProps>
-    {
-        public override string ComponentName => "mj-social"; 
-
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new SocialComponentProps(node);
-
-            if (props.Mode == "horizontal")
+            if (Mode == "horizontal")
             {
-                RenderHorizontal(renderer, node, ref props);
+                RenderHorizontal(renderer, context);
             }
             else
             {
-                RenderVertical(renderer);
+                RenderVertical(renderer, context);
             }
         }
 
-        private static void RenderHorizontal(IHtmlRenderer renderer, INode node, ref SocialComponentProps props)
+        private void RenderHorizontal(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementStart("table")
-                .Attr("align", props.Align)
+                .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -103,84 +98,48 @@
 
             renderer.ElementStart("tr");
 
-            renderer.RenderChildren(new ChildOptions
+            foreach (var child in ChildNodes)
             {
-                Renderer = child =>
+                if (child.Type == ComponentType.Raw)
                 {
-                    if (child.Node.Component.Raw)
-                    {
-                        renderer.Content("<![endif]-->");
-                        child.Render();
-                        renderer.Content("<!--[if mso | IE]>");
-                    }
-                    else
-                    {
-                        renderer.ElementStart("td");
-                        renderer.Content("<![endif]-->");
+                    renderer.Content("<![endif]-->");
 
-                        renderer.ElementStart("table")
-                            .Attr("align", child.Node.GetAttribute("align"))
-                            .Attr("border", "0")
-                            .Attr("cellpadding", "0")
-                            .Attr("cellspacing", "0")
-                            .Attr("role", "presentation")
-                            .Style("display", "inline-table")
-                            .Style("float", "none");
+                    child.Render(renderer, context);
 
-                        renderer.ElementStart("tbody");
+                    renderer.Content("<!--[if mso | IE]>");
+                }
+                else
+                {
+                    renderer.ElementStart("td");
+                    renderer.Content("<![endif]-->");
 
-                        child.Render();
+                    renderer.ElementStart("table")
+                        .Attr("align", Align)
+                        .Attr("border", "0")
+                        .Attr("cellpadding", "0")
+                        .Attr("cellspacing", "0")
+                        .Attr("role", "presentation")
+                        .Style("display", "inline-table")
+                        .Style("float", "none");
 
-                        renderer.ElementEnd("tbody");
-                        renderer.ElementEnd("table");
+                    renderer.ElementStart("tbody");
 
-                        renderer.Content("<!--[if mso | IE]>");
-                        renderer.ElementEnd("td");
-                    }
-                },
-                ChildResolver = CreateResolver(props)
-            });
+                    child.Render(renderer, context);
+
+                    renderer.ElementEnd("tbody");
+                    renderer.ElementEnd("table");
+
+                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.ElementEnd("td");
+                }
+            }
 
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
             renderer.Content("<![endif]-->");
         }
 
-        private static Func<string, string?> CreateResolver(SocialComponentProps props)
-        {
-            return name =>
-            {
-                switch (name)
-                {
-                    case "border-radius":
-                        return props.BorderRadius;
-                    case "color":
-                        return props.Color;
-                    case "font-family":
-                        return props.FontFamily;
-                    case "font-size":
-                        return props.FontSize;
-                    case "font-style":
-                        return props.FontStyle;
-                    case "icon-height":
-                        return props.IconHeight;
-                    case "icon-padding":
-                        return props.IconPadding;
-                    case "icon-size":
-                        return props.IconSize;
-                    case "line-height":
-                        return props.IconHeight;
-                    case "text-padding":
-                        return props.TextPadding;
-                    case "text-decoration":
-                        return props.TextDecoration;
-                    default:
-                        return null;
-                }
-            };
-        }
-
-        private static void RenderVertical(IHtmlRenderer renderer)
+        private void RenderVertical(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.ElementStart("table") // Table-vertical
                 .Attr("border", "0")
@@ -191,10 +150,41 @@
 
             renderer.ElementStart("tbody");
 
-            renderer.RenderChildren();
+            RenderChildren(renderer, context);
 
             renderer.ElementEnd("tbody");
             renderer.ElementEnd("table");
+        }
+
+        public override string? GetInheritingAttribute(string name)
+        {
+            switch (name)
+            {
+                case "border-radius":
+                    return BorderRadius;
+                case "color":
+                    return Color;
+                case "font-family":
+                    return FontFamily;
+                case "font-size":
+                    return FontSize;
+                case "font-style":
+                    return FontStyle;
+                case "icon-height":
+                    return IconHeight;
+                case "icon-padding":
+                    return IconPadding;
+                case "icon-size":
+                    return IconSize;
+                case "line-height":
+                    return IconHeight;
+                case "text-padding":
+                    return TextPadding;
+                case "text-decoration":
+                    return TextDecoration;
+                default:
+                    return null;
+            }
         }
     }
 }

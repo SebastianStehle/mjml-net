@@ -77,37 +77,32 @@ namespace Tools
                     {
                         var actualType = "String";
 
-                        if (type == "unit(px,%)")
+                        switch (type)
                         {
-                            actualType = "PixelsOrPercent";
-                        }
-                        else if (type == "unit(px)")
-                        {
-                            actualType = "Pixels";
-                        }
-                        else if (type == "color")
-                        {
-                            actualType = "Color";
-                        }
-                        else if (type == "unit(px,%){1,4}")
-                        {
-                            actualType = "FourPixelsOrPercent";
-                        }
-                        else if (type == "enum(top,bottom,middle)")
-                        {
-                            actualType = "VerticalAlign";
-                        }
-                        else if (type == "enum(left,center,right)")
-                        {
-                            actualType = "Align";
-                        }
-                        else if (type == "string")
-                        {
-                            actualType = "String";
-                        }
-                        else
-                        {
-                            actualType = type;
+                            case "unit(px,%)":
+                                actualType = "PixelsOrPercent";
+                                break;
+                            case "unit(px)":
+                                actualType = "Pixels";
+                                break;
+                            case "color":
+                                actualType = "Color";
+                                break;
+                            case "unit(px,%){1,4}":
+                                actualType = "FourPixelsOrPercent";
+                                break;
+                            case "enum(top,bottom,middle)":
+                                actualType = "VerticalAlign";
+                                break;
+                            case "enum(left,center,right)":
+                                actualType = "Align";
+                                break;
+                            case "string":
+                                actualType = "String";
+                                break;
+                            default:
+                                actualType = type;
+                                break;
                         }
 
                         sb.AppendTabbed(2, $"[Bind(\"{name}\", BindType.{actualType})]");

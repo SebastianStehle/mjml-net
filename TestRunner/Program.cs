@@ -23,7 +23,10 @@ namespace TestRunner
 
             var watch = Stopwatch.StartNew();
 
-            var html = mjmlRenderer.Render(text).Html;
+            var html = mjmlRenderer.Render(text, new MjmlOptions
+            {
+                Beautify = true
+            }).Html;
 
             watch.Stop();
 

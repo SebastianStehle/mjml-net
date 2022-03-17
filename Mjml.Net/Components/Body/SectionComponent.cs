@@ -1,23 +1,11 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public sealed class SectionComponent : BodyComponentBase
+    public partial class SectionComponent : BodyComponentBase
     {
         public override string ComponentName => "mj-section";
 
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            RenderChildren(renderer);
-        }
-
-        private static void RenderChildren(IHtmlRenderer renderer)
-        {
-            renderer.RenderChildren(new ChildOptions
-            {
-                Renderer = child =>
-                {
-                    child.Render();
-                }
-            });
         }
     }
 }

@@ -6,14 +6,14 @@
 
     public sealed class FontHelper : IHelper
     {
-        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalData data)
+        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
         {
             if (target != HelperTarget.HeadEnd)
             {
                 return;
             }
 
-            foreach (var (_, value) in data)
+            foreach (var (_, value) in context.GlobalData)
             {
                 if (value is Font font)
                 {

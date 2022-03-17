@@ -3,35 +3,14 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : INode
+    public sealed partial class MjmlRenderContext
     {
-        private static readonly char[] TrimChars = { ' ', '\n', '\r' };
-        private readonly GlobalData globalData = new GlobalData();
-        private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
-        private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
-        private readonly RenderStack<ComponentContext> contextStack = new RenderStack<ComponentContext>();
+        private readonly GlobalContext context = new GlobalContext();
+        private readonly RenderStack<TransitiveContext> contextStack = new RenderStack<TransitiveContext>();
         private readonly ValidationErrors errors = new ValidationErrors();
-        private IComponent? currentComponent;
         private MjmlOptions options;
         private MjmlRenderer renderer;
         private IValidator? validator;
-        private string? currentElement;
-        private string[]? currentClasses;
-
-        public INode Node
-        {
-            get => this;
-        }
-
-        public IComponent Component
-        {
-            get => currentComponent!;
-        }
-
-        public GlobalData GlobalData
-        {
-            get => globalData;
-        }
 
         public MjmlRenderContext()
         {
@@ -52,14 +31,8 @@ namespace Mjml.Net
 
         internal void Clear()
         {
-            globalData.Clear();
-            attributesByClass.Clear();
-            attributesByName.Clear();
             contextStack.Clear();
-            validator = null;
-            currentClasses = null;
-            currentComponent = null;
-            currentElement = null;
+            context.Clear();
             errors.Clear();
             renderer = null!;
 
@@ -78,140 +51,112 @@ namespace Mjml.Net
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, default);
+                        ReadElement(reader.Name, reader, null);
                         break;
                 }
             }
         }
 
-        private void ReadElement(string name, XmlReader parentReader, ChildOptions childOptions)
+        private void ReadElement(string name, XmlReader parentReader, IComponent? parent)
         {
-            var reader = parentReader.ReadSubtree();
+            var component = renderer.CreateComponent(name);
 
-            var newContext = new ComponentContext(contextStack.Current, reader, childOptions);
-
-            childOptions.ChildContext?.Invoke(newContext);
-
-            contextStack.Push(newContext);
-
-            currentElement = name;
-            currentClasses = null;
-            currentComponent = renderer.GetComponent(currentElement);
-
-            var component = currentComponent;
-
-            var currentLine = CurrentLine(reader);
-            var currentColumn = CurrentColumn(reader);
+            var currentLine = CurrentLine(parentReader);
+            var currentColumn = CurrentColumn(parentReader);
 
             if (component == null)
             {
-                errors.Add($"Invalid element '{currentElement}'.",
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                errors.Add($"Invalid element '{name}'.",
+                    currentLine,
+                    currentColumn);
                 return;
             }
 
+            var reader = parentReader.ReadSubtree();
+
+            if (parent != null)
+            {
+                parent.AddChild(component);
+            }
+
+            var binder = new Binder(context, component, parent, name);
+
+            validator?.BeforeComponent(component,
+                currentLine,
+                currentColumn);
+
             reader.Read();
 
-            if (validator != null)
+            for (var i = 0; i < reader.AttributeCount; i++)
             {
-                validator.BeforeComponent(component,
+                reader.MoveToAttribute(i);
+
+                binder.SetAttribute(reader.Name, reader.Value);
+
+                validator?.Attribute(reader.Name, reader.Value, component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
+            }
 
-                for (var i = 0; i < reader.AttributeCount; i++)
+            if (component.Type == ComponentType.Text)
+            {
+                while (reader.Read())
                 {
-                    reader.MoveToAttribute(i);
-
-                    validator.Attribute(reader.Name, reader.Value, component,
-                        CurrentLine(reader),
-                        CurrentColumn(reader));
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Text:
+                            binder.SetText(reader.Value);
+                            break;
+                    }
                 }
             }
 
-            var childRenderer = contextStack.Current?.Options.Renderer;
+            component.Bind(binder, context, reader);
 
-            if (childRenderer != null)
+            if (component.Type == ComponentType.Raw)
             {
-                childRenderer(this);
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Text:
+                            component.AddChild(reader.Value);
+                            break;
+                        case XmlNodeType.Element:
+                            component.AddChild(reader.ReadOuterXml().Trim());
+
+                            if (reader.NodeType == XmlNodeType.Text)
+                            {
+                                component.AddChild(reader.Value);
+                            }
+
+                            break;
+                    }
+                }
             }
             else
             {
-                currentComponent!.Render(this, this);
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            ReadElement(reader.Name, reader, component);
+                            break;
+                    }
+                }
             }
-
-            if (validator != null)
-            {
-                validator.AfterComponent(component, currentLine, currentColumn);
-            }
-
-            contextStack.Pop();
 
             reader.Close();
-        }
 
-        public string? GetAttribute(string name, bool withoutDefaults = false)
-        {
-            if (Reader.MoveToAttribute(name))
+            if (parent == null)
             {
-                return Reader.Value;
+                component.Render(this, context);
             }
 
-            if (contextStack.Current?.Options.ChildResolver != null)
-            {
-                var parentAttribute = contextStack.Current?.Options.ChildResolver(name);
-
-                if (parentAttribute != null)
-                {
-                    return parentAttribute;
-                }
-            }
-
-            if (attributesByName.TryGetValue(name, out var byType))
-            {
-                if (byType.TryGetValue(currentElement!, out var attribute))
-                {
-                    return attribute;
-                }
-
-                if (byType.TryGetValue(Constants.All, out attribute))
-                {
-                    return attribute;
-                }
-            }
-
-            if (attributesByClass.Count > 0)
-            {
-                if (currentClasses == null)
-                {
-                    if (Reader.MoveToAttribute(Constants.MjClass))
-                    {
-                        currentClasses = Reader.Value.Split(' ');
-                    }
-                    else
-                    {
-                        currentClasses = Array.Empty<string>();
-                    }
-                }
-
-                foreach (var className in currentClasses)
-                {
-                    if (attributesByClass.TryGetValue(className, out var byName))
-                    {
-                        if (byName.TryGetValue(name, out var attribute))
-                        {
-                            return attribute;
-                        }
-                    }
-                }
-            }
-
-            if (!withoutDefaults)
-            {
-                return currentComponent?.Props?.DefaultValue(name);
-            }
-
-            return null;
+            validator?.AfterComponent(component,
+                currentLine,
+                currentColumn);
         }
 
         public object? Set(string name, object? value)
@@ -222,57 +167,6 @@ namespace Mjml.Net
         public object? Get(string name)
         {
             return contextStack.Current?.Get(name);
-        }
-
-        public string? GetText()
-        {
-            var reader = Reader;
-
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Text)
-                {
-                    return Reader.Value.Trim(TrimChars);
-                }
-            }
-
-            return null;
-        }
-
-        public void SetGlobalData(string name, object value, bool skipIfAdded = true)
-        {
-            var type = value.GetType();
-
-            if (skipIfAdded && globalData.ContainsKey((type, name)))
-            {
-                return;
-            }
-
-            globalData[(type, name)] = value;
-        }
-
-        public void SetTypeAttribute(string name, string type, string value)
-        {
-            if (!attributesByName.TryGetValue(name, out var attributes))
-            {
-                attributes = new Dictionary<string, string>();
-
-                attributesByName[name] = attributes;
-            }
-
-            attributes[type] = value;
-        }
-
-        public void SetClassAttribute(string name, string className, string value)
-        {
-            if (!attributesByClass.TryGetValue(className, out var attributes))
-            {
-                attributes = new Dictionary<string, string>();
-
-                attributesByClass[className] = attributes;
-            }
-
-            attributes[name] = value;
         }
 
         private static int? CurrentLine(XmlReader reader)

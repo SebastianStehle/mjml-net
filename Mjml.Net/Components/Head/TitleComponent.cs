@@ -2,26 +2,21 @@
 
 namespace Mjml.Net.Components.Head
 {
-    public partial struct TitleProps
+    public partial class TitleComponent : HeadComponentBase
     {
-        [BindText]
-        public string? Text;
-    }
+        public override ComponentType Type => ComponentType.Text;
 
-    public sealed class TitleComponent : HeadComponentBase<TitleProps>
-    {
         public override string ComponentName => "mj-title";
 
-        public override bool NeedsContent => true;
+        [BindText]
+        public string? Text;
 
-        public override void Render(IHtmlRenderer renderer, INode node)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var props = new TitleProps(node);
-
             // Just in case that validation is disabled.
-            if (props.Text != null)
+            if (Text != null)
             {
-                renderer.SetGlobalData("default", new Title(props.Text));
+                context.SetGlobalData("default", new Title(Text));
             }
         }
     }
