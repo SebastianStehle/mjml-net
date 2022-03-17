@@ -291,6 +291,58 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("div");
         }
 
+        private static void RenderSectionEnd(IHtmlRenderer renderer)
+        {
+            renderer.StartConditionalTag();
+
+            renderer.ElementEnd("td");
+            renderer.ElementEnd("tr");
+            renderer.ElementEnd("table");
+
+            renderer.EndConditionalTag();
+        }
+
+        private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RenderChildren(IHtmlRenderer renderer, ref GlobalContext context)
+        {
+            renderer.StartConditionalTag();
+            renderer.ElementStart("tr");
+            renderer.EndConditionalTag();
+
+            foreach (var child in ChildNodes)
+            {
+                if (child.Raw)
+                {
+                    child.Render(renderer, context);
+                }
+                else
+                {
+                    // ONCE MJ-COLUMN is complete this will be updated
+                    renderer.StartConditionalTag();
+                    renderer.ElementStart("td")
+                        .Attr("align", child.Node.GetAttribute("align"))
+                        .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                        .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
+                        .Style("width", child.Node.GetAttribute("width")); //  getWidthAsPixel
+                    renderer.EndConditionalTag();
+
+                    child.Render(renderer, context);
+
+                    renderer.StartConditionalTag();
+                    renderer.ElementEnd("td");
+                    renderer.EndConditionalTag();
+                }
+            }
+
+            renderer.StartConditionalTag();
+            renderer.ElementEnd("tr");
+            renderer.EndConditionalTag();
+        }
+
         private string? GetBackground()
         {
             if (!HasBackground())
@@ -346,58 +398,6 @@ namespace Mjml.Net.Components.Body
                 default:
                     return ("center", "top");
             }
-        }
-
-        private static void RenderSectionEnd(IHtmlRenderer renderer)
-        {
-            renderer.StartConditionalTag();
-
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
-
-            renderer.EndConditionalTag();
-        }
-
-        private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void RenderChildren(IHtmlRenderer renderer, ref GlobalContext context)
-        {
-            renderer.StartConditionalTag();
-            renderer.ElementStart("tr");
-            renderer.EndConditionalTag();
-
-            foreach (var child in ChildNodes)
-            {
-                if (child.Raw)
-                {
-                    child.Render(renderer, context);
-                }
-                else
-                {
-                    // ONCE MJ-COLUMN is complete this will be updated
-                    renderer.StartConditionalTag();
-                    renderer.ElementStart("td")
-                        .Attr("align", child.Node.GetAttribute("align"))
-                        .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
-                        .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", child.Node.GetAttribute("width")); //  getWidthAsPixel
-                    renderer.EndConditionalTag();
-
-                    child.Render(renderer, context);
-
-                    renderer.StartConditionalTag();
-                    renderer.ElementEnd("td");
-                    renderer.EndConditionalTag();
-                }
-            }
-
-            renderer.StartConditionalTag();
-            renderer.ElementEnd("tr");
-            renderer.EndConditionalTag();
         }
 
         private bool HasBackground()
