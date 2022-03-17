@@ -304,6 +304,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
         {
+            // TODO: https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-section/src/index.js#L265-L407
             throw new NotImplementedException();
         }
 
