@@ -30,7 +30,7 @@ namespace Mjml.Net.Components.Body
         {
             ContainerWidth = context.GetContainerWidth();
 
-            var (width, widthString, pixels) = GetParsedWith();
+            var (width, widthString, pixels) = GetParsedWidth();
 
             CurrentWidth = pixels;
 
@@ -141,7 +141,7 @@ namespace Mjml.Net.Components.Body
             return className;
         }
 
-        private ((double Value, Unit Unit), string, double) GetParsedWith()
+        private ((double Value, Unit Unit), string, double) GetParsedWidth()
         {
             var widthValue = 0d;
             var widthUnit = Unit.Pixels;
