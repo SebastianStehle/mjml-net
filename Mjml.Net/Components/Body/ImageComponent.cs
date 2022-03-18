@@ -102,15 +102,22 @@ namespace Mjml.Net.Components.Body
             var isFluid = FluidOnMobile == "true";
             var isFullWidth = Equals(context.Get("full-width"), true);
 
-            var widthConfigured = UnitParser.Parse(Width).Value;
-            var widthAvailable =
+            var width =
                 ContainerWidth.Value -
                 UnitParser.Parse(BorderLeft).Value -
                 UnitParser.Parse(BorderRight).Value -
                 UnitParser.Parse(PaddingLeft).Value -
                 UnitParser.Parse(PaddingRight).Value;
 
-            var widthMin = Math.Min(widthConfigured, widthAvailable);
+            if (Width != null)
+            {
+                var parsedWidth = UnitParser.Parse(Width);
+
+                if (parsedWidth.Value > 0)
+                {
+                    width = Math.Min(width, parsedWidth.Value);
+                }
+            }
 
             var href = Href;
 
@@ -124,14 +131,14 @@ namespace Mjml.Net.Components.Body
                 .Style("border-spacing", "0px")
                 .Style("max-width", isFullWidth ? "100%" : null)
                 .Style("min-width", isFullWidth ? "100%" : null)
-                .Style("width", isFullWidth ? $"{widthMin}px" : null);
+                .Style("width", isFullWidth ? $"{width}px" : null);
 
             renderer.ElementStart("tbody");
             renderer.ElementStart("tr");
 
             renderer.ElementStart("td")
                 .Class(isFluid ? "mj-full-width-mobile" : null)
-                .Style("width", isFullWidth ? null : $"{widthMin}px");
+                .Style("width", isFullWidth ? null : $"{width}px");
 
             if (!string.IsNullOrWhiteSpace(href))
             {
@@ -142,13 +149,13 @@ namespace Mjml.Net.Components.Body
                   .Attr("target", Target)
                   .Attr("title", Title);
 
-                RenderImage(renderer, widthMin, isFullWidth);
+                RenderImage(renderer, width, isFullWidth);
 
                 renderer.ElementEnd("a");
             }
             else
             {
-                RenderImage(renderer, widthMin, isFullWidth);
+                RenderImage(renderer, width, isFullWidth);
             }
 
             renderer.ElementEnd("td");

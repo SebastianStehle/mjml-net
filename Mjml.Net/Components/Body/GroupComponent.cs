@@ -1,5 +1,4 @@
-﻿#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
@@ -59,14 +58,13 @@ namespace Mjml.Net.Components.Body
 
             renderer.ElementStart("tr");
 
-            if (width.Value != ContainerWidth.Value)
-            {
-                context.Push();
-                context.SetContainerWidth(width.Value);
-            }
-
             foreach (var child in ChildNodes)
             {
+                var childWidth = GetElementWidth(child);
+
+                context.Push();
+                context.SetContainerWidth(childWidth);
+
                 if (child.Raw)
                 {
                     renderer.Content("<![endif]-->");
@@ -78,7 +76,7 @@ namespace Mjml.Net.Components.Body
                     renderer.ElementStart("td")
                         .Style("align", child.Node.GetAttribute("align"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", GetElementWidth(child));
+                        .Style("width", $"{childWidth}px");
 
                     renderer.Content("<![endif]-->");
 
@@ -87,10 +85,7 @@ namespace Mjml.Net.Components.Body
                     renderer.Content("<!--[if mso | IE]>");
                     renderer.ElementEnd("td");
                 }
-            }
 
-            if (width.Value != ContainerWidth.Value)
-            {
                 context.Pop();
             }
 
@@ -102,7 +97,7 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("div");
         }
 
-        private string GetElementWidth(IComponent component)
+        private double GetElementWidth(IComponent component)
         {
             var width = 0d;
 
@@ -125,7 +120,7 @@ namespace Mjml.Net.Components.Body
                 width = CurrentWidth / Math.Max(1, component.ChildNodes.Count(x => !x.Raw));
             }
 
-            return $"{width}px";
+            return width;
         }
 
         private static string GetColumnClass((double Value, Unit Unit) width, string originalWidth, GlobalContext context)

@@ -132,7 +132,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                RenderSectionStart(renderer, context);
+                RenderSectionStart(renderer);
                 RenderSection(renderer, context);
                 RenderSectionEnd(renderer);
             }
@@ -145,7 +145,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSimple(IHtmlRenderer renderer, GlobalContext context)
         {
-            RenderSectionStart(renderer, context);
+            RenderSectionStart(renderer);
 
             if (HasBackground())
             {
@@ -159,7 +159,7 @@ namespace Mjml.Net.Components.Body
             RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderSectionStart(IHtmlRenderer renderer)
         {
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
@@ -272,7 +272,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("role", "presentation");
             renderer.EndConditionalTag();
 
-            RenderChildren(renderer, context);
+            RenderColumns(renderer, context);
 
             renderer.StartConditionalTag();
             renderer.ElementEnd("table");
@@ -387,7 +387,7 @@ namespace Mjml.Net.Components.Body
             renderer.EndConditionalTag();
         }
 
-        private void RenderChildren(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderColumns(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartConditionalTag();
             renderer.ElementStart("tr");
@@ -459,7 +459,7 @@ namespace Mjml.Net.Components.Body
         {
             var positions = BackgroundPosition.Split(' ');
 
-            bool IsTopOrBottom(ref string axis)
+            static bool IsTopOrBottom(ref string axis)
             {
                 if (axis.Equals("top", StringComparison.OrdinalIgnoreCase) || axis.Equals("bottom", StringComparison.OrdinalIgnoreCase))
                 {
@@ -492,7 +492,7 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
+        private static (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
         {
             var xPercent = backgroundPositionX;
             var yPercent = backgroundPositionY;
@@ -535,7 +535,7 @@ namespace Mjml.Net.Components.Body
                     break;
 
                 default:
-                    if (!backgroundPositionY.Contains("%", StringComparison.OrdinalIgnoreCase))
+                    if (!backgroundPositionY.Contains('%', StringComparison.OrdinalIgnoreCase))
                     {
                         xPercent = "0%";
                     }
@@ -552,9 +552,9 @@ namespace Mjml.Net.Components.Body
             var isBackgroundRepeat = BackgroundRepeat.Equals("repeat", StringComparison.OrdinalIgnoreCase);
 
             var position = isX ? positionX : positionY;
-            var origin = isX ? positionX : positionY;
+            string? origin;
 
-            if (position.Contains("%", StringComparison.OrdinalIgnoreCase))
+            if (position.Contains('%', StringComparison.OrdinalIgnoreCase))
             {
                 var positionUnit = UnitParser.Parse(position);
                 var positionUnitDouble = positionUnit.Value / 100.0;
