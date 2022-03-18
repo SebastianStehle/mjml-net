@@ -75,8 +75,12 @@ namespace Mjml.Net.Components.Body
         [Bind("css-class")]
         public string? CssClass;
 
+        public ContainerWidth ContainerWidth;
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
+            ContainerWidth = context.GetContainerWidth();
+
             if (IsFullWidth())
             {
                 RenderFullWidth(renderer, ref context);
@@ -157,18 +161,16 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSectionStart(IHtmlRenderer renderer, ref GlobalContext context)
         {
-            var containerWidth = context.GetContainerWidth();
-
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
                 .Attr("align", "center")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", IsFullWidth() ? "100%" : containerWidth.String)
+                .Attr("width", IsFullWidth() ? "100%" : ContainerWidth.String)
                 .Attr("bgcolor", BackgroundColor)
                 .Attr("class", CssClass?.SuffixCssClasses("outlook"))
-                .Style("width", IsFullWidth() ? "100%" : containerWidth.StringWithUnit);
+                .Style("width", IsFullWidth() ? "100%" : ContainerWidth.StringWithUnit);
 
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
@@ -180,7 +182,6 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSection(IHtmlRenderer renderer, ref GlobalContext context)
         {
-            var containerWidth = context.GetContainerWidth();
             var isFullWidth = IsFullWidth();
             var hasBackground = HasBackground();
             var background = hasBackground ? GetBackground() : null;
@@ -189,7 +190,7 @@ namespace Mjml.Net.Components.Body
                            .Attr("class", isFullWidth ? null : CssClass)
                            .Style("margin", "0px auto")
                            .Style("border-radius", BorderRadius)
-                           .Style("max-width", containerWidth.StringWithUnit);
+                           .Style("max-width", ContainerWidth.StringWithUnit);
 
             if (!isFullWidth)
             {
@@ -304,7 +305,6 @@ namespace Mjml.Net.Components.Body
         private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
         {
             var isFullwidth = IsFullWidth();
-            var containerWidth = context.GetContainerWidth();
 
             var (x, y) = ParseBackgroundPosition();
             var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(ref x, ref y);
@@ -362,7 +362,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                rectElement.Style("width", containerWidth.StringWithUnit);
+                rectElement.Style("width", ContainerWidth.StringWithUnit);
             }
 
             renderer.ElementStart("v:fill", true)
