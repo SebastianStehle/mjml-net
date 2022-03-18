@@ -19,8 +19,8 @@ namespace Tests
         {
             var source = @"
 <mjml-test head=""false"">
-<mj-column background-color=""red""></mj-column>
-<mj-column background-color=""green""></mj-column>
+    <mj-column background-color=""red""></mj-column>
+    <mj-column background-color=""green""></mj-column>
 </mjml-test>";
 
             var result = TestHelper.Render(source);
@@ -33,9 +33,9 @@ namespace Tests
         {
             var source = @"
 <mjml-test head=""false"">
-<mj-column background-color=""red""></mj-column>
-<mj-column background-color=""green""></mj-column>
-<mj-column background-color=""blue""></mj-column>
+    <mj-column background-color=""red""></mj-column>
+    <mj-column background-color=""green""></mj-column>
+    <mj-column background-color=""blue""></mj-column>
 </mjml-test>";
 
             var result = TestHelper.Render(source);
@@ -48,10 +48,10 @@ namespace Tests
         {
             var source = @"
 <mjml-test head=""false"">
-<mj-column background-color=""red""></mj-column>
-<mj-column background-color=""green""></mj-column>
-<mj-column background-color=""blue""></mj-column>
-<mj-column background-color=""yellow""></mj-column>
+    <mj-column background-color=""red""></mj-column>
+    <mj-column background-color=""green""></mj-column>
+    <mj-column background-color=""blue""></mj-column>
+    <mj-column background-color=""yellow""></mj-column>
 </mjml-test>";
 
             var result = TestHelper.Render(source);

@@ -278,6 +278,5 @@ namespace Mjml.Net.Components.Body
         {
             return CurrentWidth;
         }
-
     }
 }
