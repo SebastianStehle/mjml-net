@@ -30,7 +30,6 @@ namespace Mjml.Net
         {
             Flush();
 
-            // Rent a buffer to avoid memory allocations.
             buffers.Push(ObjectPools.StringBuilder.Get());
         }
 
@@ -39,7 +38,7 @@ namespace Mjml.Net
             Flush();
 
             var currentBuffer = buffers.Pop();
-            
+
             return currentBuffer;
         }
 
@@ -79,6 +78,18 @@ namespace Mjml.Net
             {
                 return this;
             }
+
+            Buffer.Append(' ');
+            Buffer.Append(name);
+            Buffer.Append("=\"");
+            Buffer.Append(value);
+            Buffer.Append('"');
+
+            return this;
+        }
+
+        public IElementHtmlRenderer Attr(string name, double value)
+        {
 
             Buffer.Append(' ');
             Buffer.Append(name);

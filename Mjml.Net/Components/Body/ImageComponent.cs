@@ -178,7 +178,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("srcset", Srcset)
                 .Attr("title", Title)
                 .Attr("usemap", Usemap)
-                .Attr("width", width.ToInvariantString())
+                .Attr("width", width)
                 .Style("border", Border)
                 .Style("border-bottom", BorderBottom)
                 .Style("border-left", BorderLeft)

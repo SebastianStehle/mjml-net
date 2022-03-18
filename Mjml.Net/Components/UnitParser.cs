@@ -49,7 +49,7 @@ namespace Mjml.Net.Components
                 return (0, unitType);
             }
 
-            double.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
+            int.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
 
             return (temp, unitType);
         }

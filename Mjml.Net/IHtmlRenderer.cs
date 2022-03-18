@@ -78,6 +78,14 @@ namespace Mjml.Net
         /// <param name="value">The value of the attribute. If the value is null, it will be omitted.</param>
         /// <returns>The current instance to set more attributes.</returns>
         IElementHtmlRenderer Attr(string name, string? value);
+
+        /// <summary>
+        /// Sets an attribute by name for the current element.
+        /// </summary>
+        /// <param name="name">The name of the attribute.</param>
+        /// <param name="value">The value of the attribute.</param>
+        /// <returns>The current instance to set more attributes.</returns>
+        IElementHtmlRenderer Attr(string name, double value);
     }
 
     public interface IElementStyleWriter
