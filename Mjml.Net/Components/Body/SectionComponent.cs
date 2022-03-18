@@ -303,8 +303,6 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
         {
-            // TODO: https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-section/src/index.js#L265-L407
-
             var isFullwidth = IsFullWidth();
             var containerWidth = context.GetContainerWidth();
 
@@ -403,13 +401,14 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    // ONCE MJ-COLUMN is complete this will be updated
+                    // Once MJ-COLUMN is complete this will be updated to only wrap columns using type check
+                    // It relies on mj-column.getWidthAsPixel() for the Style("Width") call. Currently we just use width.
                     renderer.StartConditionalTag();
                     renderer.ElementStart("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", child.Node.GetAttribute("width")); //  getWidthAsPixel
+                        .Style("width", child.Node.GetAttribute("width"));
                     renderer.EndConditionalTag();
 
                     child.Render(renderer, context);
@@ -502,10 +501,11 @@ namespace Mjml.Net.Components.Body
                     break;
 
                 default:
-                    if (!backgroundPositionX.Contains("%", StringComparison.OrdinalIgnoreCase))
+                    if (!backgroundPositionX.Contains('%', StringComparison.OrdinalIgnoreCase))
                     {
                         xPercent = "50%";
                     }
+
                     break;
             }
 
@@ -528,6 +528,7 @@ namespace Mjml.Net.Components.Body
                     {
                         xPercent = "0%";
                     }
+
                     break;
             }
 
