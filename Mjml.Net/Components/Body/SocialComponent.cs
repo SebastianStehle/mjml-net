@@ -89,14 +89,14 @@
         {
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
 
-            renderer.ElementStart("tr");
+            renderer.StartElement("tr");
 
             foreach (var child in ChildNodes)
             {
@@ -108,10 +108,10 @@
                 }
                 else
                 {
-                    renderer.ElementStart("td");
+                    renderer.StartElement("td");
                     renderer.Content("<![endif]-->");
 
-                    renderer.ElementStart("table")
+                    renderer.StartElement("table")
                         .Attr("align", Align)
                         .Attr("border", "0")
                         .Attr("cellpadding", "0")
@@ -120,38 +120,38 @@
                         .Style("display", "inline-table")
                         .Style("float", "none");
 
-                    renderer.ElementStart("tbody");
+                    renderer.StartElement("tbody");
 
                     child.Render(renderer, context);
 
-                    renderer.ElementEnd("tbody");
-                    renderer.ElementEnd("table");
+                    renderer.EndElement("tbody");
+                    renderer.EndElement("table");
 
                     renderer.Content("<!--[if mso | IE]>");
-                    renderer.ElementEnd("td");
+                    renderer.EndElement("td");
                 }
             }
 
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
             renderer.Content("<![endif]-->");
         }
 
         private void RenderVertical(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("table") // Table-vertical
+            renderer.StartElement("table") // Table-vertical
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Style("margin", "0px");
 
-            renderer.ElementStart("tbody");
+            renderer.StartElement("tbody");
 
             RenderChildren(renderer, context);
 
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
         public override string? GetInheritingAttribute(string name)

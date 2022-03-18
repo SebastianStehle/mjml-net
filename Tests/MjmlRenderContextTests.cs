@@ -21,7 +21,7 @@ namespace Tests
         [Fact]
         public void Should_render_element_on_flush()
         {
-            sut.ElementStart("div");
+            sut.StartElement("div");
 
             AssertText(new[]
             {
@@ -32,8 +32,8 @@ namespace Tests
         [Fact]
         public void Should_render_element_when_closed()
         {
-            sut.ElementStart("div");
-            sut.ElementEnd("div");
+            sut.StartElement("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -45,12 +45,12 @@ namespace Tests
         [Fact]
         public void Should_render_element_with_attribute()
         {
-            sut.ElementStart("div")
+            sut.StartElement("div")
                 .Attr("attr1", "1")
                 .Attr("attr2", "2")
                 .Attr("attr3", null);
 
-            sut.ElementEnd("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -62,12 +62,12 @@ namespace Tests
         [Fact]
         public void Should_render_element_with_styles()
         {
-            sut.ElementStart("div")
+            sut.StartElement("div")
                 .Style("style1", "1")
                 .Style("style2", "2")
                 .Style("style3", null);
 
-            sut.ElementEnd("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -79,12 +79,12 @@ namespace Tests
         [Fact]
         public void Should_render_element_with_classes()
         {
-            sut.ElementStart("div")
+            sut.StartElement("div")
                 .Class("class1")
                 .Class("class2")
                 .Class(null);
 
-            sut.ElementEnd("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -96,22 +96,22 @@ namespace Tests
         [Fact]
         public void Should_render_nested_elements()
         {
-            sut.ElementStart("div");
+            sut.StartElement("div");
 
-            sut.ElementStart("div1");
-            sut.ElementEnd("div1");
+            sut.StartElement("div1");
+            sut.EndElement("div1");
 
-            sut.ElementStart("div2");
+            sut.StartElement("div2");
 
-            sut.ElementStart("div2_1");
-            sut.ElementEnd("div2_1");
+            sut.StartElement("div2_1");
+            sut.EndElement("div2_1");
 
-            sut.ElementStart("div2_2");
-            sut.ElementEnd("div2_2");
+            sut.StartElement("div2_2");
+            sut.EndElement("div2_2");
 
-            sut.ElementEnd("div2");
+            sut.EndElement("div2");
 
-            sut.ElementEnd("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -131,11 +131,11 @@ namespace Tests
         [Fact]
         public void Should_render_elements_with_content()
         {
-            sut.ElementStart("div");
+            sut.StartElement("div");
             sut.Content("1");
             sut.Content("2");
             sut.Content(null);
-            sut.ElementEnd("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -149,10 +149,10 @@ namespace Tests
         [Fact]
         public void Should_render_elements_with_multiliner_content()
         {
-            sut.ElementStart("div");
+            sut.StartElement("div");
             sut.Content($"line1{Environment.NewLine}line2{Environment.NewLine}");
             sut.Content("line3");
-            sut.ElementEnd("div");
+            sut.EndElement("div");
 
             AssertText(new[]
             {
@@ -169,10 +169,10 @@ namespace Tests
         public void Should_render_elements_with_plain_text()
         {
             sut.Plain("before");
-            sut.ElementStart("div");
+            sut.StartElement("div");
             sut.Plain("1");
             sut.Plain("2");
-            sut.ElementEnd("div");
+            sut.EndElement("div");
             sut.Plain("after");
 
             AssertText(new[]
@@ -189,26 +189,26 @@ namespace Tests
         [Fact]
         public void Should_render_buffered()
         {
-            sut.ElementStart("html");
+            sut.StartElement("html");
 
             sut.BufferStart();
-            sut.ElementStart("head");
+            sut.StartElement("head");
             sut.Content("head");
-            sut.ElementEnd("head");
+            sut.EndElement("head");
 
             var head = sut.BufferFlush();
 
             sut.BufferStart();
-            sut.ElementStart("body");
+            sut.StartElement("body");
             sut.Content("body");
-            sut.ElementEnd("body");
+            sut.EndElement("body");
 
             var body = sut.BufferFlush();
 
             sut.Plain(head, false);
             sut.Plain(body, false);
 
-            sut.ElementEnd("html");
+            sut.EndElement("html");
 
             AssertText(new[]
             {

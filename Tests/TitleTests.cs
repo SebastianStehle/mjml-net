@@ -9,12 +9,12 @@ namespace Tests
         public void Should_render_title()
         {
             var source = @"
-<mjml-test>
-  <mj-head>
-    <mj-title>Hello MJML</mj-title>
-  </mj-head>
-  <mj-body>
-  </mj-body>
+<mjml-test body=""false"">
+    <mj-head>
+        <mj-title>Hello MJML</mj-title>
+    </mj-head>
+    <mj-body>
+    </mj-body>
 </mjml-test>
 ";
 

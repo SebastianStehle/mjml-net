@@ -9,9 +9,9 @@ namespace Tests
         public void Should_render_body_only()
         {
             var source = @"
- <mjml>
-   <mj-body>
-   </mj-body>
+<mjml>
+    <mj-body>
+    </mj-body>
  </mjml>
 ";
 

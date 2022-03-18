@@ -88,7 +88,7 @@ namespace Mjml.Net.Components.Body
             var (width, widthString, pixels) = GetParsedWidth();
             var widthInner = GetInnerWidth(pixels);
 
-            renderer.ElementStart("div") // Style div
+            renderer.StartElement("div") // Style div
                 .Class(GetColumnClass(width, widthString, context))
                 .Class("mj-outlook-group-fix")
                 .Class(CssClass)
@@ -108,12 +108,12 @@ namespace Mjml.Net.Components.Body
                 RenderColumn(renderer, context, widthInner);
             }
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
 
         private void RenderColumn(IHtmlRenderer renderer, GlobalContext context, double innerWidth)
         {
-            var tableElement = renderer.ElementStart("table") // Style table
+            var tableElement = renderer.StartElement("table") // Style table
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -144,7 +144,7 @@ namespace Mjml.Net.Components.Body
                     .Style("vertical-align", VerticalAlign);
             }
 
-            renderer.ElementStart("tbody");
+            renderer.StartElement("tbody");
 
             if (innerWidth != ContainerWidth.Value)
             {
@@ -160,8 +160,8 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    renderer.ElementStart("tr");
-                    renderer.ElementStart("td")
+                    renderer.StartElement("tr");
+                    renderer.StartElement("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class"))
                         .Attr("vertical-align", child.Node.GetAttribute("vertical-align"))
@@ -176,8 +176,8 @@ namespace Mjml.Net.Components.Body
 
                     child.Render(renderer, context);
 
-                    renderer.ElementEnd("td");
-                    renderer.ElementEnd("tr");
+                    renderer.EndElement("td");
+                    renderer.EndElement("tr");
                 }
             }
 
@@ -186,22 +186,22 @@ namespace Mjml.Net.Components.Body
                 context.Pop();
             }
 
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
         private void RenderGutter(IHtmlRenderer renderer, GlobalContext context, double width)
         {
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Attr("width", "100%");
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td") // Style gutter
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
+            renderer.StartElement("td") // Style gutter
                 .Style("background-color", BackgroundColor)
                 .Style("border", Border)
                 .Style("border-bottom", BorderBottom)
@@ -218,10 +218,10 @@ namespace Mjml.Net.Components.Body
 
             RenderColumn(renderer, context, width);
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
         private static string GetColumnClass((double Value, Unit Unit) width, string originalWidth, GlobalContext context)

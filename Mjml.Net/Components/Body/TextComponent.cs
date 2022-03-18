@@ -73,14 +73,14 @@ namespace Mjml.Net.Components.Body
             else
             {
                 renderer.StartConditionalTag();
-                renderer.ElementStart("table")
+                renderer.StartElement("table")
                     .Attr("role", "presentation")
                     .Attr("border", "0")
                     .Attr("cellpadding", "0")
                     .Attr("cellspacing", "0");
 
-                renderer.ElementStart("tr");
-                renderer.ElementStart("td")
+                renderer.StartElement("tr");
+                renderer.StartElement("td")
                     .Attr("height", height)
                     .Style("vertical-align", "top")
                     .Style("height", height);
@@ -89,16 +89,16 @@ namespace Mjml.Net.Components.Body
                 RenderTextContent(renderer);
 
                 renderer.StartConditionalTag();
-                renderer.ElementEnd("td");
-                renderer.ElementEnd("tr");
-                renderer.ElementEnd("table");
+                renderer.EndElement("td");
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
                 renderer.EndConditionalTag();
             }
         }
 
         private void RenderTextContent(IHtmlRenderer renderer)
         {
-            renderer.ElementStart("div")
+            renderer.StartElement("div")
                 .Style("font-family", FontFamily)
                 .Style("font-size", FontSize)
                 .Style("font-style", FontStyle)
@@ -113,7 +113,7 @@ namespace Mjml.Net.Components.Body
 
             RenderRaw(renderer);
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
     }
 }

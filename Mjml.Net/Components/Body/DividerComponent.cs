@@ -50,19 +50,19 @@ namespace Mjml.Net.Components.Body
 
             var margin = GetMargin(Align);
 
-            renderer.ElementStart("p")
+            renderer.StartElement("p")
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
                 .Style("width", Width);
 
-            renderer.ElementEnd("p");
+            renderer.EndElement("p");
 
             var outlookWidth = GetOutlookWidth();
 
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
@@ -74,16 +74,16 @@ namespace Mjml.Net.Components.Body
                 .Style("margin", margin)
                 .Style("width", outlookWidth);
 
-            renderer.ElementStart("tr");
+            renderer.StartElement("tr");
 
-            renderer.ElementStart("td")
+            renderer.StartElement("td")
                 .Attr("style", "height:0; line-height:0;");
 
             renderer.Content("&nbsp;");
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
 
             renderer.Content("<![endif]-->");
         }

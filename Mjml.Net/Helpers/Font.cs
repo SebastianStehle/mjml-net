@@ -24,13 +24,13 @@
 
             foreach (var font in context.GlobalData.Values.OfType<Font>())
             {
-                renderer.ElementStart("link", true)
+                renderer.StartElement("link", true)
                     .Attr("href", font.Href)
                     .Attr("rel", "stylesheet")
                     .Attr("type", "text/css");
             }
 
-            renderer.ElementStart("style")
+            renderer.StartElement("style")
                 .Attr("type", "text/css");
 
             foreach (var font in context.GlobalData.Values.OfType<Font>())
@@ -38,7 +38,7 @@
                 renderer.Content($"@import url({font.Href});");
             }
 
-            renderer.ElementEnd("style");
+            renderer.EndElement("style");
 
             renderer.Content("<!--<![endif]-->");
         }
