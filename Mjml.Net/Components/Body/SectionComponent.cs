@@ -83,15 +83,15 @@ namespace Mjml.Net.Components.Body
 
             if (IsFullWidth())
             {
-                RenderFullWidth(renderer, ref context);
+                RenderFullWidth(renderer, context);
             }
             else
             {
-                RenderSimple(renderer, ref context);
+                RenderSimple(renderer, context);
             }
         }
 
-        private void RenderFullWidth(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderFullWidth(IHtmlRenderer renderer, GlobalContext context)
         {
             var hasBackground = HasBackground();
 
@@ -128,12 +128,12 @@ namespace Mjml.Net.Components.Body
 
             if (hasBackground)
             {
-                RenderSectionWithBackground(renderer, ref context);
+                RenderSectionWithBackground(renderer, context);
             }
             else
             {
-                RenderSectionStart(renderer, ref context);
-                RenderSection(renderer, ref context);
+                RenderSectionStart(renderer, context);
+                RenderSection(renderer, context);
                 RenderSectionEnd(renderer);
             }
 
@@ -143,23 +143,23 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
         }
 
-        private void RenderSimple(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderSimple(IHtmlRenderer renderer, GlobalContext context)
         {
-            RenderSectionStart(renderer, ref context);
+            RenderSectionStart(renderer, context);
 
             if (HasBackground())
             {
-                RenderSectionWithBackground(renderer, ref context);
+                RenderSectionWithBackground(renderer, context);
             }
             else
             {
-                RenderSection(renderer, ref context);
+                RenderSection(renderer, context);
             }
 
             RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderSectionStart(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
@@ -180,7 +180,7 @@ namespace Mjml.Net.Components.Body
             renderer.EndConditionalTag();
         }
 
-        private void RenderSection(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderSection(IHtmlRenderer renderer, GlobalContext context)
         {
             var isFullWidth = IsFullWidth();
             var hasBackground = HasBackground();
@@ -272,7 +272,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("role", "presentation");
             renderer.EndConditionalTag();
 
-            RenderChildren(renderer, ref context);
+            RenderChildren(renderer, context);
 
             renderer.StartConditionalTag();
             renderer.ElementEnd("table");
@@ -302,7 +302,7 @@ namespace Mjml.Net.Components.Body
             renderer.EndConditionalTag();
         }
 
-        private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderSectionWithBackground(IHtmlRenderer renderer, GlobalContext context)
         {
             var isFullwidth = IsFullWidth();
 
@@ -379,7 +379,7 @@ namespace Mjml.Net.Components.Body
                 .Style("mso-fit-shape-to-text", "true");
             renderer.EndConditionalTag();
 
-            RenderSection(renderer, ref context);
+            RenderSection(renderer, context);
 
             renderer.StartConditionalTag();
             renderer.ElementEnd("v:textbox");
@@ -387,7 +387,7 @@ namespace Mjml.Net.Components.Body
             renderer.EndConditionalTag();
         }
 
-        private void RenderChildren(IHtmlRenderer renderer, ref GlobalContext context)
+        private void RenderChildren(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartConditionalTag();
             renderer.ElementStart("tr");
