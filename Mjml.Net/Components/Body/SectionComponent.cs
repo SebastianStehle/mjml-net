@@ -164,18 +164,18 @@ namespace Mjml.Net.Components.Body
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
                 .Attr("align", "center")
+                .Attr("bgcolor", BackgroundColor)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", IsFullWidth() ? "100%" : ContainerWidth.String)
-                .Attr("bgcolor", BackgroundColor)
                 .Attr("class", CssClass?.SuffixCssClasses("outlook"))
+                .Attr("width", IsFullWidth() ? "100%" : ContainerWidth.String)
                 .Style("width", IsFullWidth() ? "100%" : ContainerWidth.StringWithUnit);
 
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
-                .Style("line-height", "0px")
                 .Style("font-size", "0px")
+                .Style("line-height", "0px")
                 .Style("mso-line-height-rule", "exactly");
             renderer.EndConditionalTag();
         }
@@ -187,10 +187,10 @@ namespace Mjml.Net.Components.Body
             var background = hasBackground ? GetBackground() : null;
 
             var divElement = renderer.ElementStart("div") // Style div
-                           .Attr("class", isFullWidth ? null : CssClass)
-                           .Style("margin", "0px auto")
-                           .Style("border-radius", BorderRadius)
-                           .Style("max-width", ContainerWidth.StringWithUnit);
+                .Attr("class", isFullWidth ? null : CssClass)
+                .Style("border-radius", BorderRadius)
+                .Style("margin", "0px auto")
+                .Style("max-width", ContainerWidth.StringWithUnit);
 
             if (!isFullWidth)
             {
@@ -219,14 +219,14 @@ namespace Mjml.Net.Components.Body
             }
 
             var tableElement = renderer.ElementStart("table") // Style table
-                .Attr("align", "center")
-                .Attr("background", isFullWidth ? null : BackgroundUrl)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation")
-                .Style("width", "100%")
-                .Style("border-radius", BorderRadius);
+                    .Attr("align", "center")
+                    .Attr("background", isFullWidth ? null : BackgroundUrl)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation")
+                    .Style("border-radius", BorderRadius)
+                    .Style("width", "100%");
 
             if (!isFullWidth)
             {
