@@ -21,6 +21,7 @@ namespace Mjml.Net
             Add<BodyComponent>();
             Add<BreakpointComponent>();
             Add<ButtonComponent>();
+            Add<ColumnComponent>();
             Add<DividerComponent>();
             Add<FontComponent>();
             Add<GroupComponent>();

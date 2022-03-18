@@ -20,6 +20,11 @@
     <None Remove="Tests\ButtonLinkWithRel.html" />
     <None Remove="Tests\ButtonMixedContent.html" />
     <None Remove="Tests\ButtonMixedContent2.html" />
+    <None Remove="Tests\ColumnFour.html" />
+    <None Remove="Tests\ColumnOne.html" />
+    <None Remove="Tests\ColumnOneWithPadding.html" />
+    <None Remove="Tests\ColumnThree.html" />
+    <None Remove="Tests\ColumnTwo.html" />
     <None Remove="Tests\Divider.html" />
     <None Remove="Tests\Font.html" />
     <None Remove="Tests\Group.html" />
@@ -66,10 +71,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\ColumnFour.html" />
+    <EmbeddedResource Include="Tests\ColumnOneWithPadding.html" />
+    <EmbeddedResource Include="Tests\ColumnTwo.html" />
+    <EmbeddedResource Include="Tests\ColumnThree.html" />
     <EmbeddedResource Include="Tests\Group.html" />
     <EmbeddedResource Include="Tests\ButtonMixedContent2.html" />
     <EmbeddedResource Include="Tests\ButtonMixedContent.html" />
     <EmbeddedResource Include="Tests\HeroDividers.html" />
+    <EmbeddedResource Include="Tests\ColumnOne.html" />
     <EmbeddedResource Include="Tests\Social.html" />
     <EmbeddedResource Include="Tests\SocialRaw.html" />
     <EmbeddedResource Include="Tests\TextWithHtml.html" />
