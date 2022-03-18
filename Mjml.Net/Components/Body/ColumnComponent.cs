@@ -93,10 +93,10 @@ namespace Mjml.Net.Components.Body
 
             renderer.ElementStart("div") // Style div
                 .Attr("class", classesName)
-                .Style("font-size", "0px")
-                .Style("text-align", "left")
                 .Style("direction", Direction)
                 .Style("display", "inline-block")
+                .Style("font-size", "0px")
+                .Style("text-align", "left")
                 .Style("vertical-align", VerticalAlign)
                 .Style("width", "100%"); // Overriden by mj-column-per-*
 
@@ -158,15 +158,15 @@ namespace Mjml.Net.Components.Body
                     renderer.ElementStart("tr");
                     renderer.ElementStart("td")
                         .Attr("align", child.Node.GetAttribute("align"))
-                        .Attr("vertical-align", child.Node.GetAttribute("vertical-align"))
                         .Attr("class", child.Node.GetAttribute("css-class"))
+                        .Attr("vertical-align", child.Node.GetAttribute("vertical-align"))
                         .Style("background", child.Node.GetAttribute("container-background-color"))
                         .Style("font-size", "0px")
                         .Style("padding", child.Node.GetAttribute("padding"))
-                        .Style("padding-top", child.Node.GetAttribute("padding-top"))
-                        .Style("padding-right", child.Node.GetAttribute("padding-right"))
                         .Style("padding-bottom", child.Node.GetAttribute("padding-bottom"))
                         .Style("padding-left", child.Node.GetAttribute("padding-left"))
+                        .Style("padding-right", child.Node.GetAttribute("padding-right"))
+                        .Style("padding-top", child.Node.GetAttribute("padding-top"))
                         .Style("word-break", "break-word");
 
                     child.Render(renderer, context);
@@ -199,12 +199,12 @@ namespace Mjml.Net.Components.Body
                 .Style("border-radius", BorderRadius)
                 .Style("border-right", BorderRight)
                 .Style("border-top", BorderTop)
-                .Style("vertical-align", VerticalAlign)
                 .Style("padding", Padding)
-                .Style("padding-top", PaddingTop)
-                .Style("padding-right", PaddingRight)
                 .Style("padding-bottom", PaddingBottom)
-                .Style("padding-left", PaddingLeft);
+                .Style("padding-left", PaddingLeft)
+                .Style("padding-right", PaddingRight)
+                .Style("padding-top", PaddingTop)
+                .Style("vertical-align", VerticalAlign);
 
             RenderColumn(renderer, context);
 
