@@ -42,13 +42,13 @@
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("div")
+            renderer.StartElement("div")
                 .Style("height", Height)
                 .Style("line-height", Height);
 
             renderer.Content("&#8202;");
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
     }
 }

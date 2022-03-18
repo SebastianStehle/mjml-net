@@ -9,7 +9,7 @@ namespace Tests
         public void Should_render_style()
         {
             var source = @"
-<mjml-test>
+<mjml-test body=""false"">
   <mj-head>
     <mj-style>
       .red-text div {
@@ -31,7 +31,7 @@ namespace Tests
         public void Should_render_inline_just_normal_as_fallback()
         {
             var source = @"
-<mjml-test>
+<mjml-test body=""false"">
   <mj-head>
     <mj-style inline=""inline"">
       .red-text div {

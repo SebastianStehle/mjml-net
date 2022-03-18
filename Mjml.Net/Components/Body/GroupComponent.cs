@@ -34,7 +34,7 @@ namespace Mjml.Net.Components.Body
 
             CurrentWidth = pixels;
 
-            renderer.ElementStart("div") // Style div
+            renderer.StartElement("div") // Style div
                 .Class(GetColumnClass(width, widthString, context))
                 .Class("mj-outlook-group-fix")
                 .Class(CssClass)
@@ -49,14 +49,14 @@ namespace Mjml.Net.Components.Body
 
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("bgcolor", BackgroundColor == "none" ? null : BackgroundColor)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
 
-            renderer.ElementStart("tr");
+            renderer.StartElement("tr");
 
             foreach (var child in ChildNodes)
             {
@@ -73,7 +73,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    renderer.ElementStart("td")
+                    renderer.StartElement("td")
                         .Style("align", child.Node.GetAttribute("align"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
                         .Style("width", $"{childWidth}px");
@@ -83,18 +83,18 @@ namespace Mjml.Net.Components.Body
                     child.Render(renderer, context);
 
                     renderer.Content("<!--[if mso | IE]>");
-                    renderer.ElementEnd("td");
+                    renderer.EndElement("td");
                 }
 
                 context.Pop();
             }
 
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
 
             renderer.Content("<![endif]-->");
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
 
         private double GetElementWidth(IComponent component)

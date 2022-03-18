@@ -17,9 +17,9 @@
 
             var title = context.GlobalData.Values.OfType<Title>().FirstOrDefault()?.Value;
 
-            renderer.ElementStart("title");
+            renderer.StartElement("title");
             renderer.Content(title);
-            renderer.ElementEnd("title");
+            renderer.EndElement("title");
         }
     }
 }

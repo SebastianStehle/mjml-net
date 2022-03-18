@@ -15,13 +15,13 @@ namespace Mjml.Net
         /// <returns>
         /// A renderer to set attributes on the element.
         /// </returns>
-        IElementHtmlRenderer ElementStart(string elementName, bool selfClosed = false);
+        IElementHtmlRenderer StartElement(string elementName, bool selfClosed = false);
 
         /// <summary>
         /// Ends an element.
         /// </summary>
         /// <param name="elementName">The name of the element.</param>
-        void ElementEnd(string elementName);
+        void EndElement(string elementName);
 
         /// <summary>
         /// Renders a plain value.

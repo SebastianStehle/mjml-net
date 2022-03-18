@@ -29,7 +29,7 @@
         public string Color = "#000";
 
         [Bind("css-class")]
-        public string? Class;
+        public string? CssClass;
 
         [Bind("font-family")]
         public string FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
@@ -110,14 +110,14 @@
         {
             var (socialNetwork, href) = GetSocialAttributes();
 
-            renderer.ElementStart("tr")
-                .Class(Class);
+            renderer.StartElement("tr")
+                .Class(CssClass);
 
-            renderer.ElementStart("td") // Style td
+            renderer.StartElement("td") // Style td
                 .Style("padding", Padding)
                 .Style("vertical-align", VerticalAlign);
 
-            renderer.ElementStart("table") // Style table
+            renderer.StartElement("table") // Style table
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -126,10 +126,10 @@
                 .Style("border-radius", BorderRadius)
                 .Style("width", IconSize);
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
 
-            renderer.ElementStart("td") // Style icon
+            renderer.StartElement("td") // Style icon
                 .Style("font-size", "0")
                 .Style("height", IconHeight ?? IconSize)
                 .Style("padding", IconPadding)
@@ -138,13 +138,13 @@
 
             if (href != null)
             {
-                renderer.ElementStart("a")
+                renderer.StartElement("a")
                     .Attr("href", href)
                     .Attr("rel", Rel)
                     .Attr("target", Target);
             }
 
-            renderer.ElementStart("img") // Style img
+            renderer.StartElement("img") // Style img
                 .Attr("alt", Alt)
                 .Attr("height", UnitParser.Parse(IconHeight ?? IconSize).Value)
                 .Attr("sizes", Sizes)
@@ -157,24 +157,24 @@
 
             if (Href != null)
             {
-                renderer.ElementEnd("a");
+                renderer.EndElement("a");
             }
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
-            renderer.ElementEnd("td");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
+            renderer.EndElement("td");
 
             if (Text != null)
             {
-                renderer.ElementStart("td") // Style tdText
+                renderer.StartElement("td") // Style tdText
                     .Style("padding", TextPadding)
                     .Style("vertical-align", "middle");
 
                 if (Href != null)
                 {
-                    renderer.ElementStart("a") // Style text
+                    renderer.StartElement("a") // Style text
                         .Attr("href", href)
                         .Attr("rel", Rel)
                         .Attr("target", Target)
@@ -188,7 +188,7 @@
                 }
                 else
                 {
-                    renderer.ElementStart("span") // Style text
+                    renderer.StartElement("span") // Style text
                         .Style("color", Color)
                         .Style("font-family", FontFamily)
                         .Style("font-size", FontSize)
@@ -202,15 +202,15 @@
 
                 if (Href != null)
                 {
-                    renderer.ElementEnd("a");
+                    renderer.EndElement("a");
                 }
                 else
                 {
-                    renderer.ElementEnd("span");
+                    renderer.EndElement("span");
                 }
             }
 
-            renderer.ElementEnd("tr");
+            renderer.EndElement("tr");
         }
 
         private (SocialNetwork, string?) GetSocialAttributes()

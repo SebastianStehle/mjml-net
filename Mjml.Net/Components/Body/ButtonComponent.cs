@@ -106,7 +106,7 @@
         {
             var buttonHtmlTag = !string.IsNullOrEmpty(Href) ? "a" : "p";
 
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -115,8 +115,8 @@
                 .Style("width", Width)
                 .Style("line-height", "100%");
 
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td")
+            renderer.StartElement("tr");
+            renderer.StartElement("td")
                 .Attr("align", "center")
                 .Attr("bgcolor", BackgroundColor)
                 .Attr("role", "presentation")
@@ -134,7 +134,7 @@
                 .Style("text-align", TextAlign)
                 .Style("background", BackgroundColor);
 
-            renderer.ElementStart(buttonHtmlTag)
+            renderer.StartElement(buttonHtmlTag)
                 .Attr("href", Href)
                 .Attr("rel", Rel)
                 .Attr("name", Name)
@@ -160,10 +160,10 @@
 
             RenderRaw(renderer);
 
-            renderer.ElementEnd(buttonHtmlTag);
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement(buttonHtmlTag);
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
         }
 
         private string? CalculateButtonWidth()

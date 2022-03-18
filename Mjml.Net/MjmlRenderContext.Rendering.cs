@@ -50,7 +50,7 @@ namespace Mjml.Net
             }
         }
 
-        public IElementHtmlRenderer ElementStart(string elementName, bool selfClosed = false)
+        public IElementHtmlRenderer StartElement(string elementName, bool selfClosed = false)
         {
             Flush();
 
@@ -155,7 +155,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public void ElementEnd(string elementName)
+        public void EndElement(string elementName)
         {
             Flush();
 
