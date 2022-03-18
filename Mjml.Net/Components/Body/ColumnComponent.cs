@@ -1,4 +1,5 @@
-﻿using Mjml.Net.Helpers;
+﻿using Mjml.Net.Extensions;
+using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
 {

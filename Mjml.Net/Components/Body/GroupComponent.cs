@@ -1,5 +1,5 @@
-#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
-
+﻿#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
+using Mjml.Net.Extensions;
 using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
