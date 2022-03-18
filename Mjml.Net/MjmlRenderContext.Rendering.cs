@@ -90,7 +90,6 @@ namespace Mjml.Net
 
         public IElementHtmlRenderer Attr(string name, double value)
         {
-
             Buffer.Append(' ');
             Buffer.Append(name);
             Buffer.Append("=\"");
