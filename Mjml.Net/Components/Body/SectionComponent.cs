@@ -600,7 +600,7 @@ namespace Mjml.Net.Components.Body
                 return false;
             }
 
-            return FullWidth.Equals("full-width", StringComparison.OrdinalIgnoreCase);
+            return FullWidth == "full-width";
         }
     }
 }
