@@ -102,23 +102,20 @@ namespace Mjml.Net.Components.Body
                 .Style("width", "100%")
                 .Style("border-radius", BorderRadius);
 
-            if (IsFullWidth())
+            if (hasBackground)
             {
-                if (hasBackground)
-                {
-                    tableElement
-                        .Style("background", GetBackground())
-                        .Style("background-color", BackgroundColor)
-                        .Style("background-position", BackgroundPosition)
-                        .Style("background-repeat", BackgroundRepeat)
-                        .Style("background-size", BackgroundSize);
-                }
-                else
-                {
-                    tableElement
-                        .Style("background", BackgroundColor)
-                        .Style("background-color", BackgroundColor);
-                }
+                tableElement
+                    .Style("background", GetBackground())
+                    .Style("background-color", BackgroundColor)
+                    .Style("background-position", BackgroundPosition)
+                    .Style("background-repeat", BackgroundRepeat)
+                    .Style("background-size", BackgroundSize);
+            }
+            else
+            {
+                tableElement
+                    .Style("background", BackgroundColor)
+                    .Style("background-color", BackgroundColor);
             }
 
             renderer.ElementStart("tbody");
