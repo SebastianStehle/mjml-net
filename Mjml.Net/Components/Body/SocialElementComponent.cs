@@ -9,7 +9,7 @@
 
         public override AllowedParents? AllowedAsChild => Parents;
 
-        public override ComponentType Type => ComponentType.Text;
+        public override ContentType ContentType => ContentType.Text;
 
         public override string ComponentName => "mj-social-element";
 

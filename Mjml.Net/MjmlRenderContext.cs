@@ -16,17 +16,19 @@ namespace Mjml.Net
         {
         }
 
-        public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions options = default)
+        public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions? options = null)
         {
             Setup(renderer,  options);
         }
 
-        public void Setup(MjmlRenderer renderer, MjmlOptions options = default)
+        public void Setup(MjmlRenderer renderer, MjmlOptions? options)
         {
             this.renderer = renderer;
-            this.options = options;
+            this.options = options ?? new MjmlOptions();
 
-            validator = options.ValidatorFactory?.Create();
+            validator = this.options.ValidatorFactory?.Create();
+
+            context.SetOptions(this.options);
         }
 
         internal void Clear()
@@ -98,7 +100,7 @@ namespace Mjml.Net
                     CurrentColumn(reader));
             }
 
-            if (component.Type == ComponentType.Text)
+            if (component.ContentType == ContentType.Text)
             {
                 while (reader.Read())
                 {
@@ -113,7 +115,7 @@ namespace Mjml.Net
 
             component.Bind(binder, context, reader);
 
-            if (component.Type == ComponentType.Raw)
+            if (component.ContentType == ContentType.Raw)
             {
                 while (reader.Read())
                 {

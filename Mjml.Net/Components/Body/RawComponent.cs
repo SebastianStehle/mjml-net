@@ -2,7 +2,7 @@
 {
     public partial class RawComponent : BodyComponentBase
     {
-        public override ComponentType Type => ComponentType.Raw;
+        public override ContentType ContentType => ContentType.Raw;
 
         public override string ComponentName => "mj-raw";
 

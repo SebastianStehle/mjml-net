@@ -14,5 +14,6 @@
         VerticalAlign,
         SocialMode,
         SocialTableLayout,
+        Direction,
     }
 }

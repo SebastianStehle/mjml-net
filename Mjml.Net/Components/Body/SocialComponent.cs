@@ -100,7 +100,7 @@
 
             foreach (var child in ChildNodes)
             {
-                if (child.Type == ComponentType.Raw)
+                if (child.ContentType == ContentType.Raw)
                 {
                     renderer.Content("<![endif]-->");
 

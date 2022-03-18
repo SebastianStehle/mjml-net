@@ -172,10 +172,6 @@ namespace {namespaceName}
             if (source{field.Name} != null)
             {{
                 this.{field.Name} = {assignment};
-            }}
-            else
-            {{
-                this.{field.Name} = {field.AttributeDefault};
             }}");
         }
 

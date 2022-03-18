@@ -1,5 +1,4 @@
 ﻿using Mjml.Net;
-using Mjml.Net.Components.Head;
 
 namespace Tests
 {
@@ -11,8 +10,15 @@ namespace Tests
         {
             RenderChildren(renderer, context);
 
-            RenderHead(renderer, context);
-            RenderBody(renderer, context);
+            if (Node.GetAttribute("body") != "false")
+            {
+                RenderBody(renderer, context);
+            }
+
+            if (Node.GetAttribute("head") != "false")
+            {
+                RenderHead(renderer, context);
+            }
         }
 
         private static void RenderHead(IHtmlRenderer renderer, GlobalContext context)

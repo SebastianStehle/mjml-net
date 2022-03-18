@@ -10,9 +10,11 @@ namespace Mjml.Net
 
         AllowedAttributes? AllowedFields { get; }
 
+        IEnumerable<IComponent> ChildNodes { get; }
+
         INode Node { get; }
 
-        ComponentType Type { get; }
+        ContentType ContentType { get; }
 
         bool Raw { get; }
 

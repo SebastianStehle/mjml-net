@@ -4,7 +4,7 @@ namespace Mjml.Net.Components.Body
 {
     public partial class TextComponent : BodyComponentBase
     {
-        public override ComponentType Type => ComponentType.Raw;
+        public override ContentType ContentType => ContentType.Raw;
 
         public override string ComponentName => "mj-text";
 

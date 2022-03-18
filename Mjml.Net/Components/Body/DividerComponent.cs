@@ -37,8 +37,12 @@
         [Bind("width", BindType.PixelsOrPercent)]
         public string Width = "100%";
 
+        public ContainerWidth ContainerWidth;
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
+            ContainerWidth = context.GetContainerWidth();
+
             var borderSetting = $"{BorderStyle} {BorderWidth} {BorderColor}";
 
             var margin = GetMargin(Align);
@@ -51,7 +55,7 @@
 
             renderer.ElementEnd("p");
 
-            var outlookWidth = GetOutlookWidth(renderer);
+            var outlookWidth = GetOutlookWidth();
 
             renderer.Content("<!--[if mso | IE]>");
 
@@ -61,11 +65,11 @@
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", outlookWidth)
+                .Attr("width", outlookWidth.ToInvariantString())
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", outlookWidth);
+                .Style("width", $"{outlookWidth}px");
 
             renderer.ElementStart("tr");
 
@@ -94,26 +98,22 @@
             }
         }
 
-        private string GetOutlookWidth(IHtmlRenderer renderer)
+        private double GetOutlookWidth()
         {
-            var containerWidth = renderer.GetContainerWidth().Value;
-
             var paddingSize =
                 UnitParser.Parse(PaddingLeft).Value +
                 UnitParser.Parse(PaddingRight).Value;
 
-            var width = Width!;
-
-            var (parsedWidth, unit) = UnitParser.Parse(width);
+            var (parsedWidth, unit) = UnitParser.Parse(Width);
 
             switch (unit)
             {
                 case Unit.Percent:
-                    return $"{(containerWidth - paddingSize) * (parsedWidth / 100)}px";
+                    return (ContainerWidth.Value - paddingSize) * (parsedWidth / 100);
                 case Unit.Pixels:
-                    return width;
+                    return parsedWidth;
                 default:
-                    return $"{containerWidth - paddingSize}px";
+                    return ContainerWidth.Value - paddingSize;
             }
         }
     }

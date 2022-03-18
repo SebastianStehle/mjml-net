@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net
 {
-    public enum ComponentType
+    public enum ContentType
     {
         Raw,
         Complex,

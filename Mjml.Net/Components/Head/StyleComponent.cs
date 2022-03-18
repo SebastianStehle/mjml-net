@@ -4,7 +4,7 @@ namespace Mjml.Net.Components.Head
 {
     public partial class StyleComponent : HeadComponentBase
     {
-        public override ComponentType Type => ComponentType.Text;
+        public override ContentType ContentType => ContentType.Text;
 
         public override string ComponentName => "mj-style";
 
@@ -20,7 +20,7 @@ namespace Mjml.Net.Components.Head
             if (Text != null)
             {
                 // Allow multiple styles.
-                context.SetGlobalData(Guid.NewGuid().ToString(), new Style(Text));
+                context.SetGlobalData(Guid.NewGuid().ToString(), Style.Static(Text));
             }
         }
     }

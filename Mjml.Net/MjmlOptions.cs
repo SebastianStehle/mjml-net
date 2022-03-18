@@ -1,15 +1,19 @@
 ﻿namespace Mjml.Net
 {
-    public record struct MjmlOptions
+    public sealed record MjmlOptions
     {
-        public bool KeepComments { get; set; }
+        public bool KeepComments { get; init; }
 
-        public string[]? Fonts { get; set; }
+        public string[]? Fonts { get; init; }
 
-        public bool Beautify { get; set; } = true;
+        public string Breakpoint { get; set; } = "480px";
 
-        public bool Minify { get; set; }
+        public bool ForceOWAQueries { get; init; }
 
-        public IValidatorFactory? ValidatorFactory { get; set; }
+        public bool Beautify { get; init; } = true;
+
+        public bool Minify { get; init; }
+
+        public IValidatorFactory? ValidatorFactory { get; init; }
     }
 }
