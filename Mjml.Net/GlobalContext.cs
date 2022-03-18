@@ -14,9 +14,16 @@ namespace Mjml.Net
 
         public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
 
+        public MjmlOptions Options { get; private set; }
+
         public GlobalContext()
         {
             transitive.Push(new TransitiveContext(null));
+        }
+
+        public void SetOptions(MjmlOptions options)
+        {
+            Options = options;
         }
 
         public void Clear()

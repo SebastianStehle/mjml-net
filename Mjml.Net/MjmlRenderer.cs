@@ -21,6 +21,7 @@ namespace Mjml.Net
             Add<ButtonComponent>();
             Add<DividerComponent>();
             Add<FontComponent>();
+            Add<GroupComponent>();
             Add<HeadComponent>();
             Add<HeroComponent>();
             Add<ImageComponent>();
@@ -34,7 +35,6 @@ namespace Mjml.Net
             Add<TextComponent>();
             Add<TitleComponent>();
 
-            Add(new BreakpointHelper());
             Add(new FontHelper());
             Add(new PreviewHelper());
             Add(new StyleHelper());
@@ -74,33 +74,33 @@ namespace Mjml.Net
             return components.GetValueOrDefault(name)?.Invoke();
         }
 
-        public RenderResult Render(string mjml, MjmlOptions options = default)
+        public RenderResult Render(string mjml, MjmlOptions? options = null)
         {
             var xml = XmlReader.Create(new StringReader(mjml));
 
             return Render(xml, options);
         }
 
-        public RenderResult Render(Stream mjml, MjmlOptions options = default)
+        public RenderResult Render(Stream mjml, MjmlOptions? options = null)
         {
             var xml = XmlReader.Create(mjml);
 
             return Render(xml, options);
         }
 
-        public RenderResult Render(TextReader mjml, MjmlOptions options = default)
+        public RenderResult Render(TextReader mjml, MjmlOptions? options = null)
         {
             var xml = XmlReader.Create(mjml);
 
             return Render(xml, options);
         }
 
-        private RenderResult Render(XmlReader xml, MjmlOptions options)
+        private RenderResult Render(XmlReader xml, MjmlOptions? options)
         {
             var context = ObjectPools.Contexts.Get();
             try
             {
-                context.Setup(this, options);
+                context.Setup(this, options ?? new MjmlOptions());
                 context.BufferStart();
                 context.Read(xml);
 

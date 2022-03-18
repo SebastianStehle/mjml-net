@@ -76,12 +76,14 @@
         [Bind("width", BindType.Pixels)]
         public string? Width;
 
+        public ContainerWidth ContainerWidth;
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var containerWidth = renderer.GetContainerWidth();
+            ContainerWidth = context.GetContainerWidth();
 
-            var parsedBackgroundHeight = UnitParser.Parse(BackgroundHeight);
-            var parsedBackgroundWidth = UnitParser.Parse(BackgroundWidth);
+            var backgroundHeight = UnitParser.Parse(BackgroundHeight);
+            var backgroundWidth = UnitParser.Parse(BackgroundWidth);
             var backgroundString = BackgroundColor;
 
             if (BackgroundUrl != null)
@@ -90,14 +92,14 @@
             }
 
             var backgroundRatioValue = Math.Round(100 *
-                parsedBackgroundHeight.Value /
-                parsedBackgroundWidth.Value);
+                backgroundHeight.Value /
+                backgroundWidth.Value);
             var backgroundRatio = $"{backgroundRatioValue}px";
 
-            var widthValue = parsedBackgroundWidth.Value;
+            var widthValue = backgroundWidth.Value;
             if (widthValue <= 0)
             {
-                widthValue = containerWidth.Value;
+                widthValue = ContainerWidth.Value;
             }
 
             var width = $"{widthValue}px";
@@ -110,8 +112,8 @@
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", containerWidth.String)
-                .Style("width", containerWidth.StringWithUnit);
+                .Attr("width", ContainerWidth.String)
+                .Style("width", ContainerWidth.StringWithUnit);
 
             renderer.ElementStart("tr");
 
@@ -137,7 +139,7 @@
                 .Attr("align", Align)
                 .Attr("class", CssClass)
                 .Style("margin", "0 auto")
-                .Style("max-width", containerWidth.StringWithUnit);
+                .Style("max-width", ContainerWidth.StringWithUnit);
 
             renderer.ElementStart("table") // Style table
                 .Attr("border", "0")
@@ -177,7 +179,7 @@
                     .Style("padding-top", PaddingTop)
                     .Style("vertical-align", VerticalAlign);
 
-                RenderContent(renderer, containerWidth, context);
+                RenderContent(renderer, context);
 
                 renderer.ElementEnd("td");
 
@@ -204,7 +206,7 @@
                     .Style("padding-top", PaddingTop)
                     .Style("vertical-align", VerticalAlign);
 
-                RenderContent(renderer, containerWidth, context);
+                RenderContent(renderer, context);
 
                 renderer.ElementEnd("td");
             }
@@ -223,7 +225,7 @@
             renderer.Content("<![endif]-->");
         }
 
-        private void RenderContent(IHtmlRenderer renderer, ContainerWidth containerWidth, GlobalContext context)
+        private void RenderContent(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.Content("<!--[if mso | IE]>");
 
@@ -232,8 +234,8 @@
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", containerWidth.String)
-                .Style("width", containerWidth.StringWithUnit);
+                .Attr("width", ContainerWidth.String)
+                .Style("width", ContainerWidth.StringWithUnit);
 
             renderer.ElementStart("tr");
 
@@ -278,7 +280,7 @@
             renderer.ElementStart("tbody");
 
             var innerWidth =
-                containerWidth.Value -
+                ContainerWidth.Value -
                 UnitParser.Parse(PaddingTop).Value +
                 UnitParser.Parse(PaddingBottom).Value;
 

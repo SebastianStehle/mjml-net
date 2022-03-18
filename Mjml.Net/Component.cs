@@ -8,14 +8,14 @@ namespace Mjml.Net
         private List<IComponent>? childNodes;
         private List<string>? childXml;
 
-        protected IEnumerable<IComponent> ChildNodes
+        public IEnumerable<IComponent> ChildNodes
         {
             get => childNodes ?? Enumerable.Empty<IComponent>();
         }
 
         public INode Node { get; private set; }
 
-        public abstract string ComponentName { get; }
+        public Component? Parent { get; internal set; }
 
         public virtual bool Raw => false;
 
@@ -25,7 +25,9 @@ namespace Mjml.Net
 
         public virtual AllowedAttributes? AllowedFields => null;
 
-        public virtual ComponentType Type => ComponentType.Complex;
+        public virtual ContentType ContentType => ContentType.Complex;
+
+        public abstract string ComponentName { get; }
 
         public abstract void Render(IHtmlRenderer renderer, GlobalContext context);
 
@@ -80,16 +82,21 @@ namespace Mjml.Net
             return null;
         }
 
-        public void AddChild(IComponent child)
-        {
-            childNodes ??= new List<IComponent>(1);
-            childNodes.Add(child);
-        }
-
         public void AddChild(string rawXml)
         {
             childXml ??= new List<string>(1);
             childXml.Add(rawXml);
+        }
+
+        public void AddChild(IComponent child)
+        {
+            childNodes ??= new List<IComponent>(1);
+            childNodes.Add(child);
+
+            if (child is Component component)
+            {
+                component.Parent = this;
+            }
         }
 
         public virtual void Bind(INode node, GlobalContext context, XmlReader reader)

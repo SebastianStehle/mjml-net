@@ -11,6 +11,8 @@ namespace Mjml.Net
 
         public static readonly IType Color = new ColorType();
 
+        public static readonly IType Direction = new EnumType("ltr", "rtl");
+
         public static readonly IType Pixels = new NumberType(Unit.Pixels);
 
         public static readonly IType PixelsOrAuto = new OneOfType(new EnumType("auto"), Pixels);

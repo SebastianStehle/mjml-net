@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Helpers;
-
-namespace Mjml.Net.Components.Head
+﻿namespace Mjml.Net.Components.Head
 {
     public partial class BreakpointComponent : HeadComponentBase
     {
@@ -14,7 +12,7 @@ namespace Mjml.Net.Components.Head
             // Just in case that validation is disabled.
             if (Width != null)
             {
-                context.SetGlobalData("default", new Breakpoint(Width));
+                context.Options.Breakpoint = Width;
             }
         }
     }

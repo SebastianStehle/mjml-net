@@ -1,6 +1,4 @@
-﻿using System.Xml;
-
-namespace Mjml.Net
+﻿namespace Mjml.Net
 {
     public interface INode
     {

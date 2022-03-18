@@ -90,16 +90,20 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.Pixels)]
         public string? Width;
 
+        public ContainerWidth ContainerWidth;
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            context.SetGlobalData("mj-image", new DynamicStyle(HeadStyle));
+            ContainerWidth = context.GetContainerWidth();
+
+            context.SetGlobalData("mj-image", new Style(HeadStyle));
 
             var isFluid = FluidOnMobile == "true";
-            var isFullWidth = Equals(renderer.Get("full-width"), true);
+            var isFullWidth = Equals(context.Get("full-width"), true);
 
             var widthConfigured = UnitParser.Parse(Width).Value;
             var widthAvailable =
-                renderer.GetContainerWidth().Value -
+                ContainerWidth.Value -
                 UnitParser.Parse(BorderLeft).Value -
                 UnitParser.Parse(BorderRight).Value -
                 UnitParser.Parse(PaddingLeft).Value -
@@ -152,15 +156,16 @@ namespace Mjml.Net.Components.Body
             renderer.ElementEnd("table");
         }
 
-        private static string HeadStyle(GlobalContext context)
+        private static void HeadStyle(IHtmlRenderer renderer, GlobalContext context)
         {
-            var breakpoint = context.GlobalData.Values.OfType<Breakpoint>().First();
-
-            return $@"
-@media only screen and (max-width:${breakpoint.Value}) {{
-  table.mj-full-width-mobile {{ width: 100% !important; }}
-  td.mj-full-width-mobile {{ width: auto !important; }}
-}}";
+            renderer.Content("@media only screen and (max-width:${context.Options.Breakpoint}) {{");
+            renderer.Content("  table.mj-full-width-mobile {");
+            renderer.Content("    width: 100% !important; }");
+            renderer.Content("  }");
+            renderer.Content("  td.mj-full-width-mobile {");
+            renderer.Content("    width: auto !important;");
+            renderer.Content("  }");
+            renderer.Content("}");
         }
 
         private void RenderImage(IHtmlRenderer renderer, double width, bool fullWidth)

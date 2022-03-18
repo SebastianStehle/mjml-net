@@ -3,7 +3,7 @@
     /// <summary>
     /// Renders html for MJML.
     /// </summary>
-    public interface IHtmlRenderer : IContext
+    public interface IHtmlRenderer
     {
         /// <summary>
         /// Starts a new element.
