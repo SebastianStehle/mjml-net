@@ -1,4 +1,4 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net.Internal
 {
     internal sealed class RenderStack<T>
     {

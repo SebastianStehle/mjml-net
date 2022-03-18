@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.Extensions.ObjectPool;
 
-namespace Mjml.Net
+namespace Mjml.Net.Internal
 {
     internal static class ObjectPools
     {

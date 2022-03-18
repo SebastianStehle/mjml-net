@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {

@@ -3,6 +3,7 @@ using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
 using Mjml.Net.Helpers;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
