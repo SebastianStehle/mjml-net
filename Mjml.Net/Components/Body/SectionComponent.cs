@@ -305,7 +305,89 @@ namespace Mjml.Net.Components.Body
         private void RenderSectionWithBackground(IHtmlRenderer renderer, ref GlobalContext context)
         {
             // TODO: https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-section/src/index.js#L265-L407
-            throw new NotImplementedException();
+
+            var isFullwidth = IsFullWidth();
+            var containerWidth = renderer.GetContainerWidth();
+
+            var (x, y) = ParseBackgroundPosition();
+            var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(ref x, ref y);
+
+            var (xOrigin, xPosition) = GetOriginBasedForAxis("x", ref xPercent, ref yPercent);
+            var (yOrigin, yPosition) = GetOriginBasedForAxis("y", ref xPercent, ref yPercent);
+
+            var isBackgroundSizeAuto = BackgroundSize.Equals("auto", StringComparison.OrdinalIgnoreCase);
+            var isBackgroundSizeCover = BackgroundSize.Equals("cover", StringComparison.OrdinalIgnoreCase);
+            var isBackgroundSizeContain = BackgroundSize.Equals("contain", StringComparison.OrdinalIgnoreCase);
+            var isBackgroundRepeatNoRepeat = BackgroundRepeat.Equals("no-repeat", StringComparison.OrdinalIgnoreCase);
+
+            string? vmlSize = null;
+            string? vmlAspect = null;
+            string? vmlType = isBackgroundRepeatNoRepeat ? "frame" : "tile";
+
+            if (isBackgroundSizeCover || isBackgroundSizeContain)
+            {
+                vmlSize = "1,1";
+                vmlAspect = isBackgroundSizeCover ? "atleast" : "atmost";
+            }
+            else if (!isBackgroundSizeAuto)
+            {
+                var positions = BackgroundSize.Split(' ');
+
+                if (positions.Length == 1)
+                {
+                    vmlSize = positions[0];
+                    vmlAspect = "atmost";
+                }
+                else
+                {
+                    vmlSize = string.Join(',', positions);
+                }
+            }
+
+            if (isBackgroundSizeAuto)
+            {
+                vmlType = "tile";
+                xOrigin = "0.5";
+                xPosition = "0.5";
+                yOrigin = "0";
+                yPosition = "0";
+            }
+
+            renderer.StartConditionalTag();
+            var rectElement = renderer.ElementStart("v:rect")
+                .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
+                .Attr("fill", "true")
+                .Attr("stroke", "false");
+
+            if (isFullwidth)
+            {
+                rectElement.Style("mso-width-percent", "1000");
+            }
+            else
+            {
+                rectElement.Style("width", containerWidth.StringWithUnit);
+            }
+
+            renderer.ElementStart("v:fill", true)
+                .Attr("origin", $"{xOrigin}, {yOrigin}")
+                .Attr("position", $"{xPosition}, {yPosition}")
+                .Attr("src", BackgroundUrl)
+                .Attr("color", BackgroundColor)
+                .Attr("type", vmlType)
+                .Attr("size", vmlSize)
+                .Attr("aspect", vmlAspect);
+
+            renderer.ElementStart("v:textbox")
+                .Attr("inset", "0,0,0,0")
+                .Style("mso-fit-shape-to-text", "true");
+            renderer.EndConditionalTag();
+
+            RenderSection(renderer, ref context);
+
+            renderer.StartConditionalTag();
+            renderer.ElementEnd("v:textbox");
+            renderer.ElementEnd("v:rect");
+            renderer.EndConditionalTag();
         }
 
         private void RenderChildren(IHtmlRenderer renderer, ref GlobalContext context)
@@ -399,6 +481,100 @@ namespace Mjml.Net.Components.Body
                 default:
                     return ("center", "top");
             }
+        }
+
+        private (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(ref string backgroundPositionX, ref string backgroundPositionY)
+        {
+            var xPercent = backgroundPositionX;
+            var yPercent = backgroundPositionY;
+
+            switch (backgroundPositionX.ToLowerInvariant())
+            {
+                case "left":
+                    xPercent = "0%";
+                    break;
+
+                case "center":
+                    xPercent = "50%";
+                    break;
+
+                case "right":
+                    xPercent = "100%";
+                    break;
+
+                default:
+                    if (!backgroundPositionX.Contains("%", StringComparison.OrdinalIgnoreCase))
+                    {
+                        xPercent = "50%";
+                    }
+                    break;
+            }
+
+            switch (backgroundPositionY.ToLowerInvariant())
+            {
+                case "top":
+                    yPercent = "0%";
+                    break;
+
+                case "center":
+                    yPercent = "50%";
+                    break;
+
+                case "bottom":
+                    yPercent = "100%";
+                    break;
+
+                default:
+                    if (!backgroundPositionY.Contains("%", StringComparison.OrdinalIgnoreCase))
+                    {
+                        xPercent = "0%";
+                    }
+                    break;
+            }
+
+            return (xPercent, yPercent);
+        }
+
+        private (string origin, string position) GetOriginBasedForAxis(string axis, ref string positionX, ref string positionY)
+        {
+            var isX = axis.Equals("x", StringComparison.OrdinalIgnoreCase);
+            var isBackgroundRepeat = BackgroundRepeat.Equals("repeat", StringComparison.OrdinalIgnoreCase);
+
+            var position = isX ? positionX : positionY;
+            var origin = isX ? positionX : positionY;
+
+            if (position.Contains("%", StringComparison.OrdinalIgnoreCase))
+            {
+                var positionUnit = UnitParser.Parse(position);
+                var positionUnitDouble = positionUnit.Value / 100.0;
+
+                if (isBackgroundRepeat)
+                {
+                    var temp = positionUnitDouble.ToInvariantString();
+                    position = temp;
+                    origin = temp;
+                }
+                else
+                {
+                    var temp = -50.0 + (positionUnitDouble * 100 / 100);
+                    position = $"{temp}";
+                    origin = $"{temp}";
+                }
+            }
+            else if (isBackgroundRepeat)
+            {
+                var temp = isX ? "0.5" : "0";
+                position = temp;
+                origin = temp;
+            }
+            else
+            {
+                var temp = isX ? "0" : "-0.5";
+                position = temp;
+                origin = temp;
+            }
+
+            return (origin, position);
         }
 
         private bool HasBackground()

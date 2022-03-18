@@ -23,5 +23,15 @@ namespace Tests
 
             AssertHelpers.HtmlAssert(TestHelper.GetContent("SectionWithBackgroundColor.html"), result);
         }
+
+        [Fact]
+        public void Should_render_section_with_background_image()
+        {
+            var source = @"<mj-section background-url=""https://picsum.photos/600/300""></mj-section>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlAssert(TestHelper.GetContent("SectionWithBackgroundImage.html"), result);
+        }
     }
 }
