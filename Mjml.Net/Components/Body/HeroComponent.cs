@@ -109,7 +109,7 @@ namespace Mjml.Net.Components.Body
 
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementStart("table") // Style: outlook-table
+            renderer.StartElement("table") // Style: outlook-table
                 .Attr("align", "center")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
@@ -118,14 +118,14 @@ namespace Mjml.Net.Components.Body
                 .Attr("width", ContainerWidth.String)
                 .Style("width", ContainerWidth.StringWithUnit);
 
-            renderer.ElementStart("tr");
+            renderer.StartElement("tr");
 
-            renderer.ElementStart("td")
+            renderer.StartElement("td")
                 .Style("line-height", "0")
                 .Style("font-size", "0")
                 .Style("mso-line-height-rule", "exactly"); // Style: outlook-td
 
-            renderer.ElementStart("v:image") // Style: outlook-image
+            renderer.StartElement("v:image") // Style: outlook-image
                 .Attr("src", BackgroundUrl)
                 .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Style("border", "0")
@@ -138,38 +138,38 @@ namespace Mjml.Net.Components.Body
 
             renderer.Content("<![endif]-->");
 
-            renderer.ElementStart("div") // Style div
+            renderer.StartElement("div") // Style div
                 .Attr("align", Align)
                 .Attr("class", CssClass)
                 .Style("margin", "0 auto")
                 .Style("max-width", ContainerWidth.StringWithUnit);
 
-            renderer.ElementStart("table") // Style table
+            renderer.StartElement("table") // Style table
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Style("width", "100%");
 
-            renderer.ElementStart("tbody");
+            renderer.StartElement("tbody");
 
-            renderer.ElementStart("tr")
+            renderer.StartElement("tr")
                 .Style("vertical-align", "top"); // Style tr
 
             if (Mode == "fluid-height")
             {
                 static void MagicId(IHtmlRenderer renderer, string backgroundRatio)
                 {
-                    renderer.ElementStart("td") // Style td-fluid
+                    renderer.StartElement("td") // Style td-fluid
                         .Style("mso-padding-bottom-alt", "0")
                         .Style("padding-bottom", backgroundRatio)
                         .Style("width", "0.01%");
-                    renderer.ElementEnd("td");
+                    renderer.EndElement("td");
                 }
 
                 MagicId(renderer, backgroundRatio);
 
-                renderer.ElementStart("td") // Style: hero
+                renderer.StartElement("td") // Style: hero
                     .Attr("background", BackgroundUrl)
                     .Style("background", backgroundString)
                     .Style("background-position", BackgroundPosition)
@@ -184,7 +184,7 @@ namespace Mjml.Net.Components.Body
 
                 RenderContent(renderer, context);
 
-                renderer.ElementEnd("td");
+                renderer.EndElement("td");
 
                 MagicId(renderer, backgroundRatio);
             }
@@ -195,7 +195,7 @@ namespace Mjml.Net.Components.Body
                     UnitParser.Parse(PaddingTop).Value +
                     UnitParser.Parse(PaddingBottom).Value;
 
-                renderer.ElementStart("td") // Style: hero
+                renderer.StartElement("td") // Style: hero
                     .Attr("background", BackgroundUrl)
                     .Attr("height", height)
                     .Style("background", backgroundString)
@@ -211,19 +211,19 @@ namespace Mjml.Net.Components.Body
 
                 RenderContent(renderer, context);
 
-                renderer.ElementEnd("td");
+                renderer.EndElement("td");
             }
 
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
-            renderer.ElementEnd("div");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
+            renderer.EndElement("div");
 
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
 
             renderer.Content("<![endif]-->");
         }
@@ -232,7 +232,7 @@ namespace Mjml.Net.Components.Body
         {
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementStart("table") // Style: outlook-inner-table
+            renderer.StartElement("table") // Style: outlook-inner-table
                 .Attr("align", Align)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
@@ -240,9 +240,9 @@ namespace Mjml.Net.Components.Body
                 .Attr("width", ContainerWidth.String)
                 .Style("width", ContainerWidth.StringWithUnit);
 
-            renderer.ElementStart("tr");
+            renderer.StartElement("tr");
 
-            renderer.ElementStart("td") // Style: outlook-inner-td
+            renderer.StartElement("td") // Style: outlook-inner-td
                 .Style("background-color", InnerBackgroundColor)
                 .Style("inner-padding", InnerPadding)
                 .Style("inner-padding-bottom", InnerPaddingBottom)
@@ -252,7 +252,7 @@ namespace Mjml.Net.Components.Body
 
             renderer.Content("<![endif]-->");
 
-            renderer.ElementStart("div") // Style: inner-div
+            renderer.StartElement("div") // Style: inner-div
                 .Attr("align", Align)
                 .Class("mj-hero-content")
                 .Style("background-color", InnerBackgroundColor)
@@ -260,7 +260,7 @@ namespace Mjml.Net.Components.Body
                 .Style("margin", "0px auto")
                 .Style("width", Width);
 
-            renderer.ElementStart("table") // Style: inner-table
+            renderer.StartElement("table") // Style: inner-table
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -268,11 +268,11 @@ namespace Mjml.Net.Components.Body
                 .Style("width", "100%")
                 .Style("margin", "0px");
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td");
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
+            renderer.StartElement("td");
 
-            renderer.ElementStart("table") // Style: inner-table
+            renderer.StartElement("table") // Style: inner-table
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -280,11 +280,11 @@ namespace Mjml.Net.Components.Body
                 .Style("width", "100%")
                 .Style("margin", "0px");
 
-            renderer.ElementStart("tbody");
+            renderer.StartElement("tbody");
 
             var innerWidth =
                 ContainerWidth.Value -
-                UnitParser.Parse(PaddingTop).Value +
+                UnitParser.Parse(PaddingTop).Value -
                 UnitParser.Parse(PaddingBottom).Value;
 
             if (innerWidth != ContainerWidth.Value)
@@ -303,9 +303,9 @@ namespace Mjml.Net.Components.Body
                 {
                     var backgroundColor = child.Node.GetAttribute("container-background-color");
 
-                    renderer.ElementStart("tr");
+                    renderer.StartElement("tr");
 
-                    renderer.ElementStart("td")
+                    renderer.StartElement("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("background", backgroundColor)
                         .Attr("class", child.Node.GetAttribute("css-class"))
@@ -320,8 +320,8 @@ namespace Mjml.Net.Components.Body
 
                     child.Render(renderer, context);
 
-                    renderer.ElementEnd("td");
-                    renderer.ElementEnd("tr");
+                    renderer.EndElement("td");
+                    renderer.EndElement("tr");
                 }
             }
 
@@ -330,19 +330,19 @@ namespace Mjml.Net.Components.Body
                 context.Pop();
             }
 
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
-            renderer.ElementEnd("div");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
+            renderer.EndElement("div");
 
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
 
             renderer.Content("<![endif]-->");
         }

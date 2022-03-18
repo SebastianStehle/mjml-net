@@ -1,5 +1,7 @@
 ﻿using Mjml.Net.Extensions;
 
+#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
+
 namespace Mjml.Net.Components.Body
 {
     public partial class SectionComponent : BodyComponentBase
@@ -45,6 +47,9 @@ namespace Mjml.Net.Components.Body
         [Bind("border-top", BindType.String)]
         public string? BorderTop;
 
+        [Bind("css-class")]
+        public string? CssClass;
+
         [Bind("direction", BindType.String)]
         public string Direction = "ltr";
 
@@ -72,9 +77,6 @@ namespace Mjml.Net.Components.Body
         [Bind("text-padding", BindType.PixelsOrPercent)]
         public string TextPadding = "4px 4px 4px 0";
 
-        [Bind("css-class")]
-        public string? CssClass;
-
         public ContainerWidth ContainerWidth;
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
@@ -95,7 +97,7 @@ namespace Mjml.Net.Components.Body
         {
             var hasBackground = HasBackground();
 
-            var tableElement = renderer.ElementStart("table")
+            var tableElement = renderer.StartElement("table")
                 .Attr("align", "center")
                 .Attr("background", BackgroundUrl)
                 .Attr("border", "0")
@@ -122,9 +124,9 @@ namespace Mjml.Net.Components.Body
                     .Style("background-color", BackgroundColor);
             }
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td");
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
+            renderer.StartElement("td");
 
             if (hasBackground)
             {
@@ -132,20 +134,20 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                RenderSectionStart(renderer, context);
+                RenderSectionStart(renderer);
                 RenderSection(renderer, context);
                 RenderSectionEnd(renderer);
             }
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
         private void RenderSimple(IHtmlRenderer renderer, GlobalContext context)
         {
-            RenderSectionStart(renderer, context);
+            RenderSectionStart(renderer);
 
             if (HasBackground())
             {
@@ -159,10 +161,10 @@ namespace Mjml.Net.Components.Body
             RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderSectionStart(IHtmlRenderer renderer)
         {
             renderer.Content("<!--[if mso | IE]>");
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("align", "center")
                 .Attr("bgcolor", BackgroundColor)
                 .Attr("border", "0")
@@ -172,8 +174,8 @@ namespace Mjml.Net.Components.Body
                 .Attr("width", IsFullWidth() ? "100%" : ContainerWidth.String)
                 .Style("width", IsFullWidth() ? "100%" : ContainerWidth.StringWithUnit);
 
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td")
+            renderer.StartElement("tr");
+            renderer.StartElement("td")
                 .Style("font-size", "0px")
                 .Style("line-height", "0px")
                 .Style("mso-line-height-rule", "exactly");
@@ -186,7 +188,7 @@ namespace Mjml.Net.Components.Body
             var hasBackground = HasBackground();
             var background = hasBackground ? GetBackground() : null;
 
-            var divElement = renderer.ElementStart("div") // Style div
+            var divElement = renderer.StartElement("div") // Style div
                 .Attr("class", isFullWidth ? null : CssClass)
                 .Style("border-radius", BorderRadius)
                 .Style("margin", "0px auto")
@@ -213,20 +215,20 @@ namespace Mjml.Net.Components.Body
 
             if (hasBackground)
             {
-                renderer.ElementStart("div") // Style innerDiv
+                renderer.StartElement("div") // Style innerDiv
                     .Style("line-height", "0")
                     .Style("font-size", "0");
             }
 
-            var tableElement = renderer.ElementStart("table") // Style table
-                    .Attr("align", "center")
-                    .Attr("background", isFullWidth ? null : BackgroundUrl)
-                    .Attr("border", "0")
-                    .Attr("cellpadding", "0")
-                    .Attr("cellspacing", "0")
-                    .Attr("role", "presentation")
-                    .Style("border-radius", BorderRadius)
-                    .Style("width", "100%");
+            var tableElement = renderer.StartElement("table") // Style table
+                .Attr("align", "center")
+                .Attr("background", isFullWidth ? null : BackgroundUrl)
+                .Attr("border", "0")
+                .Attr("cellpadding", "0")
+                .Attr("cellspacing", "0")
+                .Attr("role", "presentation")
+                .Style("border-radius", BorderRadius)
+                .Style("width", "100%");
 
             if (!isFullWidth)
             {
@@ -247,9 +249,9 @@ namespace Mjml.Net.Components.Body
                 }
             }
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td") // Style td
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
+            renderer.StartElement("td") // Style td
                 .Style("border", Border)
                 .Style("border-bottom", BorderBottom)
                 .Style("border-left", BorderLeft)
@@ -265,39 +267,39 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", TextAlign);
 
             renderer.Content("<!--[if mso | IE]>");
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
             renderer.Content("<![endif]-->");
 
-            RenderChildren(renderer, context);
+            RenderColumns(renderer, context);
 
             renderer.Content("<!--[if mso | IE]>");
-            renderer.ElementEnd("table");
+            renderer.EndElement("table");
             renderer.Content("<![endif]-->");
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
 
             if (hasBackground)
             {
-                renderer.ElementEnd("div");
+                renderer.EndElement("div");
             }
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
 
         private static void RenderSectionEnd(IHtmlRenderer renderer)
         {
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
 
             renderer.Content("<![endif]-->");
         }
@@ -309,8 +311,8 @@ namespace Mjml.Net.Components.Body
             var (x, y) = ParseBackgroundPosition();
             var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(x, y);
 
-            var (xOrigin, xPosition) = GetOriginBasedForAxis("x", ref xPercent, ref yPercent);
-            var (yOrigin, yPosition) = GetOriginBasedForAxis("y", ref xPercent, ref yPercent);
+            var (xOrigin, xPosition) = GetOriginBasedForAxis(true, xPercent, yPercent);
+            var (yOrigin, yPosition) = GetOriginBasedForAxis(false, xPercent, yPercent);
 
             var isBackgroundSizeAuto = BackgroundSize.Equals("auto", StringComparison.OrdinalIgnoreCase);
             var isBackgroundSizeCover = BackgroundSize.Equals("cover", StringComparison.OrdinalIgnoreCase);
@@ -345,13 +347,13 @@ namespace Mjml.Net.Components.Body
             {
                 vmlType = "tile";
                 xOrigin = "0.5";
-                xPosition = "0.5";
                 yOrigin = "0";
+                xPosition = "0.5";
                 yPosition = "0";
             }
 
             renderer.Content("<!--[if mso | IE]>");
-            var rectElement = renderer.ElementStart("v:rect")
+            var rectElement = renderer.StartElement("v:rect")
                 .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Attr("fill", "true")
                 .Attr("stroke", "false");
@@ -365,7 +367,7 @@ namespace Mjml.Net.Components.Body
                 rectElement.Style("width", ContainerWidth.StringWithUnit);
             }
 
-            renderer.ElementStart("v:fill", true)
+            renderer.StartElement("v:fill", true)
                 .Attr("origin", $"{xOrigin}, {yOrigin}")
                 .Attr("position", $"{xPosition}, {yPosition}")
                 .Attr("src", BackgroundUrl)
@@ -374,7 +376,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("size", vmlSize)
                 .Attr("aspect", vmlAspect);
 
-            renderer.ElementStart("v:textbox")
+            renderer.StartElement("v:textbox")
                 .Attr("inset", "0,0,0,0")
                 .Style("mso-fit-shape-to-text", "true");
             renderer.Content("<![endif]-->");
@@ -382,16 +384,29 @@ namespace Mjml.Net.Components.Body
             RenderSection(renderer, context);
 
             renderer.Content("<!--[if mso | IE]>");
-            renderer.ElementEnd("v:textbox");
-            renderer.ElementEnd("v:rect");
+            renderer.EndElement("v:textbox");
+            renderer.EndElement("v:rect");
             renderer.Content("<![endif]-->");
         }
 
-        private void RenderChildren(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderColumns(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.Content("<!--[if mso | IE]>");
-            renderer.ElementStart("tr");
+            renderer.StartElement("tr");
             renderer.Content("<![endif]-->");
+
+            var innerWidth =
+                ContainerWidth.Value -
+                UnitParser.Parse(BorderLeft).Value -
+                UnitParser.Parse(BorderRight).Value -
+                UnitParser.Parse(PaddingTop).Value -
+                UnitParser.Parse(PaddingBottom).Value;
+
+            if (innerWidth != ContainerWidth.Value)
+            {
+                context.Push();
+                context.SetContainerWidth(innerWidth);
+            }
 
             foreach (var child in ChildNodes)
             {
@@ -403,7 +418,7 @@ namespace Mjml.Net.Components.Body
                 {
                     // Once MJ-COLUMN is complete this will be updated to only wrap columns using type check
                     renderer.Content("<!--[if mso | IE]>");
-                    renderer.ElementStart("td")
+                    renderer.StartElement("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
@@ -411,15 +426,20 @@ namespace Mjml.Net.Components.Body
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
-
+                    
                     renderer.Content("<!--[if mso | IE]>");
-                    renderer.ElementEnd("td");
+                    renderer.EndElement("td");
                     renderer.Content("<![endif]-->");
                 }
             }
 
+            if (innerWidth != ContainerWidth.Value)
+            {
+                context.Pop();
+            }
+
             renderer.Content("<!--[if mso | IE]>");
-            renderer.ElementEnd("tr");
+            renderer.EndElement("tr");
             renderer.Content("<![endif]-->");
         }
 
@@ -447,7 +467,7 @@ namespace Mjml.Net.Components.Body
 
         private string? GetBackgroundPositionString()
         {
-            (string parsedX, string parsedY) = ParseBackgroundPosition();
+            var (parsedX, parsedY) = ParseBackgroundPosition();
 
             var x = string.IsNullOrEmpty(BackgroundPositionX) ? parsedX : BackgroundPositionX;
             var y = string.IsNullOrEmpty(BackgroundPositionY) ? parsedY : BackgroundPositionY;
@@ -459,7 +479,7 @@ namespace Mjml.Net.Components.Body
         {
             var positions = BackgroundPosition.Split(' ');
 
-            bool IsTopOrBottom(ref string axis)
+            static bool IsTopOrBottom(ref string axis)
             {
                 if (axis.Equals("top", StringComparison.OrdinalIgnoreCase) || axis.Equals("bottom", StringComparison.OrdinalIgnoreCase))
                 {
@@ -492,7 +512,7 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
+        private static (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
         {
             var xPercent = backgroundPositionX;
             var yPercent = backgroundPositionY;
@@ -535,7 +555,7 @@ namespace Mjml.Net.Components.Body
                     break;
 
                 default:
-                    if (!backgroundPositionY.Contains("%", StringComparison.OrdinalIgnoreCase))
+                    if (!backgroundPositionY.Contains('%', StringComparison.OrdinalIgnoreCase))
                     {
                         xPercent = "0%";
                     }
@@ -546,46 +566,40 @@ namespace Mjml.Net.Components.Body
             return (xPercent, yPercent);
         }
 
-        private (string origin, string position) GetOriginBasedForAxis(string axis, ref string positionX, ref string positionY)
+        private (string Origin, string Position) GetOriginBasedForAxis(bool isXAxis, string positionX, string positionY)
         {
-            var isX = axis.Equals("x", StringComparison.OrdinalIgnoreCase);
-            var isBackgroundRepeat = BackgroundRepeat.Equals("repeat", StringComparison.OrdinalIgnoreCase);
+            var position = isXAxis ? positionX : positionY;
 
-            var position = isX ? positionX : positionY;
-            var origin = isX ? positionX : positionY;
-
-            if (position.Contains("%", StringComparison.OrdinalIgnoreCase))
+            if (position.Contains('%', StringComparison.OrdinalIgnoreCase))
             {
                 var positionUnit = UnitParser.Parse(position);
                 var positionUnitDouble = positionUnit.Value / 100.0;
 
-                if (isBackgroundRepeat)
+                if (BackgroundRepeat == "repeat")
                 {
                     var temp = positionUnitDouble.ToInvariantString();
-                    position = temp;
-                    origin = temp;
+
+                    return (temp, temp);
                 }
                 else
                 {
-                    var temp = -50.0 + (positionUnitDouble * 100 / 100);
-                    position = $"{temp}";
-                    origin = $"{temp}";
+                    var temp = $"{(positionUnitDouble * 100 / 100) - 50.0}";
+
+                    return (temp, temp);
                 }
             }
-            else if (isBackgroundRepeat)
+            else if (BackgroundRepeat == "repeat")
             {
-                var temp = isX ? "0.5" : "0";
-                position = temp;
-                origin = temp;
+                var temp = isXAxis ? "0.5" : "0";
+
+                return (temp, temp);
             }
             else
             {
-                var temp = isX ? "0" : "-0.5";
-                position = temp;
-                origin = temp;
-            }
+                var temp = isXAxis ? "0" : "-0.5";
 
-            return (origin, position);
+                return (temp, temp);
+            }
         }
 
         private bool HasBackground()
@@ -595,11 +609,6 @@ namespace Mjml.Net.Components.Body
 
         private bool IsFullWidth()
         {
-            if (string.IsNullOrEmpty(FullWidth))
-            {
-                return false;
-            }
-
             return FullWidth == "full-width";
         }
     }

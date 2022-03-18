@@ -1,5 +1,4 @@
-﻿#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
@@ -31,11 +30,11 @@ namespace Mjml.Net.Components.Body
         {
             ContainerWidth = context.GetContainerWidth();
 
-            var (width, widthString, pixels) = GetParsedWith();
+            var (width, widthString, pixels) = GetParsedWidth();
 
             CurrentWidth = pixels;
 
-            renderer.ElementStart("div") // Style div
+            renderer.StartElement("div") // Style div
                 .Class(GetColumnClass(width, widthString, context))
                 .Class("mj-outlook-group-fix")
                 .Class(CssClass)
@@ -50,23 +49,22 @@ namespace Mjml.Net.Components.Body
 
             renderer.Content("<!--[if mso | IE]>");
 
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("bgcolor", BackgroundColor == "none" ? null : BackgroundColor)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
 
-            renderer.ElementStart("tr");
-
-            if (width.Value != ContainerWidth.Value)
-            {
-                context.Push();
-                context.SetContainerWidth(width.Value);
-            }
+            renderer.StartElement("tr");
 
             foreach (var child in ChildNodes)
             {
+                var childWidth = GetElementWidth(child);
+
+                context.Push();
+                context.SetContainerWidth(childWidth);
+
                 if (child.Raw)
                 {
                     renderer.Content("<![endif]-->");
@@ -75,34 +73,31 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    renderer.ElementStart("td")
+                    renderer.StartElement("td")
                         .Style("align", child.Node.GetAttribute("align"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", GetElementWidth(child));
+                        .Style("width", $"{childWidth}px");
 
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
 
                     renderer.Content("<!--[if mso | IE]>");
-                    renderer.ElementEnd("td");
+                    renderer.EndElement("td");
                 }
-            }
 
-            if (width.Value != ContainerWidth.Value)
-            {
                 context.Pop();
             }
 
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("table");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
 
             renderer.Content("<![endif]-->");
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
 
-        private string GetElementWidth(IComponent component)
+        private double GetElementWidth(IComponent component)
         {
             var width = 0d;
 
@@ -125,7 +120,7 @@ namespace Mjml.Net.Components.Body
                 width = CurrentWidth / Math.Max(1, component.ChildNodes.Count(x => !x.Raw));
             }
 
-            return $"{width}px";
+            return width;
         }
 
         private static string GetColumnClass((double Value, Unit Unit) width, string originalWidth, GlobalContext context)
@@ -146,7 +141,7 @@ namespace Mjml.Net.Components.Body
             return className;
         }
 
-        private ((double Value, Unit Unit), string, double) GetParsedWith()
+        private ((double Value, Unit Unit), string, double) GetParsedWidth()
         {
             var widthValue = 0d;
             var widthUnit = Unit.Pixels;

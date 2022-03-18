@@ -35,7 +35,7 @@ namespace Mjml.Net.Helpers
 
         private static void WriteMediaQueries(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("style")
+            renderer.StartElement("style")
                 .Attr("type", "text/css");
 
             renderer.Content($"@media only screen and (min-width:{context.Options.Breakpoint}) {{");
@@ -47,12 +47,12 @@ namespace Mjml.Net.Helpers
 
             renderer.Content("}");
 
-            renderer.ElementEnd("style");
+            renderer.EndElement("style");
         }
 
         private static void WriteMediaQueriesThunderbird(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("style")
+            renderer.StartElement("style")
                 .Attr("type", "text/css").Attr("media", $"screen and (min-width:{context.Options.Breakpoint})");
 
             foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
@@ -60,7 +60,7 @@ namespace Mjml.Net.Helpers
                 renderer.Content($"  .moz-text-html .{mediaQuery.ClassName} {mediaQuery.Rule}");
             }
 
-            renderer.ElementEnd("style");
+            renderer.EndElement("style");
         }
 
         private static void WriteMediaQueriesOWA(IHtmlRenderer renderer, GlobalContext context)
@@ -70,7 +70,7 @@ namespace Mjml.Net.Helpers
                 return;
             }
 
-            renderer.ElementStart("style")
+            renderer.StartElement("style")
                 .Attr("type", "text/css");
 
             foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
@@ -78,12 +78,12 @@ namespace Mjml.Net.Helpers
                 renderer.Content($"  [owa] {mediaQuery.Rule}");
             }
 
-            renderer.ElementEnd("style");
+            renderer.EndElement("style");
         }
 
         private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("style")
+            renderer.StartElement("style")
                 .Attr("type", "text/css");
 
             foreach (var style in context.GlobalData.Values.OfType<Style>())
@@ -91,7 +91,7 @@ namespace Mjml.Net.Helpers
                 style.Renderer(renderer, context);
             }
 
-            renderer.ElementEnd("style");
+            renderer.EndElement("style");
         }
     }
 }

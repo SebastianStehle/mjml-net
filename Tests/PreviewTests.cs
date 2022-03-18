@@ -10,11 +10,11 @@ namespace Tests
         {
             var source = @"
 <mjml-test>
-  <mj-head>
-    <mj-preview>Hello MJML</mj-preview>
-  </mj-head>
-  <mj-body>
-  </mj-body>
+    <mj-head>
+        <mj-preview>Hello MJML</mj-preview>
+    </mj-head>
+    <mj-body>
+    </mj-body>
 </mjml-test>
 ";
 

@@ -1,6 +1,8 @@
 ﻿using Mjml.Net.Extensions;
 using Mjml.Net.Helpers;
 
+#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
+
 namespace Mjml.Net.Components.Body
 {
     public partial class ColumnComponent : Component, IProvidesWidth
@@ -84,8 +86,9 @@ namespace Mjml.Net.Components.Body
             ContainerWidth = context.GetContainerWidth();
 
             var (width, widthString, pixels) = GetParsedWidth();
+            var widthInner = GetInnerWidth(pixels);
 
-            renderer.ElementStart("div") // Style div
+            renderer.StartElement("div") // Style div
                 .Class(GetColumnClass(width, widthString, context))
                 .Class("mj-outlook-group-fix")
                 .Class(CssClass)
@@ -98,19 +101,19 @@ namespace Mjml.Net.Components.Body
 
             if (HasGutter())
             {
-                RenderGutter(renderer, context);
+                RenderGutter(renderer, context, widthInner);
             }
             else
             {
-                RenderColumn(renderer, context);
+                RenderColumn(renderer, context, widthInner);
             }
 
-            renderer.ElementEnd("div");
+            renderer.EndElement("div");
         }
 
-        private void RenderColumn(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderColumn(IHtmlRenderer renderer, GlobalContext context, double innerWidth)
         {
-            var tableElement = renderer.ElementStart("table") // Style table
+            var tableElement = renderer.StartElement("table") // Style table
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -141,7 +144,13 @@ namespace Mjml.Net.Components.Body
                     .Style("vertical-align", VerticalAlign);
             }
 
-            renderer.ElementStart("tbody");
+            renderer.StartElement("tbody");
+
+            if (innerWidth != ContainerWidth.Value)
+            {
+                context.Push();
+                context.SetContainerWidth(innerWidth);
+            }
 
             foreach (var child in ChildNodes)
             {
@@ -151,8 +160,8 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    renderer.ElementStart("tr");
-                    renderer.ElementStart("td")
+                    renderer.StartElement("tr");
+                    renderer.StartElement("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class"))
                         .Attr("vertical-align", child.Node.GetAttribute("vertical-align"))
@@ -167,27 +176,32 @@ namespace Mjml.Net.Components.Body
 
                     child.Render(renderer, context);
 
-                    renderer.ElementEnd("td");
-                    renderer.ElementEnd("tr");
+                    renderer.EndElement("td");
+                    renderer.EndElement("tr");
                 }
             }
 
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            if (innerWidth != ContainerWidth.Value)
+            {
+                context.Pop();
+            }
+
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
-        private void RenderGutter(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderGutter(IHtmlRenderer renderer, GlobalContext context, double width)
         {
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Attr("width", "100%");
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
-            renderer.ElementStart("td") // Style gutter
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
+            renderer.StartElement("td") // Style gutter
                 .Style("background-color", BackgroundColor)
                 .Style("border", Border)
                 .Style("border-bottom", BorderBottom)
@@ -202,12 +216,12 @@ namespace Mjml.Net.Components.Body
                 .Style("padding-top", PaddingTop)
                 .Style("vertical-align", VerticalAlign);
 
-            RenderColumn(renderer, context);
+            RenderColumn(renderer, context, width);
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
         private static string GetColumnClass((double Value, Unit Unit) width, string originalWidth, GlobalContext context)
@@ -259,6 +273,19 @@ namespace Mjml.Net.Components.Body
             }
 
             return ((widthValue, widthUnit), widthString, pixels);
+        }
+
+        private double GetInnerWidth(double widthInPixels)
+        {
+            var allPaddings =
+                UnitParser.Parse(PaddingTop).Value +
+                UnitParser.Parse(PaddingBottom).Value +
+                UnitParser.Parse(BorderLeft).Value +
+                UnitParser.Parse(BorderRight).Value +
+                UnitParser.Parse(InnerBorderLeft).Value +
+                UnitParser.Parse(InnerBorderRight).Value;
+
+            return widthInPixels - allPaddings;
         }
 
         private bool HasGutter()

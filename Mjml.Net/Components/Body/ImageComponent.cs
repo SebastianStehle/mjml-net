@@ -102,19 +102,26 @@ namespace Mjml.Net.Components.Body
             var isFluid = FluidOnMobile == "true";
             var isFullWidth = Equals(context.Get("full-width"), true);
 
-            var widthConfigured = UnitParser.Parse(Width).Value;
-            var widthAvailable =
+            var width =
                 ContainerWidth.Value -
                 UnitParser.Parse(BorderLeft).Value -
                 UnitParser.Parse(BorderRight).Value -
                 UnitParser.Parse(PaddingLeft).Value -
                 UnitParser.Parse(PaddingRight).Value;
 
-            var widthMin = Math.Min(widthConfigured, widthAvailable);
+            if (Width != null)
+            {
+                var parsedWidth = UnitParser.Parse(Width);
+
+                if (parsedWidth.Value > 0)
+                {
+                    width = Math.Min(width, parsedWidth.Value);
+                }
+            }
 
             var href = Href;
 
-            renderer.ElementStart("table")
+            renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -124,37 +131,37 @@ namespace Mjml.Net.Components.Body
                 .Style("border-spacing", "0px")
                 .Style("max-width", isFullWidth ? "100%" : null)
                 .Style("min-width", isFullWidth ? "100%" : null)
-                .Style("width", isFullWidth ? $"{widthMin}px" : null);
+                .Style("width", isFullWidth ? $"{width}px" : null);
 
-            renderer.ElementStart("tbody");
-            renderer.ElementStart("tr");
+            renderer.StartElement("tbody");
+            renderer.StartElement("tr");
 
-            renderer.ElementStart("td")
+            renderer.StartElement("td")
                 .Class(isFluid ? "mj-full-width-mobile" : null)
-                .Style("width", isFullWidth ? null : $"{widthMin}px");
+                .Style("width", isFullWidth ? null : $"{width}px");
 
             if (!string.IsNullOrWhiteSpace(href))
             {
-                renderer.ElementStart("a")
+                renderer.StartElement("a")
                   .Attr("href", Href)
                   .Attr("name", Name)
                   .Attr("rel", Rel)
                   .Attr("target", Target)
                   .Attr("title", Title);
 
-                RenderImage(renderer, widthMin, isFullWidth);
+                RenderImage(renderer, width, isFullWidth);
 
-                renderer.ElementEnd("a");
+                renderer.EndElement("a");
             }
             else
             {
-                RenderImage(renderer, widthMin, isFullWidth);
+                RenderImage(renderer, width, isFullWidth);
             }
 
-            renderer.ElementEnd("td");
-            renderer.ElementEnd("tr");
-            renderer.ElementEnd("tbody");
-            renderer.ElementEnd("table");
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("tbody");
+            renderer.EndElement("table");
         }
 
         private static void HeadStyle(IHtmlRenderer renderer, GlobalContext context)
@@ -171,7 +178,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderImage(IHtmlRenderer renderer, double width, bool fullWidth)
         {
-            renderer.ElementStart("img", true)
+            renderer.StartElement("img", true)
                 .Attr("alt", Alt)
                 .Attr("height", Height.GetNumberOrAuto())
                 .Attr("sizes", Sizes)

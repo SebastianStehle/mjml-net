@@ -32,16 +32,16 @@ namespace Mjml.Net.Components
 
         private static void RenderHead(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("head");
+            renderer.StartElement("head");
 
             renderer.RenderHelpers(HelperTarget.HeadStart);
 
             // Add default meta tags.
             renderer.Content(DefaultMeta);
 
-            renderer.ElementStart("style").Attr("type", "text/css");
+            renderer.StartElement("style").Attr("type", "text/css");
             renderer.Content(DefaultStyles);
-            renderer.ElementEnd("style");
+            renderer.EndElement("style");
 
             renderer.Content(DefaultComments);
 
@@ -55,12 +55,13 @@ namespace Mjml.Net.Components
 
             renderer.RenderHelpers(HelperTarget.HeadEnd);
 
-            renderer.ElementEnd("head");
+            renderer.EndElement("head");
         }
 
         private static void RenderBody(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.ElementStart("body");
+            renderer.StartElement("body")
+                .Style("word-spacing", "normal");
 
             renderer.RenderHelpers(HelperTarget.BodyStart);
 
@@ -74,7 +75,7 @@ namespace Mjml.Net.Components
 
             renderer.RenderHelpers(HelperTarget.BodyEnd);
 
-            renderer.ElementEnd("body");
+            renderer.EndElement("body");
         }
     }
 }

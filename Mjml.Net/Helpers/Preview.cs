@@ -10,14 +10,14 @@
     {
         public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
         {
-            if (target != HelperTarget.HeadStart)
+            if (target != HelperTarget.BodyStart)
             {
                 return;
             }
 
             if (context.GlobalData.Values.OfType<Preview>().Any())
             {
-                renderer.ElementStart("div")
+                renderer.StartElement("div")
                     .Attr("style", "display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;");
 
                 foreach (var preview in context.GlobalData.Values.OfType<Preview>())
@@ -25,7 +25,7 @@
                     renderer.Content(preview.Value);
                 }
 
-                renderer.ElementEnd("div");
+                renderer.EndElement("div");
             }
         }
     }
