@@ -201,11 +201,6 @@ namespace Mjml.Net
 
         public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
         {
-            if (Buffer == null)
-            {
-                return;
-            }
-
             Flush();
 
             if (value.Length == 0)
