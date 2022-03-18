@@ -25,5 +25,12 @@ namespace Tests
             var cssClass = "         ";
             Assert.Equal(string.Empty, cssClass.SuffixCssClasses("outlook"));
         }
+
+        [Fact]
+        public void Should_suffix_no_suffix()
+        {
+            var cssClass = "class1 class2";
+            Assert.Equal("class1 class2", cssClass.SuffixCssClasses(string.Empty));
+        }
     }
 }
