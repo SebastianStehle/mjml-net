@@ -284,7 +284,7 @@ namespace Mjml.Net.Components.Body
 
             var innerWidth =
                 ContainerWidth.Value -
-                UnitParser.Parse(PaddingTop).Value +
+                UnitParser.Parse(PaddingTop).Value -
                 UnitParser.Parse(PaddingBottom).Value;
 
             if (innerWidth != ContainerWidth.Value)
