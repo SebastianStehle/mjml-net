@@ -34,6 +34,9 @@
     <None Remove="Tests\Image.html" />
     <None Remove="Tests\ImageWithLink.html" />
     <None Remove="Tests\Preview.html" />
+    <None Remove="Tests\Section.html" />
+    <None Remove="Tests\SectionWithBackgroundColor.html" />
+    <None Remove="Tests\SectionWithBackgroundImage.html" />
     <None Remove="Tests\Social.html" />
     <None Remove="Tests\SocialEmpty.html" />
     <None Remove="Tests\SocialRaw.html" />
@@ -71,6 +74,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\SectionWithBackgroundImage.html" />
+    <EmbeddedResource Include="Tests\SectionWithBackgroundColor.html" />
+    <EmbeddedResource Include="Tests\Section.html" />
     <EmbeddedResource Include="Tests\ColumnFour.html" />
     <EmbeddedResource Include="Tests\ColumnOneWithPadding.html" />
     <EmbeddedResource Include="Tests\ColumnTwo.html" />
