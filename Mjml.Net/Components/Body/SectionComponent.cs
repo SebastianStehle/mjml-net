@@ -161,7 +161,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSectionStart(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementStart("table")
                 .Attr("align", "center")
                 .Attr("bgcolor", BackgroundColor)
@@ -177,7 +177,7 @@ namespace Mjml.Net.Components.Body
                 .Style("font-size", "0px")
                 .Style("line-height", "0px")
                 .Style("mso-line-height-rule", "exactly");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
         }
 
         private void RenderSection(IHtmlRenderer renderer, GlobalContext context)
@@ -264,19 +264,19 @@ namespace Mjml.Net.Components.Body
                 .Style("padding-top", PaddingTop)
                 .Style("text-align", TextAlign);
 
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementStart("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
 
             RenderChildren(renderer, context);
 
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementEnd("table");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
 
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
@@ -293,13 +293,13 @@ namespace Mjml.Net.Components.Body
 
         private static void RenderSectionEnd(IHtmlRenderer renderer)
         {
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
 
             renderer.ElementEnd("td");
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
 
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
         }
 
         private void RenderSectionWithBackground(IHtmlRenderer renderer, GlobalContext context)
@@ -350,7 +350,7 @@ namespace Mjml.Net.Components.Body
                 yPosition = "0";
             }
 
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             var rectElement = renderer.ElementStart("v:rect")
                 .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Attr("fill", "true")
@@ -377,21 +377,21 @@ namespace Mjml.Net.Components.Body
             renderer.ElementStart("v:textbox")
                 .Attr("inset", "0,0,0,0")
                 .Style("mso-fit-shape-to-text", "true");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
 
             RenderSection(renderer, context);
 
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementEnd("v:textbox");
             renderer.ElementEnd("v:rect");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
         }
 
         private void RenderChildren(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementStart("tr");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
 
             foreach (var child in ChildNodes)
             {
@@ -402,25 +402,25 @@ namespace Mjml.Net.Components.Body
                 else
                 {
                     // Once MJ-COLUMN is complete this will be updated to only wrap columns using type check
-                    renderer.StartConditionalTag();
+                    renderer.Content("<!--[if mso | IE]>");
                     renderer.ElementStart("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
                         .Style("width", GetElementWidth(child));
-                    renderer.EndConditionalTag();
+                    renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
 
-                    renderer.StartConditionalTag();
+                    renderer.Content("<!--[if mso | IE]>");
                     renderer.ElementEnd("td");
-                    renderer.EndConditionalTag();
+                    renderer.Content("<![endif]-->");
                 }
             }
 
-            renderer.StartConditionalTag();
+            renderer.Content("<!--[if mso | IE]>");
             renderer.ElementEnd("tr");
-            renderer.EndConditionalTag();
+            renderer.Content("<![endif]-->");
         }
 
         private static string GetElementWidth(IComponent component)
