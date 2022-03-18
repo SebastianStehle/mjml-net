@@ -28,7 +28,7 @@ namespace Mjml.Net.Components.Body
         public string? BorderTop;
 
         [Bind("css-class")]
-        public string? Class;
+        public string? CssClass;
 
         [Bind("direction", BindType.Direction)]
         public string Direction = "ltr";
@@ -84,15 +84,10 @@ namespace Mjml.Net.Components.Body
 
             var (width, widthString, pixels) = GetParsedWidth();
 
-            var classesName = $"{GetColumnClass(width, widthString, context)} mj-outlook-group-fix";
-
-            if (!string.IsNullOrEmpty(Class))
-            {
-                classesName += $" {Class}";
-            }
-
             renderer.ElementStart("div") // Style div
-                .Attr("class", classesName)
+                .Class(GetColumnClass(width, widthString, context))
+                .Class("mj-outlook-group-fix")
+                .Class(CssClass)
                 .Style("direction", Direction)
                 .Style("display", "inline-block")
                 .Style("font-size", "0px")
