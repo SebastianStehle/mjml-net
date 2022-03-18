@@ -15,6 +15,14 @@ namespace TestRunner
             {
                 Run("ManyHeroes.mjml", mjmlRenderer);
             }
+
+            Console.WriteLine("---");
+            Console.WriteLine("Amario");
+
+            for (var i = 0; i < 20; i++)
+            {
+                Run("Amario.mjml", mjmlRenderer);
+            }
         }
 
         private static void Run(string file, MjmlRenderer mjmlRenderer)

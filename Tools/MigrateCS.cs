@@ -54,7 +54,6 @@ namespace Tools
                     {
                         return $"{attribute}\npublic string? {name.ToPascalCase()};\n";
                     }
-
                 });
 
                 changed = argumentAccessRegex.Replace(changed, x =>

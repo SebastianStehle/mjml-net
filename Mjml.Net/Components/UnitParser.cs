@@ -13,12 +13,20 @@ namespace Mjml.Net.Components
 
             var span = rawValue.AsSpan().Trim();
 
+            var hasSeparator = false;
+
             var i = 0;
             for (i = 0; i < span.Length; i++)
             {
                 var c = span[i];
 
-                if (!char.IsNumber(c) && c != '.' && c != ',')
+                if (c == '.' || c == ',')
+                {
+                    hasSeparator = true;
+                    continue;
+                }
+
+                if (!char.IsNumber(c))
                 {
                     break;
                 }
@@ -49,9 +57,18 @@ namespace Mjml.Net.Components
                 return (0, unitType);
             }
 
-            int.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
+            if (hasSeparator)
+            {
+                double.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
 
-            return (temp, unitType);
+                return (temp, unitType);
+            }
+            else
+            {
+                int.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
+
+                return (temp, unitType);
+            }
         }
     }
 }
