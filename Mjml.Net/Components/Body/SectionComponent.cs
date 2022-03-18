@@ -131,7 +131,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                RenderSectionStart(renderer);
+                RenderSectionStart(renderer, ref context);
                 RenderSection(renderer, ref context);
                 RenderSectionEnd(renderer);
             }
@@ -144,7 +144,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSimple(IHtmlRenderer renderer, ref GlobalContext context)
         {
-            RenderSectionStart(renderer);
+            RenderSectionStart(renderer, ref context);
 
             if (HasBackground())
             {
@@ -158,18 +158,20 @@ namespace Mjml.Net.Components.Body
             RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer)
+        private void RenderSectionStart(IHtmlRenderer renderer, ref GlobalContext context)
         {
+            var containerWidth = context.GetContainerWidth();
+
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
                 .Attr("align", "center")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", IsFullWidth() ? "100%" : renderer.GetContainerWidth().String)
+                .Attr("width", IsFullWidth() ? "100%" : containerWidth.String)
                 .Attr("bgcolor", BackgroundColor)
                 .Attr("class", CssClass?.SuffixCssClasses("outlook"))
-                .Style("width", IsFullWidth() ? "100%" : renderer.GetContainerWidth().StringWithUnit);
+                .Style("width", IsFullWidth() ? "100%" : containerWidth.StringWithUnit);
 
             renderer.ElementStart("tr");
             renderer.ElementStart("td")
@@ -181,23 +183,23 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSection(IHtmlRenderer renderer, ref GlobalContext context)
         {
+            var containerWidth = context.GetContainerWidth();
             var isFullWidth = IsFullWidth();
             var hasBackground = HasBackground();
-
-            var containerOuterwidth = renderer.GetContainerWidth().StringWithUnit;
+            var background = hasBackground ? GetBackground() : null;
 
             var divElement = renderer.ElementStart("div")
                            .Attr("class", isFullWidth ? null : CssClass)
                            .Style("margin", "0px auto")
                            .Style("border-radius", BorderRadius)
-                           .Style("max-width", containerOuterwidth);
+                           .Style("max-width", containerWidth.StringWithUnit);
 
             if (!isFullWidth)
             {
                 if (hasBackground)
                 {
                     divElement
-                        .Style("background", GetBackground())
+                        .Style("background", background)
                         .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
                         .Style("background-repeat", BackgroundRepeat)
@@ -233,7 +235,7 @@ namespace Mjml.Net.Components.Body
                 if (hasBackground)
                 {
                     tableElement
-                        .Style("background", GetBackground())
+                        .Style("background", background)
                         .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
                         .Style("background-repeat", BackgroundRepeat)
@@ -307,7 +309,7 @@ namespace Mjml.Net.Components.Body
             // TODO: https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-section/src/index.js#L265-L407
 
             var isFullwidth = IsFullWidth();
-            var containerWidth = renderer.GetContainerWidth();
+            var containerWidth = context.GetContainerWidth();
 
             var (x, y) = ParseBackgroundPosition();
             var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(ref x, ref y);
