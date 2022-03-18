@@ -402,13 +402,12 @@ namespace Mjml.Net.Components.Body
                 else
                 {
                     // Once MJ-COLUMN is complete this will be updated to only wrap columns using type check
-                    // It relies on mj-column.getWidthAsPixel() for the Style("Width") call. Currently we just use width.
                     renderer.StartConditionalTag();
                     renderer.ElementStart("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", child.Node.GetAttribute("width"));
+                        .Style("width", GetElementWidth(child));
                     renderer.EndConditionalTag();
 
                     child.Render(renderer, context);
@@ -422,6 +421,18 @@ namespace Mjml.Net.Components.Body
             renderer.StartConditionalTag();
             renderer.ElementEnd("tr");
             renderer.EndConditionalTag();
+        }
+
+        private static string GetElementWidth(IComponent component)
+        {
+            var width = 0d;
+
+            if (component is IProvidesWidth providesWidth)
+            {
+                width = providesWidth.GetWidthAsPixel();
+            }
+
+            return $"{width}px";
         }
 
         private string? GetBackground()
