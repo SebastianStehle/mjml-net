@@ -132,7 +132,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                RenderSectionStart(renderer, context);
+                RenderSectionStart(renderer);
                 RenderSection(renderer, context);
                 RenderSectionEnd(renderer);
             }
@@ -145,7 +145,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSimple(IHtmlRenderer renderer, GlobalContext context)
         {
-            RenderSectionStart(renderer, context);
+            RenderSectionStart(renderer);
 
             if (HasBackground())
             {
@@ -159,7 +159,7 @@ namespace Mjml.Net.Components.Body
             RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderSectionStart(IHtmlRenderer renderer)
         {
             renderer.StartConditionalTag();
             renderer.ElementStart("table")
