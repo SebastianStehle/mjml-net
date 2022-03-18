@@ -307,7 +307,7 @@ namespace Mjml.Net.Components.Body
             var isFullwidth = IsFullWidth();
 
             var (x, y) = ParseBackgroundPosition();
-            var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(ref x, ref y);
+            var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(x, y);
 
             var (xOrigin, xPosition) = GetOriginBasedForAxis("x", ref xPercent, ref yPercent);
             var (yOrigin, yPosition) = GetOriginBasedForAxis("y", ref xPercent, ref yPercent);
@@ -492,7 +492,7 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(ref string backgroundPositionX, ref string backgroundPositionY)
+        private (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
         {
             var xPercent = backgroundPositionX;
             var yPercent = backgroundPositionY;
