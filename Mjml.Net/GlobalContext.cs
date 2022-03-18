@@ -2,7 +2,7 @@
 
 namespace Mjml.Net
 {
-    public sealed class GlobalContext : IContext
+    public sealed class GlobalContext
     {
         private readonly RenderStack<TransitiveContext> transitive = new RenderStack<TransitiveContext>();
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
