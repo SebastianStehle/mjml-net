@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net.Components.Body
+﻿#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
+
+namespace Mjml.Net.Components.Body
 {
     public partial class HeroComponent : BodyComponentBase
     {
@@ -194,7 +196,7 @@
 
                 renderer.ElementStart("td") // Style: hero
                     .Attr("background", BackgroundUrl)
-                    .Attr("height", height.ToInvariantString())
+                    .Attr("height", height)
                     .Style("background", backgroundString)
                     .Style("background-position", BackgroundPosition)
                     .Style("background-repeat", "no-repeat")
@@ -284,8 +286,11 @@
                 UnitParser.Parse(PaddingTop).Value +
                 UnitParser.Parse(PaddingBottom).Value;
 
-            context.Push();
-            context.SetContainerWidth(innerWidth);
+            if (innerWidth != ContainerWidth.Value)
+            {
+                context.Push();
+                context.SetContainerWidth(innerWidth);
+            }
 
             foreach (var child in ChildNodes)
             {
@@ -319,7 +324,10 @@
                 }
             }
 
-            context.Pop();
+            if (innerWidth != ContainerWidth.Value)
+            {
+                context.Pop();
+            }
 
             renderer.ElementEnd("tbody");
             renderer.ElementEnd("table");

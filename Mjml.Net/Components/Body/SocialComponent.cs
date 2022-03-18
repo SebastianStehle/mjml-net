@@ -103,9 +103,7 @@
                 if (child.ContentType == ContentType.Raw)
                 {
                     renderer.Content("<![endif]-->");
-
                     child.Render(renderer, context);
-
                     renderer.Content("<!--[if mso | IE]>");
                 }
                 else

@@ -1,12 +1,10 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net.Internal
 {
     internal sealed class RenderStack<T>
     {
         private readonly Stack<T> stack = new Stack<T>(10);
 
-#pragma warning disable SA1401 // Fields should be private
         public T? Current;
-#pragma warning restore SA1401 // Fields should be private
 
         public IEnumerable<T> Elements => stack;
 

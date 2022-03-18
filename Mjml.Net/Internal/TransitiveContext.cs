@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Internal
 {
-    internal sealed class TransitiveContext : IContext
+    internal sealed class TransitiveContext
     {
         private bool isCopied;
 

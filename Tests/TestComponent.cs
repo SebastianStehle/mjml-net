@@ -1,4 +1,5 @@
-﻿using Mjml.Net;
+﻿using System.Text;
+using Mjml.Net;
 
 namespace Tests
 {
@@ -25,9 +26,9 @@ namespace Tests
         {
             renderer.RenderHelpers(HelperTarget.HeadStart);
 
-            if (context.GlobalData.TryGetValue((typeof(string), "head"), out var head))
+            if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
             {
-                renderer.Plain(head.ToString());
+                renderer.Plain(sb);
             }
 
             renderer.RenderHelpers(HelperTarget.HeadEnd);
@@ -37,9 +38,9 @@ namespace Tests
         {
             renderer.RenderHelpers(HelperTarget.BodyStart);
 
-            if (context.GlobalData.TryGetValue((typeof(string), "body"), out var body))
+            if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
             {
-                renderer.Plain(body.ToString());
+                renderer.Plain(sb);
             }
 
             renderer.RenderHelpers(HelperTarget.BodyEnd);

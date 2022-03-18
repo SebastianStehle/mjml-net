@@ -4,12 +4,12 @@ namespace Mjml.Net.Components
 {
     public static class NodeExtensions
     {
-        public static ContainerWidth GetContainerWidth(this IContext context)
+        public static ContainerWidth GetContainerWidth(this GlobalContext context)
         {
             return context.Get("containerWidth") as ContainerWidth ?? ContainerWidth.Default;
         }
 
-        public static void SetContainerWidth(this IContext context, double value)
+        public static void SetContainerWidth(this GlobalContext context, double value)
         {
             context.Set("containerWidth", ContainerWidth.Create(value));
         }

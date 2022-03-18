@@ -2,13 +2,13 @@
 
 namespace Mjml.Net
 {
-    public sealed class GlobalContext : IContext
+    public sealed class GlobalContext
     {
         private readonly RenderStack<TransitiveContext> transitive = new RenderStack<TransitiveContext>();
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
 
-        public GlobalData GlobalData { get; } = new GlobalData();
+        public Dictionary<(Type Type, string Name), object> GlobalData { get; } = new Dictionary<(Type Type, string Name), object>();
 
         public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
 
@@ -37,8 +37,13 @@ namespace Mjml.Net
             transitive.Push(new TransitiveContext(null));
         }
 
-        public void SetGlobalData(string name, object value, bool skipIfAdded = true)
+        public void SetGlobalData(string name, object? value, bool skipIfAdded = true)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             var type = value.GetType();
 
             if (skipIfAdded && GlobalData.ContainsKey((type, name)))

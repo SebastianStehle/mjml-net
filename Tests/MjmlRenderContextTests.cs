@@ -229,7 +229,7 @@ namespace Tests
             sut.BufferStart();
             sut.StartConditionalTag();
 
-            var result = sut.BufferFlush().Trim();
+            var result = sut.BufferFlush()!.ToString().Trim();
 
             Assert.Equal("<!--[if mso | IE]>", result);
         }
@@ -240,7 +240,7 @@ namespace Tests
             sut.BufferStart();
             sut.StartConditionalMsoTag();
 
-            var result = sut.BufferFlush().Trim();
+            var result = sut.BufferFlush()!.ToString().Trim();
 
             Assert.Equal("<!--[if mso]>", result);
         }
@@ -251,7 +251,7 @@ namespace Tests
             sut.BufferStart();
             sut.StartConditionalNotTag();
 
-            var result = sut.BufferFlush().Trim();
+            var result = sut.BufferFlush()!.ToString().Trim();
 
             Assert.Equal("<!--[if !mso | IE]><!-->", result);
         }
@@ -262,7 +262,7 @@ namespace Tests
             sut.BufferStart();
             sut.StartConditionalNotMsoTag();
 
-            var result = sut.BufferFlush().Trim();
+            var result = sut.BufferFlush()!.ToString().Trim();
 
             Assert.Equal("<!--[if !mso]><!-->", result);
         }
@@ -273,7 +273,7 @@ namespace Tests
             sut.BufferStart();
             sut.EndConditionalTag();
 
-            var result = sut.BufferFlush().Trim();
+            var result = sut.BufferFlush()!.ToString().Trim();
 
             Assert.Equal("<![endif]-->", result);
         }
@@ -284,7 +284,7 @@ namespace Tests
             sut.BufferStart();
             sut.EndConditionalNotTag();
 
-            var result = sut.BufferFlush().Trim();
+            var result = sut.BufferFlush()!.ToString().Trim();
 
             Assert.Equal("<!--<![endif]-->", result);
         }
@@ -298,7 +298,7 @@ namespace Tests
                 sb.AppendLine(line.Replace('\'', '"'));
             }
 
-            var actual = sut.BufferFlush();
+            var actual = sut.BufferFlush()!.ToString();
 
             Assert.Equal(sb.ToString(), actual);
         }

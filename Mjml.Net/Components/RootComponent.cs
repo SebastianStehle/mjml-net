@@ -1,9 +1,15 @@
-﻿using Mjml.Net.Properties;
+﻿using System.Text;
+using Mjml.Net.Internal;
+using Mjml.Net.Properties;
 
 namespace Mjml.Net.Components
 {
     public sealed class RootComponent : Component
     {
+        private static readonly string DefaultMeta = Resources.DefaultMeta;
+        private static readonly string DefaultStyles = Resources.DefaultStyles;
+        private static readonly string DefaultComments = Resources.DefaultComments;
+
         public override string ComponentName => "mjml";
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
@@ -28,26 +34,27 @@ namespace Mjml.Net.Components
         {
             renderer.ElementStart("head");
 
-            // Helpers right after head.
             renderer.RenderHelpers(HelperTarget.HeadStart);
 
-            // Add default things.
-            renderer.Content(Resources.DefaultMeta);
+            // Add default meta tags.
+            renderer.Content(DefaultMeta);
 
             renderer.ElementStart("style").Attr("type", "text/css");
-            renderer.Content(Resources.DefaultStyles);
+            renderer.Content(DefaultStyles);
             renderer.ElementEnd("style");
 
-            renderer.Content(Resources.DefaultComments);
+            renderer.Content(DefaultComments);
 
             // Already formatted properly.
-            if (context.GlobalData.TryGetValue((typeof(string), "head"), out var head))
+            if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
             {
-                renderer.Plain(head.ToString());
+                renderer.Plain(sb);
+
+                ObjectPools.StringBuilder.Return(sb);
             }
 
-            // Helpers right before head ends.
             renderer.RenderHelpers(HelperTarget.HeadEnd);
+
             renderer.ElementEnd("head");
         }
 
@@ -55,17 +62,18 @@ namespace Mjml.Net.Components
         {
             renderer.ElementStart("body");
 
-            // Helpers right after body.
             renderer.RenderHelpers(HelperTarget.BodyStart);
 
             // Already formatted properly.
-            if (context.GlobalData.TryGetValue((typeof(string), "body"), out var head))
+            if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
             {
-                renderer.Plain(head.ToString());
+                renderer.Plain(sb);
+
+                ObjectPools.StringBuilder.Return(sb);
             }
 
-            // Helpers right before body ends.
             renderer.RenderHelpers(HelperTarget.BodyEnd);
+
             renderer.ElementEnd("body");
         }
     }

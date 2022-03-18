@@ -1,15 +1,16 @@
 ﻿using System.Text;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
-        private bool currentSelfClosed;
+        private bool elementSelfClosed;
+        private bool elementStarted;
         private int numClasses;
         private int numStyles;
-        private int currentIntend;
-        private bool currentlyWriting;
+        private int indent;
 
         private StringBuilder Buffer
         {
@@ -20,39 +21,25 @@ namespace Mjml.Net
         {
             buffers.Clear();
             contextStack.Clear();
-            currentSelfClosed = false;
-            currentIntend = 0;
+            elementStarted = false;
+            elementSelfClosed = false;
+            indent = 0;
         }
 
         public void BufferStart()
         {
             Flush();
 
-            // Rent a buffer to avoid memory allocations.
             buffers.Push(ObjectPools.StringBuilder.Get());
         }
 
-        public string BufferFlush()
+        public StringBuilder? BufferFlush()
         {
-            if (Buffer == null)
-            {
-                return string.Empty;
-            }
-
             Flush();
 
             var currentBuffer = buffers.Pop();
-            try
-            {
-                return currentBuffer?.ToString() ?? string.Empty;
-            }
-            finally
-            {
-                if (currentBuffer != null)
-                {
-                    ObjectPools.StringBuilder.Return(currentBuffer);
-                }
-            }
+
+            return currentBuffer;
         }
 
         public void RenderHelpers(HelperTarget target)
@@ -77,10 +64,10 @@ namespace Mjml.Net
             Buffer.Append('<');
             Buffer.Append(elementName);
 
-            currentlyWriting = true;
-            numStyles = 0;
+            elementSelfClosed = selfClosed;
+            elementStarted = true;
             numClasses = 0;
-            currentSelfClosed = selfClosed;
+            numStyles = 0;
 
             return this;
         }
@@ -91,6 +78,18 @@ namespace Mjml.Net
             {
                 return this;
             }
+
+            Buffer.Append(' ');
+            Buffer.Append(name);
+            Buffer.Append("=\"");
+            Buffer.Append(value);
+            Buffer.Append('"');
+
+            return this;
+        }
+
+        public IElementHtmlRenderer Attr(string name, double value)
+        {
 
             Buffer.Append(' ');
             Buffer.Append(name);
@@ -161,7 +160,7 @@ namespace Mjml.Net
         {
             Flush();
 
-            currentIntend--;
+            indent--;
 
             WriteLineStart();
 
@@ -203,13 +202,25 @@ namespace Mjml.Net
             Plain(value.AsSpan(), appendLine);
         }
 
-        public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
+        public void Plain(StringBuilder? value, bool appendLine = true)
         {
-            if (Buffer == null)
+            Flush();
+
+            if (value?.Length == 0)
             {
                 return;
             }
 
+            Buffer.Append(value);
+
+            if (appendLine)
+            {
+                WriteLineEnd();
+            }
+        }
+
+        public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
+        {
             Flush();
 
             if (value.Length == 0)
@@ -261,7 +272,7 @@ namespace Mjml.Net
         {
             if (options.Beautify)
             {
-                for (var i = 0; i < currentIntend; i++)
+                for (var i = 0; i < indent; i++)
                 {
                     Buffer.Append("  ");
                 }
@@ -270,7 +281,7 @@ namespace Mjml.Net
 
         private void Flush()
         {
-            if (!currentlyWriting)
+            if (!elementStarted)
             {
                 return;
             }
@@ -281,20 +292,20 @@ namespace Mjml.Net
                 Buffer.Append('\"');
             }
 
-            if (currentSelfClosed)
+            if (elementSelfClosed)
             {
                 Buffer.Append("/>");
             }
             else
             {
-                currentIntend++;
+                indent++;
                 Buffer.Append('>');
             }
 
             WriteLineEnd();
 
-            currentlyWriting = false;
-            currentSelfClosed = false;
+            elementStarted = false;
+            elementSelfClosed = false;
         }
     }
 }

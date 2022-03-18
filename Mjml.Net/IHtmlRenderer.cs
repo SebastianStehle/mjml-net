@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net
+﻿using System.Text;
+
+namespace Mjml.Net
 {
     /// <summary>
     /// Renders html for MJML.
@@ -36,6 +38,13 @@
         void Plain(ReadOnlySpan<char> value, bool appendLine = true);
 
         /// <summary>
+        /// Renders a plain value.
+        /// </summary>
+        /// <param name="value">The value to render.</param>
+        /// <param name="appendLine">True to append a new line.</param>
+        void Plain(StringBuilder value, bool appendLine = true);
+
+        /// <summary>
         /// Renders the content of an element.
         /// </summary>
         /// <param name="value">The value to render.</param>
@@ -57,7 +66,7 @@
         /// Removes the buffer from the stack and returns the content.
         /// </summary>
         /// <returns>The buffer content.</returns>
-        string BufferFlush();
+        StringBuilder? BufferFlush();
     }
 
     public interface IElementHtmlRenderer : IElementClassWriter
@@ -69,6 +78,14 @@
         /// <param name="value">The value of the attribute. If the value is null, it will be omitted.</param>
         /// <returns>The current instance to set more attributes.</returns>
         IElementHtmlRenderer Attr(string name, string? value);
+
+        /// <summary>
+        /// Sets an attribute by name for the current element.
+        /// </summary>
+        /// <param name="name">The name of the attribute.</param>
+        /// <param name="value">The value of the attribute.</param>
+        /// <returns>The current instance to set more attributes.</returns>
+        IElementHtmlRenderer Attr(string name, double value);
     }
 
     public interface IElementStyleWriter

@@ -1,8 +1,10 @@
-﻿using System.Xml;
+﻿using System.Text;
+using System.Xml;
 using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
 using Mjml.Net.Helpers;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
@@ -105,7 +107,17 @@ namespace Mjml.Net
                 context.BufferStart();
                 context.Read(xml);
 
-                return new RenderResult(context.BufferFlush(), context.Validate());
+                StringBuilder? buffer = null;
+                try
+                {
+                    buffer = context.BufferFlush();
+
+                    return new RenderResult(buffer!.ToString()!, context.Validate());
+                }
+                finally
+                {
+                    ObjectPools.StringBuilder.Return(buffer!);
+                }
             }
             finally
             {

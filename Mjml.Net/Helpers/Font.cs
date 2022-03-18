@@ -13,31 +13,34 @@
                 return;
             }
 
-            foreach (var (_, value) in context.GlobalData)
+            var hasFont = context.GlobalData.Values.Any(x => x is Font);
+
+            if (!hasFont)
             {
-                if (value is Font font)
-                {
-                    var href = font.Href;
-
-                    renderer.Content("<!--[if !mso]><!-->");
-
-                    // Render Link (self closed).
-                    renderer.ElementStart("link", true)
-                        .Attr("href", href)
-                        .Attr("rel", "stylesheet")
-                        .Attr("type", "text/css");
-
-                    // Render Style
-                    renderer.ElementStart("style")
-                        .Attr("type", "text/css");
-
-                    renderer.Content($"@import url({href});");
-
-                    renderer.ElementEnd("style");
-
-                    renderer.Content("<!--<![endif]-->");
-                }
+                return;
             }
+
+            renderer.Content("<!--[if !mso]><!-->");
+
+            foreach (var font in context.GlobalData.Values.OfType<Font>())
+            {
+                renderer.ElementStart("link", true)
+                    .Attr("href", font.Href)
+                    .Attr("rel", "stylesheet")
+                    .Attr("type", "text/css");
+            }
+
+            renderer.ElementStart("style")
+                .Attr("type", "text/css");
+
+            foreach (var font in context.GlobalData.Values.OfType<Font>())
+            {
+                renderer.Content($"@import url({font.Href});");
+            }
+
+            renderer.ElementEnd("style");
+
+            renderer.Content("<!--<![endif]-->");
         }
     }
 }

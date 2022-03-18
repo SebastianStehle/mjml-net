@@ -1,4 +1,6 @@
-﻿using Mjml.Net.Helpers;
+#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
+
+using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
 {
@@ -57,8 +59,11 @@ namespace Mjml.Net.Components.Body
 
             renderer.ElementStart("tr");
 
-            context.Push();
-            context.SetContainerWidth(width.Value);
+            if (width.Value != ContainerWidth.Value)
+            {
+                context.Push();
+                context.SetContainerWidth(width.Value);
+            }
 
             foreach (var child in ChildNodes)
             {
@@ -66,6 +71,7 @@ namespace Mjml.Net.Components.Body
                 {
                     renderer.Content("<![endif]-->");
                     child.Render(renderer, context);
+                    renderer.Content("<!--[if mso | IE]>");
                 }
                 else
                 {
@@ -83,7 +89,10 @@ namespace Mjml.Net.Components.Body
                 }
             }
 
-            context.Pop();
+            if (width.Value != ContainerWidth.Value)
+            {
+                context.Pop();
+            }
 
             renderer.ElementEnd("tr");
             renderer.ElementEnd("table");
