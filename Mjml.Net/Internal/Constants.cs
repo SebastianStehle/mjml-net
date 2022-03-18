@@ -1,6 +1,6 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net.Internal
 {
-    public static class Constants
+    internal static class Constants
     {
         public const string All = "mj-all";
 

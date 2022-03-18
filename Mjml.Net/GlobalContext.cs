@@ -8,7 +8,7 @@ namespace Mjml.Net
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
 
-        public GlobalData GlobalData { get; } = new GlobalData();
+        public Dictionary<(Type Type, string Name), object> GlobalData { get; } = new Dictionary<(Type Type, string Name), object>();
 
         public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
 

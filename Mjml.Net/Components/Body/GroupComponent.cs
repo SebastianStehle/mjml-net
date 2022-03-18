@@ -109,7 +109,6 @@ namespace Mjml.Net.Components.Body
                 if (parsed.Unit == Unit.Pixels)
                 {
                     width = 100 * parsed.Value / CurrentWidth;
-
                 }
             }
             else

@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net.Components.Body
+﻿#pragma warning disable SA1119 // Statement should not use unnecessary parenthesis
+
+namespace Mjml.Net.Components.Body
 {
     public partial class DividerComponent : BodyComponentBase
     {
@@ -65,11 +67,11 @@
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", outlookWidth.ToInvariantString())
+                .Attr("width", outlookWidth)
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", $"{outlookWidth}px");
+                .Style("width", outlookWidth);
 
             renderer.ElementStart("tr");
 
@@ -98,7 +100,7 @@
             }
         }
 
-        private double GetOutlookWidth()
+        private string GetOutlookWidth()
         {
             var paddingSize =
                 UnitParser.Parse(PaddingLeft).Value +
@@ -108,12 +110,12 @@
 
             switch (unit)
             {
-                case Unit.Percent:
-                    return (ContainerWidth.Value - paddingSize) * (parsedWidth / 100);
                 case Unit.Pixels:
-                    return parsedWidth;
+                    return Width;
+                case Unit.Percent:
+                    return $"{(ContainerWidth.Value - paddingSize) * (parsedWidth / 100)}px";
                 default:
-                    return ContainerWidth.Value - paddingSize;
+                    return $"{(ContainerWidth.Value - paddingSize)}px";
             }
         }
     }
