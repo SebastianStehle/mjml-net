@@ -267,16 +267,16 @@ namespace Mjml.Net.Components.Body
 
         private bool HasGutter()
         {
-            if (string.IsNullOrEmpty(Padding) ||
-                string.IsNullOrEmpty(PaddingBottom) ||
-                string.IsNullOrEmpty(PaddingLeft) ||
-                string.IsNullOrEmpty(PaddingRight) ||
-                string.IsNullOrEmpty(PaddingTop))
+            if (!string.IsNullOrEmpty(Padding) ||
+                !string.IsNullOrEmpty(PaddingBottom) ||
+                !string.IsNullOrEmpty(PaddingLeft) ||
+                !string.IsNullOrEmpty(PaddingRight) ||
+                !string.IsNullOrEmpty(PaddingTop))
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public double GetWidthAsPixel()
