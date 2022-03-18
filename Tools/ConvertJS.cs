@@ -21,7 +21,7 @@ namespace Tools
                     continue;
                 }
 
-                var fileProps = file.Name[..^suffix.Length];
+                var fileName = file.Name[..^3];
                 var fileText = File.ReadAllText(file.FullName);
 
                 // Remove this, otherwise we get issues with our ending detection.
@@ -68,7 +68,7 @@ namespace Tools
                     {
                         sb.AppendTabbed(0, "namespace Mjml.Net.Components.Body");
                         sb.AppendTabbed(0, "{");
-                        sb.AppendTabbed(1, $"public partial struct {fileProps}Props");
+                        sb.AppendTabbed(1, $"public partial class {fileName}");
                         sb.AppendTabbed(1, "{");
                     }
 
