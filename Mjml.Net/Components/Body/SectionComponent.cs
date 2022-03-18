@@ -186,7 +186,7 @@ namespace Mjml.Net.Components.Body
             var hasBackground = HasBackground();
             var background = hasBackground ? GetBackground() : null;
 
-            var divElement = renderer.ElementStart("div")
+            var divElement = renderer.ElementStart("div") // Style div
                            .Attr("class", isFullWidth ? null : CssClass)
                            .Style("margin", "0px auto")
                            .Style("border-radius", BorderRadius)
@@ -196,7 +196,7 @@ namespace Mjml.Net.Components.Body
             {
                 if (hasBackground)
                 {
-                    divElement
+                    divElement // Style background
                         .Style("background", background)
                         .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
@@ -205,7 +205,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    divElement
+                    divElement // Style background
                         .Style("background", BackgroundColor)
                         .Style("background-color", BackgroundColor);
                 }
@@ -213,12 +213,12 @@ namespace Mjml.Net.Components.Body
 
             if (hasBackground)
             {
-                renderer.ElementStart("div")
+                renderer.ElementStart("div") // Style innerDiv
                     .Style("line-height", "0")
                     .Style("font-size", "0");
             }
 
-            var tableElement = renderer.ElementStart("table")
+            var tableElement = renderer.ElementStart("table") // Style table
                 .Attr("align", "center")
                 .Attr("background", isFullWidth ? null : BackgroundUrl)
                 .Attr("border", "0")
@@ -232,7 +232,7 @@ namespace Mjml.Net.Components.Body
             {
                 if (hasBackground)
                 {
-                    tableElement
+                    tableElement // Style background
                         .Style("background", background)
                         .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
@@ -241,7 +241,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    tableElement
+                    tableElement // Style background
                         .Style("background", BackgroundColor)
                         .Style("background-color", BackgroundColor);
                 }
@@ -249,7 +249,7 @@ namespace Mjml.Net.Components.Body
 
             renderer.ElementStart("tbody");
             renderer.ElementStart("tr");
-            renderer.ElementStart("td")
+            renderer.ElementStart("td") // Style td
                 .Style("border", Border)
                 .Style("border-bottom", BorderBottom)
                 .Style("border-left", BorderLeft)
