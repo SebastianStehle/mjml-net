@@ -25,7 +25,7 @@ namespace TestRunner
 
             var html = mjmlRenderer.Render(text, new MjmlOptions
             {
-                Beautify = true
+                Beautify = false
             }).Html;
 
             watch.Stop();

@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net
+﻿using System.Text;
+
+namespace Mjml.Net
 {
     /// <summary>
     /// Renders html for MJML.
@@ -36,6 +38,13 @@
         void Plain(ReadOnlySpan<char> value, bool appendLine = true);
 
         /// <summary>
+        /// Renders a plain value.
+        /// </summary>
+        /// <param name="value">The value to render.</param>
+        /// <param name="appendLine">True to append a new line.</param>
+        void Plain(StringBuilder value, bool appendLine = true);
+
+        /// <summary>
         /// Renders the content of an element.
         /// </summary>
         /// <param name="value">The value to render.</param>
@@ -57,7 +66,7 @@
         /// Removes the buffer from the stack and returns the content.
         /// </summary>
         /// <returns>The buffer content.</returns>
-        string BufferFlush();
+        StringBuilder? BufferFlush();
     }
 
     public interface IElementHtmlRenderer : IElementClassWriter

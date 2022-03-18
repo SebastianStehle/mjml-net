@@ -37,8 +37,13 @@ namespace Mjml.Net
             transitive.Push(new TransitiveContext(null));
         }
 
-        public void SetGlobalData(string name, object value, bool skipIfAdded = true)
+        public void SetGlobalData(string name, object? value, bool skipIfAdded = true)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             var type = value.GetType();
 
             if (skipIfAdded && GlobalData.ContainsKey((type, name)))

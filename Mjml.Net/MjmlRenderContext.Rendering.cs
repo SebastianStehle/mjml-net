@@ -34,22 +34,13 @@ namespace Mjml.Net
             buffers.Push(ObjectPools.StringBuilder.Get());
         }
 
-        public string BufferFlush()
+        public StringBuilder? BufferFlush()
         {
             Flush();
 
             var currentBuffer = buffers.Pop();
-            try
-            {
-                return currentBuffer?.ToString() ?? string.Empty;
-            }
-            finally
-            {
-                if (currentBuffer != null)
-                {
-                    ObjectPools.StringBuilder.Return(currentBuffer);
-                }
-            }
+            
+            return currentBuffer;
         }
 
         public void RenderHelpers(HelperTarget target)
@@ -198,6 +189,23 @@ namespace Mjml.Net
         public void Plain(string? value, bool appendLine = true)
         {
             Plain(value.AsSpan(), appendLine);
+        }
+
+        public void Plain(StringBuilder? value, bool appendLine = true)
+        {
+            Flush();
+
+            if (value?.Length == 0)
+            {
+                return;
+            }
+
+            Buffer.Append(value);
+
+            if (appendLine)
+            {
+                WriteLineEnd();
+            }
         }
 
         public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
