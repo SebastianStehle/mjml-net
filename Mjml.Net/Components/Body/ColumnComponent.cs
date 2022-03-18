@@ -83,7 +83,7 @@ namespace Mjml.Net.Components.Body
         {
             ContainerWidth = context.GetContainerWidth();
 
-            var (width, widthString, pixels) = GetParsedWidth();
+            var (width, widthString, _) = GetParsedWidth();
 
             renderer.ElementStart("div") // Style div
                 .Class(GetColumnClass(width, widthString, context))
