@@ -23,6 +23,22 @@ namespace TestRunner
             {
                 Run("Amario.mjml", mjmlRenderer);
             }
+
+            Console.WriteLine("---");
+            Console.WriteLine("Austin");
+
+            for (var i = 0; i < 20; i++)
+            {
+                Run("Austin.mjml", mjmlRenderer);
+            }
+
+            Console.WriteLine("---");
+            Console.WriteLine("Sphero");
+
+            for (var i = 0; i < 20; i++)
+            {
+                Run("Sphero.mjml", mjmlRenderer);
+            }
         }
 
         private static void Run(string file, MjmlRenderer mjmlRenderer)

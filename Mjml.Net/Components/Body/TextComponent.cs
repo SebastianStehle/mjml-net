@@ -72,7 +72,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                renderer.StartConditionalTag();
+                renderer.Content("<!--[if mso | IE]>");
                 renderer.StartElement("table")
                     .Attr("role", "presentation")
                     .Attr("border", "0")
@@ -84,15 +84,15 @@ namespace Mjml.Net.Components.Body
                     .Attr("height", height)
                     .Style("vertical-align", "top")
                     .Style("height", height);
-                renderer.EndConditionalTag();
+                renderer.Content("<![endif]-->");
 
                 RenderTextContent(renderer);
 
-                renderer.StartConditionalTag();
+                renderer.Content("<!--[if mso | IE]>");
                 renderer.EndElement("td");
                 renderer.EndElement("tr");
                 renderer.EndElement("table");
-                renderer.EndConditionalTag();
+                renderer.Content("<![endif]-->");
             }
         }
 
