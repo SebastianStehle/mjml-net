@@ -3,22 +3,28 @@ using Mjml.Net;
 
 namespace Tests.Internal
 {
-    public sealed class TestComponent : Component
+    public partial class TestComponent : Component
     {
         public override string ComponentName => "mjml-test";
+
+        [Bind("head")]
+        public string? Head;
+
+        [Bind("body")]
+        public string? Body;
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             RenderChildren(renderer, context);
 
-            if (Node.GetAttribute("body") != "false")
-            {
-                RenderBody(renderer, context);
-            }
-
-            if (Node.GetAttribute("head") != "false")
+            if (Head != "false")
             {
                 RenderHead(renderer, context);
+            }
+
+            if (Body != "false")
+            {
+                RenderBody(renderer, context);
             }
         }
 

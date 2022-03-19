@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+#pragma warning disable IDE0056 // Use index operator
+
 namespace Mjml.Net.Generator
 {
     [Generator]
@@ -74,21 +76,27 @@ namespace Mjml.Net.Generator
 
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
 
-            var source = new StringBuilder($@"#pragma warning disable
-// Auto-generated code
-namespace {namespaceName}
-{{
-    public partial class {classSymbol.Name}
-    {{
-        protected override void BindCore(INode node)
-        {{
-");
-            foreach (var field in allFields.Values.Where(x => !x.Text))
+            var nonTextFields = allFields.Values.Where(x => !x.Text).ToList();
+
+            var source = new SourceWriter();
+            source.AppendLine("#pragma warning disable");
+            source.AppendLine("// Auto-generated code");
+            source.AppendLine("using Mjml.Net;");
+            source.AppendLine();
+            source.AppendLine($"namespace {namespaceName}");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"public partial class {classSymbol.Name}");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("public override void Bind(Mjml.Net.IBinder binder, Mjml.Net.GlobalContext context, System.Xml.XmlReader reader)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("base.Bind(binder, context, reader);");
+
+            foreach (var field in nonTextFields)
             {
-                ProcessField(source, field);
+                ProcessField(source, field, field == nonTextFields[nonTextFields.Count - 1]);
             }
 
-            foreach (var field in allFields.Values.Where(x => !x.Text))
+            foreach (var field in nonTextFields)
             {
                 ProcessFieldExpand(source, field, allFields);
             }
@@ -100,65 +108,59 @@ namespace {namespaceName}
                 ProcessFieldText(source, textField);
             }
 
-            source.Append($@"
-        }}
+            source.MoveOut().AppendLine("}");
+            source.AppendLine();
+            source.AppendLine("public override AllowedAttributes AllowedFields");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("get");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("var result = new AllowedAttributes();");
 
-        public override AllowedAttributes AllowedFields
-        {{
-            get
-            {{
-                var result = new AllowedAttributes();
-");
-            foreach (var field in allFields.Values.Where(x => !x.Text))
+            foreach (var field in nonTextFields)
             {
                 ProcessFieldType(source, field);
             }
 
-            source.Append($@"
-                return result;
-            }}
-        }}
+            source.AppendLine("return result;");
+            source.MoveOut().AppendLine("}");
+            source.MoveOut().AppendLine("}");
+            source.AppendLine();
+            source.AppendLine("public override string ? GetAttribute(string? name)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("switch (name)");
+            source.AppendLine("{").MoveIn();
 
-        public override string? GetDefaultValue(string? name)
-        {{
-            switch (name)
-            {{
-");
-            foreach (var field in allFields.Values.Where(x => x.AttributeDefault != null && !x.Text))
+            foreach (var field in nonTextFields)
             {
-                ProcessFieldDefault(source, field);
+                ProcessFieldAttribute(source, field);
             }
 
-            source.Append($@"
-            }}
-            return null;
-        }}
-    }}
-}}");
+            source.MoveOut().AppendLine("}");
+            source.AppendLine("return null;");
+            source.MoveOut().AppendLine("}");
+            source.MoveOut().AppendLine("}");
+            source.MoveOut().AppendLine("}");
 
             return source.ToString();
         }
 
-        private void ProcessFieldText(StringBuilder source, FieldInfo field)
+        private void ProcessFieldText(SourceWriter source, FieldInfo field)
         {
-            source.Append($@"
-            {field.Name} = node.GetText();");
+            source.AppendLine($"{field.Name} = binder.GetText();");
         }
 
-        private void ProcessFieldType(StringBuilder source, FieldInfo field)
+        private void ProcessFieldType(SourceWriter source, FieldInfo field)
         {
-            source.Append($@"
-                result[""{field.Attribute}""] = AttributeTypes.{field.Type};");
+            source.AppendLine($"result[\"{field.Attribute}\"] = AttributeTypes.{field.Type};");
         }
 
-        private void ProcessFieldDefault(StringBuilder source, FieldInfo field)
+        private void ProcessFieldAttribute(SourceWriter source, FieldInfo field)
         {
-            source.Append($@"
-                case ""{field.Attribute}"":
-                    return {field.AttributeDefault};");
+            source.AppendLine($"case \"{field.Attribute}\":").MoveIn();
+            source.AppendLine($"return {field.Name};").MoveOut();
         }
 
-        private void ProcessField(StringBuilder source, FieldInfo field)
+        private void ProcessField(SourceWriter source, FieldInfo field, bool isLast)
         {
             var assignment = $"source{field.Name}";
 
@@ -167,15 +169,19 @@ namespace {namespaceName}
                 assignment = $"BindingHelper.CoerceColor(source{field.Name})";
             }
 
-            source.Append($@"
-            var source{field.Name} = node.GetAttribute(""{field.Attribute}"", true);
-            if (source{field.Name} != null)
-            {{
-                this.{field.Name} = {assignment};
-            }}");
+            source.AppendLine($"var source{field.Name} = binder.GetAttribute(\"{field.Attribute}\");");
+            source.AppendLine($"if (source{field.Name} != null)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"this.{field.Name} = {assignment};");
+            source.MoveOut().AppendLine("}");
+
+            if (!isLast)
+            {
+                source.AppendLine();
+            }
         }
 
-        private void ProcessFieldExpand(StringBuilder source, FieldInfo field, Dictionary<string, FieldInfo> allFields)
+        private void ProcessFieldExpand(SourceWriter source, FieldInfo field, Dictionary<string, FieldInfo> allFields)
         {
             var fieldName = field.Name;
 
@@ -214,32 +220,27 @@ namespace {namespaceName}
                 return;
             }
 
-            source.Append($@"
-            if ({fieldName} != null && ({fieldName}Top == null || {fieldName}Right == null || {fieldName}Bottom == null || {fieldName}Left == null))
-            {{
-                var (t, r, b, l) = BindingHelper.ParseShorthandValue({fieldName});
-
-                if ({fieldName}Top == null)
-                {{
-                    {fieldName}Top = t;
-                }}
-
-                if ({fieldName}Right == null)
-                {{
-                    {fieldName}Right = r;
-                }}
-
-                if ({fieldName}Bottom == null)
-                {{
-                    {fieldName}Bottom = b;
-                }}
-
-                if ({fieldName}Left == null)
-                {{
-                    {fieldName}Left = l;
-                }}
-            }}
-");
+            source.AppendLine($"if ({fieldName} != null && ({fieldName}Top == null || {fieldName}Right == null || {fieldName}Bottom == null || {fieldName}Left == null))");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"var (t, r, b, l) = BindingHelper.ParseShorthandValue({fieldName});");
+            source.AppendLine();
+            source.AppendLine($"if ({fieldName}Top == null)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"{fieldName}Top = t;");
+            source.MoveOut().AppendLine("}");
+            source.AppendLine($"if ({fieldName}Right == null)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"{fieldName}Right = r;");
+            source.MoveOut().AppendLine("}");
+            source.AppendLine($"if ({fieldName}Bottom == null)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"{fieldName}Bottom = b;");
+            source.MoveOut().AppendLine("}");
+            source.AppendLine($"if ({fieldName}Left == null)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine($"{fieldName}Left = l;");
+            source.MoveOut().AppendLine("}");
+            source.MoveOut().AppendLine("}");
         }
     }
 
