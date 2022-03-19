@@ -1,11 +1,10 @@
-﻿using Mjml.Net.Extensions;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 
-#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
 
 namespace Mjml.Net.Components.Body
 {
-    public partial class ColumnComponent : Component, IProvidesWidth
+    public partial class ColumnComponent : Component
     {
         public override string ComponentName => "mj-column";
 
@@ -78,23 +77,53 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.PixelsOrPercent)]
         public string? Width;
 
-        public ContainerWidth ContainerWidth;
+        public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
 
-        public (double Value, Unit Unit, string WidthString, double Pixels) CurrentWidth;
-
-        public double GetWidthAsPixel(GlobalContext context)
+        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
         {
-            ComputeWidth(context);
+            var widthValue = 0d;
+            var widthUnit = Unit.Pixels;
+            var widthString = string.Empty;
 
-            return CurrentWidth.Pixels;
+            if (Width != null)
+            {
+                (widthValue, widthUnit) = UnitParser.Parse(Width);
+
+                widthString = Width;
+            }
+            else
+            {
+                widthValue = 100d / Math.Max(1, numNonRawSiblings);
+                widthUnit = Unit.Percent;
+                widthString = $"{widthValue}%";
+            }
+
+            if (widthUnit != Unit.Pixels)
+            {
+                ActualWidth = (int)(parentWidth * widthValue / 100);
+            }
+            else
+            {
+                ActualWidth = (int)widthValue;
+            }
+
+            var allPaddings =
+                UnitParser.Parse(PaddingTop).Value +
+                UnitParser.Parse(PaddingBottom).Value +
+                UnitParser.Parse(BorderLeft).Value +
+                UnitParser.Parse(BorderRight).Value +
+                UnitParser.Parse(InnerBorderLeft).Value +
+                UnitParser.Parse(InnerBorderRight).Value;
+
+            var innerWidth = ActualWidth - (int)allPaddings;
+
+            CurrentWidth = (widthValue, widthUnit, widthString, ActualWidth - allPaddings);
+
+            MeasureChildren(innerWidth);
         }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            ComputeWidth(context);
-
-            var widthInner = GetInnerWidth(CurrentWidth.Pixels);
-
             renderer.StartElement("div") // Style div
                 .Class(GetColumnClass(context))
                 .Class("mj-outlook-group-fix")
@@ -108,17 +137,17 @@ namespace Mjml.Net.Components.Body
 
             if (HasGutter())
             {
-                RenderGutter(renderer, context, widthInner);
+                RenderGutter(renderer, context);
             }
             else
             {
-                RenderColumn(renderer, context, widthInner);
+                RenderColumn(renderer, context);
             }
 
             renderer.EndElement("div");
         }
 
-        private void RenderColumn(IHtmlRenderer renderer, GlobalContext context, double innerWidth)
+        private void RenderColumn(IHtmlRenderer renderer, GlobalContext context)
         {
             var tableElement = renderer.StartElement("table") // Style table
                 .Attr("border", "0")
@@ -153,12 +182,6 @@ namespace Mjml.Net.Components.Body
 
             renderer.StartElement("tbody");
 
-            if (innerWidth != ContainerWidth.Value)
-            {
-                context.Push();
-                context.SetContainerWidth(innerWidth);
-            }
-
             foreach (var child in ChildNodes)
             {
                 if (child.Raw)
@@ -188,16 +211,11 @@ namespace Mjml.Net.Components.Body
                 }
             }
 
-            if (innerWidth != ContainerWidth.Value)
-            {
-                context.Pop();
-            }
-
             renderer.EndElement("tbody");
             renderer.EndElement("table");
         }
 
-        private void RenderGutter(IHtmlRenderer renderer, GlobalContext context, double width)
+        private void RenderGutter(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartElement("table")
                 .Attr("border", "0")
@@ -223,7 +241,7 @@ namespace Mjml.Net.Components.Body
                 .Style("padding-top", PaddingTop)
                 .Style("vertical-align", VerticalAlign);
 
-            RenderColumn(renderer, context, width);
+            RenderColumn(renderer, context);
 
             renderer.EndElement("td");
             renderer.EndElement("tr");
@@ -249,62 +267,9 @@ namespace Mjml.Net.Components.Body
             return className;
         }
 
-        private void ComputeWidth(GlobalContext context)
-        {
-            if (CurrentWidth.WidthString != null)
-            {
-                return;
-            }
-
-            ContainerWidth = context.GetContainerWidth();
-
-            var widthValue = 0d;
-            var widthUnit = Unit.Pixels;
-            var widthString = string.Empty;
-            var pixels = 0d;
-
-            if (Width != null)
-            {
-                (widthValue, widthUnit) = UnitParser.Parse(Width);
-
-                widthString = Width;
-            }
-            else
-            {
-                widthValue = 100d / Math.Max(1, Parent?.ChildNodes.Count(x => !x.Raw) ?? 1);
-                widthUnit = Unit.Percent;
-                widthString = $"{widthValue}%";
-            }
-
-            if (widthUnit != Unit.Pixels)
-            {
-                pixels = ContainerWidth.Value * widthValue / 100;
-            }
-            else
-            {
-                pixels = widthValue;
-            }
-
-            CurrentWidth = (widthValue, widthUnit, widthString, pixels);
-        }
-
-        private double GetInnerWidth(double widthInPixels)
-        {
-            var allPaddings =
-                UnitParser.Parse(PaddingTop).Value +
-                UnitParser.Parse(PaddingBottom).Value +
-                UnitParser.Parse(BorderLeft).Value +
-                UnitParser.Parse(BorderRight).Value +
-                UnitParser.Parse(InnerBorderLeft).Value +
-                UnitParser.Parse(InnerBorderRight).Value;
-
-            return widthInPixels - allPaddings;
-        }
-
         private bool HasGutter()
         {
-            if (!string.IsNullOrEmpty(Padding) ||
-                !string.IsNullOrEmpty(PaddingBottom) ||
+            if (!string.IsNullOrEmpty(PaddingBottom) ||
                 !string.IsNullOrEmpty(PaddingLeft) ||
                 !string.IsNullOrEmpty(PaddingRight) ||
                 !string.IsNullOrEmpty(PaddingTop))

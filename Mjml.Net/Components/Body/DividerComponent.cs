@@ -1,5 +1,4 @@
 ﻿#pragma warning disable SA1119 // Statement should not use unnecessary parenthesis
-using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
@@ -40,12 +39,8 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.PixelsOrPercent)]
         public string Width = "100%";
 
-        public ContainerWidth ContainerWidth;
-
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            ContainerWidth = context.GetContainerWidth();
-
             var borderSetting = $"{BorderStyle} {BorderWidth} {BorderColor}";
 
             var margin = GetMargin(Align);
@@ -114,9 +109,9 @@ namespace Mjml.Net.Components.Body
                 case Unit.Pixels:
                     return Width;
                 case Unit.Percent:
-                    return $"{(ContainerWidth.Value - paddingSize) * (parsedWidth / 100)}px";
+                    return $"{(ActualWidth - paddingSize) * (parsedWidth / 100)}px";
                 default:
-                    return $"{(ContainerWidth.Value - paddingSize)}px";
+                    return $"{(ActualWidth - paddingSize)}px";
             }
         }
     }

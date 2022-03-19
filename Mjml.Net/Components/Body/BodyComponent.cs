@@ -1,5 +1,4 @@
-﻿using Mjml.Net.Extensions;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
 {
@@ -17,11 +16,18 @@ namespace Mjml.Net.Components.Body
         [Bind("css-class")]
         public string? CssClass;
 
-        [Bind("width")]
-        public string Width = "600px";
-
         [Bind("background-color")]
         public string? BackgroundColor;
+
+        [Bind("width", BindType.Pixels)]
+        public string Width = "600px";
+
+        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        {
+            ActualWidth = (int)UnitParser.Parse(Width).Value;
+
+            MeasureChildren(ActualWidth);
+        }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
@@ -36,12 +42,7 @@ namespace Mjml.Net.Components.Body
                 .Class(CssClass)
                 .Style("background-color", BackgroundColor);
 
-            context.Push();
-            context.SetContainerWidth(UnitParser.Parse(Width).Value);
-
             RenderChildren(renderer, context);
-
-            context.Pop();
 
             renderer.EndElement("div");
 

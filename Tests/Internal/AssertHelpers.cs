@@ -47,10 +47,17 @@ namespace Tests.Internal
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 
-            File.WriteAllText($"{name}.expected", lhs);
-            File.WriteAllText($"{name}.actual", rhs);
-
             HtmlAssertCore(lhs, rhs);
+
+            try
+            {
+                File.WriteAllText($"{name}.expected", lhs);
+                File.WriteAllText($"{name}.actual", rhs);
+            }
+            catch (IOException)
+            {
+                return;
+            }
         }
 
         public static void HtmlAssert(string expected, string actual)

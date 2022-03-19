@@ -153,6 +153,7 @@ namespace Mjml.Net
 
             if (parent == null)
             {
+                component.Measure(600, 0, 0);
                 component.Render(this, context);
             }
 
