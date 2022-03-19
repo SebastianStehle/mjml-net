@@ -11,22 +11,22 @@ namespace Mjml.Net.Components.Body
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;
 
-        [Bind("border", BindType.String)]
+        [Bind("border")]
         public string? Border;
 
-        [Bind("border-bottom", BindType.String)]
+        [Bind("border-bottom")]
         public string? BorderBottom;
 
-        [Bind("border-left", BindType.String)]
+        [Bind("border-left")]
         public string? BorderLeft;
 
         [Bind("border-radius", BindType.PixelsOrPercent)]
         public string? BorderRadius;
 
-        [Bind("border-right", BindType.String)]
+        [Bind("border-right")]
         public string? BorderRight;
 
-        [Bind("border-top", BindType.String)]
+        [Bind("border-top")]
         public string? BorderTop;
 
         [Bind("css-class")]
@@ -38,23 +38,26 @@ namespace Mjml.Net.Components.Body
         [Bind("inner-background-color", BindType.Color)]
         public string? InnerBackgroundColor;
 
-        [Bind("inner-border", BindType.String)]
+        [Bind("inner-border")]
         public string? InnerBorder;
 
-        [Bind("inner-border-bottom", BindType.String)]
+        [Bind("inner-border-bottom")]
         public string? InnerBorderBottom;
 
-        [Bind("inner-border-left", BindType.String)]
+        [Bind("inner-border-left")]
         public string? InnerBorderLeft;
 
         [Bind("inner-border-radius", BindType.PixelsOrPercent)]
         public string? InnerBorderRadius;
 
-        [Bind("inner-border-right", BindType.String)]
+        [Bind("inner-border-right")]
         public string? InnerBorderRight;
 
-        [Bind("inner-border-top", BindType.String)]
+        [Bind("inner-border-top")]
         public string? InnerBorderTop;
+
+        [Bind("mobile-width")]
+        public string? MobileWidth;
 
         [Bind("padding", BindType.PixelsOrPercent)]
         public string? Padding;
@@ -79,7 +82,7 @@ namespace Mjml.Net.Components.Body
 
         public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
 
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Measure(int parentWidth, int numSiblings, int nonRawSiblings)
         {
             var widthValue = 0d;
             var widthUnit = Unit.Pixels;
@@ -93,7 +96,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                widthValue = 100d / Math.Max(1, numNonRawSiblings);
+                widthValue = 100d / Math.Max(1, nonRawSiblings);
                 widthUnit = Unit.Percent;
                 widthString = $"{widthValue}%";
             }
@@ -133,7 +136,7 @@ namespace Mjml.Net.Components.Body
                 .Style("font-size", "0px")
                 .Style("text-align", "left")
                 .Style("vertical-align", VerticalAlign)
-                .Style("width", "100%"); // Overriden by mj-column-per-*
+                .Style("width", GetWidth()); // Overriden by mj-column-per-*
 
             if (HasGutter())
             {
@@ -145,6 +148,16 @@ namespace Mjml.Net.Components.Body
             }
 
             renderer.EndElement("div");
+        }
+
+        private string GetWidth()
+        {
+            if (MobileWidth != "mobile-width")
+            {
+                return "100%";
+            }
+
+            return CurrentWidth.WidthString;
         }
 
         private void RenderColumn(IHtmlRenderer renderer, GlobalContext context)

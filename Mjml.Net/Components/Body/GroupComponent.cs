@@ -139,8 +139,8 @@ namespace Mjml.Net.Components.Body
         {
             switch (name)
             {
-                case "mobileWidth":
-                    return "mobileWidth";
+                case "mobile-width":
+                    return "mobile-width";
             }
 
             return null;

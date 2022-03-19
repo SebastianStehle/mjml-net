@@ -29,6 +29,7 @@
     <None Remove="Tests\Font.html" />
     <None Remove="Tests\FontUbuntu.html" />
     <None Remove="Tests\Group.html" />
+    <None Remove="Tests\GroupWithColumns.html" />
     <None Remove="Tests\Hero.html" />
     <None Remove="Tests\HeroDivider.html" />
     <None Remove="Tests\HeroDividers.html" />
@@ -78,6 +79,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Tests\FontUbuntu.html" />
+    <EmbeddedResource Include="Tests\GroupWithColumns.html" />
     <EmbeddedResource Include="Tests\SectionWithGroups.html" />
     <EmbeddedResource Include="Tests\SectionWithColumns.html" />
     <EmbeddedResource Include="Tests\SectionWithBackgroundImage.html" />

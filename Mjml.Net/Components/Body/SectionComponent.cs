@@ -11,49 +11,49 @@ namespace Mjml.Net.Components.Body
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;
 
-        [Bind("background-position", BindType.String)]
+        [Bind("background-position")]
         public string BackgroundPosition = "top center";
 
-        [Bind("background-position-x", BindType.String)]
+        [Bind("background-position-x")]
         public string? BackgroundPositionX;
 
-        [Bind("background-position-y", BindType.String)]
+        [Bind("background-position-y")]
         public string? BackgroundPositionY;
 
-        [Bind("background-repeat", BindType.String)]
+        [Bind("background-repeat")]
         public string BackgroundRepeat = "repeat";
 
-        [Bind("background-size", BindType.String)]
+        [Bind("background-size")]
         public string BackgroundSize = "auto";
 
-        [Bind("background-url", BindType.String)]
+        [Bind("background-url")]
         public string? BackgroundUrl;
 
-        [Bind("border", BindType.String)]
+        [Bind("border")]
         public string? Border;
 
-        [Bind("border-bottom", BindType.String)]
+        [Bind("border-bottom")]
         public string? BorderBottom;
 
-        [Bind("border-left", BindType.String)]
+        [Bind("border-left")]
         public string? BorderLeft;
 
-        [Bind("border-radius", BindType.String)]
+        [Bind("border-radius")]
         public string? BorderRadius;
 
-        [Bind("border-right", BindType.String)]
+        [Bind("border-right")]
         public string? BorderRight;
 
-        [Bind("border-top", BindType.String)]
+        [Bind("border-top")]
         public string? BorderTop;
 
         [Bind("css-class")]
         public string? CssClass;
 
-        [Bind("direction", BindType.String)]
+        [Bind("direction")]
         public string Direction = "ltr";
 
-        [Bind("full-width", BindType.String)]
+        [Bind("full-width")]
         public string? FullWidth;
 
         [Bind("padding", BindType.PixelsOrPercent)]
