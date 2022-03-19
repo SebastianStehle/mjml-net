@@ -79,7 +79,7 @@ namespace Mjml.Net.Components.Body
                     renderer.StartElement("td")
                         .Style("align", child.GetAttribute("align"))
                         .Style("vertical-align", child.GetAttribute("vertical-align"))
-                        .Style("width", $"{childWidth}px");
+                        .Style("width", childWidth, "px");
 
                     renderer.Content("<![endif]-->");
 

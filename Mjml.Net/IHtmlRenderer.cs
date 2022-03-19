@@ -80,6 +80,15 @@ namespace Mjml.Net
         IElementHtmlRenderer Attr(string name, string? value);
 
         /// <summary>
+        /// Writes an attribute by name with two values. for the current element.
+        /// </summary>
+        /// <param name="name">The name of the attribute.</param>
+        /// <param name="value1">The first value of the attribute. If the value is null, it will be omitted.</param>
+        /// <param name="value2">The second value of the attribute. If the value is null, it will be omitted.</param>
+        /// <returns>The current instance to set more attributes.</returns>
+        IElementHtmlRenderer Attr(string name, string? value1, string? value2);
+
+        /// <summary>
         /// Sets an attribute by name for the current element.
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
@@ -97,6 +106,15 @@ namespace Mjml.Net
         /// <param name="value">The value of the attribute. If the value is null, it will be omitted.</param>
         /// <returns>The current instance to set more styles.</returns>
         IElementStyleWriter Style(string name, string? value);
+
+        /// <summary>
+        /// Sets an style by name for the current element.
+        /// </summary>
+        /// <param name="name">The name of the style.</param>
+        /// <param name="value">The value of the attribute. If the value is null, it will be omitted.</param>
+        /// <param name="unit">The unit of the value.</param>
+        /// <returns>The current instance to set more styles.</returns>
+        IElementStyleWriter Style(string name, double value, string unit);
     }
 
     public interface IElementClassWriter : IElementStyleWriter
