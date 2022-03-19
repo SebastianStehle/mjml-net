@@ -23,5 +23,22 @@ namespace Tests
 
             AssertHelpers.HtmlFileAsset("Group.html", result);
         }
+
+        [Fact]
+        public void Should_render_group_with_columns()
+        {
+            var source = @"
+<mjml-test head=""false"">
+    <mj-group>
+        <mj-column width=""100px""></mj-column>
+        <mj-column></mj-column>
+    </mj-group>
+</mjml-test>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAsset("GroupWithColumns.html", result);
+        }
     }
 }

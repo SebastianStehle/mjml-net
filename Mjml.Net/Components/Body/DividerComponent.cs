@@ -1,5 +1,4 @@
 ﻿#pragma warning disable SA1119 // Statement should not use unnecessary parenthesis
-using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
@@ -40,12 +39,8 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.PixelsOrPercent)]
         public string Width = "100%";
 
-        public ContainerWidth ContainerWidth;
-
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            ContainerWidth = context.GetContainerWidth();
-
             var borderSetting = $"{BorderStyle} {BorderWidth} {BorderColor}";
 
             var margin = GetMargin(Align);
@@ -68,11 +63,11 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", outlookWidth)
+                .Attr("width", outlookWidth, "px")
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", outlookWidth);
+                .Style("width", outlookWidth, "px");
 
             renderer.StartElement("tr");
 
@@ -101,22 +96,22 @@ namespace Mjml.Net.Components.Body
             }
         }
 
-        private string GetOutlookWidth()
+        private double GetOutlookWidth()
         {
             var paddingSize =
                 UnitParser.Parse(PaddingLeft).Value +
                 UnitParser.Parse(PaddingRight).Value;
 
-            var (parsedWidth, unit) = UnitParser.Parse(Width);
+            var (width, unit) = UnitParser.Parse(Width);
 
             switch (unit)
             {
                 case Unit.Pixels:
-                    return Width;
+                    return width;
                 case Unit.Percent:
-                    return $"{(ContainerWidth.Value - paddingSize) * (parsedWidth / 100)}px";
+                    return (ActualWidth - paddingSize) * (width / 100);
                 default:
-                    return $"{(ContainerWidth.Value - paddingSize)}px";
+                    return (ActualWidth - paddingSize);
             }
         }
     }

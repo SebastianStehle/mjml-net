@@ -34,8 +34,11 @@ namespace Mjml.Net.Components.Body
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
 
-        [Bind("fluid-on-mobile", BindType.Boolean)]
+        [Bind("fluid-on-mobile")]
         public string? FluidOnMobile;
+
+        [Bind("full-width", BindType.Boolean)]
+        public string? FullWidth;
 
         [Bind("font-size", BindType.Pixels)]
         public string FontSize = "13px";
@@ -91,19 +94,10 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.Pixels)]
         public string? Width;
 
-        public ContainerWidth ContainerWidth;
-
-        public override void Render(IHtmlRenderer renderer, GlobalContext context)
+        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
         {
-            ContainerWidth = context.GetContainerWidth();
-
-            context.SetGlobalData("mj-image", new Style(HeadStyle));
-
-            var isFluid = FluidOnMobile == "true";
-            var isFullWidth = Equals(context.Get("full-width"), true);
-
             var width =
-                ContainerWidth.Value -
+                parentWidth -
                 UnitParser.Parse(BorderLeft).Value -
                 UnitParser.Parse(BorderRight).Value -
                 UnitParser.Parse(PaddingLeft).Value -
@@ -119,6 +113,16 @@ namespace Mjml.Net.Components.Body
                 }
             }
 
+            ActualWidth = (int)width;
+        }
+
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
+        {
+            context.SetGlobalData("mj-image", new Style(HeadStyle));
+
+            var isFluid = FluidOnMobile == "true";
+            var isFullWidth = FullWidth == "full-width";
+
             var href = Href;
 
             renderer.StartElement("table")
@@ -131,14 +135,14 @@ namespace Mjml.Net.Components.Body
                 .Style("border-spacing", "0px")
                 .StyleIf("max-width", isFullWidth, "100%")
                 .StyleIf("min-width", isFullWidth, "100%")
-                .StyleIf("width", isFullWidth, width, "px");
+                .StyleIf("width", isFullWidth, ActualWidth, "px");
 
             renderer.StartElement("tbody");
             renderer.StartElement("tr");
 
             renderer.StartElement("td")
                 .Class(isFluid ? "mj-full-width-mobile" : null)
-                .StyleIf("width", !isFullWidth, width, "px");
+                .StyleIf("width", !isFullWidth, ActualWidth, "px");
 
             if (!string.IsNullOrEmpty(href))
             {
@@ -149,13 +153,13 @@ namespace Mjml.Net.Components.Body
                   .Attr("target", Target)
                   .Attr("title", Title);
 
-                RenderImage(renderer, width, isFullWidth);
+                RenderImage(renderer, isFullWidth);
 
                 renderer.EndElement("a");
             }
             else
             {
-                RenderImage(renderer, width, isFullWidth);
+                RenderImage(renderer, isFullWidth);
             }
 
             renderer.EndElement("td");
@@ -176,17 +180,17 @@ namespace Mjml.Net.Components.Body
             renderer.Content("}");
         }
 
-        private void RenderImage(IHtmlRenderer renderer, double width, bool fullWidth)
+        private void RenderImage(IHtmlRenderer renderer, bool fullWidth)
         {
             renderer.StartElement("img", true)
                 .Attr("alt", Alt)
-                .Attr("height", Height.GetNumberOrAuto())
+                .AttrOrAuto("height", Height)
                 .Attr("sizes", Sizes)
                 .Attr("src", Src)
                 .Attr("srcset", Srcset)
                 .Attr("title", Title)
                 .Attr("usemap", Usemap)
-                .Attr("width", width)
+                .Attr("width", ActualWidth)
                 .Style("border", Border)
                 .Style("border-bottom", BorderBottom)
                 .Style("border-left", BorderLeft)

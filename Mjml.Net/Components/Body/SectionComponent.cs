@@ -11,49 +11,49 @@ namespace Mjml.Net.Components.Body
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;
 
-        [Bind("background-position", BindType.String)]
+        [Bind("background-position")]
         public string BackgroundPosition = "top center";
 
-        [Bind("background-position-x", BindType.String)]
+        [Bind("background-position-x")]
         public string? BackgroundPositionX;
 
-        [Bind("background-position-y", BindType.String)]
+        [Bind("background-position-y")]
         public string? BackgroundPositionY;
 
-        [Bind("background-repeat", BindType.String)]
+        [Bind("background-repeat")]
         public string BackgroundRepeat = "repeat";
 
-        [Bind("background-size", BindType.String)]
+        [Bind("background-size")]
         public string BackgroundSize = "auto";
 
-        [Bind("background-url", BindType.String)]
+        [Bind("background-url")]
         public string? BackgroundUrl;
 
-        [Bind("border", BindType.String)]
+        [Bind("border")]
         public string? Border;
 
-        [Bind("border-bottom", BindType.String)]
+        [Bind("border-bottom")]
         public string? BorderBottom;
 
-        [Bind("border-left", BindType.String)]
+        [Bind("border-left")]
         public string? BorderLeft;
 
-        [Bind("border-radius", BindType.String)]
+        [Bind("border-radius")]
         public string? BorderRadius;
 
-        [Bind("border-right", BindType.String)]
+        [Bind("border-right")]
         public string? BorderRight;
 
-        [Bind("border-top", BindType.String)]
+        [Bind("border-top")]
         public string? BorderTop;
 
         [Bind("css-class")]
         public string? CssClass;
 
-        [Bind("direction", BindType.String)]
+        [Bind("direction")]
         public string Direction = "ltr";
 
-        [Bind("full-width", BindType.String)]
+        [Bind("full-width")]
         public string? FullWidth;
 
         [Bind("padding", BindType.PixelsOrPercent)]
@@ -77,12 +77,22 @@ namespace Mjml.Net.Components.Body
         [Bind("text-padding", BindType.PixelsOrPercent)]
         public string TextPadding = "4px 4px 4px 0";
 
-        public ContainerWidth ContainerWidth;
+        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        {
+            ActualWidth = parentWidth;
+
+            var innerWidth =
+                ActualWidth -
+                UnitParser.Parse(BorderLeft).Value -
+                UnitParser.Parse(BorderRight).Value -
+                UnitParser.Parse(PaddingLeft).Value -
+                UnitParser.Parse(PaddingRight).Value;
+
+            MeasureChildren((int)innerWidth);
+        }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            ContainerWidth = context.GetContainerWidth();
-
             if (IsFullWidth())
             {
                 RenderFullWidth(renderer, context);
@@ -170,9 +180,10 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("class", CssClass?.SuffixCssClasses("outlook"))
-                .Attr("width", IsFullWidth() ? "100%" : ContainerWidth.String)
-                .Style("width", IsFullWidth() ? "100%" : ContainerWidth.StringWithUnit);
+                .Attr("width", IsFullWidth() ? "100%" : ActualWidth.ToInvariantString())
+                .Classes(CssClass, "outlook")
+                .StyleIf("width", IsFullWidth(), "100%")
+                .StyleIf("width", !IsFullWidth(), ActualWidth, "px");
 
             renderer.StartElement("tr");
             renderer.StartElement("td")
@@ -192,7 +203,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("class", isFullWidth ? null : CssClass)
                 .Style("border-radius", BorderRadius)
                 .Style("margin", "0px auto")
-                .Style("max-width", ContainerWidth.StringWithUnit);
+                .Style("max-width", ActualWidth, "px");
 
             if (!isFullWidth)
             {
@@ -362,7 +373,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                rectElement.Style("width", ContainerWidth.StringWithUnit);
+                rectElement.Style("width", ActualWidth, "px");
             }
 
             renderer.StartElement("v:fill", true)
@@ -391,19 +402,6 @@ namespace Mjml.Net.Components.Body
         {
             renderer.StartElement("tr");
 
-            var innerWidth =
-                ContainerWidth.Value -
-                UnitParser.Parse(BorderLeft).Value -
-                UnitParser.Parse(BorderRight).Value -
-                UnitParser.Parse(PaddingLeft).Value -
-                UnitParser.Parse(PaddingRight).Value;
-
-            if (innerWidth != ContainerWidth.Value)
-            {
-                context.Push();
-                context.SetContainerWidth(innerWidth);
-            }
-
             foreach (var child in ChildNodes)
             {
                 if (child.Raw)
@@ -416,9 +414,9 @@ namespace Mjml.Net.Components.Body
                 {
                     renderer.StartElement("td")
                         .Attr("align", child.GetAttribute("align"))
-                        .Attr("class", child.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                        .Classes(child.GetAttribute("css-class"), "outlook")
                         .Style("vertical-align", child.GetAttribute("vertical-align"))
-                        .Style("width", GetElementWidth(child, context));
+                        .Style("width", child.ActualWidth, "px");
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
@@ -428,24 +426,7 @@ namespace Mjml.Net.Components.Body
                 }
             }
 
-            if (innerWidth != ContainerWidth.Value)
-            {
-                context.Pop();
-            }
-
             renderer.EndElement("tr");
-        }
-
-        private static string GetElementWidth(IComponent component, GlobalContext context)
-        {
-            var width = 0d;
-
-            if (component is IProvidesWidth providesWidth)
-            {
-                width = providesWidth.GetWidthAsPixel(context);
-            }
-
-            return $"{width}px";
         }
 
         private string? GetBackground()

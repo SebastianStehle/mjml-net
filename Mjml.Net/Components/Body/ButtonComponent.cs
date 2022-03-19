@@ -140,7 +140,7 @@
                 .Attr("name", Name)
                 .Attr("target", !string.IsNullOrEmpty(Href) ? Target : null)
                 .Style("display", "inline-block")
-                .Style("width", CalculateButtonWidth())
+                .Style("width", CalculateButtonWidth(), "px")
                 .Style("background", BackgroundColor)
                 .Style("color", Color)
                 .Style("font-family", FontFamily)
@@ -166,13 +166,13 @@
             renderer.EndElement("table");
         }
 
-        private string? CalculateButtonWidth()
+        private double CalculateButtonWidth()
         {
             var widthParsed = UnitParser.Parse(Width);
 
             if (widthParsed.Value <= 0 || widthParsed.Unit != Unit.Pixels)
             {
-                return null;
+                return double.NaN;
             }
 
             var borders =
@@ -183,7 +183,7 @@
                 UnitParser.Parse(PaddingLeft).Value +
                 UnitParser.Parse(PaddingRight).Value;
 
-            return $"{widthParsed.Value - innerPadding - borders}px";
+            return widthParsed.Value - innerPadding - borders;
         }
     }
 }

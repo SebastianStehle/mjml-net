@@ -1,7 +1,4 @@
-﻿#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
-using Mjml.Net.Extensions;
-
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial class HeroComponent : BodyComponentBase
     {
@@ -79,12 +76,20 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.Pixels)]
         public string? Width;
 
-        public ContainerWidth ContainerWidth;
+        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        {
+            ActualWidth = parentWidth;
+
+            var innerWidth =
+                ActualWidth -
+                UnitParser.Parse(PaddingTop).Value -
+                UnitParser.Parse(PaddingBottom).Value;
+
+            MeasureChildren((int)innerWidth);
+        }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            ContainerWidth = context.GetContainerWidth();
-
             var backgroundHeight = UnitParser.Parse(BackgroundHeight);
             var backgroundWidth = UnitParser.Parse(BackgroundWidth);
             var backgroundString = BackgroundColor;
@@ -98,11 +103,7 @@ namespace Mjml.Net.Components.Body
                 backgroundHeight.Value /
                 backgroundWidth.Value);
 
-            var width = backgroundWidth.Value;
-            if (width <= 0)
-            {
-                width = ContainerWidth.Value;
-            }
+            var width = backgroundWidth.Value > 0 ? backgroundWidth.Value : ActualWidth;
 
             renderer.Content("<!--[if mso | IE]>");
 
@@ -112,8 +113,8 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", ContainerWidth.String)
-                .Style("width", ContainerWidth.StringWithUnit);
+                .Attr("width", ActualWidth)
+                .Style("width", ActualWidth, "px");
 
             renderer.StartElement("tr");
 
@@ -139,7 +140,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("align", Align)
                 .Attr("class", CssClass)
                 .Style("margin", "0 auto")
-                .Style("max-width", ContainerWidth.StringWithUnit);
+                .Style("max-width", ActualWidth, "px");
 
             renderer.StartElement("table") // Style table
                 .Attr("border", "0")
@@ -234,8 +235,8 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", ContainerWidth.String)
-                .Style("width", ContainerWidth.StringWithUnit);
+                .Attr("width", ActualWidth)
+                .Style("width", ActualWidth, "px");
 
             renderer.StartElement("tr");
 
@@ -279,17 +280,6 @@ namespace Mjml.Net.Components.Body
 
             renderer.StartElement("tbody");
 
-            var innerWidth =
-                ContainerWidth.Value -
-                UnitParser.Parse(PaddingTop).Value -
-                UnitParser.Parse(PaddingBottom).Value;
-
-            if (innerWidth != ContainerWidth.Value)
-            {
-                context.Push();
-                context.SetContainerWidth(innerWidth);
-            }
-
             foreach (var child in ChildNodes)
             {
                 if (child.Raw)
@@ -320,11 +310,6 @@ namespace Mjml.Net.Components.Body
                     renderer.EndElement("td");
                     renderer.EndElement("tr");
                 }
-            }
-
-            if (innerWidth != ContainerWidth.Value)
-            {
-                context.Pop();
             }
 
             renderer.EndElement("tbody");

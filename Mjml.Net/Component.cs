@@ -13,7 +13,7 @@ namespace Mjml.Net
             get => childNodes ?? Enumerable.Empty<IComponent>();
         }
 
-        public Component? Parent { get; internal set; }
+        public int ActualWidth { get; protected set; }
 
         public virtual bool Raw => false;
 
@@ -95,15 +95,28 @@ namespace Mjml.Net
         {
             childNodes ??= new List<IComponent>(1);
             childNodes.Add(child);
-
-            if (child is Component component)
-            {
-                component.Parent = this;
-            }
         }
 
         public virtual void Bind(IBinder binder, GlobalContext context, XmlReader reader)
         {
+        }
+
+        public virtual void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        {
+            ActualWidth = parentWidth;
+
+            MeasureChildren(ActualWidth);
+        }
+
+        protected void MeasureChildren(int width)
+        {
+            if (childNodes != null)
+            {
+                foreach (var child in childNodes)
+                {
+                    child.Measure(width, childNodes.Count, childNodes.Count(x => !x.Raw));
+                }
+            }
         }
     }
 }

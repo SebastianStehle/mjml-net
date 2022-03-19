@@ -1,4 +1,4 @@
-﻿using Mjml.Net.Internal;
+﻿using System.Globalization;
 
 namespace Mjml.Net.Extensions
 {
@@ -6,55 +6,14 @@ namespace Mjml.Net.Extensions
     {
         private static readonly char[] TrimChars = { ' ', '\n', '\r' };
 
-        public static string? SuffixCssClasses(this string classAttributeValue, string? suffix)
+        public static string ToInvariantString(this double value)
         {
-            if (classAttributeValue == null)
-            {
-                return null;
-            }
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
 
-            if (string.IsNullOrWhiteSpace(classAttributeValue))
-            {
-                return string.Empty;
-            }
-
-            if (string.IsNullOrWhiteSpace(suffix))
-            {
-                return classAttributeValue;
-            }
-
-            var trimmed = classAttributeValue.Trim();
-
-            if (!trimmed.Contains(' ', StringComparison.OrdinalIgnoreCase))
-            {
-                return $"{trimmed}-{suffix}";
-            }
-            else
-            {
-                var classes = trimmed.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                var stringBuilder = ObjectPools.StringBuilder.Get();
-                try
-                {
-                    foreach (var className in classes)
-                    {
-                        if (stringBuilder.Length > 0)
-                        {
-                            stringBuilder.Append(' ');
-                        }
-
-                        stringBuilder.Append(className);
-                        stringBuilder.Append('-');
-                        stringBuilder.Append(suffix);
-                    }
-
-                    return stringBuilder.ToString();
-                }
-                finally
-                {
-                    ObjectPools.StringBuilder.Return(stringBuilder);
-                }
-            }
+        public static string ToInvariantString(this int value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
         }
 
         public static ReadOnlySpan<char> TrimXmlStart(this ReadOnlySpan<char> source)

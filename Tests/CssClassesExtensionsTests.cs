@@ -1,40 +1,88 @@
-﻿using Mjml.Net.Extensions;
+﻿using System.Text;
+using Mjml.Net;
+using Mjml.Net.Extensions;
 using Xunit;
 
 namespace Tests
 {
     public class CssClassesExtensionsTests
     {
+        private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
+        {
+            Beautify = true
+        });
+
+        public CssClassesExtensionsTests()
+        {
+            sut.BufferStart();
+        }
+
         [Fact]
         public void Should_suffix_single_class()
         {
-            var cssClass = "class1";
+            sut.StartElement("div")
+                .Classes("class1", "outlook");
 
-            Assert.Equal("class1-outlook", cssClass.SuffixCssClasses("outlook"));
+            AssertText("<div class=\"class1-outlook\">");
         }
 
         [Fact]
         public void Should_suffix_multiple_classes()
         {
-            var cssClass = "class1 class2";
+            sut.StartElement("div")
+                .Classes("class1 class2", "outlook");
 
-            Assert.Equal("class1-outlook class2-outlook", cssClass.SuffixCssClasses("outlook"));
+            AssertText("<div class=\"class1-outlook class2-outlook\">");
+        }
+
+        [Fact]
+        public void Should_suffix_multiple_classes2()
+        {
+            sut.StartElement("div")
+                .Classes("class1  class2", "outlook");
+
+            AssertText("<div class=\"class1-outlook class2-outlook\">");
+        }
+
+        [Fact]
+        public void Should_suffix_multiple_classes3()
+        {
+            sut.StartElement("div")
+                .Classes(" class1 class2 ", "outlook");
+
+            AssertText("<div class=\"class1-outlook class2-outlook\">");
         }
 
         [Fact]
         public void Should_suffix_no_classes()
         {
-            var cssClass = " ";
+            sut.StartElement("div")
+                .Classes(string.Empty, "outlook");
 
-            Assert.Equal(string.Empty, cssClass.SuffixCssClasses("outlook"));
+            AssertText("<div>");
         }
 
         [Fact]
         public void Should_suffix_no_suffix()
         {
-            var cssClass = "class1 class2";
+            sut.StartElement("div")
+                .Classes("class1 class2", string.Empty);
 
-            Assert.Equal("class1 class2", cssClass.SuffixCssClasses(string.Empty));
+            AssertText("<div class=\"class1 class2\">");
+        }
+
+        private void AssertText(params string[] lines)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var line in lines)
+            {
+                sb.AppendLine(line.Replace('\'', '"'));
+            }
+
+            var actual = sut.BufferFlush()!.ToString();
+
+            Assert.Equal(sb.ToString(), actual);
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Mjml.Net
     public sealed partial class MjmlRenderContext
     {
         private readonly GlobalContext context = new GlobalContext();
-        private readonly RenderStack<TransitiveContext> contextStack = new RenderStack<TransitiveContext>();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
         private MjmlOptions mjmlOptions;
@@ -37,7 +36,6 @@ namespace Mjml.Net
 
         internal void Clear()
         {
-            contextStack.Clear();
             context.Clear();
             errors.Clear();
             mjmlRenderer = null!;
@@ -157,22 +155,13 @@ namespace Mjml.Net
 
             if (parent == null)
             {
+                component.Measure(600, 0, 0);
                 component.Render(this, context);
             }
 
             validator?.AfterComponent(component,
                 currentLine,
                 currentColumn);
-        }
-
-        public object? Set(string name, object? value)
-        {
-            return contextStack.Current?.Set(name, value);
-        }
-
-        public object? Get(string name)
-        {
-            return contextStack.Current?.Get(name);
         }
 
         private static int? CurrentLine(XmlReader reader)
