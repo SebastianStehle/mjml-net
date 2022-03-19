@@ -298,21 +298,21 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    var backgroundColor = child.Node.GetAttribute("container-background-color");
+                    var backgroundColor = child.GetAttribute("container-background-color");
 
                     renderer.StartElement("tr");
 
                     renderer.StartElement("td")
-                        .Attr("align", child.Node.GetAttribute("align"))
+                        .Attr("align", child.GetAttribute("align"))
                         .Attr("background", backgroundColor)
-                        .Attr("class", child.Node.GetAttribute("css-class"))
+                        .Attr("class", child.GetAttribute("css-class"))
                         .Style("background", backgroundColor)
                         .Style("font-size", "0px")
-                        .Style("padding", child.Node.GetAttribute("padding"))
-                        .Style("padding-bottom", child.Node.GetAttribute("padding-bottom"))
-                        .Style("padding-left", child.Node.GetAttribute("padding-left"))
-                        .Style("padding-right", child.Node.GetAttribute("padding-right"))
-                        .Style("padding-top", child.Node.GetAttribute("padding-top"))
+                        .Style("padding", child.GetAttribute("padding"))
+                        .Style("padding-bottom", child.GetAttribute("padding-bottom"))
+                        .Style("padding-left", child.GetAttribute("padding-left"))
+                        .Style("padding-right", child.GetAttribute("padding-right"))
+                        .Style("padding-top", child.GetAttribute("padding-top"))
                         .Style("word-break", "break-word");
 
                     child.Render(renderer, context);

@@ -1,22 +1,27 @@
 ﻿namespace Mjml.Net.Internal
 {
-    internal sealed class Binder : INode
+    internal sealed class Binder : IBinder
     {
         private static readonly char[] TrimChars = { ' ', '\n', '\r' };
         private readonly GlobalContext context;
-        private readonly IComponent component;
-        private readonly IComponent? parent;
-        private readonly string elementName;
         private readonly Dictionary<string, string> attributes = new Dictionary<string, string>();
+        private IComponent? parent;
+        private string elementName;
         private string? currentText;
         private string[]? currentClasses;
 
-        public Binder(GlobalContext context, IComponent component, IComponent? parent, string elementName)
+        public Binder(GlobalContext context)
         {
             this.context = context;
-            this.component = component;
-            this.parent = parent;
-            this.elementName = elementName;
+        }
+
+        public void Clear(IComponent? newParent = null, string? newElementName = null)
+        {
+            attributes.Clear();
+            currentClasses = null;
+            currentText = null;
+            elementName = newElementName!;
+            parent = newParent;
         }
 
         public void SetAttribute(string name, string value)
@@ -29,7 +34,7 @@
             currentText = text.Trim(TrimChars);
         }
 
-        public string? GetAttribute(string name, bool withoutDefaults = false)
+        public string? GetAttribute(string name)
         {
             if (attributes.TryGetValue(name, out var attribute))
             {
@@ -83,11 +88,6 @@
                 {
                     return inherited;
                 }
-            }
-
-            if (!withoutDefaults)
-            {
-                return component?.GetDefaultValue(name);
             }
 
             return null;

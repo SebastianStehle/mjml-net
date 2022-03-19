@@ -6,9 +6,9 @@ namespace Mjml.Net.Components.Head
     {
         public override string ComponentName => "mj-attributes";
 
-        public override void Bind(INode node, GlobalContext context, XmlReader reader)
+        public override void Bind(IBinder binder, GlobalContext context, XmlReader reader)
         {
-            base.Bind(node, context, reader);
+            base.Bind(binder, context, reader);
 
             while (reader.Read())
             {
