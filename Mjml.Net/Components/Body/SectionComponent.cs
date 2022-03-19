@@ -272,11 +272,9 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
-            renderer.Content("<![endif]-->");
 
             RenderColumns(renderer, context);
 
-            renderer.Content("<!--[if mso | IE]>");
             renderer.EndElement("table");
             renderer.Content("<![endif]-->");
 
@@ -391,9 +389,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderColumns(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.Content("<!--[if mso | IE]>");
             renderer.StartElement("tr");
-            renderer.Content("<![endif]-->");
 
             var innerWidth =
                 ContainerWidth.Value -
@@ -412,12 +408,14 @@ namespace Mjml.Net.Components.Body
             {
                 if (child.Raw)
                 {
+                    renderer.Content("<![endif]-->");
                     child.Render(renderer, context);
+                    renderer.Content("<!--[if mso | IE]>");
                 }
                 else
                 {
-                    // Once MJ-COLUMN is complete this will be updated to only wrap columns using type check
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.Content("<![endif]-->");
+
                     renderer.StartElement("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
@@ -426,10 +424,9 @@ namespace Mjml.Net.Components.Body
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
-                    
+
                     renderer.Content("<!--[if mso | IE]>");
                     renderer.EndElement("td");
-                    renderer.Content("<![endif]-->");
                 }
             }
 
@@ -438,9 +435,7 @@ namespace Mjml.Net.Components.Body
                 context.Pop();
             }
 
-            renderer.Content("<!--[if mso | IE]>");
             renderer.EndElement("tr");
-            renderer.Content("<![endif]-->");
         }
 
         private static string GetElementWidth(IComponent component)
