@@ -54,7 +54,7 @@ namespace Mjml.Net
         {
             Flush();
 
-            if (string.IsNullOrWhiteSpace(elementName))
+            if (string.IsNullOrEmpty(elementName))
             {
                 return this;
             }
@@ -74,7 +74,7 @@ namespace Mjml.Net
 
         public IElementHtmlRenderer Attr(string name, string? value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrEmpty(value))
             {
                 return this;
             }
@@ -83,6 +83,24 @@ namespace Mjml.Net
             Buffer.Append(name);
             Buffer.Append("=\"");
             Buffer.Append(value);
+            Buffer.Append('"');
+
+            return this;
+        }
+
+        public IElementHtmlRenderer Attr(string name, string? value1, string? value2)
+        {
+            if (string.IsNullOrEmpty(value1) || string.IsNullOrEmpty(value2))
+            {
+                return this;
+            }
+
+            Buffer.Append(' ');
+            Buffer.Append(name);
+            Buffer.Append("=\"");
+            Buffer.Append(value1);
+            Buffer.Append(',');
+            Buffer.Append(value2);
             Buffer.Append('"');
 
             return this;
@@ -101,11 +119,22 @@ namespace Mjml.Net
 
         public IElementClassWriter Class(string? value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrEmpty(value))
             {
                 return this;
             }
 
+            SwitchToClasses();
+
+            Buffer.Append(value);
+
+            numClasses++;
+
+            return this;
+        }
+
+        private void SwitchToClasses()
+        {
             if (numClasses == 0)
             {
                 // Open the class attribute.
@@ -115,23 +144,51 @@ namespace Mjml.Net
             {
                 Buffer.Append(' ');
             }
-
-            Buffer.Append(value);
-
-            numClasses++;
-
-            return this;
         }
 
         public IElementStyleWriter Style(string name, string? value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrEmpty(value))
             {
                 return this;
             }
 
             DetectFontFamily(name, value);
 
+            SwitchToStyles();
+
+            Buffer.Append(name);
+            Buffer.Append(':');
+            Buffer.Append(value);
+            Buffer.Append(';');
+
+            numStyles++;
+
+            return this;
+        }
+
+        public IElementStyleWriter Style(string name, double value, string unit)
+        {
+            if (string.IsNullOrEmpty(unit))
+            {
+                return this;
+            }
+
+            SwitchToStyles();
+
+            Buffer.Append(name);
+            Buffer.Append(':');
+            Buffer.Append(value);
+            Buffer.Append(unit);
+            Buffer.Append(';');
+
+            numStyles++;
+
+            return this;
+        }
+
+        private void SwitchToStyles()
+        {
             if (numClasses > 0)
             {
                 // Close the open class attribute.
@@ -146,15 +203,6 @@ namespace Mjml.Net
                 // Open the styles attribute.
                 Buffer.Append(" style=\"");
             }
-
-            Buffer.Append(name);
-            Buffer.Append(':');
-            Buffer.Append(value);
-            Buffer.Append(';');
-
-            numStyles++;
-
-            return this;
         }
 
         public void EndElement(string elementName)

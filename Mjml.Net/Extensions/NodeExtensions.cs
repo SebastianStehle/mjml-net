@@ -20,6 +20,26 @@ namespace Mjml.Net.Extensions
             return value.ToString(CultureInfo.InvariantCulture);
         }
 
+        public static IElementStyleWriter StyleIf(this IElementStyleWriter writer, string name, bool condition, string? value)
+        {
+            if (condition)
+            {
+                writer.Style(name, value);
+            }
+
+            return writer;
+        }
+
+        public static IElementStyleWriter StyleIf(this IElementStyleWriter writer, string name, bool condition, double value, string unit)
+        {
+            if (condition)
+            {
+                writer.Style(name, value, unit);
+            }
+
+            return writer;
+        }
+
         public static string GetNumberOrAuto(this string? value)
         {
             if (value == "auto")

@@ -94,18 +94,15 @@ namespace Mjml.Net.Components.Body
                 backgroundString = $"{backgroundString} url({BackgroundUrl}) no-repeat {BackgroundPosition} / cover";
             }
 
-            var backgroundRatioValue = Math.Round(100 *
+            var backgroundRatio = Math.Round(100 *
                 backgroundHeight.Value /
                 backgroundWidth.Value);
-            var backgroundRatio = $"{backgroundRatioValue}px";
 
-            var widthValue = backgroundWidth.Value;
-            if (widthValue <= 0)
+            var width = backgroundWidth.Value;
+            if (width <= 0)
             {
-                widthValue = ContainerWidth.Value;
+                width = ContainerWidth.Value;
             }
-
-            var width = $"{widthValue}px";
 
             renderer.Content("<!--[if mso | IE]>");
 
@@ -133,7 +130,7 @@ namespace Mjml.Net.Components.Body
                 .Style("mso-position-horizontal", "center")
                 .Style("position", "absolute")
                 .Style("top", "0")
-                .Style("width", width)
+                .Style("width", width, "px")
                 .Style("z-index", "-3");
 
             renderer.Content("<![endif]-->");
@@ -158,11 +155,11 @@ namespace Mjml.Net.Components.Body
 
             if (Mode == "fluid-height")
             {
-                static void MagicId(IHtmlRenderer renderer, string backgroundRatio)
+                static void MagicId(IHtmlRenderer renderer, double backgroundRatio)
                 {
                     renderer.StartElement("td") // Style td-fluid
                         .Style("mso-padding-bottom-alt", "0")
-                        .Style("padding-bottom", backgroundRatio)
+                        .Style("padding-bottom", backgroundRatio, "px")
                         .Style("width", "0.01%");
                     renderer.EndElement("td");
                 }

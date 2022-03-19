@@ -366,8 +366,8 @@ namespace Mjml.Net.Components.Body
             }
 
             renderer.StartElement("v:fill", true)
-                .Attr("origin", $"{xOrigin}, {yOrigin}")
-                .Attr("position", $"{xPosition}, {yPosition}")
+                .Attr("origin", xOrigin, yOrigin)
+                .Attr("position", xPosition, yPosition)
                 .Attr("src", BackgroundUrl)
                 .Attr("color", BackgroundColor)
                 .Attr("type", vmlType)
