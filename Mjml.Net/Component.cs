@@ -1,10 +1,10 @@
 ﻿using System.Xml;
+using Mjml.Net.Extensions;
 
 namespace Mjml.Net
 {
     public abstract class Component : IComponent
     {
-        private static readonly char[] TrimChars = { ' ', '\n', '\r' };
         private List<IComponent>? childNodes;
         private List<string>? childXml;
 
@@ -12,8 +12,6 @@ namespace Mjml.Net
         {
             get => childNodes ?? Enumerable.Empty<IComponent>();
         }
-
-        public INode Node { get; private set; }
 
         public int ActualWidth { get; protected set; }
 
@@ -60,12 +58,12 @@ namespace Mjml.Net
 
                 if (i == 0)
                 {
-                    toRender = toRender.TrimStart(TrimChars);
+                    toRender = toRender.TrimXmlStart();
                 }
 
                 if (i == childXml.Count - 1)
                 {
-                    toRender = toRender.TrimEnd(TrimChars);
+                    toRender = toRender.TrimXmlEnd();
                 }
 
                 renderer.Plain(toRender);
@@ -82,6 +80,11 @@ namespace Mjml.Net
             return null;
         }
 
+        public virtual string? GetAttribute(string name)
+        {
+            return null;
+        }
+
         public void AddChild(string rawXml)
         {
             childXml ??= new List<string>(1);
@@ -94,14 +97,7 @@ namespace Mjml.Net
             childNodes.Add(child);
         }
 
-        public virtual void Bind(INode node, GlobalContext context, XmlReader reader)
-        {
-            Node = node;
-
-            BindCore(node);
-        }
-
-        protected virtual void BindCore(INode node)
+        public virtual void Bind(IBinder binder, GlobalContext context, XmlReader reader)
         {
         }
 

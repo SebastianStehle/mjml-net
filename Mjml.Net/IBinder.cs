@@ -1,16 +1,15 @@
 ﻿namespace Mjml.Net
 {
-    public interface INode
+    public interface IBinder
     {
         /// <summary>
         /// Get the attribute of the node with the given name.
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
-        /// <param name="withoutDefaults">Ignore defaults.</param>
         /// <returns>
         /// The attribute of the node or null if not found.
         /// </returns>
-        string? GetAttribute(string name, bool withoutDefaults = false);
+        string? GetAttribute(string name);
 
         /// <summary>
         /// Get the text content of the node.

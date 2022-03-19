@@ -376,8 +376,8 @@ namespace Mjml.Net.Components.Body
             }
 
             renderer.StartElement("v:fill", true)
-                .Attr("origin", $"{xOrigin}, {yOrigin}")
-                .Attr("position", $"{xPosition}, {yPosition}")
+                .Attr("origin", xOrigin, yOrigin)
+                .Attr("position", xPosition, yPosition)
                 .Attr("src", BackgroundUrl)
                 .Attr("color", BackgroundColor)
                 .Attr("type", vmlType)
@@ -412,10 +412,10 @@ namespace Mjml.Net.Components.Body
                 else
                 {
                     renderer.StartElement("td")
-                        .Attr("align", child.Node.GetAttribute("align"))
-                        .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
-                        .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", $"{child.ActualWidth}px");
+                        .Attr("align", child.GetAttribute("align"))
+                        .Attr("class", child.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                        .Style("vertical-align", child.GetAttribute("vertical-align"))
+                        .Style("width", child.ActualWidth, "px");
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);

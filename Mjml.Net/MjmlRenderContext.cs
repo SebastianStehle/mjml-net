@@ -7,34 +7,38 @@ namespace Mjml.Net
     {
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
-        private MjmlOptions options;
-        private MjmlRenderer renderer;
+        private readonly Binder binder;
+        private MjmlOptions mjmlOptions;
+        private MjmlRenderer mjmlRenderer;
         private IValidator? validator;
 
         public MjmlRenderContext()
         {
+            binder = new Binder(context);
         }
 
-        public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions? options = null)
+        public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions? mjmlOptions = null)
+            : this()
         {
-            Setup(renderer,  options);
+            Setup(renderer,  mjmlOptions);
         }
 
-        public void Setup(MjmlRenderer renderer, MjmlOptions? options)
+        public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
         {
-            this.renderer = renderer;
-            this.options = options ?? new MjmlOptions();
+            this.mjmlRenderer = mjmlRenderer;
+            this.mjmlOptions = mjmlOptions ?? new MjmlOptions();
 
-            validator = this.options.ValidatorFactory?.Create();
+            validator = this.mjmlOptions.ValidatorFactory?.Create();
 
-            context.SetOptions(this.options);
+            // Reuse the context and therefore do not set them over the properties.
+            context.SetOptions(this.mjmlOptions);
         }
 
         internal void Clear()
         {
             context.Clear();
             errors.Clear();
-            renderer = null!;
+            mjmlRenderer = null!;
 
             ClearRenderData();
         }
@@ -59,7 +63,7 @@ namespace Mjml.Net
 
         private void ReadElement(string name, XmlReader parentReader, IComponent? parent)
         {
-            var component = renderer.CreateComponent(name);
+            var component = mjmlRenderer.CreateComponent(name);
 
             var currentLine = CurrentLine(parentReader);
             var currentColumn = CurrentColumn(parentReader);
@@ -79,7 +83,7 @@ namespace Mjml.Net
                 parent.AddChild(component);
             }
 
-            var binder = new Binder(context, component, parent, name);
+            binder.Clear(parent, component.ComponentName);
 
             validator?.BeforeComponent(component,
                 currentLine,

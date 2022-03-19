@@ -82,7 +82,7 @@ namespace Mjml.Net.Components.Body
 
         public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
 
-        public override void Measure(int parentWidth, int numSiblings, int nonRawSiblings)
+        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
         {
             var widthValue = 0d;
             var widthUnit = Unit.Pixels;
@@ -96,7 +96,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                widthValue = 100d / Math.Max(1, nonRawSiblings);
+                widthValue = 100d / Math.Max(1, numNonRawSiblings);
                 widthUnit = Unit.Percent;
                 widthString = $"{widthValue}%";
             }
@@ -205,16 +205,16 @@ namespace Mjml.Net.Components.Body
                 {
                     renderer.StartElement("tr");
                     renderer.StartElement("td")
-                        .Attr("align", child.Node.GetAttribute("align"))
-                        .Attr("class", child.Node.GetAttribute("css-class"))
-                        .Attr("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("background", child.Node.GetAttribute("container-background-color"))
+                        .Attr("align", child.GetAttribute("align"))
+                        .Attr("class", child.GetAttribute("css-class"))
+                        .Attr("vertical-align", child.GetAttribute("vertical-align"))
+                        .Style("background", child.GetAttribute("container-background-color"))
                         .Style("font-size", "0px")
-                        .Style("padding", child.Node.GetAttribute("padding"))
-                        .Style("padding-bottom", child.Node.GetAttribute("padding-bottom"))
-                        .Style("padding-left", child.Node.GetAttribute("padding-left"))
-                        .Style("padding-right", child.Node.GetAttribute("padding-right"))
-                        .Style("padding-top", child.Node.GetAttribute("padding-top"))
+                        .Style("padding", child.GetAttribute("padding"))
+                        .Style("padding-bottom", child.GetAttribute("padding-bottom"))
+                        .Style("padding-left", child.GetAttribute("padding-left"))
+                        .Style("padding-right", child.GetAttribute("padding-right"))
+                        .Style("padding-top", child.GetAttribute("padding-top"))
                         .Style("word-break", "break-word");
 
                     child.Render(renderer, context);

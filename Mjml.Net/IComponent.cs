@@ -12,8 +12,6 @@ namespace Mjml.Net
 
         IEnumerable<IComponent> ChildNodes { get; }
 
-        INode Node { get; }
-
         ContentType ContentType { get; }
 
         bool Raw { get; }
@@ -24,9 +22,11 @@ namespace Mjml.Net
 
         string? GetInheritingAttribute(string name);
 
+        string? GetAttribute(string name);
+
         int ActualWidth { get; }
 
-        void Bind(INode node, GlobalContext context, XmlReader reader);
+        void Bind(IBinder node, GlobalContext context, XmlReader reader);
 
         void AddChild(IComponent child);
 

@@ -133,18 +133,18 @@ namespace Mjml.Net.Components.Body
                 .Class(isFluid ? "mj-full-width-mobile" : null)
                 .Style("border-collapse", "collapse")
                 .Style("border-spacing", "0px")
-                .Style("max-width", isFullWidth ? "100%" : null)
-                .Style("min-width", isFullWidth ? "100%" : null)
-                .Style("width", isFullWidth ? $"{ActualWidth}px" : null);
+                .StyleIf("max-width", isFullWidth, "100%")
+                .StyleIf("min-width", isFullWidth, "100%")
+                .StyleIf("width", isFullWidth, ActualWidth, "px");
 
             renderer.StartElement("tbody");
             renderer.StartElement("tr");
 
             renderer.StartElement("td")
                 .Class(isFluid ? "mj-full-width-mobile" : null)
-                .Style("width", isFullWidth ? null : $"{ActualWidth}px");
+                .StyleIf("width", !isFullWidth, ActualWidth, "px");
 
-            if (!string.IsNullOrWhiteSpace(href))
+            if (!string.IsNullOrEmpty(href))
             {
                 renderer.StartElement("a")
                   .Attr("href", Href)
@@ -201,8 +201,8 @@ namespace Mjml.Net.Components.Body
                 .Style("font-size", FontSize)
                 .Style("height", Height)
                 .Style("max-height", MaxHeight)
-                .Style("max-width", fullWidth ? "100%" : null)
-                .Style("min-width", fullWidth ? "100%" : null)
+                .StyleIf("max-width", fullWidth, "100%")
+                .StyleIf("min-width", fullWidth, "100%")
                 .Style("outline", "none")
                 .Style("text-decoration", "none")
                 .Style("width", "100%");
