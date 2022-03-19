@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Mjml.Net;
-using Mjml.Net.Extensions;
 using Xunit;
 
 namespace Tests

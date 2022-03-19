@@ -1,5 +1,4 @@
 ﻿#pragma warning disable RECS0018 // Comparison of floating point numbers with equality operator
-using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
@@ -117,7 +116,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
                 .Attr("width", ActualWidth)
-                .Style("width", $"{ActualWidth}px");
+                .Style("width", ActualWidth, "px");
 
             renderer.StartElement("tr");
 
@@ -143,7 +142,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("align", Align)
                 .Attr("class", CssClass)
                 .Style("margin", "0 auto")
-                .Style("max-width", $"{ActualWidth}px");
+                .Style("max-width", ActualWidth, "px");
 
             renderer.StartElement("table") // Style table
                 .Attr("border", "0")
@@ -239,7 +238,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("width", ActualWidth)
-                .Style("width", $"{ActualWidth}px");
+                .Style("width", ActualWidth, "px");
 
             renderer.StartElement("tr");
 

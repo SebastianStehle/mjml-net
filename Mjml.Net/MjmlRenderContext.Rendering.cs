@@ -3,7 +3,7 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlRenderer
+    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlWriter
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
         private bool elementSelfClosed;
@@ -49,7 +49,7 @@ namespace Mjml.Net
             }
         }
 
-        public IElementHtmlRenderer StartElement(string elementName, bool selfClosed = false)
+        public IElementHtmlWriter StartElement(string elementName, bool selfClosed = false)
         {
             Flush();
 
@@ -71,7 +71,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementHtmlRenderer Attr(string name, string? value)
+        public IElementHtmlWriter Attr(string name, string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -87,7 +87,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementHtmlRenderer Attr(string name, string? value1, string? value2)
+        public IElementHtmlWriter Attr(string name, string? value1, string? value2)
         {
             if (string.IsNullOrEmpty(value1) || string.IsNullOrEmpty(value2))
             {
@@ -105,12 +105,34 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementHtmlRenderer Attr(string name, double value)
+        public IElementHtmlWriter Attr(string name, double value)
         {
+            if (double.IsNaN(value))
+            {
+                return this;
+            }
+
             Buffer.Append(' ');
             Buffer.Append(name);
             Buffer.Append("=\"");
             Buffer.Append(value);
+            Buffer.Append('"');
+
+            return this;
+        }
+
+        public IElementHtmlWriter Attr(string name, double value, string unit)
+        {
+            if (double.IsNaN(value))
+            {
+                return this;
+            }
+
+            Buffer.Append(' ');
+            Buffer.Append(name);
+            Buffer.Append("=\"");
+            Buffer.Append(value);
+            Buffer.Append(unit);
             Buffer.Append('"');
 
             return this;
@@ -126,6 +148,24 @@ namespace Mjml.Net
             SwitchToClasses();
 
             Buffer.Append(value);
+
+            numClasses++;
+
+            return this;
+        }
+
+        public IElementClassWriter Class(ReadOnlySpan<char> value, string suffix)
+        {
+            if (string.IsNullOrEmpty(suffix))
+            {
+                return this;
+            }
+
+            SwitchToClasses();
+
+            Buffer.Append(value);
+            Buffer.Append('-');
+            Buffer.Append(suffix);
 
             numClasses++;
 
@@ -168,7 +208,7 @@ namespace Mjml.Net
 
         public IElementStyleWriter Style(string name, double value, string unit)
         {
-            if (string.IsNullOrEmpty(unit))
+            if (string.IsNullOrEmpty(unit) || double.IsNaN(value))
             {
                 return this;
             }

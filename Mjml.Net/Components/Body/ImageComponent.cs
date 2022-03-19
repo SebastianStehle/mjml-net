@@ -184,7 +184,7 @@ namespace Mjml.Net.Components.Body
         {
             renderer.StartElement("img", true)
                 .Attr("alt", Alt)
-                .Attr("height", Height.GetNumberOrAuto())
+                .AttrOrAuto("height", Height)
                 .Attr("sizes", Sizes)
                 .Attr("src", Src)
                 .Attr("srcset", Srcset)

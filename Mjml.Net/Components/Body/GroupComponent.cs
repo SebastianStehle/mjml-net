@@ -1,5 +1,4 @@
-﻿using Mjml.Net.Extensions;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
 

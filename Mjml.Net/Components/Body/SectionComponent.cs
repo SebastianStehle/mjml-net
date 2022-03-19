@@ -180,9 +180,10 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("class", CssClass?.SuffixCssClasses("outlook"))
                 .Attr("width", IsFullWidth() ? "100%" : ActualWidth.ToInvariantString())
-                .Style("width", IsFullWidth() ? "100%" : $"{ActualWidth}px");
+                .Classes(CssClass, "outlook")
+                .StyleIf("width", IsFullWidth(), "100%")
+                .StyleIf("width", !IsFullWidth(), ActualWidth, "px");
 
             renderer.StartElement("tr");
             renderer.StartElement("td")
@@ -202,7 +203,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("class", isFullWidth ? null : CssClass)
                 .Style("border-radius", BorderRadius)
                 .Style("margin", "0px auto")
-                .Style("max-width", $"{ActualWidth}px");
+                .Style("max-width", ActualWidth, "px");
 
             if (!isFullWidth)
             {
@@ -372,7 +373,7 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                rectElement.Style("width", $"{ActualWidth}px");
+                rectElement.Style("width", ActualWidth, "px");
             }
 
             renderer.StartElement("v:fill", true)
@@ -413,7 +414,7 @@ namespace Mjml.Net.Components.Body
                 {
                     renderer.StartElement("td")
                         .Attr("align", child.GetAttribute("align"))
-                        .Attr("class", child.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                        .Classes(child.GetAttribute("css-class"), "outlook")
                         .Style("vertical-align", child.GetAttribute("vertical-align"))
                         .Style("width", child.ActualWidth, "px");
                     renderer.Content("<![endif]-->");

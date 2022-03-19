@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Extensions;
-
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial class TextComponent : BodyComponentBase
     {
