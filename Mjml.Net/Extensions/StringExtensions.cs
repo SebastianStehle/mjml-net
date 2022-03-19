@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Mjml.Net.Internal;
+using System.Text;
 
 namespace Mjml.Net.Extensions
 {
@@ -33,21 +34,27 @@ namespace Mjml.Net.Extensions
             {
                 var classes = trimmed.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                var sb = new StringBuilder();
-
-                foreach (var className in classes)
+                var stringBuilder = ObjectPools.StringBuilder.Get();
+                try
                 {
-                    if (sb.Length > 0)
+                    foreach (var className in classes)
                     {
-                        sb.Append(' ');
+                        if (stringBuilder.Length > 0)
+                        {
+                            stringBuilder.Append(' ');
+                        }
+
+                        stringBuilder.Append(className);
+                        stringBuilder.Append('-');
+                        stringBuilder.Append(suffix);
                     }
 
-                    sb.Append(className);
-                    sb.Append('-');
-                    sb.Append(suffix);
+                    return stringBuilder.ToString();
                 }
-
-                return sb.ToString();
+                finally
+                {
+                    ObjectPools.StringBuilder.Return(stringBuilder);
+                }
             }
         }
 
