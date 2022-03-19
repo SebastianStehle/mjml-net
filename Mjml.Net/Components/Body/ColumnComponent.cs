@@ -235,18 +235,16 @@ namespace Mjml.Net.Components.Body
         {
             string className;
 
-            var widthString = CurrentWidth.Value.ToInvariantString().Replace('.', '-');
-
             if (CurrentWidth.Unit == Unit.Percent)
             {
-                className = $"mj-column-per-{widthString}";
+                className = $"mj-column-per-{(int)CurrentWidth.Value}";
             }
             else
             {
-                className = $"mj-column-px-{widthString}";
+                className = $"mj-column-px-{(int)CurrentWidth.Value}";
             }
 
-            context.SetGlobalData(widthString, MediaQuery.Width(className, CurrentWidth.WidthString));
+            context.SetGlobalData(className, MediaQuery.Width(className, CurrentWidth.WidthString));
 
             return className;
         }
