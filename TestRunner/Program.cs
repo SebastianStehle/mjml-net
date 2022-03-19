@@ -33,7 +33,7 @@ namespace TestRunner
 
             var html = mjmlRenderer.Render(text, new MjmlOptions
             {
-                Beautify = false
+                Beautify = true
             }).Html;
 
             watch.Stop();

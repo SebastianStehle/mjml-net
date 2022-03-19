@@ -14,7 +14,7 @@ namespace Mjml.Net.Helpers
     {
         public static MediaQuery Width(string className, string width)
         {
-            return new MediaQuery(className, $"{{ width:{width} !important; max-width: {width}; }}");
+            return new MediaQuery(className, $"{{\r\nwidth:{width} !important;\r\nmax-width: {width};\r\n}}");
         }
     }
 
@@ -63,6 +63,19 @@ namespace Mjml.Net.Helpers
             renderer.EndElement("style");
         }
 
+        private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
+        {
+            renderer.StartElement("style")
+                .Attr("type", "text/css");
+
+            foreach (var style in context.GlobalData.Values.OfType<Style>())
+            {
+                style.Renderer(renderer, context);
+            }
+
+            renderer.EndElement("style");
+        }
+
         private static void WriteMediaQueriesOWA(IHtmlRenderer renderer, GlobalContext context)
         {
             if (!context.Options.ForceOWAQueries)
@@ -76,19 +89,6 @@ namespace Mjml.Net.Helpers
             foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
             {
                 renderer.Content($"  [owa] {mediaQuery.Rule}");
-            }
-
-            renderer.EndElement("style");
-        }
-
-        private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
-        {
-            renderer.StartElement("style")
-                .Attr("type", "text/css");
-
-            foreach (var style in context.GlobalData.Values.OfType<Style>())
-            {
-                style.Renderer(renderer, context);
             }
 
             renderer.EndElement("style");
