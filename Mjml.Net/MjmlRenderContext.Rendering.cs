@@ -44,7 +44,7 @@ namespace Mjml.Net
 
         public void RenderHelpers(HelperTarget target)
         {
-            foreach (var helper in renderer.Helpers)
+            foreach (var helper in mjmlRenderer.Helpers)
             {
                 helper.Render(this, target, context);
             }
@@ -183,7 +183,7 @@ namespace Mjml.Net
 
             WriteLineStart();
 
-            if (options.Beautify)
+            if (mjmlOptions.Beautify)
             {
                 WriteIntended(value);
             }
@@ -263,7 +263,7 @@ namespace Mjml.Net
 
         private void WriteLineEnd()
         {
-            if (options.Beautify)
+            if (mjmlOptions.Beautify)
             {
                 Buffer.AppendLine();
             }
@@ -271,7 +271,7 @@ namespace Mjml.Net
 
         private void WriteLineStart()
         {
-            if (options.Beautify)
+            if (mjmlOptions.Beautify)
             {
                 for (var i = 0; i < indent; i++)
                 {
@@ -319,7 +319,7 @@ namespace Mjml.Net
             if (value.Contains(',', StringComparison.OrdinalIgnoreCase))
             {
                 // If we have multiple fonts it is faster than a string.Split, because we can avoid allocations.
-                foreach (var (key, font) in options.Fonts)
+                foreach (var (key, font) in mjmlOptions.Fonts)
                 {
                     if (value.Contains(key, StringComparison.OrdinalIgnoreCase))
                     {
@@ -330,7 +330,7 @@ namespace Mjml.Net
             else
             {
                 // Fast track for a single font.
-                if (options.Fonts.TryGetValue(value, out var font))
+                if (mjmlOptions.Fonts.TryGetValue(value, out var font))
                 {
                     context.SetGlobalData(value, font);
                 }

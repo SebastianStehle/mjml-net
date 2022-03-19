@@ -415,9 +415,9 @@ namespace Mjml.Net.Components.Body
                 else
                 {
                     renderer.StartElement("td")
-                        .Attr("align", child.Node.GetAttribute("align"))
-                        .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
-                        .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
+                        .Attr("align", child.GetAttribute("align"))
+                        .Attr("class", child.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
+                        .Style("vertical-align", child.GetAttribute("vertical-align"))
                         .Style("width", GetElementWidth(child, context));
                     renderer.Content("<![endif]-->");
 
