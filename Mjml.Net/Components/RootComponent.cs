@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Mjml.Net.Helpers;
 using Mjml.Net.Internal;
 using Mjml.Net.Properties;
 
@@ -61,6 +62,7 @@ namespace Mjml.Net.Components
         private static void RenderBody(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartElement("body")
+                .Style("background-color", context.GlobalData.Values.OfType<Background>().FirstOrDefault()?.Color)
                 .Style("word-spacing", "normal");
 
             renderer.RenderHelpers(HelperTarget.BodyStart);

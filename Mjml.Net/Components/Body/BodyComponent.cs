@@ -1,4 +1,5 @@
 ﻿using Mjml.Net.Extensions;
+using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
 {
@@ -24,10 +25,14 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
+            if (BackgroundColor != null)
+            {
+                context.SetGlobalData("default", new Background(BackgroundColor));
+            }
+
             renderer.BufferStart();
 
             renderer.StartElement("div")
-                .Attr("background-color", BackgroundColor)
                 .Class(CssClass)
                 .Style("background-color", BackgroundColor);
 
