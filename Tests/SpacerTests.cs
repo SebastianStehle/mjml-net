@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Tests.Internal;
+using Xunit;
 
 namespace Tests
 {
@@ -11,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("Spacer.html"), result);
+            AssertHelpers.HtmlFileAsset("Spacer.html", result);
         }
 
         [Fact]
@@ -21,7 +22,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("SpacerWithHeight.html"), result);
+            AssertHelpers.HtmlFileAsset("SpacerWithHeight.html", result);
         }
     }
 }

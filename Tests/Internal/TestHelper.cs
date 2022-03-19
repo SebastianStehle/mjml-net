@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Mjml.Net;
 
-namespace Tests
+namespace Tests.Internal
 {
     public static class TestHelper
     {

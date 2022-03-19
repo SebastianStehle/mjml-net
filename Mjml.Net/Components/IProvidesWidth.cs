@@ -2,6 +2,6 @@
 {
     public interface IProvidesWidth
     {
-        double GetWidthAsPixel();
+        double GetWidthAsPixel(GlobalContext context);
     }
 }

@@ -38,6 +38,8 @@
     <None Remove="Tests\Section.html" />
     <None Remove="Tests\SectionWithBackgroundColor.html" />
     <None Remove="Tests\SectionWithBackgroundImage.html" />
+    <None Remove="Tests\SectionWithColumns.html" />
+    <None Remove="Tests\SectionWithGroups.html" />
     <None Remove="Tests\Social.html" />
     <None Remove="Tests\SocialEmpty.html" />
     <None Remove="Tests\SocialRaw.html" />
@@ -76,6 +78,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Tests\FontUbuntu.html" />
+    <EmbeddedResource Include="Tests\SectionWithGroups.html" />
+    <EmbeddedResource Include="Tests\SectionWithColumns.html" />
     <EmbeddedResource Include="Tests\SectionWithBackgroundImage.html" />
     <EmbeddedResource Include="Tests\SectionWithBackgroundColor.html" />
     <EmbeddedResource Include="Tests\Section.html" />

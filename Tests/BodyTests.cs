@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Tests.Internal;
+using Xunit;
 
 namespace Tests
 {

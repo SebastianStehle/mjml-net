@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Mjml.Net;
 
-namespace Tests
+namespace Tests.Internal
 {
     public sealed class TestComponent : Component
     {

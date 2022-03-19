@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Tests.Internal;
+using Xunit;
 
 namespace Tests
 {
@@ -11,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("SocialEmpty.html"), result);
+            AssertHelpers.HtmlFileAsset("SocialEmpty.html", result);
         }
 
         [Fact]
@@ -27,7 +28,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("SocialRaw.html"), result);
+            AssertHelpers.HtmlFileAsset("SocialRaw.html", result);
         }
 
         [Fact]
@@ -46,7 +47,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("Social.html"), result);
+            AssertHelpers.HtmlFileAsset("Social.html", result);
         }
     }
 }

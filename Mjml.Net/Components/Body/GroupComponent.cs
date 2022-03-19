@@ -24,18 +24,21 @@ namespace Mjml.Net.Components.Body
 
         public ContainerWidth ContainerWidth;
 
-        public double CurrentWidth;
+        public (double Value, Unit Unit, string WidthString, double Pixels) CurrentWidth;
+
+        public double GetWidthAsPixel(GlobalContext context)
+        {
+            ComputeWidth(context);
+
+            return CurrentWidth.Pixels;
+        }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            ContainerWidth = context.GetContainerWidth();
-
-            var (width, widthString, pixels) = GetParsedWidth();
-
-            CurrentWidth = pixels;
+            ComputeWidth(context);
 
             renderer.StartElement("div") // Style div
-                .Class(GetColumnClass(width, widthString, context))
+                .Class(GetColumnClass(context))
                 .Class("mj-outlook-group-fix")
                 .Class(CssClass)
                 .Style("background-color", BackgroundColor)
@@ -60,7 +63,7 @@ namespace Mjml.Net.Components.Body
 
             foreach (var child in ChildNodes)
             {
-                var childWidth = GetElementWidth(child);
+                var childWidth = GetElementWidth(child, context);
 
                 context.Push();
                 context.SetContainerWidth(childWidth);
@@ -97,13 +100,13 @@ namespace Mjml.Net.Components.Body
             renderer.EndElement("div");
         }
 
-        private double GetElementWidth(IComponent component)
+        private double GetElementWidth(IComponent component, GlobalContext context)
         {
             var width = 0d;
 
             if (component is IProvidesWidth providesWidth)
             {
-                width = providesWidth.GetWidthAsPixel();
+                width = providesWidth.GetWidthAsPixel(context);
             }
 
             if (Width != null)
@@ -112,37 +115,46 @@ namespace Mjml.Net.Components.Body
 
                 if (parsed.Unit == Unit.Pixels)
                 {
-                    width = 100 * parsed.Value / CurrentWidth;
+                    width = 100 * parsed.Value / CurrentWidth.Pixels;
                 }
             }
             else
             {
-                width = CurrentWidth / Math.Max(1, component.ChildNodes.Count(x => !x.Raw));
+                width = CurrentWidth.Pixels / Math.Max(1, component.ChildNodes.Count(x => !x.Raw));
             }
 
             return width;
         }
 
-        private static string GetColumnClass((double Value, Unit Unit) width, string originalWidth, GlobalContext context)
+        private string GetColumnClass(GlobalContext context)
         {
             string className;
 
-            if (width.Unit == Unit.Percent)
+            var widthString = CurrentWidth.Value.ToInvariantString().Replace('.', '-');
+
+            if (CurrentWidth.Unit == Unit.Percent)
             {
-                className = $"mj-column-per-{width.Value}";
+                className = $"mj-column-per-{widthString}";
             }
             else
             {
-                className = $"mj-column-px-{width.Value}";
+                className = $"mj-column-px-{widthString}";
             }
 
-            context.SetGlobalData(originalWidth, MediaQuery.Width(className, originalWidth));
+            context.SetGlobalData(widthString, MediaQuery.Width(className, CurrentWidth.WidthString));
 
             return className;
         }
 
-        private ((double Value, Unit Unit), string, double) GetParsedWidth()
+        private void ComputeWidth(GlobalContext context)
         {
+            if (CurrentWidth.WidthString != null)
+            {
+                return;
+            }
+
+            ContainerWidth = context.GetContainerWidth();
+
             var widthValue = 0d;
             var widthUnit = Unit.Pixels;
             var widthString = string.Empty;
@@ -152,12 +164,11 @@ namespace Mjml.Net.Components.Body
             {
                 (widthValue, widthUnit) = UnitParser.Parse(Width);
 
-                // No need to interpolate it again.
                 widthString = Width;
             }
             else
             {
-                widthValue = 100 / Math.Max(1, Parent?.ChildNodes.Count(x => !x.Raw) ?? 1);
+                widthValue = 100d / Math.Max(1, Parent?.ChildNodes.Count(x => !x.Raw) ?? 1);
                 widthUnit = Unit.Percent;
                 widthString = $"{widthValue}%";
             }
@@ -171,12 +182,7 @@ namespace Mjml.Net.Components.Body
                 pixels = widthValue;
             }
 
-            return ((widthValue, widthUnit), widthString, pixels);
-        }
-
-        double IProvidesWidth.GetWidthAsPixel()
-        {
-            return CurrentWidth;
+            CurrentWidth = ((int)widthValue, widthUnit, widthString, pixels);
         }
 
         public override string? GetInheritingAttribute(string name)

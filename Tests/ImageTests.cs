@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Tests.Internal;
+using Xunit;
 
 namespace Tests
 {
@@ -11,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("Image.html"), result);
+            AssertHelpers.HtmlFileAsset("Image.html", result);
         }
 
         [Fact]
@@ -21,7 +22,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("ImageWithLink.html"), result);
+            AssertHelpers.HtmlFileAsset("ImageWithLink.html", result);
         }
     }
 }

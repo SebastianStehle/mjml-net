@@ -1,4 +1,5 @@
 ﻿using Mjml.Net.Helpers;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests
@@ -20,7 +21,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("Font.html"), result);
+            AssertHelpers.HtmlFileAsset("Font.html", result);
         }
 
         [Fact]
@@ -36,7 +37,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlAssert(TestHelper.GetContent("FontUbuntu.html"), result);
+            AssertHelpers.HtmlFileAsset("FontUbuntu.html", result);
         }
     }
 }

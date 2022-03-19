@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,47 +13,60 @@ using Xunit;
 
 #pragma warning disable MA0011 // IFormatProvider is missing
 
-namespace Tests
+namespace Tests.Internal
 {
     public static class AssertHelpers
     {
         public static void TrimmedEqual(string expected, string actual)
         {
-            var expTrimmed = Trim(expected);
-            var actTrimmed = Trim(actual);
+            var lhs = Trim(expected);
+            var rhs = Trim(actual);
 
-            Assert.Equal(expTrimmed, actTrimmed);
+            Assert.Equal(lhs, rhs);
         }
 
         public static void TrimmedContains(string expected, string actual)
         {
-            var expTrimmed = Trim(expected);
-            var actTrimmed = Trim(actual);
+            var lhs = Trim(expected);
+            var rhs = Trim(actual);
 
-            Assert.Contains(expTrimmed, actTrimmed, StringComparison.Ordinal);
+            Assert.Contains(lhs, rhs, StringComparison.Ordinal);
+        }
+
+        private static string Trim(string value)
+        {
+            var lines = value.Split('\n');
+
+            return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
+        }
+
+        public static void HtmlFileAsset(string name, string actual)
+        {
+            var expected = TestHelper.GetContent(name);
+
+            var lhs = Cleanup(expected);
+            var rhs = Cleanup(actual);
+
+            File.WriteAllText($"{name}.expected", lhs);
+            File.WriteAllText($"{name}.actual", rhs);
+
+            HtmlAssertCore(lhs, rhs);
         }
 
         public static void HtmlAssert(string expected, string actual)
         {
-            // We use a lot of conditional comments in html. These comments are treated as comments, which makes them hard to diff.
-            // If we replace them as normal comments the inner html become normal nodes and we can compare them.
-            static string Cleanup(string source)
-            {
-                var regex = new Regex(@"<!--\d{0,}\[(.*)\]\d{0,}>");
+            var lhs = Cleanup(expected);
+            var rhs = Cleanup(actual);
 
-                // Replace ending conditional tag to normal comment.
-                source = source.Replace("<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
+            HtmlAssertCore(lhs, rhs);
+        }
 
-                // Replace start condition tal to normal comment
-                source = regex.Replace(source, x => $"<!-- [{x.Groups[1].Value}] -->");
-
-                return source;
-            }
-
+        private static void HtmlAssertCore(string expected, string actual)
+        {
             var diffs =
                 DiffBuilder
-                    .Compare(Cleanup(expected))
-                    .WithTest(Cleanup(actual))
+                    .Compare(expected)
+                    .WithTest(actual)
                     .WithOptions(options => options
                         .AddAttributeComparer()
                         .AddAttributeNameMatcher()
@@ -93,6 +107,19 @@ namespace Tests
             }).ToList();
 
             Assert.True(!cleaned.Any(), PrintDiffs(cleaned));
+        }
+
+        private static string Cleanup(string source)
+        {
+            var regex = new Regex(@"<!--\d{0,}\[(.*)\]\d{0,}>");
+
+            // Replace ending conditional tag to normal comment.
+            source = source.Replace("<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
+
+            // Replace start condition tal to normal comment
+            source = regex.Replace(source, x => $"<!-- [{x.Groups[1].Value}] -->");
+
+            return source;
         }
 
         private static string PrintDiffs(IEnumerable<IDiff> diffs)
@@ -153,13 +180,6 @@ namespace Tests
             return sb.ToString();
 
             static string NodeName(ComparisonSource source) => source.Node.NodeType.ToString().ToLowerInvariant();
-        }
-
-        private static string Trim(string value)
-        {
-            var lines = value.Split('\n');
-
-            return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
     }
 }

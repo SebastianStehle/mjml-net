@@ -395,8 +395,8 @@ namespace Mjml.Net.Components.Body
                 ContainerWidth.Value -
                 UnitParser.Parse(BorderLeft).Value -
                 UnitParser.Parse(BorderRight).Value -
-                UnitParser.Parse(PaddingTop).Value -
-                UnitParser.Parse(PaddingBottom).Value;
+                UnitParser.Parse(PaddingLeft).Value -
+                UnitParser.Parse(PaddingRight).Value;
 
             if (innerWidth != ContainerWidth.Value)
             {
@@ -414,13 +414,11 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    renderer.Content("<![endif]-->");
-
                     renderer.StartElement("td")
                         .Attr("align", child.Node.GetAttribute("align"))
                         .Attr("class", child.Node.GetAttribute("css-class")?.SuffixCssClasses("outlook"))
                         .Style("vertical-align", child.Node.GetAttribute("vertical-align"))
-                        .Style("width", GetElementWidth(child));
+                        .Style("width", GetElementWidth(child, context));
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
@@ -438,13 +436,13 @@ namespace Mjml.Net.Components.Body
             renderer.EndElement("tr");
         }
 
-        private static string GetElementWidth(IComponent component)
+        private static string GetElementWidth(IComponent component, GlobalContext context)
         {
             var width = 0d;
 
             if (component is IProvidesWidth providesWidth)
             {
-                width = providesWidth.GetWidthAsPixel();
+                width = providesWidth.GetWidthAsPixel(context);
             }
 
             return $"{width}px";

@@ -1,4 +1,5 @@
 ﻿using Mjml.Net;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests
