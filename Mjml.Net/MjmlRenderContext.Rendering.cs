@@ -99,7 +99,7 @@ namespace Mjml.Net
             Buffer.Append(name);
             Buffer.Append("=\"");
             Buffer.Append(value1);
-            Buffer.Append(',');
+            Buffer.Append(", ");
             Buffer.Append(value2);
             Buffer.Append('"');
 
