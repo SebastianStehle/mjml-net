@@ -130,6 +130,8 @@ namespace Mjml.Net
                 return this;
             }
 
+            DetectFontFamily(name, value);
+
             if (numClasses > 0)
             {
                 // Close the open class attribute.
@@ -305,6 +307,34 @@ namespace Mjml.Net
 
             elementStarted = false;
             elementSelfClosed = false;
+        }
+
+        private void DetectFontFamily(string name, string value)
+        {
+            if (name != "font-family")
+            {
+                return;
+            }
+
+            if (value.Contains(',', StringComparison.OrdinalIgnoreCase))
+            {
+                // If we have multiple fonts it is faster than a string.Split, because we can avoid allocations.
+                foreach (var (key, font) in options.Fonts)
+                {
+                    if (value.Contains(key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        context.SetGlobalData(key, font);
+                    }
+                }
+            }
+            else
+            {
+                // Fast track for a single font.
+                if (options.Fonts.TryGetValue(value, out var font))
+                {
+                    context.SetGlobalData(value, font);
+                }
+            }
         }
     }
 }
