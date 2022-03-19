@@ -20,7 +20,6 @@ namespace Mjml.Net
         private void ClearRenderData()
         {
             buffers.Clear();
-            contextStack.Clear();
             elementStarted = false;
             elementSelfClosed = false;
             indent = 0;

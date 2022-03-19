@@ -4,7 +4,6 @@ namespace Mjml.Net
 {
     public sealed class GlobalContext
     {
-        private readonly RenderStack<TransitiveContext> transitive = new RenderStack<TransitiveContext>();
         private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
         private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
 
@@ -15,11 +14,6 @@ namespace Mjml.Net
         public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
 
         public MjmlOptions Options { get; private set; }
-
-        public GlobalContext()
-        {
-            transitive.Push(new TransitiveContext(null));
-        }
 
         public void SetOptions(MjmlOptions options)
         {
@@ -32,9 +26,6 @@ namespace Mjml.Net
 
             attributesByClass.Clear();
             attributesByName.Clear();
-
-            transitive.Clear();
-            transitive.Push(new TransitiveContext(null));
         }
 
         public void SetGlobalData(string name, object? value)
@@ -101,26 +92,6 @@ namespace Mjml.Net
             }
 
             return null;
-        }
-
-        public void Push()
-        {
-            transitive.Push(new TransitiveContext(transitive.Current));
-        }
-
-        public void Pop()
-        {
-            transitive.Pop();
-        }
-
-        public object? Set(string name, object? value)
-        {
-            return transitive.Current?.Set(name, value);
-        }
-
-        public object? Get(string name)
-        {
-            return transitive.Current?.Get(name);
         }
     }
 }
