@@ -118,7 +118,7 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            context.SetGlobalData("mj-image", new Style(HeadStyle));
+            context.SetGlobalData(ComponentName, new Style(HeadStyle));
 
             var isFluid = FluidOnMobile == "true";
             var isFullWidth = FullWidth == "full-width";
