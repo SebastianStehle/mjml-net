@@ -37,6 +37,8 @@
     <None Remove="Tests\HeroDividers.html" />
     <None Remove="Tests\Image.html" />
     <None Remove="Tests\ImageWithLink.html" />
+    <None Remove="Tests\Navbar.html" />
+    <None Remove="Tests\NavbarWithoutHamburger.html" />
     <None Remove="Tests\Preview.html" />
     <None Remove="Tests\Section.html" />
     <None Remove="Tests\SectionWithBackgroundColor.html" />
@@ -88,6 +90,8 @@
     <EmbeddedResource Include="Tests\Amario.html" />
     <EmbeddedResource Include="Tests\FontUbuntu.html" />
     <EmbeddedResource Include="Tests\GroupWithColumns.html" />
+    <EmbeddedResource Include="Tests\NavbarWithoutHamburger.html" />
+    <EmbeddedResource Include="Tests\Navbar.html" />
     <EmbeddedResource Include="Tests\SectionWithGroups.html" />
     <EmbeddedResource Include="Tests\SectionWithColumns.html" />
     <EmbeddedResource Include="Tests\SectionWithBackgroundImage.html" />

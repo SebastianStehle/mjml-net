@@ -168,18 +168,6 @@ namespace Mjml.Net.Components.Body
             renderer.EndElement("table");
         }
 
-        private static void HeadStyle(IHtmlRenderer renderer, GlobalContext context)
-        {
-            renderer.Content($"@media only screen and (max-width:{context.Options.Breakpoint}) {{");
-            renderer.Content("  table.mj-full-width-mobile {");
-            renderer.Content("    width: 100% !important;");
-            renderer.Content("  }");
-            renderer.Content("  td.mj-full-width-mobile {");
-            renderer.Content("    width: auto !important;");
-            renderer.Content("  }");
-            renderer.Content("}");
-        }
-
         private void RenderImage(IHtmlRenderer renderer, bool fullWidth)
         {
             renderer.StartElement("img", true)
@@ -206,6 +194,18 @@ namespace Mjml.Net.Components.Body
                 .Style("outline", "none")
                 .Style("text-decoration", "none")
                 .Style("width", "100%");
+        }
+
+        private static void HeadStyle(IHtmlRenderer renderer, GlobalContext context)
+        {
+            renderer.Content($"@media only screen and (max-width:{context.Options.Breakpoint}) {{");
+            renderer.Content("  table.mj-full-width-mobile {");
+            renderer.Content("    width: 100% !important;");
+            renderer.Content("  }");
+            renderer.Content("  td.mj-full-width-mobile {");
+            renderer.Content("    width: auto !important;");
+            renderer.Content("  }");
+            renderer.Content("}");
         }
     }
 }
