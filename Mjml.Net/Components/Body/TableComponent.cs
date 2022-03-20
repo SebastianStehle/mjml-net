@@ -3,6 +3,7 @@ namespace Mjml.Net.Components.Body
     public partial class TableComponent : Component
     {
         public override string ComponentName => "mj-table";
+        public override ContentType ContentType => ContentType.Raw;
 
         [Bind("align", BindType.Align)]
         public string Align = "left";
@@ -100,7 +101,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellpadding", CellPadding)
                 .Attr("cellspacing", CellSpacing)
                 .Attr("role", Role)
-                .Attr("width", $"{CurrentWidth.Value}")
+                .Attr("width", CurrentWidth.Unit == Unit.Percent ? CurrentWidth.WidthString : $"{CurrentWidth.Value}")
                 .Style("border", Border)
                 .Style("color", Color)
                 .Style("font-family", FontFamily)

@@ -49,6 +49,9 @@
     <None Remove="Tests\Spacer.html" />
     <None Remove="Tests\SpacerWIthHeight.html" />
     <None Remove="Tests\Style.html" />
+    <None Remove="Tests\Table.html" />
+    <None Remove="Tests\TablePercent.html" />
+    <None Remove="Tests\TablePixels.html" />
     <None Remove="Tests\Text.html" />
     <None Remove="Tests\TextWithHtml.html" />
     <None Remove="Tests\Title.html" />
@@ -81,6 +84,18 @@
 
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Tests\TablePixels.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\TablePercent.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\Table.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
