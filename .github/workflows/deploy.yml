@@ -20,7 +20,7 @@ jobs:
 
     - name: pack
       run: |
-        dotnet pack -c Release
+        cd Mjml.Net & dotnet pack -c Release
 
     - name: publish
       if: github.event_name != 'pull_request' && 1 == 2

@@ -1,0 +1,13 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Authors>Liam Riddell,Sebastian Stehle</Authors>
+    <Description>An unofficial port of MJML (by MailJet) to .NET Standard. This project is currently in experimental state and should not be used in a production environment.</Description>
+    <Copyright>MIT</Copyright>
+    <PackageTags>email,mjml</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/LiamRiddell/MJML.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/LiamRiddell/MJML.NET.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+    <Version>0.2.0</Version>
+  </PropertyGroup>
+</Project>
