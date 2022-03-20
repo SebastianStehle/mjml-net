@@ -63,53 +63,32 @@
         [Bind("width", BindType.PixelsOrPercent)]
         public string Width = "100%";
 
-        public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
-
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var widthValue = 0d;
-            var widthUnit = Unit.Pixels;
-            var widthString = string.Empty;
+
+            var widthValue = 100d;
+            var widthUnit = Unit.Percent;
+            var widthString = "100%";
 
             if (Width != null)
             {
                 (widthValue, widthUnit) = UnitParser.Parse(Width);
                 widthString = Width;
             }
-            else
-            {
-                widthValue = 100d;
-                widthUnit = Unit.Percent;
-                widthString = $"{widthValue}%";
-            }
 
-            if (widthUnit != Unit.Pixels)
-            {
-                ActualWidth = (int)(parentWidth * widthValue / 100);
-            }
-            else
-            {
-                ActualWidth = (int)widthValue;
-            }
-
-            CurrentWidth = (widthValue, widthUnit, widthString, ActualWidth);
-        }
-
-        public override void Render(IHtmlRenderer renderer, GlobalContext context)
-        {
             renderer.StartElement("table") // Style table
                 .Attr("border", "0")
                 .Attr("cellpadding", CellPadding)
                 .Attr("cellspacing", CellSpacing)
                 .Attr("role", Role)
-                .Attr("width", CurrentWidth.Unit == Unit.Percent ? CurrentWidth.WidthString : $"{CurrentWidth.Value}")
+                .Attr("width", widthUnit == Unit.Percent ? widthString : $"{widthValue}")
                 .Style("border", Border)
                 .Style("color", Color)
                 .Style("font-family", FontFamily)
                 .Style("font-size", FontSize)
                 .Style("line-height", LineHeight)
                 .Style("table-layout", TableLayout)
-                .Style("width", CurrentWidth.WidthString);
+                .Style("width", widthString);
 
             RenderRaw(renderer);
 
