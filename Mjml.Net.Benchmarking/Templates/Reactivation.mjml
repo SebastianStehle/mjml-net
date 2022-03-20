@@ -1,0 +1,55 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all padding="0px"></mj-all>
+      <mj-class name="preheader" color="#000000" font-size="11px" font-family="Ubuntu, Helvetica, Arial, sans-serif" padding="0px"></mj-class>
+    </mj-attributes>
+    <mj-style inline="inline">a { text-decoration: none; color: inherit; }</mj-style>
+  </mj-head>
+  <mj-body background-color="#e0f2ff">
+    <mj-section background-color="#2a5cab" padding="10px 0">
+      <mj-column width="33%">
+        <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qg.png" alt="logo" width="150px" padding="10px 0"></mj-image>
+      </mj-column>
+      <mj-column width="66%">
+        <mj-text align="left" color="#ffffff" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" padding="18px 0px">the only way to travel</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding-top="20px">
+      <mj-column width="100%">
+        <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qh.png" alt="tickets" width="192px" padding="10px 25px"></mj-image>
+        <mj-text align="center" color="#FAB701" font-size="25px" font-family="Lato, Helvetica, Arial, sans-serif" padding="10px 25px"><strong>Hey {{FirstName}}
+            <br />
+            <br />
+            It&#39;s been a long time since you last traveled with us.
+          </strong></mj-text>
+        <mj-text align="center" color="#EC652D" font-size="18px" font-family="Lato, Helvetica, Arial, sans-serif" padding="10px 30px"><strong>Have a look at some of the top destinations people are booking right now!</strong></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="20px 0">
+      <mj-column>
+        <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qy.png" alt="New York" width="184px" padding="0 25px"></mj-image>
+        <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" vertical-align="top" padding="20px 25px"><strong>New York</strong> <br />
+          <p style="font-size: 15px;color:#000000;">$399&#xA0;</p>
+        </mj-text>
+      </mj-column>
+      <mj-column>
+        <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qr.png" alt="London" width="184px" padding="0 25px"></mj-image>
+        <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" vertical-align="top" padding="20px 25px"><strong>London</strong> <br />
+          <p style="font-size: 15px;color:#000000;">$399&#xA0;</p>
+        </mj-text>
+      </mj-column>
+      <mj-column>
+        <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qv.png" alt="Berlin" width="184px" padding="0 25px"></mj-image>
+        <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" vertical-align="top" padding="20px 25px"><strong>Berlin</strong> <br />
+          <p style="font-size: 15px;color:#000000;">$399&#xA0;</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#FAB700" padding="10px">
+      <mj-column vertical-align="top" width="100%">
+        <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" padding="10px 25px">Best, <br /><br /> The {{Company}} Team</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
