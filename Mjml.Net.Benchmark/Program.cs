@@ -9,6 +9,9 @@ namespace Mjml.Net.Benchmarking
         {
             [Option('p', "profiler", Required = false, HelpText = "Runs the test runenr logic.")]
             public bool TestRunner { get; set; }
+
+            [Option('i', "interations", Required = false, HelpText = "The number of iterations when using profiler mode.", Default = 20)]
+            public int TestRunnerIterations { get; set; }
         }
 
         public static void Main(string[] args)
@@ -18,7 +21,7 @@ namespace Mjml.Net.Benchmarking
                      {
                          if (o.TestRunner)
                          {
-                             TestRunner.Run();
+                             TestRunner.Run(o.TestRunnerIterations);
                          } else
                          {
                              BenchmarkRunner.Run<TemplateBenchmarks>();

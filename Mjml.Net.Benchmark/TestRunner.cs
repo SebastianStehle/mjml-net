@@ -5,46 +5,42 @@ namespace Mjml.Net.Benchmarking
 {
     public static class TestRunner
     {
-        public static void Run()
+        public static void Run(int numberOfIterations)
         {
             var mjmlRenderer = new MjmlRenderer();
+            var mjmlTemplatePaths = Directory.GetFiles("./Templates/", "*.mjml");
 
-            Console.WriteLine("Many Heroes");
-
-            for (var i = 0; i < 20; i++)
+            foreach (var mjmlTemplatePath in mjmlTemplatePaths)
             {
-                Run("ManyHeroes.mjml", mjmlRenderer);
-            }
+                try
+                {
+                    if (string.IsNullOrEmpty(mjmlTemplatePath))
+                    {
+                        continue;
+                    }    
 
-            Console.WriteLine("---");
-            Console.WriteLine("Amario");
+                    var fileName = Path.GetFileName(mjmlTemplatePath);
 
-            for (var i = 0; i < 20; i++)
-            {
-                Run("Amario.mjml", mjmlRenderer);
-            }
+                    Console.WriteLine($"\n=============================");
+                    Console.WriteLine($" {fileName}");
+                    Console.WriteLine($" {mjmlTemplatePath}");
+                    Console.WriteLine($"=============================");
 
-            return;
-            Console.WriteLine("---");
-            Console.WriteLine("Austin");
-
-            for (var i = 0; i < 20; i++)
-            {
-                Run("Austin.mjml", mjmlRenderer);
-            }
-
-            Console.WriteLine("---");
-            Console.WriteLine("Sphero");
-
-            for (var i = 0; i < 20; i++)
-            {
-                Run("Sphero.mjml", mjmlRenderer);
+                    for (var i = 0; i < numberOfIterations; i++)
+                    {
+                        Run(fileName, mjmlTemplatePath, mjmlRenderer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
         }
 
-        private static void Run(string file, MjmlRenderer mjmlRenderer)
+        private static void Run(string fileName, string filePath, MjmlRenderer mjmlRenderer)
         {
-            var text = File.ReadAllText($"./Templates/{file}");
+            var text = File.ReadAllText(filePath);
 
             var watch = Stopwatch.StartNew();
 
@@ -55,7 +51,7 @@ namespace Mjml.Net.Benchmarking
 
             watch.Stop();
 
-            File.WriteAllText($"{file}.html", html);
+            File.WriteAllText(fileName.Replace(".mjml", ".html"), html);
 
             Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
         }
