@@ -39,6 +39,7 @@ namespace Mjml.Net
             Add<TextComponent>();
             Add<TitleComponent>();
             Add<SectionComponent>();
+            Add<WrapperComponent>();
 
             Add(new FontHelper());
             Add(new PreviewHelper());

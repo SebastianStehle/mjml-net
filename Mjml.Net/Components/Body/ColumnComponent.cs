@@ -4,7 +4,7 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public partial class ColumnComponent : Component
+    public partial class ColumnComponent : BodyComponentBase
     {
         public override string ComponentName => "mj-column";
 
@@ -28,9 +28,6 @@ namespace Mjml.Net.Components.Body
 
         [Bind("border-top")]
         public string? BorderTop;
-
-        [Bind("css-class")]
-        public string? CssClass;
 
         [Bind("direction", BindType.Direction)]
         public string Direction = "ltr";
