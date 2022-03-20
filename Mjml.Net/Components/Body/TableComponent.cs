@@ -54,7 +54,7 @@
         [Bind("role", BindType.String)]
         public string? Role;
 
-        [Bind("table-layout", BindType.SocialTableLayout)]
+        [Bind("table-layout", BindType.String)]
         public string TableLayout = "auto";
 
         [Bind("vertical-align", BindType.VerticalAlign)]
