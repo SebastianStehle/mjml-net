@@ -35,6 +35,7 @@ namespace Mjml.Net
             Add<SocialElementComponent>();
             Add<SpacerComponent>();
             Add<StyleComponent>();
+            Add<TableComponent>();
             Add<TextComponent>();
             Add<TitleComponent>();
             Add<SectionComponent>();
