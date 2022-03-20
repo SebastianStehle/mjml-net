@@ -2,7 +2,7 @@
 
 An unofficial port of [MJML](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to .NET Core.
 
-This project is currently in an **experimental state** and should not be used in a production environment. 
+This project is currently in an **experimental state** and should not be used in a production environment.
 
 ## Introduction
 
@@ -32,15 +32,37 @@ You can find out more about MJML 4 from the official website.
 </p>
 
 ## Usage
-Firstly, you'll need to reference the `MJML.NET 2` NuGet Package into your project. 
+
+Firstly, you'll need to reference the `MJML.NET 2` NuGet Package into your project.
 
 ```cmd
 PM > Install-Package MjmlDotNet2
 ```
 
+## Known Issues
+
+### Unknown HTML Entity
+
+We are aware with an issue where by using HTML Character Entities (e.g. `&copy;`) are unknown and throw an unhandled exception during the rendering of the MJML document. This is because
+we use XmlReader as the main driver for parsing the MJMl document.
+
+The solution is to change the HTML Character Entity Names (e.g. `&copy;`) to there corresponding HTML Character Entity Number (e.g. `&#169;`) in the MJML document.
+Here are some of the common HTML Character Entities:
+
+| Result | Description                        | Entity Name | Entity Number |
+| ------ | ---------------------------------- | ----------- | ------------- |
+|        | non-breaking space                 | `&nbsp;`    | `&#160;`      |
+| <      | less than                          | `&lt`       | `&#60;`       |
+| >      | greater than                       | `&gt;`      | `&#62;`       |
+| &      | ampersand                          | `&amp;`     | `&#38;`       |
+| "      | double quotation mark              | `&quot;`    | `&#34;`       |
+| '      | single quotation mark (apostrophe) | `&apos;`    | `&#39;`       |
+| ©      | copyright                          | `&copy;`    | `&#169;`      |
+| ®      | registered trademark               | `&reg;`     | `&#174;`      |
+
 ## Contribution
 
-We really appreciate any contribution to the project to help provide a native version of MJML to C#. 
+We really appreciate any contribution to the project to help provide a native version of MJML to C#.
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -50,6 +72,6 @@ Side Note: In your PR you should summarise your changes, bug fixes or general mo
 
 Once again, it's good to share some appreciation to the projects that make `MJML.NET V2` possible.
 
-* [MJML](https://github.com/mjmlio/mjml)
-* [MJML.NET V1](https://github.com/LiamRiddell/MJML.NET)
-* [AngleSharp](https://github.com/AngleSharp/AngleSharp)
+- [MJML](https://github.com/mjmlio/mjml)
+- [MJML.NET V1](https://github.com/LiamRiddell/MJML.NET)
+- [AngleSharp](https://github.com/AngleSharp/AngleSharp)
