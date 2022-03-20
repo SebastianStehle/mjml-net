@@ -97,7 +97,7 @@ namespace Mjml.Net.Components.Body
                     renderer.StartElement("td")
                         .Style("align", child.GetAttribute("align"))
                         .Style("vertical-align", child.GetAttribute("vertical-align"))
-                        .Style("width", child.ActualWidth, "px");
+                        .Style("width", $"{child.ActualWidth}px");
 
                     renderer.Content("<![endif]-->");
 

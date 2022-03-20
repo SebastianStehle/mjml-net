@@ -113,8 +113,8 @@
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", ActualWidth)
-                .Style("width", ActualWidth, "px");
+                .Attr("width", $"{ActualWidth}")
+                .Style("width", $"{ActualWidth}px");
 
             renderer.StartElement("tr");
 
@@ -131,7 +131,7 @@
                 .Style("mso-position-horizontal", "center")
                 .Style("position", "absolute")
                 .Style("top", "0")
-                .Style("width", width, "px")
+                .Style("width", $"{width}px")
                 .Style("z-index", "-3");
 
             renderer.Content("<![endif]-->");
@@ -140,7 +140,7 @@
                 .Attr("align", Align)
                 .Attr("class", CssClass)
                 .Style("margin", "0 auto")
-                .Style("max-width", ActualWidth, "px");
+                .Style("max-width", $"{ActualWidth}px");
 
             renderer.StartElement("table") // Style table
                 .Attr("border", "0")
@@ -160,7 +160,7 @@
                 {
                     renderer.StartElement("td") // Style td-fluid
                         .Style("mso-padding-bottom-alt", "0")
-                        .Style("padding-bottom", backgroundRatio, "px")
+                        .Style("padding-bottom", $"{backgroundRatio}px")
                         .Style("width", "0.01%");
                     renderer.EndElement("td");
                 }
@@ -195,7 +195,7 @@
 
                 renderer.StartElement("td") // Style: hero
                     .Attr("background", BackgroundUrl)
-                    .Attr("height", height)
+                    .Attr("height", $"{height}")
                     .Style("background", backgroundString)
                     .Style("background-position", BackgroundPosition)
                     .Style("background-repeat", "no-repeat")
@@ -235,8 +235,8 @@
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
-                .Attr("width", ActualWidth)
-                .Style("width", ActualWidth, "px");
+                .Attr("width", $"{ActualWidth}")
+                .Style("width", $"{ActualWidth}px");
 
             renderer.StartElement("tr");
 

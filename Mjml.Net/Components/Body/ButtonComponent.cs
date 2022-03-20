@@ -140,7 +140,7 @@
                 .Attr("name", Name)
                 .Attr("target", !string.IsNullOrEmpty(Href) ? Target : null)
                 .Style("display", "inline-block")
-                .Style("width", CalculateButtonWidth(), "px")
+                .Style("width", $"{CalculateButtonWidth()}px")
                 .Style("background", BackgroundColor)
                 .Style("color", Color)
                 .Style("font-family", FontFamily)

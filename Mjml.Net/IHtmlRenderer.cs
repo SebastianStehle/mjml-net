@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Mjml.Net
 {
@@ -80,30 +81,77 @@ namespace Mjml.Net
         IElementHtmlWriter Attr(string name, string? value);
 
         /// <summary>
-        /// Writes an attribute by name with two values. for the current element.
-        /// </summary>
-        /// <param name="name">The name of the attribute.</param>
-        /// <param name="value1">The first value of the attribute. If the value is null, it will be omitted.</param>
-        /// <param name="value2">The second value of the attribute. If the value is null, it will be omitted.</param>
-        /// <returns>The current instance to set more attributes.</returns>
-        IElementHtmlWriter Attr(string name, string? value1, string? value2);
-
-        /// <summary>
         /// Sets an attribute by name for the current element.
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
         /// <param name="value">The value of the attribute.</param>
         /// <returns>The current instance to set more attributes.</returns>
-        IElementHtmlWriter Attr(string name, double value);
+        IElementHtmlWriter Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value);
 
-        /// <summary>
-        /// Sets an attribute by name for the current element.
-        /// </summary>
-        /// <param name="name">The name of the attribute.</param>
-        /// <param name="value">The value of the attribute.</param>
-        /// <param name="unit">The unit of the value.</param>
-        /// <returns>The current instance to set more attributes.</returns>
-        IElementHtmlWriter Attr(string name, double value, string unit);
+        internal void StartAttr(string name);
+    }
+
+    [InterpolatedStringHandler]
+    public ref struct AttrInterpolatedStringHandler
+    {
+        private StringBuilder.AppendInterpolatedStringHandler inner;
+
+        public AttrInterpolatedStringHandler(int literalLength, int formattedCount, IElementHtmlWriter writer, string name)
+        {
+            writer.StartAttr(name);
+
+            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder);
+        }
+
+        public void AppendLiteral(string value)
+        {
+            inner.AppendLiteral(value);
+        }
+
+        public void AppendFormatted<T>(T value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted<T>(T value, string? format)
+        {
+            inner.AppendFormatted(value, format);
+        }
+
+        public void AppendFormatted<T>(T value, int alignment)
+        {
+            inner.AppendFormatted(value, alignment);
+        }
+
+        public void AppendFormatted<T>(T value, int alignment, string? format)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(string? value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted(string? value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(object? value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
     }
 
     public interface IElementStyleWriter
@@ -121,9 +169,75 @@ namespace Mjml.Net
         /// </summary>
         /// <param name="name">The name of the style.</param>
         /// <param name="value">The value of the attribute. If the value is null, it will be omitted.</param>
-        /// <param name="unit">The unit of the value.</param>
         /// <returns>The current instance to set more styles.</returns>
-        IElementStyleWriter Style(string name, double value, string unit);
+        IElementStyleWriter Style(string name, [InterpolatedStringHandlerArgument("", "name")] ref StyleInterpolatedStringHandler value);
+
+        internal StringBuilder StringBuilder { get; }
+
+        void StartStyle(string name);
+    }
+
+    [InterpolatedStringHandler]
+    public ref struct StyleInterpolatedStringHandler
+    {
+        private StringBuilder.AppendInterpolatedStringHandler inner;
+
+        public StyleInterpolatedStringHandler(int literalLength, int formattedCount, IElementStyleWriter writer, string name)
+        {
+            writer.StartStyle(name);
+
+            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder);
+        }
+
+        public void AppendLiteral(string value)
+        {
+            inner.AppendLiteral(value);
+        }
+
+        public void AppendFormatted<T>(T value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted<T>(T value, string? format)
+        {
+            inner.AppendFormatted(value, format);
+        }
+
+        public void AppendFormatted<T>(T value, int alignment)
+        {
+            inner.AppendFormatted(value, alignment);
+        }
+
+        public void AppendFormatted<T>(T value, int alignment, string? format)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(string? value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted(string? value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(object? value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
     }
 
     public interface IElementClassWriter : IElementStyleWriter
@@ -139,8 +253,72 @@ namespace Mjml.Net
         /// Adds a class name to the current element.
         /// </summary>
         /// <param name="value">The class name. If the value is null, it will be omitted.</param>
-        /// <param name="suffix">The suffix.</param>
         /// <returns>The current instance to set more class names.</returns>
-        IElementClassWriter Class(ReadOnlySpan<char> value, string suffix);
+        IElementClassWriter Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value);
+
+        void StartClass();
+    }
+
+    [InterpolatedStringHandler]
+    public ref struct ClassNameInterpolatedStringHandler
+    {
+        private StringBuilder.AppendInterpolatedStringHandler inner;
+
+        public ClassNameInterpolatedStringHandler(int literalLength, int formattedCount, IElementClassWriter writer)
+        {
+            writer.StartClass();
+
+            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder);
+        }
+
+        public void AppendLiteral(string value)
+        {
+            inner.AppendLiteral(value);
+        }
+
+        public void AppendFormatted<T>(T value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted<T>(T value, string? format)
+        {
+            inner.AppendFormatted(value, format);
+        }
+
+        public void AppendFormatted<T>(T value, int alignment)
+        {
+            inner.AppendFormatted(value, alignment);
+        }
+
+        public void AppendFormatted<T>(T value, int alignment, string? format)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(string? value)
+        {
+            inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted(string? value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
+
+        public void AppendFormatted(object? value, int alignment = 0, string? format = null)
+        {
+            inner.AppendFormatted(value, alignment, format);
+        }
     }
 }

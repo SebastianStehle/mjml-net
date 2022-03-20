@@ -63,11 +63,11 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation")
-                .Attr("width", outlookWidth, "px")
+                .Attr("width", $"{outlookWidth}px")
                 .Style("border-top", borderSetting)
                 .Style("font-size", "1px")
                 .Style("margin", margin)
-                .Style("width", outlookWidth, "px");
+                .Style("width", $"{outlookWidth}px");
 
             renderer.StartElement("tr");
 

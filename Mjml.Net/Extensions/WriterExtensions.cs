@@ -18,7 +18,7 @@ namespace Mjml.Net.Extensions
         {
             if (condition)
             {
-                writer.Style(name, value, unit);
+                writer.Style(name, $"{value}{unit}");
             }
 
             return writer;
@@ -32,7 +32,7 @@ namespace Mjml.Net.Extensions
             }
             else
             {
-                return writer.Attr(name, UnitParser.Parse(value).Value);
+                return writer.Attr(name, $"{UnitParser.Parse(value).Value}");
             }
         }
 
@@ -57,7 +57,7 @@ namespace Mjml.Net.Extensions
 
                 if (index > 0)
                 {
-                    writer.Class(span[..index], suffix);
+                    writer.Class($"{span[..index]}-{suffix}");
 
                     span = span[index..].Trim();
                 }
@@ -69,7 +69,7 @@ namespace Mjml.Net.Extensions
 
             if (span.Length > 0)
             {
-                writer.Class(span, suffix);
+                writer.Class($"{span}-{suffix}");
             }
 
             return writer;
