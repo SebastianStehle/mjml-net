@@ -178,6 +178,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
+                .Attr("role", "presentation")
                 .Attr("width", IsFullWidth() ? "100%" : ActualWidth.ToInvariantString())
                 .Classes(CssClass, "outlook")
                 .StyleIf("width", IsFullWidth(), "100%")

@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Tests\Amario.html" />
+    <None Remove="Tests\Amario.mjml" />
     <None Remove="Tests\Breakpoint.html" />
     <None Remove="Tests\Button.html" />
     <None Remove="Tests\ButtonLink.html" />
@@ -82,6 +84,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\Amario.mjml" />
+    <EmbeddedResource Include="Tests\Amario.html" />
     <EmbeddedResource Include="Tests\FontUbuntu.html" />
     <EmbeddedResource Include="Tests\GroupWithColumns.html" />
     <EmbeddedResource Include="Tests\SectionWithGroups.html" />

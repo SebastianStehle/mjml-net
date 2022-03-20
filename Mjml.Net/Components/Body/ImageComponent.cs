@@ -172,7 +172,7 @@ namespace Mjml.Net.Components.Body
         {
             renderer.Content($"@media only screen and (max-width:{context.Options.Breakpoint}) {{");
             renderer.Content("  table.mj-full-width-mobile {");
-            renderer.Content("    width: 100% !important; }");
+            renderer.Content("    width: 100% !important;");
             renderer.Content("  }");
             renderer.Content("  td.mj-full-width-mobile {");
             renderer.Content("    width: auto !important;");

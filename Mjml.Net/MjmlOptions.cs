@@ -17,6 +17,8 @@ namespace Mjml.Net
 
         public string Breakpoint { get; set; } = "480px";
 
+        public Style[]? Styles { get; init; }
+
         public bool ForceOWAQueries { get; init; }
 
         public bool Beautify { get; init; } = true;

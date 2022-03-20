@@ -23,5 +23,18 @@ namespace Tests
 
             AssertHelpers.TrimmedContains("</body>", result);
         }
+
+        [Fact]
+        public void Should_render_amario()
+        {
+            var source = TestHelper.GetContent("Amario.mjml");
+
+            var result = new MjmlRenderer().Render(source, new MjmlOptions
+            {
+                Beautify = true
+            }).Html;
+
+            AssertHelpers.HtmlFileAsset("Amario.html", result, true);
+        }
     }
 }

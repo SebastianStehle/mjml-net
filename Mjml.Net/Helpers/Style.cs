@@ -31,6 +31,7 @@ namespace Mjml.Net.Helpers
             WriteMediaQueriesThunderbird(renderer, context);
             WriteMediaQueriesOWA(renderer, context);
             WriteStyles(renderer, context);
+            WriteOptionStyles(renderer, context);
         }
 
         private static void WriteMediaQueries(IHtmlRenderer renderer, GlobalContext context)
@@ -53,7 +54,7 @@ namespace Mjml.Net.Helpers
         private static void WriteMediaQueriesThunderbird(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartElement("style")
-                .Attr("type", "text/css").Attr("media", $"screen and (min-width:{context.Options.Breakpoint})");
+                .Attr("media", $"screen and (min-width:{context.Options.Breakpoint})");
 
             foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
             {
@@ -69,6 +70,19 @@ namespace Mjml.Net.Helpers
                 .Attr("type", "text/css");
 
             foreach (var style in context.GlobalData.Values.OfType<Style>())
+            {
+                style.Renderer(renderer, context);
+            }
+
+            renderer.EndElement("style");
+        }
+
+        private static void WriteOptionStyles(IHtmlRenderer renderer, GlobalContext context)
+        {
+            renderer.StartElement("style")
+                .Attr("type", "text/css");
+
+            foreach (var style in context.Options.Styles ?? Array.Empty<Style>())
             {
                 style.Renderer(renderer, context);
             }

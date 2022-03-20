@@ -25,7 +25,7 @@
         public string FontSize = "13px";
 
         [Bind("font-style")]
-        public string FontStyle = "normal";
+        public string FontStyle;
 
         [Bind("font-weight")]
         public string? FontWeight;
@@ -34,7 +34,7 @@
         public string? Height;
 
         [Bind("letter-spacing", BindType.Pixels)]
-        public string LetterSpacing = "none";
+        public string LetterSpacing;
 
         [Bind("line-height", BindType.Pixels)]
         public string LineHeight = "1";

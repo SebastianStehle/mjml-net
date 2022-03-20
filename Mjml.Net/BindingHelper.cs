@@ -18,6 +18,12 @@
 
             switch (parts.Length)
             {
+                case 1:
+                    t = parts[0];
+                    r = parts[0];
+                    b = parts[0];
+                    l = parts[0];
+                    break;
                 case 2:
                     t = parts[0];
                     r = parts[1];

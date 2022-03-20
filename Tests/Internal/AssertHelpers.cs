@@ -40,7 +40,7 @@ namespace Tests.Internal
             return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
 
-        public static void HtmlFileAsset(string name, string actual)
+        public static void HtmlFileAsset(string name, string actual, bool ignoreComments = false)
         {
             var expected = TestHelper.GetContent(name);
 
@@ -49,44 +49,50 @@ namespace Tests.Internal
 
             try
             {
-                File.WriteAllText($"{name}.expected", lhs);
-                File.WriteAllText($"{name}.actual", rhs);
+                File.WriteAllText($"{name}.expected.html", lhs);
+                File.WriteAllText($"{name}.actual.html", rhs);
             }
             catch (IOException)
             {
             }
 
-            HtmlAssertCore(lhs, rhs);
+            HtmlAssertCore(lhs, rhs, ignoreComments);
         }
 
-        public static void HtmlAssert(string expected, string actual)
+        public static void HtmlAssert(string expected, string actual, bool ignoreComments = false)
         {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 
-            HtmlAssertCore(lhs, rhs);
+            HtmlAssertCore(lhs, rhs, ignoreComments);
         }
 
-        private static void HtmlAssertCore(string expected, string actual)
+        private static void HtmlAssertCore(string expected, string actual, bool ignoreComments )
         {
             var diffs =
                 DiffBuilder
                     .Compare(expected)
                     .WithTest(actual)
-                    .WithOptions(options => options
-                        .AddAttributeComparer()
-                        .AddAttributeNameMatcher()
-                        .AddBooleanAttributeComparer(BooleanAttributeComparision.Strict)
-                        .AddClassAttributeComparer()
-                        .AddCssSelectorMatcher()
-                        .AddElementComparer()
-                        .AddIgnoreElementSupport()
-                        .AddSearchingNodeMatcher()
-                        .AddStyleAttributeComparer(ignoreOrder: true)
-                        .AddStyleSheetComparer()
-                        .AddTextComparer(WhitespaceOption.Normalize, ignoreCase: false)
-                        .IgnoreDiffAttributes()
-                    )
+                    .WithOptions(options =>
+                    {
+                        options.AddAttributeComparer();
+                        options.AddAttributeNameMatcher();
+                        options.AddBooleanAttributeComparer(BooleanAttributeComparision.Strict);
+                        options.AddClassAttributeComparer();
+                        options.AddCssSelectorMatcher();
+                        options.AddElementComparer();
+                        options.AddIgnoreElementSupport();
+                        options.AddSearchingNodeMatcher();
+                        options.AddStyleAttributeComparer(ignoreOrder: true);
+                        options.AddStyleSheetComparer();
+                        options.AddTextComparer(WhitespaceOption.Normalize, ignoreCase: false);
+                        options.IgnoreDiffAttributes();
+
+                        if (ignoreComments)
+                        {
+                            options.IgnoreComments();
+                        }
+                    })
                     .Build();
 
             var cleaned = diffs.Where(d =>
@@ -143,8 +149,8 @@ namespace Tests.Internal
                 {
                     case NodeDiff diff when diff.Target == DiffTarget.Text && diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
                         sb.AppendLine($"The text in {diff.Control.Path} is different.");
-                        sb.AppendLine($"   * Test:    '{diff.Test.Node.Text()}'.");
-                        sb.AppendLine($"   * Control: '{diff.Control.Node.Text()}'.");
+                        sb.AppendLine($"   *   Actual: '{diff.Test.Node.Text()}'.");
+                        sb.AppendLine($"   * Expected: '{diff.Control.Node.Text()}'.");
                         break;
                     case NodeDiff diff when diff.Target == DiffTarget.Text:
                         sb.AppendLine($"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} is different.");
@@ -157,11 +163,13 @@ namespace Tests.Internal
                         break;
                     case AttrDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
                         sb.AppendLine($"The values of the attributes at {diff.Control.Path} are different.");
-                        sb.AppendLine($"   * Test:    '{diff.Test.Attribute.Value}'.");
-                        sb.AppendLine($"   * Control: '{diff.Control.Attribute.Value}'.");
+                        sb.AppendLine($"   *   Actual: '{diff.Test.Attribute.Value}'.");
+                        sb.AppendLine($"   * Expected: '{diff.Control.Attribute.Value}'.");
                         break;
                     case AttrDiff diff:
                         sb.AppendLine($"The value of the attribute {diff.Control.Path} and actual attribute {diff.Test.Path} are different.");
+                        sb.AppendLine($"   *   Actual: '{diff.Test.Attribute.Value}'.");
+                        sb.AppendLine($"   * Expected: '{diff.Control.Attribute.Value}'.");
                         break;
                     case MissingNodeDiff diff:
                         sb.AppendLine($"The {NodeName(diff.Control)} at {diff.Control.Path} is missing.");
