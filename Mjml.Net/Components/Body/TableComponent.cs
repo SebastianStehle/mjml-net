@@ -65,30 +65,21 @@
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-
-            var widthValue = 100d;
-            var widthUnit = Unit.Percent;
-            var widthString = "100%";
-
-            if (Width != null)
-            {
-                (widthValue, widthUnit) = UnitParser.Parse(Width);
-                widthString = Width;
-            }
+            var (widthValue, widthUnit) = UnitParser.Parse(Width);
 
             renderer.StartElement("table") // Style table
                 .Attr("border", "0")
                 .Attr("cellpadding", CellPadding)
                 .Attr("cellspacing", CellSpacing)
                 .Attr("role", Role)
-                .Attr("width", widthUnit == Unit.Percent ? widthString : $"{widthValue}")
+                .Attr("width", widthUnit == Unit.Percent ? Width : $"{widthValue}")
                 .Style("border", Border)
                 .Style("color", Color)
                 .Style("font-family", FontFamily)
                 .Style("font-size", FontSize)
                 .Style("line-height", LineHeight)
                 .Style("table-layout", TableLayout)
-                .Style("width", widthString);
+                .Style("width", Width);
 
             RenderRaw(renderer);
 
