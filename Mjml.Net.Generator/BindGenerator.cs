@@ -123,7 +123,7 @@ namespace Mjml.Net.Generator
 
             source.AppendLine();
             source.AppendLine("var inherited = base.AllowedFields;");
-            source.AppendLine("if (inherited != null);");
+            source.AppendLine("if (inherited != null)");
             source.AppendLine("{").MoveIn();
             source.AppendLine("foreach (var (key, value) in inherited)");
             source.AppendLine("{").MoveIn();
