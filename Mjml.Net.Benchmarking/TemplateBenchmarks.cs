@@ -7,28 +7,9 @@ namespace Mjml.Net.Benchmarking
         private readonly MjmlRenderer MjmlRenderer;
      
         [ParamsSource(nameof(MjmlTemplates))]
-        public string MjmlTemplateFileName { get; set; }
+        public string MjmlTemplateFilePath { get; set; }
 
-        public IEnumerable<string> MjmlTemplates => new[] {
-            "Arturia",
-            "Austin",
-            "BlackFriday",
-            "Card",
-            "Christmas",
-            "HappyNewYear",
-            "OnePage",
-            "Proof",
-            "Racoon",
-            "Reactivation",
-            "RealEstate",
-            "Receipt",
-            "Referral",
-            "SpheroDroids",
-            "SpheroMini",
-            "UGGRoyale",
-            "Welcome",
-            "Worldly",
-        };
+        public IEnumerable<string> MjmlTemplates => Directory.GetFiles("./Templates/", "*.mjml");
 
         public string MjmlTemplate { get; set; }
 
@@ -40,7 +21,7 @@ namespace Mjml.Net.Benchmarking
         [GlobalSetup]
         public void GlobalSetup()
         {
-            MjmlTemplate = File.ReadAllText($"../../../../Templates/{MjmlTemplateFileName}.mjml");
+            MjmlTemplate = File.ReadAllText(MjmlTemplateFilePath);
         }
 
         [Benchmark()]
