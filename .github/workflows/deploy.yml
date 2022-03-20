@@ -20,9 +20,9 @@ jobs:
 
     - name: pack
       run: |
-        dotnet pack -c Release
+        cd Mjml.Net & dotnet pack -c Release
 
     - name: publish
-      if: github.event_name != 'pull_request' && 1 == 2
+      if: github.event_name != 'pull_request'
       run: |
         dotnet nuget push **/*.nupkg --source 'https://api.nuget.org/v3/index.json' --skip-duplicate -k ${{ secrets.nuget }} --no-symbols 1 
