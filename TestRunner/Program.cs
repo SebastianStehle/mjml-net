@@ -24,6 +24,7 @@ namespace TestRunner
                 Run("Amario.mjml", mjmlRenderer);
             }
 
+            return;
             Console.WriteLine("---");
             Console.WriteLine("Austin");
 
@@ -49,7 +50,7 @@ namespace TestRunner
 
             var html = mjmlRenderer.Render(text, new MjmlOptions
             {
-                Beautify = true
+                Beautify = false
             }).Html;
 
             watch.Stop();

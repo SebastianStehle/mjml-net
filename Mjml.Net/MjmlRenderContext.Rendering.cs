@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 using Mjml.Net.Internal;
 
 namespace Mjml.Net
@@ -6,6 +7,7 @@ namespace Mjml.Net
     public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlWriter
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
+        private readonly HashSet<string> analyzedFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private bool elementSelfClosed;
         private bool elementStarted;
         private int numClasses;
@@ -17,8 +19,14 @@ namespace Mjml.Net
             get => buffers.Current!;
         }
 
+        StringBuilder IElementStyleWriter.StringBuilder
+        {
+            get => buffers.Current!;
+        }
+
         private void ClearRenderData()
         {
+            analyzedFonts.Clear();
             buffers.Clear();
             elementStarted = false;
             elementSelfClosed = false;
@@ -78,64 +86,26 @@ namespace Mjml.Net
                 return this;
             }
 
-            Buffer.Append(' ');
-            Buffer.Append(name);
-            Buffer.Append("=\"");
+            StartAttr(name);
+
             Buffer.Append(value);
             Buffer.Append('"');
 
             return this;
         }
 
-        public IElementHtmlWriter Attr(string name, string? value1, string? value2)
+        public IElementHtmlWriter Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value)
         {
-            if (string.IsNullOrEmpty(value1) || string.IsNullOrEmpty(value2))
-            {
-                return this;
-            }
-
-            Buffer.Append(' ');
-            Buffer.Append(name);
-            Buffer.Append("=\"");
-            Buffer.Append(value1);
-            Buffer.Append(", ");
-            Buffer.Append(value2);
             Buffer.Append('"');
 
             return this;
         }
 
-        public IElementHtmlWriter Attr(string name, double value)
+        public void StartAttr(string name)
         {
-            if (double.IsNaN(value))
-            {
-                return this;
-            }
-
             Buffer.Append(' ');
             Buffer.Append(name);
             Buffer.Append("=\"");
-            Buffer.Append(value);
-            Buffer.Append('"');
-
-            return this;
-        }
-
-        public IElementHtmlWriter Attr(string name, double value, string unit)
-        {
-            if (double.IsNaN(value))
-            {
-                return this;
-            }
-
-            Buffer.Append(' ');
-            Buffer.Append(name);
-            Buffer.Append("=\"");
-            Buffer.Append(value);
-            Buffer.Append(unit);
-            Buffer.Append('"');
-
-            return this;
         }
 
         public IElementClassWriter Class(string? value)
@@ -145,7 +115,7 @@ namespace Mjml.Net
                 return this;
             }
 
-            SwitchToClasses();
+            StartClass();
 
             Buffer.Append(value);
 
@@ -154,25 +124,14 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementClassWriter Class(ReadOnlySpan<char> value, string suffix)
+        public IElementClassWriter Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value)
         {
-            if (string.IsNullOrEmpty(suffix))
-            {
-                return this;
-            }
-
-            SwitchToClasses();
-
-            Buffer.Append(value);
-            Buffer.Append('-');
-            Buffer.Append(suffix);
-
             numClasses++;
 
             return this;
         }
 
-        private void SwitchToClasses()
+        public void StartClass()
         {
             if (numClasses == 0)
             {
@@ -194,10 +153,8 @@ namespace Mjml.Net
 
             DetectFontFamily(name, value);
 
-            SwitchToStyles();
+            StartStyle(name);
 
-            Buffer.Append(name);
-            Buffer.Append(':');
             Buffer.Append(value);
             Buffer.Append(';');
 
@@ -206,19 +163,8 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementStyleWriter Style(string name, double value, string unit)
+        public IElementStyleWriter Style(string name, [InterpolatedStringHandlerArgument("", "name")] ref StyleInterpolatedStringHandler value)
         {
-            if (string.IsNullOrEmpty(unit) || double.IsNaN(value))
-            {
-                return this;
-            }
-
-            SwitchToStyles();
-
-            Buffer.Append(name);
-            Buffer.Append(':');
-            Buffer.Append(value);
-            Buffer.Append(unit);
             Buffer.Append(';');
 
             numStyles++;
@@ -226,7 +172,7 @@ namespace Mjml.Net
             return this;
         }
 
-        private void SwitchToStyles()
+        public void StartStyle(string name)
         {
             if (numClasses > 0)
             {
@@ -242,6 +188,9 @@ namespace Mjml.Net
                 // Open the styles attribute.
                 Buffer.Append(" style=\"");
             }
+
+            Buffer.Append(name);
+            Buffer.Append(':');
         }
 
         public void EndElement(string elementName)
@@ -403,7 +352,14 @@ namespace Mjml.Net
                 return;
             }
 
-            if (value.Contains(',', StringComparison.OrdinalIgnoreCase))
+            if (!analyzedFonts.Add(value))
+            {
+                return;
+            }
+
+            var hasMultipleFonts = value.Contains(',', StringComparison.OrdinalIgnoreCase);
+
+            if (hasMultipleFonts)
             {
                 // If we have multiple fonts it is faster than a string.Split, because we can avoid allocations.
                 foreach (var (key, font) in mjmlOptions.Fonts)

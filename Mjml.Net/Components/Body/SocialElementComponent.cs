@@ -146,12 +146,12 @@
 
             renderer.StartElement("img") // Style img
                 .Attr("alt", Alt)
-                .Attr("height", UnitParser.Parse(IconHeight ?? IconSize).Value)
+                .Attr("height", $"{UnitParser.Parse(IconHeight ?? IconSize).Value}")
                 .Attr("sizes", Sizes)
                 .Attr("src", socialNetwork.ImageUrl)
                 .Attr("srcset", Srcset)
                 .Attr("title", Title)
-                .Attr("width", UnitParser.Parse(IconSize).Value)
+                .Attr("width", $"{UnitParser.Parse(IconSize).Value}")
                 .Style("border-radius", BorderRadius)
                 .Style("display", "block");
 

@@ -201,7 +201,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("class", isFullWidth ? null : CssClass)
                 .Style("border-radius", BorderRadius)
                 .Style("margin", "0px auto")
-                .Style("max-width", ActualWidth, "px");
+                .Style("max-width", $"{ActualWidth}px");
 
             if (!isFullWidth)
             {
@@ -371,12 +371,12 @@ namespace Mjml.Net.Components.Body
             }
             else
             {
-                rectElement.Style("width", ActualWidth, "px");
+                rectElement.Style("width", $"{ActualWidth}px");
             }
 
             renderer.StartElement("v:fill", true)
-                .Attr("origin", xOrigin, yOrigin)
-                .Attr("position", xPosition, yPosition)
+                .Attr("origin", $"{xOrigin}, {yOrigin}")
+                .Attr("position", $"{xPosition}, {yPosition}")
                 .Attr("src", BackgroundUrl)
                 .Attr("color", BackgroundColor)
                 .Attr("type", vmlType)
@@ -414,7 +414,7 @@ namespace Mjml.Net.Components.Body
                         .Attr("align", child.GetAttribute("align"))
                         .Classes(child.GetAttribute("css-class"), "outlook")
                         .Style("vertical-align", child.GetAttribute("vertical-align"))
-                        .Style("width", child.ActualWidth, "px");
+                        .Style("width", $"{child.ActualWidth}px");
                     renderer.Content("<![endif]-->");
 
                     child.Render(renderer, context);
