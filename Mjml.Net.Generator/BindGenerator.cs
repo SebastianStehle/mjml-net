@@ -121,6 +121,15 @@ namespace Mjml.Net.Generator
                 ProcessFieldType(source, field);
             }
 
+            source.AppendLine();
+            source.AppendLine("var inherited = base.AllowedFields;");
+            source.AppendLine("if (inherited != null)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("foreach (var (key, value) in inherited)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("result[key] = value;");
+            source.MoveOut().AppendLine("}");
+            source.MoveOut().AppendLine("}");
             source.AppendLine("return result;");
             source.MoveOut().AppendLine("}");
             source.MoveOut().AppendLine("}");
@@ -136,7 +145,7 @@ namespace Mjml.Net.Generator
             }
 
             source.MoveOut().AppendLine("}");
-            source.AppendLine("return null;");
+            source.AppendLine("return base.GetAttribute(name);");
             source.MoveOut().AppendLine("}");
             source.MoveOut().AppendLine("}");
             source.MoveOut().AppendLine("}");

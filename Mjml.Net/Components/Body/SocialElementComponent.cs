@@ -28,9 +28,6 @@
         [Bind("color", BindType.Color)]
         public string Color = "#000";
 
-        [Bind("css-class")]
-        public string? CssClass;
-
         [Bind("font-family")]
         public string FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
 

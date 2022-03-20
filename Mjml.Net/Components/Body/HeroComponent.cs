@@ -28,9 +28,6 @@
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
 
-        [Bind("css-class")]
-        public string? CssClass;
-
         [Bind("height", BindType.PixelsOrPercent)]
         public string Height = "0px";
 
