@@ -1,8 +1,9 @@
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial class TableComponent : Component
     {
         public override string ComponentName => "mj-table";
+
         public override ContentType ContentType => ContentType.Raw;
 
         [Bind("align", BindType.Align)]
