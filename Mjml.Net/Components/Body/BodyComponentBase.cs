@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Components.Body
 {
-    public abstract class BodyComponentBase : Component
+    public abstract partial class BodyComponentBase : Component
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
@@ -8,5 +8,8 @@
         };
 
         public override AllowedParents? AllowedAsDescendant => Parents;
+
+        [Bind("css-class")]
+        public string? CssClass;
     }
 }
