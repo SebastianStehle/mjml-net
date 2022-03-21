@@ -45,9 +45,6 @@ namespace Mjml.Net.Components.Body
         [Bind("border-top")]
         public string? BorderTop;
 
-        [Bind("css-class")]
-        public string? CssClass;
-
         [Bind("direction")]
         public string Direction = "ltr";
 
@@ -283,7 +280,7 @@ namespace Mjml.Net.Components.Body
                 .Attr("cellspacing", "0")
                 .Attr("role", "presentation");
 
-            RenderColumns(renderer, context);
+            RenderWrappedChildren(renderer, context);
 
             renderer.EndElement("table");
             renderer.Content("<![endif]-->");
@@ -397,7 +394,7 @@ namespace Mjml.Net.Components.Body
             renderer.Content("<![endif]-->");
         }
 
-        private void RenderColumns(IHtmlRenderer renderer, GlobalContext context)
+        protected virtual void RenderWrappedChildren(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartElement("tr");
 

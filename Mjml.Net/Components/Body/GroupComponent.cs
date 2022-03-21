@@ -4,15 +4,12 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public partial class GroupComponent : Component
+    public partial class GroupComponent : BodyComponentBase
     {
         public override string ComponentName => "mj-group";
 
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;
-
-        [Bind("css-class")]
-        public string? CssClass;
 
         [Bind("direction", BindType.Direction)]
         public string Direction = "ltr";

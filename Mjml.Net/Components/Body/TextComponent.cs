@@ -15,9 +15,6 @@
         [Bind("container-background-color", BindType.Color)]
         public string? ContainerBackgroundColor;
 
-        [Bind("css-class")]
-        public string? CssClass;
-
         [Bind("font-family")]
         public string FontFamily = "Ubuntu, Helvetica, Arial, sans-serif";
 

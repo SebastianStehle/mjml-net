@@ -51,9 +51,13 @@
     <None Remove="Tests\Spacer.html" />
     <None Remove="Tests\SpacerWIthHeight.html" />
     <None Remove="Tests\Style.html" />
+    <None Remove="Tests\Table.html" />
+    <None Remove="Tests\TablePercent.html" />
+    <None Remove="Tests\TablePixels.html" />
     <None Remove="Tests\Text.html" />
     <None Remove="Tests\TextWithHtml.html" />
     <None Remove="Tests\Title.html" />
+    <None Remove="Tests\Wrapper.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -86,6 +90,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\TablePixels.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\TablePercent.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\Table.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Tests\Amario.mjml" />
     <EmbeddedResource Include="Tests\Amario.html" />
     <EmbeddedResource Include="Tests\FontUbuntu.html" />
@@ -108,6 +124,7 @@
     <EmbeddedResource Include="Tests\ColumnOne.html" />
     <EmbeddedResource Include="Tests\Social.html" />
     <EmbeddedResource Include="Tests\SocialRaw.html" />
+    <EmbeddedResource Include="Tests\Wrapper.html" />
     <EmbeddedResource Include="Tests\TextWithHtml.html" />
     <EmbeddedResource Include="Tests\Text.html" />
     <EmbeddedResource Include="Tests\Title.html" />
