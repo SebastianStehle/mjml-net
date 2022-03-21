@@ -17,6 +17,8 @@ namespace Mjml.Net
 
         public static readonly IType PixelsOrAuto = new OneOfType(new EnumType("auto"), Pixels);
 
+        public static readonly IType PixelsOrEm = new NumberType(Unit.Pixels, Unit.Em);
+
         public static readonly IType PixelsOrPercent = new NumberType(Unit.Pixels, Unit.Percent);
 
         public static readonly IType PixelsOrPercentOrNone = new NumberType(Unit.Pixels, Unit.Percent, Unit.None);

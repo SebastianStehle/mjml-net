@@ -115,6 +115,12 @@ namespace Tests.Internal
                     return false;
                 }
 
+                // Ids are random. Therefore we ignore them.
+                if (d is AttrDiff a && (a.Test.Attribute.Name == "id" || a.Test.Attribute.Name == "for"))
+                {
+                    return false;
+                }
+
                 return true;
             }).ToList();
 
