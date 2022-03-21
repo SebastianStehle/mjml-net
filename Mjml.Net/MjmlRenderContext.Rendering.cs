@@ -346,7 +346,7 @@ namespace Mjml.Net
         {
             Buffer.EnsureCapacity(Buffer.Length + value.Length);
 
-            // We could go over the chars but it is much faster to writer to the buffer in batches. Therefore we create a span from newline to newline.
+            // We could go over the chars but it is much faster to write to the buffer in batches. Therefore we create a span from newline to newline.
             var span = value.AsSpan();
 
             for (int i = 0, j = 0; i < value.Length; i++, j++)

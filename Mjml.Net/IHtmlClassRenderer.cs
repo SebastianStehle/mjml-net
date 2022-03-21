@@ -27,11 +27,11 @@ namespace Mjml.Net
     {
         private StringBuilder.AppendInterpolatedStringHandler inner;
 
-        public ClassNameInterpolatedStringHandler(int literalLength, int formattedCount, IHtmlClassRenderer writer)
+        public ClassNameInterpolatedStringHandler(int literalLength, int formattedCount, IHtmlClassRenderer renderer)
         {
-            writer.StartClass();
+            renderer.StartClass();
 
-            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder);
+            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, renderer.StringBuilder);
         }
 
         public void AppendLiteral(string value)
