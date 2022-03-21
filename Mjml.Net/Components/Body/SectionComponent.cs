@@ -89,7 +89,7 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            if (IsFullWidth())
+            if (FullWidth == "full-width")
             {
                 RenderFullWidth(renderer, context);
             }
@@ -135,12 +135,12 @@ namespace Mjml.Net.Components.Body
 
             if (hasBackground)
             {
-                RenderSectionWithBackground(renderer, context);
+                RenderSectionWithBackground(renderer, context, true);
             }
             else
             {
-                RenderSectionStart(renderer);
-                RenderSection(renderer, context);
+                RenderSectionStart(renderer, true);
+                RenderSection(renderer, context, true);
                 RenderSectionEnd(renderer);
             }
 
@@ -152,21 +152,21 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSimple(IHtmlRenderer renderer, GlobalContext context)
         {
-            RenderSectionStart(renderer);
+            RenderSectionStart(renderer, true);
 
             if (HasBackground())
             {
-                RenderSectionWithBackground(renderer, context);
+                RenderSectionWithBackground(renderer, context, false);
             }
             else
             {
-                RenderSection(renderer, context);
+                RenderSection(renderer, context, false);
             }
 
             RenderSectionEnd(renderer);
         }
 
-        private void RenderSectionStart(IHtmlRenderer renderer)
+        private void RenderSectionStart(IHtmlRenderer renderer, bool fullWidth)
         {
             renderer.StartConditional("<!--[if mso | IE]>");
             {
@@ -177,10 +177,9 @@ namespace Mjml.Net.Components.Body
                     .Attr("cellpadding", "0")
                     .Attr("cellspacing", "0")
                     .Attr("role", "presentation")
-                    .Attr("width", IsFullWidth() ? "100%" : ActualWidth.ToInvariantString())
+                    .Attr("width", $"{ActualWidth}")
                     .Classes(CssClass, "outlook")
-                    .StyleIf("width", IsFullWidth(), "100%")
-                    .StyleIf("width", !IsFullWidth(), ActualWidth, "px");
+                    .Style("width", $"{ActualWidth}px");
 
                 renderer.StartElement("tr");
                 renderer.StartElement("td")
@@ -191,19 +190,18 @@ namespace Mjml.Net.Components.Body
             renderer.EndConditional("<![endif]-->");
         }
 
-        private void RenderSection(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderSection(IHtmlRenderer renderer, GlobalContext context, bool fullWidth)
         {
-            var isFullWidth = IsFullWidth();
             var hasBackground = HasBackground();
             var background = hasBackground ? GetBackground() : null;
 
             var divElement = renderer.StartElement("div") // Style div
-                .Attr("class", isFullWidth ? null : CssClass)
+                .Attr("class", fullWidth ? null : CssClass)
                 .Style("border-radius", BorderRadius)
                 .Style("margin", "0px auto")
                 .Style("max-width", $"{ActualWidth}px");
 
-            if (!isFullWidth)
+            if (!fullWidth)
             {
                 if (hasBackground)
                 {
@@ -230,7 +228,7 @@ namespace Mjml.Net.Components.Body
 
             var tableElement = renderer.StartElement("table") // Style table
                 .Attr("align", "center")
-                .Attr("background", isFullWidth ? null : BackgroundUrl)
+                .Attr("background", fullWidth ? null : BackgroundUrl)
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
                 .Attr("cellspacing", "0")
@@ -238,7 +236,7 @@ namespace Mjml.Net.Components.Body
                 .Style("border-radius", BorderRadius)
                 .Style("width", "100%");
 
-            if (!isFullWidth)
+            if (!fullWidth)
             {
                 if (hasBackground)
                 {
@@ -315,10 +313,8 @@ namespace Mjml.Net.Components.Body
             renderer.EndConditional("<![endif]-->");
         }
 
-        private void RenderSectionWithBackground(IHtmlRenderer renderer, GlobalContext context)
+        private void RenderSectionWithBackground(IHtmlRenderer renderer, GlobalContext context, bool fullWidth)
         {
-            var isFullwidth = IsFullWidth();
-
             var (x, y) = ParseBackgroundPosition();
             var (xPercent, yPercent) = GetBackgroundPositionAsPercentage(x, y);
 
@@ -370,7 +366,7 @@ namespace Mjml.Net.Components.Body
                     .Attr("fill", "true")
                     .Attr("stroke", "false");
 
-                if (isFullwidth)
+                if (fullWidth)
                 {
                     rectElement.Style("mso-width-percent", "1000");
                 }
@@ -394,7 +390,16 @@ namespace Mjml.Net.Components.Body
             }
             renderer.EndConditional("<![endif]-->");
 
-            RenderSection(renderer, context);
+            if (fullWidth)
+            {
+                RenderSectionStart(renderer, fullWidth);
+                RenderSection(renderer, context, fullWidth);
+                RenderSectionEnd(renderer);
+            }
+            else
+            {
+                RenderSection(renderer, context, fullWidth);
+            }
 
             renderer.StartConditional("<!--[if mso | IE]>");
             {
@@ -597,11 +602,6 @@ namespace Mjml.Net.Components.Body
         private bool HasBackground()
         {
             return BackgroundUrl != null;
-        }
-
-        private bool IsFullWidth()
-        {
-            return FullWidth == "full-width";
         }
     }
 }

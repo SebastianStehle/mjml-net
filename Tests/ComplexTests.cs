@@ -19,7 +19,7 @@ namespace Tests
             return files.Where(x => !Ignore.Contains(x.Name)).Select(x => new[] { x.Name });
         }
 
-        [Theory(Skip = "Expensive")]
+        [Theory]
         [MemberData(nameof(Templates))]
         public void Should_render_template(string template)
         {
@@ -41,10 +41,12 @@ namespace Tests
                 var result = new MjmlRenderer().Render(source, new MjmlOptions
                 {
                     Beautify = true,
-
                     // Cleanup XML, because some are broken.
                     Lax = true
                 }).Html;
+
+                // Fix whitespaces for easier comparison.
+                result = result.Replace("&amp;#160;", " ", StringComparison.Ordinal);
 
                 AssertHelpers.HtmlAssert(template, result, expected);
             }
