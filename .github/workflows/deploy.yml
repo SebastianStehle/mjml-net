@@ -1,4 +1,4 @@
-eeename: Build and Push to Nuget
+name: Build and Push to Nuget
 
 on: [push, pull_request]
 
