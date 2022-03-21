@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Divider.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Divider.html", result);
         }
     }
 }

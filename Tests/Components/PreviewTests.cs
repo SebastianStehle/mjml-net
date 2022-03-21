@@ -21,7 +21,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source, new PreviewHelper());
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Preview.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Preview.html", result);
         }
     }
 }

@@ -1,0 +1,110 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text font-family="Ubuntu, Helvetica, Arial, sans-serif" color="#000000"></mj-text>
+      <mj-class name="description"></mj-class>
+      <mj-class name="preheader" color="#000000" font-size="11px" padding-left="25px" padding-right="25px"></mj-class>
+      <mj-class name="button" background-color="#fcc245" color="#000000" font-size="18px" border-radius="3px" font-family="Ubuntu, Helvetica, Arial, sans-serif"></mj-class>
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#ffffff">
+    <mj-section padding-bottom="20px" padding-top="20px">
+      <mj-group>
+        <mj-column>
+          <mj-text align="left" mj-class="preheader">[[HEADLINE]]</mj-text>
+        </mj-column>
+        <mj-column>
+          <mj-text align="right" mj-class="preheader">[PERMALINK_LABEL]]</mj-text>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+    <mj-section padding-bottom="0px" padding-top="0">
+      <mj-column width="25%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/xm0.png" alt="" width="147px" padding="0px"></mj-image>
+      </mj-column>
+      <mj-column width="75%">
+        <mj-text font-size="19px" padding="0 25px" font-weight="bold">Special pre sale information</mj-text>
+        <mj-text font-size="11px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rutrum enim eget magna efficitur, eu semper augue semper. Aliquam erat volutpat. Proin rutrum enim eget magna efficitur.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fcc245">
+      <mj-column>
+        <mj-text align="center" font-size="20px" padding="0 25px"><span style="color: rgb(89, 89, 89);">PRE SALE BEGINS TODAY</span> AT 9 AM</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" background-url="http://191n.mj.am/img/191n/3s/xl9.jpg" background-size="cover" padding-bottom="20px" padding-top="20px">
+      <mj-column>
+        <mj-button mj-class="button" href="https://mjml.io" padding="305px 25px 0">BUY TICKETS</mj-button>
+        <mj-text align="center" font-size="13px" padding-left="25px" padding-right="25px" padding-bottom="10px" padding-top="0"><span style="color: rgb(255, 255, 255);">PASSWORD : YULAN03</span></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-bottom="20px" padding-top="20px">
+      <mj-column width="25%">
+        <mj-image src="http://191n.mj.am/img/191n/3s/xmw.jpg" alt="CD" width="147px" padding="0px"></mj-image>
+      </mj-column>
+      <mj-column width="25%">
+        <mj-text align="center" font-size="16px" padding="0 25px">LAST ALBUM AVAILABLE <span style="font-weight: bold;">12,99&#x20AC;</span></mj-text>
+        <mj-button mj-class="button" font-size="17px" href="https://mjml.io" padding="10px 0">BUY IT !</mj-button>
+      </mj-column>
+      <mj-column width="50%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/xmx.jpg" alt="Play now and win your vip pass" width="290px" padding="0px"></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-bottom="20px" padding-top="20px">
+      <mj-column>
+        <mj-button background-color="#000000" color="#fcc245" font-size="16px" border-radius="0px" href="https://mjml.io" padding="10px 25px">OUR PARTNERS</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-bottom="20px" padding-top="0">
+      <mj-column width="25%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/y2.jpg" alt="Partner logo" width="95px" padding="0 0 10px 0"></mj-image>
+      </mj-column>
+      <mj-column width="25%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/y2.jpg" alt="Partner logo" width="95px" padding="0 0 10px 0"></mj-image>
+      </mj-column>
+      <mj-column width="25%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/y2.jpg" alt="Partner logo" width="95px" padding="0 0 10px 0"></mj-image>
+      </mj-column>
+      <mj-column width="25%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/y2.jpg" alt="Partner logo" width="95px" padding="0 0 10px 0"></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-bottom="20px" padding-top="20px">
+      <mj-column>
+        <mj-text align="center" font-size="13px" padding="0 25px" font-weight="bold">Terms and conditions:</mj-text>
+        <mj-text align="center" font-size="13px" padding="0 25px 10px 25px">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rutrum enim eget magna efficitur, eu semper augue semper. Aliquam erat volutpat. Cras id dui lectus. Vestibulum sed finibus lectus, sit amet suscipit nibh. Proin nec commodo purus.
+            Sed eget nulla elit. Nulla aliquet mollis faucibus.</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fcc245" padding-bottom="0px" padding-top="0">
+      <mj-column width="33.33333333333333%">
+        <mj-text align="center" font-size="20px" font-weight="bold" padding="0 25px">
+          <p>0800 123 456</p>
+        </mj-text>
+        <mj-text align="center" color="#FFFFFF" font-size="13px" padding="0 25px">
+          <p>Privacy policy</p>
+        </mj-text>
+      </mj-column>a
+      <mj-column width="33.33333333333333%">
+        <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/yp.jpg" alt="Logo yellow" width="133px" padding="0px"></mj-image>
+      </mj-column>
+      <mj-column width="33.33333333333333%">
+        <mj-social mode="horizontal" padding="30px">
+          <mj-social-element name="facebook" href="[[SHORT_PERMALINK]]"></mj-social-element>
+          <mj-social-element name="twitter" href="[[SHORT_PERMALINK]]"></mj-social-element>
+          <mj-social-element name="google" href="[[SHORT_PERMALINK]]"></mj-social-element>
+        </mj-social>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-bottom="20px" padding-top="20px">
+      <mj-column>
+        <mj-text align="center" font-size="11px" padding="0 25px">
+          <p>[[DELIVERY_INFO]]</p>
+          <p>[[POSTAL_ADDRESS]]</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net.Components.Body
+﻿using Mjml.Net.Extensions;
+
+namespace Mjml.Net.Components.Body
 {
     public partial class ButtonComponent : BodyComponentBase
     {
@@ -139,24 +141,24 @@
                 .Attr("rel", Rel)
                 .Attr("name", Name)
                 .Attr("target", !string.IsNullOrEmpty(Href) ? Target : null)
-                .Style("display", "inline-block")
-                .Style("width", $"{CalculateButtonWidth()}px")
                 .Style("background", BackgroundColor)
+                .Style("border-radius", BorderRadius)
                 .Style("color", Color)
+                .Style("display", "inline-block")
                 .Style("font-family", FontFamily)
-                .Style("font-style", FontStyle)
                 .Style("font-size", FontSize)
+                .Style("font-style", FontStyle)
                 .Style("font-weight", FontWeight)
-                .Style("line-height", LineHeight)
                 .Style("letter-spacing", LetterSpacing)
+                .Style("letter-spacing", LetterSpacing)
+                .Style("line-height", LineHeight)
                 .Style("margin", "0")
+                .Style("mso-padding-alt", "0px")
+                .Style("padding", InnerPadding)
+                .Style("text-align", TextAlign)
                 .Style("text-decoration", TextDecoration)
                 .Style("text-transform", TextTransform)
-                .Style("letter-spacing", LetterSpacing)
-                .Style("padding", InnerPadding)
-                .Style("mso-padding-alt", "0px")
-                .Style("text-align", TextAlign)
-                .Style("border-radius", BorderRadius);
+                .StyleOrNone("width", CalculateButtonWidth());
 
             RenderRaw(renderer);
 

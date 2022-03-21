@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Navbar.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Navbar.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.NavbarWithoutHamburger.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.NavbarWithoutHamburger.html", result);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.NavbarWithLinks.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.NavbarWithLinks.html", result);
         }
     }
 }

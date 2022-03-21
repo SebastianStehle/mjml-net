@@ -460,7 +460,7 @@ namespace Mjml.Net
                 {
                     if (value.Contains(key, StringComparison.OrdinalIgnoreCase))
                     {
-                        context.SetGlobalData(key, font);
+                        context.SetGlobalData(key, font, true);
                     }
                 }
             }

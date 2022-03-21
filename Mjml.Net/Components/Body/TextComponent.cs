@@ -57,6 +57,9 @@
         [Bind("text-transform")]
         public string? TextTransform;
 
+        [Bind("vertical-align", BindType.VerticalAlign)]
+        public string? VerticalAlign;
+
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             var height = Height;

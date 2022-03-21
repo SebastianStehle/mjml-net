@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SocialEmpty.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SocialEmpty.html", result);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SocialRaw.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SocialRaw.html", result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Social.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Social.html", result);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mjml.Net.Helpers;
+﻿using Mjml.Net.Extensions;
+using Mjml.Net.Helpers;
 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
 
@@ -265,11 +266,11 @@ namespace Mjml.Net.Components.Body
 
             if (CurrentWidth.Unit == Unit.Percent)
             {
-                className = $"mj-column-per-{(int)CurrentWidth.Value}";
+                className = $"mj-column-per-{CurrentWidth.Value.ToInvariantString().Replace('.', '-')}";
             }
             else
             {
-                className = $"mj-column-px-{(int)CurrentWidth.Value}";
+                className = $"mj-column-px-{CurrentWidth.Value.ToInvariantString().Replace('.', '-')}";
             }
 
             context.SetGlobalData(className, MediaQuery.Width(className, CurrentWidth.WidthString));

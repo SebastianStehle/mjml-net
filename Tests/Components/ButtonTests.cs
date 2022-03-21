@@ -16,7 +16,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Button.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Button.html", result);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonLink.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonLink.html", result);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonLinkWithRel.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonLinkWithRel.html", result);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonMixedContent.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonMixedContent.html", result);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonMixedContent2.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonMixedContent2.html", result);
         }
     }
 }

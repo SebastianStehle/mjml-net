@@ -24,6 +24,18 @@ namespace Mjml.Net.Extensions
             return renderer;
         }
 
+        public static IHtmlStyleRenderer StyleOrNone(this IHtmlStyleRenderer renderer, string name, double value)
+        {
+            if (double.IsNaN(value))
+            {
+                return renderer;
+            }
+            else
+            {
+                return renderer.Style(name, $"{value}px");
+            }
+        }
+
         public static IHtmlAttrRenderer AttrOrAuto(this IHtmlAttrRenderer renderer, string name, string? value)
         {
             if (value == "auto")

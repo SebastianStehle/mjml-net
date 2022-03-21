@@ -24,7 +24,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Font.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Font.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Font.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
         }
     }
 }

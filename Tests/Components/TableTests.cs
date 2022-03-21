@@ -29,7 +29,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Table.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Table.html", result);
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.TablePixels.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.TablePixels.html", result);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.TablePercent.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.TablePercent.html", result);
         }
     }
 }

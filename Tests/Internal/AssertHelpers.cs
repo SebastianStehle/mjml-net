@@ -36,10 +36,15 @@ namespace Tests.Internal
             return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
 
-        public static void HtmlFileAsset(string name, string actual)
+        public static void HtmlFileAssert(string name, string actual)
         {
             var expected = TestHelper.GetContent(name);
 
+            HtmlAssert(name, actual, expected);
+        }
+
+        public static void HtmlAssert(string name, string actual, string expected)
+        {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 

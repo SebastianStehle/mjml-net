@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Image.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Image.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ImageWithLink.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ImageWithLink.html", result);
         }
     }
 }

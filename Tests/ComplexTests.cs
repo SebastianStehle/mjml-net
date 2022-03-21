@@ -1,4 +1,5 @@
-﻿using Mjml.Net;
+﻿using System.Diagnostics;
+using Mjml.Net;
 using Tests.Internal;
 using Xunit;
 
@@ -6,35 +7,43 @@ namespace Tests
 {
     public class ComplexTests
     {
-        [Fact]
-        public void Should_render_body_only()
+        public static IEnumerable<object[]> Templates()
         {
-            var source = @"
-<mjml>
-    <mj-body>
-    </mj-body>
- </mjml>
-";
+            var files = Directory.GetFiles("Templates", "*.mjml");
 
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
-            {
-                Beautify = true
-            }).Html;
-
-            AssertHelpers.TrimmedContains("</body>", result);
+            return files.Select(x => new[] { new FileInfo(x).Name });
         }
 
-        [Fact]
-        public void Should_render_amario()
+        [Theory(Skip = "Too expensive")]
+        [MemberData(nameof(Templates))]
+        public void Should_render_template(string template)
         {
-            var source = TestHelper.GetContent("Tests.Amario.mjml");
-
-            var result = new MjmlRenderer().Render(source, new MjmlOptions
+            var tempFile = Guid.NewGuid().ToString();
+            try
             {
-                Beautify = true
-            }).Html;
+                var process = new Process();
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.FileName = "npx";
+                process.StartInfo.Arguments = $"mjml Templates/{template} -o {tempFile}";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+                process.WaitForExit();
 
-            AssertHelpers.HtmlFileAsset("Tests.Amario.html", result);
+                var expected = File.ReadAllText(tempFile);
+
+                var source = File.ReadAllText($"Templates/{template}");
+
+                var result = new MjmlRenderer().Render(source, new MjmlOptions
+                {
+                    Beautify = true
+                }).Html;
+
+                AssertHelpers.HtmlAssert(template, result, expected);
+            }
+            finally
+            {
+                File.Delete(tempFile);
+            }
         }
     }
 }

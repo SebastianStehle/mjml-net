@@ -21,7 +21,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Group.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.GroupWithColumns.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.GroupWithColumns.html", result);
         }
     }
 }

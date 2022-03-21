@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Spacer.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Spacer.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SpacerWithHeight.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SpacerWithHeight.html", result);
         }
     }
 }

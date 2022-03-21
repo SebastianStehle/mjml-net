@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Section.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Section.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithBackgroundColor.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithBackgroundColor.html", result);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithBackgroundImage.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithBackgroundImage.html", result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithColumns.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithColumns.html", result);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithGroups.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithGroups.html", result);
         }
     }
 }

@@ -28,14 +28,21 @@ namespace Mjml.Net
             attributesByName.Clear();
         }
 
-        public void SetGlobalData(string name, object? value)
+        public void SetGlobalData(string name, object? value, bool doNotOverride = false)
         {
             if (value == null)
             {
                 return;
             }
 
-            GlobalData[(value.GetType(), name)] = value;
+            var key = (value.GetType(), name);
+
+            if (doNotOverride && GlobalData.ContainsKey(key))
+            {
+                return;
+            }
+
+            GlobalData[key] = value;
         }
 
         public void SetTypeAttribute(string name, string type, string value)

@@ -1,4 +1,5 @@
 ﻿using Mjml.Net.Extensions;
+using System.Xml;
 
 namespace Mjml.Net.Components.Body
 {
@@ -117,7 +118,6 @@ namespace Mjml.Net.Components.Body
             {
                 tableElement
                     .Style("background", GetBackground())
-                    .Style("background-color", BackgroundColor)
                     .Style("background-position", BackgroundPosition)
                     .Style("background-repeat", BackgroundRepeat)
                     .Style("background-size", BackgroundSize);
@@ -209,7 +209,6 @@ namespace Mjml.Net.Components.Body
                 {
                     divElement // Style background
                         .Style("background", background)
-                        .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
                         .Style("background-repeat", BackgroundRepeat)
                         .Style("background-size", BackgroundSize);
@@ -456,7 +455,7 @@ namespace Mjml.Net.Components.Body
                 return BackgroundColor;
             }
 
-            return $"{BackgroundColor} url({BackgroundUrl}) {GetBackgroundPositionString()} / {BackgroundSize} {BackgroundRepeat}";
+            return $"{BackgroundColor} url('{BackgroundUrl}') {GetBackgroundPositionString()} / {BackgroundSize} {BackgroundRepeat}";
         }
 
         private string? GetBackgroundPositionString()

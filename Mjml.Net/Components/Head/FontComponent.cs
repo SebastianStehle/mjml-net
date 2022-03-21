@@ -17,7 +17,7 @@ namespace Mjml.Net.Components.Head
             // Just in case that validation is disabled.
             if (Href != null)
             {
-                context.SetGlobalData(Name ?? Guid.NewGuid().ToString(), new Font(Href));
+                context.SetGlobalData(Name ?? Href, new Font(Href));
             }
         }
     }

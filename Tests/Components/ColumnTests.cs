@@ -12,7 +12,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnOne.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnOne.html", result);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnTwo.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnTwo.html", result);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnThree.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnThree.html", result);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnFour.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnFour.html", result);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnOneWithPadding.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnOneWithPadding.html", result);
         }
     }
 }

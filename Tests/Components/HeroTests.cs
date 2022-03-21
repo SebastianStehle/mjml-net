@@ -15,7 +15,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Hero.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Hero.html", result);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.HeroDivider.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.HeroDivider.html", result);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.HeroDividers.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.HeroDividers.html", result);
         }
     }
 }

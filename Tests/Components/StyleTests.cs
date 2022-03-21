@@ -25,7 +25,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Style.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlFileAsset("Components.Outputs.Style.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
         }
     }
 }
