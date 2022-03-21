@@ -14,7 +14,7 @@ namespace Tests
 
         public CssClassesExtensionsTests()
         {
-            sut.BufferStart();
+            sut.StartBuffer();
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Tests
                 sb.AppendLine(line.Replace('\'', '"'));
             }
 
-            var actual = sut.BufferFlush()!.ToString();
+            var actual = sut.EndBuffer()!.ToString();
 
             Assert.Equal(sb.ToString(), actual);
         }

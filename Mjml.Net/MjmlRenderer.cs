@@ -109,13 +109,13 @@ namespace Mjml.Net
             try
             {
                 context.Setup(this, options ?? new MjmlOptions());
-                context.BufferStart();
+                context.StartBuffer();
                 context.Read(xml);
 
                 StringBuilder? buffer = null;
                 try
                 {
-                    buffer = context.BufferFlush();
+                    buffer = context.EndBuffer();
 
                     return new RenderResult(buffer!.ToString()!, context.Validate());
                 }

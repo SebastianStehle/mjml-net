@@ -19,7 +19,7 @@ namespace Mjml.Net
         /// <returns>The current instance to set more class names.</returns>
         IHtmlClassRenderer Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value);
 
-        void StartClass();
+        internal void StartClass();
     }
 
     [InterpolatedStringHandler]

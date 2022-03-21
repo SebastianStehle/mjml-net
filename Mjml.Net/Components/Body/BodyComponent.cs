@@ -36,7 +36,7 @@ namespace Mjml.Net.Components.Body
                 context.SetGlobalData("default", new Background(BackgroundColor));
             }
 
-            renderer.BufferStart();
+            renderer.StartBuffer();
 
             renderer.StartElement("div")
                 .Class(CssClass)
@@ -46,7 +46,7 @@ namespace Mjml.Net.Components.Body
 
             renderer.EndElement("div");
 
-            context.SetGlobalData("body", renderer.BufferFlush());
+            context.SetGlobalData("body", renderer.EndBuffer());
         }
     }
 }

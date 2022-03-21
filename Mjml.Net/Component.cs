@@ -49,8 +49,6 @@ namespace Mjml.Net
                 return;
             }
 
-            renderer.Content(string.Empty, false);
-
             var i = 0;
             foreach (var xml in childXml)
             {
