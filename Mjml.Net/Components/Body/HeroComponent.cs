@@ -103,34 +103,34 @@
             var width = backgroundWidth.Value > 0 ? backgroundWidth.Value : ActualWidth;
 
             renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("table") // Style: outlook-table
+                    .Attr("align", "center")
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation")
+                    .Attr("width", $"{ActualWidth}")
+                    .Style("width", $"{ActualWidth}px");
 
-            renderer.StartElement("table") // Style: outlook-table
-                .Attr("align", "center")
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation")
-                .Attr("width", $"{ActualWidth}")
-                .Style("width", $"{ActualWidth}px");
+                renderer.StartElement("tr");
 
-            renderer.StartElement("tr");
+                renderer.StartElement("td")
+                    .Style("line-height", "0")
+                    .Style("font-size", "0")
+                    .Style("mso-line-height-rule", "exactly"); // Style: outlook-td
 
-            renderer.StartElement("td")
-                .Style("line-height", "0")
-                .Style("font-size", "0")
-                .Style("mso-line-height-rule", "exactly"); // Style: outlook-td
-
-            renderer.StartElement("v:image") // Style: outlook-image
-                .Attr("src", BackgroundUrl)
-                .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
-                .Style("border", "0")
-                .Style("height", BackgroundHeight)
-                .Style("mso-position-horizontal", "center")
-                .Style("position", "absolute")
-                .Style("top", "0")
-                .Style("width", $"{width}px")
-                .Style("z-index", "-3");
-
+                renderer.StartElement("v:image") // Style: outlook-image
+                    .Attr("src", BackgroundUrl)
+                    .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
+                    .Style("border", "0")
+                    .Style("height", BackgroundHeight)
+                    .Style("mso-position-horizontal", "center")
+                    .Style("position", "absolute")
+                    .Style("top", "0")
+                    .Style("width", $"{width}px")
+                    .Style("z-index", "-3");
+            }
             renderer.EndConditional("<![endif]-->");
 
             renderer.StartElement("div") // Style div
@@ -215,36 +215,36 @@
             renderer.EndElement("div");
 
             renderer.StartConditional("<!--[if mso | IE]>");
-
-            renderer.EndElement("td");
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-
+            {
+                renderer.EndElement("td");
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
             renderer.EndConditional("<![endif]-->");
         }
 
         private void RenderContent(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("table") // Style: outlook-inner-table
+                    .Attr("align", Align)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("width", $"{ActualWidth}")
+                    .Style("width", $"{ActualWidth}px");
 
-            renderer.StartElement("table") // Style: outlook-inner-table
-                .Attr("align", Align)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("width", $"{ActualWidth}")
-                .Style("width", $"{ActualWidth}px");
+                renderer.StartElement("tr");
 
-            renderer.StartElement("tr");
-
-            renderer.StartElement("td") // Style: outlook-inner-td
-                .Style("background-color", InnerBackgroundColor)
-                .Style("inner-padding", InnerPadding)
-                .Style("inner-padding-bottom", InnerPaddingBottom)
-                .Style("inner-padding-left", InnerPaddingLeft)
-                .Style("inner-padding-right", InnerPaddingRight)
-                .Style("inner-padding-top", InnerPaddingTop);
-
+                renderer.StartElement("td") // Style: outlook-inner-td
+                    .Style("background-color", InnerBackgroundColor)
+                    .Style("inner-padding", InnerPadding)
+                    .Style("inner-padding-bottom", InnerPaddingBottom)
+                    .Style("inner-padding-left", InnerPaddingLeft)
+                    .Style("inner-padding-right", InnerPaddingRight)
+                    .Style("inner-padding-top", InnerPaddingTop);
+            }
             renderer.EndConditional("<![endif]-->");
 
             renderer.StartElement("div") // Style: inner-div
@@ -318,11 +318,11 @@
             renderer.EndElement("div");
 
             renderer.StartConditional("<!--[if mso | IE]>");
-
-            renderer.EndElement("td");
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-
+            {
+                renderer.EndElement("td");
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
             renderer.EndConditional("<![endif]-->");
         }
     }

@@ -67,7 +67,7 @@ namespace Tests.Internal
             HtmlAssertCore(lhs, rhs, ignoreComments);
         }
 
-        private static void HtmlAssertCore(string expected, string actual, bool ignoreComments )
+        private static void HtmlAssertCore(string expected, string actual, bool ignoreComments)
         {
             var diffs =
                 DiffBuilder

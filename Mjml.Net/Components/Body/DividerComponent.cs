@@ -56,30 +56,30 @@ namespace Mjml.Net.Components.Body
             var outlookWidth = GetOutlookWidth();
 
             renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("table")
+                    .Attr("align", Align)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation")
+                    .Attr("width", $"{outlookWidth}px")
+                    .Style("border-top", borderSetting)
+                    .Style("font-size", "1px")
+                    .Style("margin", margin)
+                    .Style("width", $"{outlookWidth}px");
 
-            renderer.StartElement("table")
-                .Attr("align", Align)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation")
-                .Attr("width", $"{outlookWidth}px")
-                .Style("border-top", borderSetting)
-                .Style("font-size", "1px")
-                .Style("margin", margin)
-                .Style("width", $"{outlookWidth}px");
+                renderer.StartElement("tr");
 
-            renderer.StartElement("tr");
+                renderer.StartElement("td")
+                    .Attr("style", "height:0; line-height:0;");
 
-            renderer.StartElement("td")
-                .Attr("style", "height:0; line-height:0;");
+                renderer.Content("&nbsp;");
 
-            renderer.Content("&nbsp;");
-
-            renderer.EndElement("td");
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-
+                renderer.EndElement("td");
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
             renderer.EndConditional("<![endif]-->");
         }
 

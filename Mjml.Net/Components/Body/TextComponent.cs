@@ -68,25 +68,29 @@
             else
             {
                 renderer.StartConditional("<!--[if mso | IE]>");
-                renderer.StartElement("table")
-                    .Attr("role", "presentation")
-                    .Attr("border", "0")
-                    .Attr("cellpadding", "0")
-                    .Attr("cellspacing", "0");
+                {
+                    renderer.StartElement("table")
+                        .Attr("role", "presentation")
+                        .Attr("border", "0")
+                        .Attr("cellpadding", "0")
+                        .Attr("cellspacing", "0");
 
-                renderer.StartElement("tr");
-                renderer.StartElement("td")
-                    .Attr("height", height)
-                    .Style("vertical-align", "top")
-                    .Style("height", height);
+                    renderer.StartElement("tr");
+                    renderer.StartElement("td")
+                        .Attr("height", height)
+                        .Style("vertical-align", "top")
+                        .Style("height", height);
+                }
                 renderer.EndConditional("<![endif]-->");
 
                 RenderTextContent(renderer);
 
                 renderer.StartConditional("<!--[if mso | IE]>");
-                renderer.EndElement("td");
-                renderer.EndElement("tr");
-                renderer.EndElement("table");
+                {
+                    renderer.EndElement("td");
+                    renderer.EndElement("tr");
+                    renderer.EndElement("table");
+                }
                 renderer.EndConditional("<![endif]-->");
             }
         }

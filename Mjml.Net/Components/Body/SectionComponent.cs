@@ -169,23 +169,25 @@ namespace Mjml.Net.Components.Body
         private void RenderSectionStart(IHtmlRenderer renderer)
         {
             renderer.StartConditional("<!--[if mso | IE]>");
-            renderer.StartElement("table")
-                .Attr("align", "center")
-                .Attr("bgcolor", BackgroundColor)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation")
-                .Attr("width", IsFullWidth() ? "100%" : ActualWidth.ToInvariantString())
-                .Classes(CssClass, "outlook")
-                .StyleIf("width", IsFullWidth(), "100%")
-                .StyleIf("width", !IsFullWidth(), ActualWidth, "px");
+            {
+                renderer.StartElement("table")
+                    .Attr("align", "center")
+                    .Attr("bgcolor", BackgroundColor)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation")
+                    .Attr("width", IsFullWidth() ? "100%" : ActualWidth.ToInvariantString())
+                    .Classes(CssClass, "outlook")
+                    .StyleIf("width", IsFullWidth(), "100%")
+                    .StyleIf("width", !IsFullWidth(), ActualWidth, "px");
 
-            renderer.StartElement("tr");
-            renderer.StartElement("td")
-                .Style("font-size", "0px")
-                .Style("line-height", "0px")
-                .Style("mso-line-height-rule", "exactly");
+                renderer.StartElement("tr");
+                renderer.StartElement("td")
+                    .Style("font-size", "0px")
+                    .Style("line-height", "0px")
+                    .Style("mso-line-height-rule", "exactly");
+            }
             renderer.EndConditional("<![endif]-->");
         }
 
@@ -274,15 +276,21 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", TextAlign);
 
             renderer.StartConditional("<!--[if mso | IE]>");
-            renderer.StartElement("table")
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation");
+            {
+                renderer.StartElement("table")
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation");
+            }
+            renderer.EndConditional("<![endif]-->");
 
             RenderWrappedChildren(renderer, context);
 
-            renderer.EndElement("table");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.EndElement("table");
+            }
             renderer.EndConditional("<![endif]-->");
 
             renderer.EndElement("td");
@@ -301,11 +309,11 @@ namespace Mjml.Net.Components.Body
         private static void RenderSectionEnd(IHtmlRenderer renderer)
         {
             renderer.StartConditional("<!--[if mso | IE]>");
-
-            renderer.EndElement("td");
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-
+            {
+                renderer.EndElement("td");
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
             renderer.EndConditional("<![endif]-->");
         }
 
@@ -358,71 +366,87 @@ namespace Mjml.Net.Components.Body
             }
 
             renderer.StartConditional("<!--[if mso | IE]>");
-            var rectElement = renderer.StartElement("v:rect")
-                .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
-                .Attr("fill", "true")
-                .Attr("stroke", "false");
-
-            if (isFullwidth)
             {
-                rectElement.Style("mso-width-percent", "1000");
-            }
-            else
-            {
-                rectElement.Style("width", $"{ActualWidth}px");
-            }
+                var rectElement = renderer.StartElement("v:rect")
+                    .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
+                    .Attr("fill", "true")
+                    .Attr("stroke", "false");
 
-            renderer.StartElement("v:fill", true)
-                .Attr("origin", $"{xOrigin}, {yOrigin}")
-                .Attr("position", $"{xPosition}, {yPosition}")
-                .Attr("src", BackgroundUrl)
-                .Attr("color", BackgroundColor)
-                .Attr("type", vmlType)
-                .Attr("size", vmlSize)
-                .Attr("aspect", vmlAspect);
+                if (isFullwidth)
+                {
+                    rectElement.Style("mso-width-percent", "1000");
+                }
+                else
+                {
+                    rectElement.Style("width", $"{ActualWidth}px");
+                }
 
-            renderer.StartElement("v:textbox")
-                .Attr("inset", "0,0,0,0")
-                .Style("mso-fit-shape-to-text", "true");
+                renderer.StartElement("v:fill", true)
+                    .Attr("origin", $"{xOrigin}, {yOrigin}")
+                    .Attr("position", $"{xPosition}, {yPosition}")
+                    .Attr("src", BackgroundUrl)
+                    .Attr("color", BackgroundColor)
+                    .Attr("type", vmlType)
+                    .Attr("size", vmlSize)
+                    .Attr("aspect", vmlAspect);
+
+                renderer.StartElement("v:textbox")
+                    .Attr("inset", "0,0,0,0")
+                    .Style("mso-fit-shape-to-text", "true");
+            }
             renderer.EndConditional("<![endif]-->");
 
             RenderSection(renderer, context);
 
             renderer.StartConditional("<!--[if mso | IE]>");
-            renderer.EndElement("v:textbox");
-            renderer.EndElement("v:rect");
+            {
+                renderer.EndElement("v:textbox");
+                renderer.EndElement("v:rect");
+            }
             renderer.EndConditional("<![endif]-->");
         }
 
         protected virtual void RenderWrappedChildren(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.StartElement("tr");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("tr");
+            }
+            renderer.EndConditional("<![endif]-->");
 
             foreach (var child in ChildNodes)
             {
                 if (child.Raw)
                 {
-                    renderer.EndConditional("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.StartConditional("<!--[if mso | IE]>");
                 }
                 else
                 {
-                    renderer.StartElement("td")
-                        .Attr("align", child.GetAttribute("align"))
-                        .Classes(child.GetAttribute("css-class"), "outlook")
-                        .Style("vertical-align", child.GetAttribute("vertical-align"))
-                        .Style("width", $"{child.ActualWidth}px");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.StartElement("td")
+                            .Attr("align", child.GetAttribute("align"))
+                            .Classes(child.GetAttribute("css-class"), "outlook")
+                            .Style("vertical-align", child.GetAttribute("vertical-align"))
+                            .Style("width", $"{child.ActualWidth}px");
+                    }
                     renderer.EndConditional("<![endif]-->");
 
                     child.Render(renderer, context);
 
                     renderer.StartConditional("<!--[if mso | IE]>");
-                    renderer.EndElement("td");
+                    {
+                        renderer.EndElement("td");
+                    }
+                    renderer.EndConditional("<![endif]-->");
                 }
             }
 
-            renderer.EndElement("tr");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.EndElement("tr");
+            }
+            renderer.EndConditional("<![endif]-->");
         }
 
         private string? GetBackground()
