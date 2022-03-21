@@ -8,7 +8,7 @@ namespace Tests.Components
         [Fact]
         public void Should_render_text()
         {
-            var source = @"<mj-text>HelloMJML</mj-text>";
+            var source = @"<mj-text>Hello MJML</mj-text>";
 
             var result = TestHelper.Render(source);
 
