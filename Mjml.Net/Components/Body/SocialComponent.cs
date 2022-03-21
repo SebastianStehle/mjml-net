@@ -87,7 +87,7 @@
 
         private void RenderHorizontal(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.StartElement("table")
                 .Attr("align", Align)
@@ -102,14 +102,14 @@
             {
                 if (child.ContentType == ContentType.Raw)
                 {
-                    renderer.Content("<![endif]-->");
+                    renderer.EndConditional("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.StartConditional("<!--[if mso | IE]>");
                 }
                 else
                 {
                     renderer.StartElement("td");
-                    renderer.Content("<![endif]-->");
+                    renderer.EndConditional("<![endif]-->");
 
                     renderer.StartElement("table")
                         .Attr("align", Align)
@@ -127,14 +127,14 @@
                     renderer.EndElement("tbody");
                     renderer.EndElement("table");
 
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.StartConditional("<!--[if mso | IE]>");
                     renderer.EndElement("td");
                 }
             }
 
             renderer.EndElement("tr");
             renderer.EndElement("table");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
 
         private void RenderVertical(IHtmlRenderer renderer, GlobalContext context)

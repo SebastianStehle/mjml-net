@@ -4,7 +4,7 @@ namespace Mjml.Net.Extensions
 {
     public static class WriterExtensions
     {
-        public static IElementStyleWriter StyleIf(this IElementStyleWriter writer, string name, bool condition, string? value)
+        public static IHtmlStyleRenderer StyleIf(this IHtmlStyleRenderer writer, string name, bool condition, string? value)
         {
             if (condition)
             {
@@ -14,7 +14,7 @@ namespace Mjml.Net.Extensions
             return writer;
         }
 
-        public static IElementStyleWriter StyleIf(this IElementStyleWriter writer, string name, bool condition, double value, string unit)
+        public static IHtmlStyleRenderer StyleIf(this IHtmlStyleRenderer writer, string name, bool condition, double value, string unit)
         {
             if (condition)
             {
@@ -24,7 +24,7 @@ namespace Mjml.Net.Extensions
             return writer;
         }
 
-        public static IElementHtmlWriter AttrOrAuto(this IElementHtmlWriter writer, string name, string? value)
+        public static IHtmlAttrRenderer AttrOrAuto(this IHtmlAttrRenderer writer, string name, string? value)
         {
             if (value == "auto")
             {
@@ -36,7 +36,7 @@ namespace Mjml.Net.Extensions
             }
         }
 
-        public static IElementClassWriter Classes(this IElementClassWriter writer, string? classNames, string suffix)
+        public static IHtmlClassRenderer Classes(this IHtmlClassRenderer writer, string? classNames, string suffix)
         {
             if (string.IsNullOrEmpty(classNames))
             {

@@ -168,7 +168,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderSectionStart(IHtmlRenderer renderer)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
             renderer.StartElement("table")
                 .Attr("align", "center")
                 .Attr("bgcolor", BackgroundColor)
@@ -186,7 +186,7 @@ namespace Mjml.Net.Components.Body
                 .Style("font-size", "0px")
                 .Style("line-height", "0px")
                 .Style("mso-line-height-rule", "exactly");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
 
         private void RenderSection(IHtmlRenderer renderer, GlobalContext context)
@@ -273,7 +273,7 @@ namespace Mjml.Net.Components.Body
                 .Style("padding-top", PaddingTop)
                 .Style("text-align", TextAlign);
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
             renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
@@ -283,7 +283,7 @@ namespace Mjml.Net.Components.Body
             RenderWrappedChildren(renderer, context);
 
             renderer.EndElement("table");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
 
             renderer.EndElement("td");
             renderer.EndElement("tr");
@@ -300,13 +300,13 @@ namespace Mjml.Net.Components.Body
 
         private static void RenderSectionEnd(IHtmlRenderer renderer)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.EndElement("td");
             renderer.EndElement("tr");
             renderer.EndElement("table");
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
 
         private void RenderSectionWithBackground(IHtmlRenderer renderer, GlobalContext context)
@@ -357,7 +357,7 @@ namespace Mjml.Net.Components.Body
                 yPosition = "0";
             }
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
             var rectElement = renderer.StartElement("v:rect")
                 .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                 .Attr("fill", "true")
@@ -384,14 +384,14 @@ namespace Mjml.Net.Components.Body
             renderer.StartElement("v:textbox")
                 .Attr("inset", "0,0,0,0")
                 .Style("mso-fit-shape-to-text", "true");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
 
             RenderSection(renderer, context);
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
             renderer.EndElement("v:textbox");
             renderer.EndElement("v:rect");
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
 
         protected virtual void RenderWrappedChildren(IHtmlRenderer renderer, GlobalContext context)
@@ -402,9 +402,9 @@ namespace Mjml.Net.Components.Body
             {
                 if (child.Raw)
                 {
-                    renderer.Content("<![endif]-->");
+                    renderer.EndConditional("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.StartConditional("<!--[if mso | IE]>");
                 }
                 else
                 {
@@ -413,11 +413,11 @@ namespace Mjml.Net.Components.Body
                         .Classes(child.GetAttribute("css-class"), "outlook")
                         .Style("vertical-align", child.GetAttribute("vertical-align"))
                         .Style("width", $"{child.ActualWidth}px");
-                    renderer.Content("<![endif]-->");
+                    renderer.EndConditional("<![endif]-->");
 
                     child.Render(renderer, context);
 
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.StartConditional("<!--[if mso | IE]>");
                     renderer.EndElement("td");
                 }
             }

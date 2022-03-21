@@ -102,7 +102,7 @@
 
             var width = backgroundWidth.Value > 0 ? backgroundWidth.Value : ActualWidth;
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.StartElement("table") // Style: outlook-table
                 .Attr("align", "center")
@@ -131,7 +131,7 @@
                 .Style("width", $"{width}px")
                 .Style("z-index", "-3");
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
 
             renderer.StartElement("div") // Style div
                 .Attr("align", Align)
@@ -214,18 +214,18 @@
             renderer.EndElement("table");
             renderer.EndElement("div");
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.EndElement("td");
             renderer.EndElement("tr");
             renderer.EndElement("table");
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
 
         private void RenderContent(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.StartElement("table") // Style: outlook-inner-table
                 .Attr("align", Align)
@@ -245,7 +245,7 @@
                 .Style("inner-padding-right", InnerPaddingRight)
                 .Style("inner-padding-top", InnerPaddingTop);
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
 
             renderer.StartElement("div") // Style: inner-div
                 .Attr("align", Align)
@@ -317,13 +317,13 @@
             renderer.EndElement("table");
             renderer.EndElement("div");
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.EndElement("td");
             renderer.EndElement("tr");
             renderer.EndElement("table");
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
     }
 }

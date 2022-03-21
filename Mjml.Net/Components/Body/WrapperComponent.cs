@@ -12,9 +12,9 @@ namespace Mjml.Net.Components.Body
             {
                 if (child.Raw)
                 {
-                    renderer.Content("<![endif]-->");
+                    renderer.EndConditional("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.StartConditional("<!--[if mso | IE]>");
                 }
                 else
                 {
@@ -23,11 +23,11 @@ namespace Mjml.Net.Components.Body
                         .Attr("align", child.GetAttribute("align"))
                         .Attr("width", $"{ActualWidth}px")
                         .Classes(child.GetAttribute("css-class"), "outlook");
-                    renderer.Content("<![endif]-->");
+                    renderer.EndConditional("<![endif]-->");
 
                     child.Render(renderer, context);
 
-                    renderer.Content("<!--[if mso | IE]>");
+                    renderer.StartConditional("<!--[if mso | IE]>");
                     renderer.EndElement("td");
                     renderer.EndElement("tr");
                 }

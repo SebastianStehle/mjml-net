@@ -67,7 +67,7 @@
             }
             else
             {
-                renderer.Content("<!--[if mso | IE]>");
+                renderer.StartConditional("<!--[if mso | IE]>");
                 renderer.StartElement("table")
                     .Attr("role", "presentation")
                     .Attr("border", "0")
@@ -79,15 +79,15 @@
                     .Attr("height", height)
                     .Style("vertical-align", "top")
                     .Style("height", height);
-                renderer.Content("<![endif]-->");
+                renderer.EndConditional("<![endif]-->");
 
                 RenderTextContent(renderer);
 
-                renderer.Content("<!--[if mso | IE]>");
+                renderer.StartConditional("<!--[if mso | IE]>");
                 renderer.EndElement("td");
                 renderer.EndElement("tr");
                 renderer.EndElement("table");
-                renderer.Content("<![endif]-->");
+                renderer.EndConditional("<![endif]-->");
             }
         }
 

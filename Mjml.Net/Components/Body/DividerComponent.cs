@@ -55,7 +55,7 @@ namespace Mjml.Net.Components.Body
 
             var outlookWidth = GetOutlookWidth();
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
 
             renderer.StartElement("table")
                 .Attr("align", Align)
@@ -80,7 +80,7 @@ namespace Mjml.Net.Components.Body
             renderer.EndElement("tr");
             renderer.EndElement("table");
 
-            renderer.Content("<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
 
         private static string GetMargin(string? align)
