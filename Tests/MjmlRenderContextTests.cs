@@ -14,7 +14,7 @@ namespace Tests
 
         public MjmlRenderContextTests()
         {
-            sut.BufferStart();
+            sut.StartBuffer();
         }
 
         [Fact]
@@ -47,13 +47,14 @@ namespace Tests
             sut.StartElement("div")
                 .Attr("attr1", "1")
                 .Attr("attr2", "2")
-                .Attr("attr3", null);
+                .Attr("attr3", $"{3}")
+                .Attr("attr4", null);
 
             sut.EndElement("div");
 
             AssertText(new[]
             {
-                "<div attr1='1' attr2='2'>",
+                "<div attr1='1' attr2='2' attr3='3'>",
                 "</div>"
             });
         }
@@ -64,13 +65,14 @@ namespace Tests
             sut.StartElement("div")
                 .Style("style1", "1")
                 .Style("style2", "2")
-                .Style("style3", null);
+                .Style("style3", $"{3}")
+                .Style("style4", null);
 
             sut.EndElement("div");
 
             AssertText(new[]
             {
-                "<div style='style1:1;style2:2;'>",
+                "<div style='style1:1;style2:2;style3:3;'>",
                 "</div>"
             });
         }
@@ -81,13 +83,14 @@ namespace Tests
             sut.StartElement("div")
                 .Class("class1")
                 .Class("class2")
+                .Class($"class{3}")
                 .Class(null);
 
             sut.EndElement("div");
 
             AssertText(new[]
             {
-                "<div class='class1 class2'>",
+                "<div class='class1 class2 class3'>",
                 "</div>"
             });
         }
@@ -134,6 +137,7 @@ namespace Tests
             sut.Content("1");
             sut.Content("2");
             sut.Content(null);
+            sut.Content($"{3}");
             sut.EndElement("div");
 
             AssertText(new[]
@@ -141,6 +145,7 @@ namespace Tests
                 "<div>",
                 "  1",
                 "  2",
+                "  3",
                 "</div>"
             });
         }
@@ -148,9 +153,12 @@ namespace Tests
         [Fact]
         public void Should_render_elements_with_multiliner_content()
         {
+            var line12 = $"line1{Environment.NewLine}line2{Environment.NewLine}";
+            var line3 = "line3";
+
             sut.StartElement("div");
-            sut.Content($"line1{Environment.NewLine}line2{Environment.NewLine}");
-            sut.Content("line3");
+            sut.Content(line12);
+            sut.Content(line3);
             sut.EndElement("div");
 
             AssertText(new[]
@@ -190,19 +198,19 @@ namespace Tests
         {
             sut.StartElement("html");
 
-            sut.BufferStart();
+            sut.StartBuffer();
             sut.StartElement("head");
             sut.Content("head");
             sut.EndElement("head");
 
-            var head = sut.BufferFlush();
+            var head = sut.EndBuffer();
 
-            sut.BufferStart();
+            sut.StartBuffer();
             sut.StartElement("body");
             sut.Content("body");
             sut.EndElement("body");
 
-            var body = sut.BufferFlush();
+            var body = sut.EndBuffer();
 
             sut.Plain(head, false);
             sut.Plain(body, false);
@@ -336,7 +344,7 @@ namespace Tests
                 sb.AppendLine(line.Replace('\'', '"'));
             }
 
-            var actual = sut.BufferFlush()!.ToString();
+            var actual = sut.EndBuffer()!.ToString();
 
             Assert.Equal(sb.ToString(), actual);
         }

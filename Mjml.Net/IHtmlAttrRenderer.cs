@@ -29,11 +29,11 @@ namespace Mjml.Net
     {
         private StringBuilder.AppendInterpolatedStringHandler inner;
 
-        public AttrInterpolatedStringHandler(int literalLength, int formattedCount, IHtmlAttrRenderer writer, string name)
+        public AttrInterpolatedStringHandler(int literalLength, int formattedCount, IHtmlAttrRenderer renderer, string name)
         {
-            writer.StartAttr(name);
+            renderer.StartAttr(name);
 
-            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder);
+            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, renderer.StringBuilder);
         }
 
         public void AppendLiteral(string value)

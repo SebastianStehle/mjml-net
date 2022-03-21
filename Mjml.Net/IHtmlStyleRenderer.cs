@@ -23,7 +23,7 @@ namespace Mjml.Net
 
         internal StringBuilder StringBuilder { get; }
 
-        void StartStyle(string name);
+        internal void StartStyle(string name);
     }
 
     [InterpolatedStringHandler]
