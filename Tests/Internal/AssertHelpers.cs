@@ -40,7 +40,7 @@ namespace Tests.Internal
             return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
 
-        public static void HtmlFileAsset(string name, string actual, bool ignoreComments = false)
+        public static void HtmlFileAsset(string name, string actual)
         {
             var expected = TestHelper.GetContent(name);
 
@@ -56,18 +56,18 @@ namespace Tests.Internal
             {
             }
 
-            HtmlAssertCore(lhs, rhs, ignoreComments);
+            HtmlAssertCore(lhs, rhs);
         }
 
-        public static void HtmlAssert(string expected, string actual, bool ignoreComments = false)
+        public static void HtmlAssert(string expected, string actual)
         {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 
-            HtmlAssertCore(lhs, rhs, ignoreComments);
+            HtmlAssertCore(lhs, rhs);
         }
 
-        private static void HtmlAssertCore(string expected, string actual, bool ignoreComments)
+        private static void HtmlAssertCore(string expected, string actual)
         {
             var diffs =
                 DiffBuilder
@@ -87,11 +87,6 @@ namespace Tests.Internal
                         options.AddStyleSheetComparer();
                         options.AddTextComparer(WhitespaceOption.Normalize, ignoreCase: false);
                         options.IgnoreDiffAttributes();
-
-                        if (ignoreComments)
-                        {
-                            options.IgnoreComments();
-                        }
                     })
                     .Build();
 
