@@ -13,20 +13,44 @@ namespace Mjml.Net
             ["Ubuntu"] = new Font("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
         };
 
-        public bool KeepComments { get; init; }
+        /// <summary>
+        /// True to also keep comments.
+        /// </summary>
+        public bool KeepComments { get; init; } = false;
 
+        /// <summary>
+        /// The default breakpoint to switch to mobile view.
+        /// </summary>
         public string Breakpoint { get; set; } = "480px";
 
+        /// <summary>
+        /// A list of custom styles.
+        /// </summary>
         public Style[]? Styles { get; init; }
 
+        /// <summary>
+        /// True to enable media queries for OWA.
+        /// </summary>
         public bool ForceOWAQueries { get; init; }
 
+        /// <summary>
+        /// True to beatify the HTML.
+        /// </summary>
         public bool Beautify { get; init; } = true;
 
+        /// <summary>
+        /// True to minify the HTML.
+        /// </summary>
         public bool Minify { get; init; }
 
+        /// <summary>
+        /// A list of supported default fonts.
+        /// </summary>
         public IReadOnlyDictionary<string, Font> Fonts { get; init; } = DefaultFonts;
 
+        /// <summary>
+        /// The current validator.
+        /// </summary>
         public IValidatorFactory? ValidatorFactory { get; init; }
     }
 }

@@ -8,13 +8,22 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
+    /// <summary>
+    /// Default implementation of the <see cref="IMjmlRenderer"/> interface.
+    /// </summary>
     public sealed class MjmlRenderer : IMjmlRenderer
     {
         private readonly Dictionary<string, Func<IComponent>> components = new Dictionary<string, Func<IComponent>>();
         private readonly List<IHelper> helpers = new List<IHelper>();
 
+        /// <summary>
+        /// Provides a list of all registered helpers.
+        /// </summary>
         public IEnumerable<IHelper> Helpers => helpers;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MjmlRenderer"/> class.
+        /// </summary>
         public MjmlRenderer()
         {
             Add<AttributesComponent>();
@@ -49,6 +58,7 @@ namespace Mjml.Net
             Add(new TitleHelper());
         }
 
+        /// <inheritdoc />
         public IMjmlRenderer Add<T>() where T : IComponent, new()
         {
             components[new T().ComponentName] = () => new T();
@@ -56,6 +66,7 @@ namespace Mjml.Net
             return this;
         }
 
+        /// <inheritdoc />
         public IMjmlRenderer Add(IHelper helper)
         {
             helpers.Add(helper);
@@ -63,6 +74,7 @@ namespace Mjml.Net
             return this;
         }
 
+        /// <inheritdoc />
         public IMjmlRenderer ClearComponents()
         {
             components.Clear();
@@ -70,6 +82,7 @@ namespace Mjml.Net
             return this;
         }
 
+        /// <inheritdoc />
         public IMjmlRenderer ClearHelpers()
         {
             helpers.Clear();
@@ -82,6 +95,7 @@ namespace Mjml.Net
             return components.GetValueOrDefault(name)?.Invoke();
         }
 
+        /// <inheritdoc />
         public RenderResult Render(string mjml, MjmlOptions? options = null)
         {
             var xml = XmlReader.Create(new StringReader(mjml));
@@ -89,6 +103,7 @@ namespace Mjml.Net
             return Render(xml, options);
         }
 
+        /// <inheritdoc />
         public RenderResult Render(Stream mjml, MjmlOptions? options = null)
         {
             var xml = XmlReader.Create(mjml);
@@ -96,6 +111,7 @@ namespace Mjml.Net
             return Render(xml, options);
         }
 
+        /// <inheritdoc />
         public RenderResult Render(TextReader mjml, MjmlOptions? options = null)
         {
             var xml = XmlReader.Create(mjml);

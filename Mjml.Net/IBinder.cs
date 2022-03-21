@@ -1,5 +1,8 @@
 ﻿namespace Mjml.Net
 {
+    /// <summary>
+    /// Providers values from MJML.
+    /// </summary>
     public interface IBinder
     {
         /// <summary>
