@@ -232,9 +232,14 @@ namespace Mjml.Net.Components.Body
             renderer.StartElement("div")
                 .Class("mj-carousel-images");
 
-            foreach (var image in CarouselImages)
+            for (int i = 0; i < CarouselImages.Count(); i++)
             {
+                var image = CarouselImages.ElementAt(i);
+
+                image.CarouselID = CarouselID;
+                image.CarouselImageIndex = i;
                 image.BorderRadius = BorderRadius;
+
                 image.Render(renderer, context);
             }
 
