@@ -4,7 +4,7 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : IHtmlRenderer, IElementHtmlWriter
+    public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
         private readonly HashSet<string> analyzedFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -13,13 +13,16 @@ namespace Mjml.Net
         private int numClasses;
         private int numStyles;
         private int indent;
+        private string? pendingConditionalStart;
+        private string? pendingConditionalEnd;
+        private int conditionalDepth;
 
         private StringBuilder Buffer
         {
             get => buffers.Current!;
         }
 
-        StringBuilder IElementStyleWriter.StringBuilder
+        StringBuilder IHtmlStyleRenderer.StringBuilder
         {
             get => buffers.Current!;
         }
@@ -35,14 +38,14 @@ namespace Mjml.Net
 
         public void BufferStart()
         {
-            Flush();
-
             buffers.Push(ObjectPools.StringBuilder.Get());
         }
 
         public StringBuilder? BufferFlush()
         {
-            Flush();
+            FlushElement();
+            FlushConditionalStart();
+            FlushConditionalEnd();
 
             var currentBuffer = buffers.Pop();
 
@@ -57,9 +60,11 @@ namespace Mjml.Net
             }
         }
 
-        public IElementHtmlWriter StartElement(string elementName, bool selfClosed = false)
+        public IHtmlAttrRenderer StartElement(string elementName, bool close = false)
         {
-            Flush();
+            FlushElement();
+            FlushConditionalStart();
+            FlushConditionalEnd();
 
             if (string.IsNullOrEmpty(elementName))
             {
@@ -71,7 +76,7 @@ namespace Mjml.Net
             Buffer.Append('<');
             Buffer.Append(elementName);
 
-            elementSelfClosed = selfClosed;
+            elementSelfClosed = close;
             elementStarted = true;
             numClasses = 0;
             numStyles = 0;
@@ -79,7 +84,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementHtmlWriter Attr(string name, string? value)
+        public IHtmlAttrRenderer Attr(string name, string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -94,7 +99,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementHtmlWriter Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value)
+        public IHtmlAttrRenderer Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value)
         {
             Buffer.Append('"');
 
@@ -108,7 +113,7 @@ namespace Mjml.Net
             Buffer.Append("=\"");
         }
 
-        public IElementClassWriter Class(string? value)
+        public IHtmlClassRenderer Class(string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -124,7 +129,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementClassWriter Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value)
+        public IHtmlClassRenderer Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value)
         {
             numClasses++;
 
@@ -144,7 +149,7 @@ namespace Mjml.Net
             }
         }
 
-        public IElementStyleWriter Style(string name, string? value)
+        public IHtmlStyleRenderer Style(string name, string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -163,7 +168,7 @@ namespace Mjml.Net
             return this;
         }
 
-        public IElementStyleWriter Style(string name, [InterpolatedStringHandlerArgument("", "name")] ref StyleInterpolatedStringHandler value)
+        public IHtmlStyleRenderer Style(string name, [InterpolatedStringHandlerArgument("", "name")] ref StyleInterpolatedStringHandler value)
         {
             Buffer.Append(';');
 
@@ -195,7 +200,9 @@ namespace Mjml.Net
 
         public void EndElement(string elementName)
         {
-            Flush();
+            FlushElement();
+            FlushConditionalStart();
+            FlushConditionalEnd();
 
             indent--;
 
@@ -208,15 +215,50 @@ namespace Mjml.Net
             WriteLineEnd();
         }
 
+        public void StartConditional(string content)
+        {
+            FlushElement();
+
+            conditionalDepth++;
+
+            if (pendingConditionalStart != null || pendingConditionalEnd != null || conditionalDepth > 1)
+            {
+                pendingConditionalEnd = null;
+                return;
+            }
+
+            pendingConditionalStart = content;
+        }
+
+        public void EndConditional(string content)
+        {
+            FlushElement();
+
+            conditionalDepth--;
+
+            if (pendingConditionalStart != null || conditionalDepth > 0)
+            {
+                pendingConditionalEnd = content;
+                return;
+            }
+
+            pendingConditionalEnd = content;
+        }
+
         public void Content(string? value, bool appendLine = true)
         {
-            Flush();
+            FlushElement();
 
             if (value == null)
             {
                 return;
             }
 
+            ContentCore(value, appendLine);
+        }
+
+        private void ContentCore(string value, bool appendLine = true)
+        {
             WriteLineStart();
 
             if (mjmlOptions.Beautify)
@@ -241,7 +283,9 @@ namespace Mjml.Net
 
         public void Plain(StringBuilder? value, bool appendLine = true)
         {
-            Flush();
+            FlushElement();
+            FlushConditionalStart();
+            FlushConditionalEnd();
 
             if (value?.Length == 0)
             {
@@ -258,7 +302,9 @@ namespace Mjml.Net
 
         public void Plain(ReadOnlySpan<char> value, bool appendLine = true)
         {
-            Flush();
+            FlushElement();
+            FlushConditionalStart();
+            FlushConditionalEnd();
 
             if (value.Length == 0)
             {
@@ -316,7 +362,31 @@ namespace Mjml.Net
             }
         }
 
-        private void Flush()
+        private void FlushConditionalEnd()
+        {
+            if (pendingConditionalEnd == null)
+            {
+                return;
+            }
+
+            ContentCore(pendingConditionalEnd);
+
+            pendingConditionalEnd = null;
+        }
+
+        private void FlushConditionalStart()
+        {
+            if (pendingConditionalStart == null)
+            {
+                return;
+            }
+
+            ContentCore(pendingConditionalStart);
+
+            pendingConditionalStart = null;
+        }
+
+        private void FlushElement()
         {
             if (!elementStarted)
             {

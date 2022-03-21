@@ -84,32 +84,29 @@ namespace Mjml.Net.Components.Body
             renderer.StartElement("div")
                 .Class("mj-inline-links");
 
-            renderer.Content("<!--[if mso | IE]>");
-
-            renderer.StartElement("table")
-                .Attr("align", Align)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation");
-            renderer.StartElement("tr");
-
-            if (ChildNodes.Any())
+            renderer.StartConditional("<!--[if mso | IE]>");
             {
-                renderer.Content("<![endif]-->");
+                renderer.StartElement("table")
+                    .Attr("align", Align)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation");
+                renderer.StartElement("tr");
+            }
+            renderer.EndConditional("<![endif]-->");
 
-                foreach (var child in ChildNodes)
-                {
-                    child.Render(renderer, context);
-                }
-
-                renderer.Content("<!--[if mso | IE]>");
+            foreach (var child in ChildNodes)
+            {
+                child.Render(renderer, context);
             }
 
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-
-            renderer.Content("<![endif]-->");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
+            renderer.EndConditional("<![endif]-->");
 
             renderer.EndElement("div");
         }
@@ -118,17 +115,17 @@ namespace Mjml.Net.Components.Body
         {
             var key = Guid.NewGuid().ToString();
 
-            renderer.Content("<!--[if !mso><!-->");
-
-            renderer.StartElement("input")
-                .Attr("id", key)
-                .Attr("type", "checkbox")
-                .Class("mj-menu-checkbox")
-                .Style("display", "none !important")
-                .Style("max-height", "0")
-                .Style("visibility", "hidden");
-
-            renderer.Content("<!--<![endif]-->");
+            renderer.StartConditional("<!--[if !mso><!-->");
+            {
+                renderer.StartElement("input")
+                    .Attr("id", key)
+                    .Attr("type", "checkbox")
+                    .Class("mj-menu-checkbox")
+                    .Style("display", "none !important")
+                    .Style("max-height", "0")
+                    .Style("visibility", "hidden");
+            }
+            renderer.EndConditional("<!--<![endif]-->");
 
             renderer.StartElement("div") // Style trigger
                 .Class("mj-menu-trigger")

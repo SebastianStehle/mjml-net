@@ -4,49 +4,49 @@ namespace Mjml.Net.Extensions
 {
     public static class WriterExtensions
     {
-        public static IElementStyleWriter StyleIf(this IElementStyleWriter writer, string name, bool condition, string? value)
+        public static IHtmlStyleRenderer StyleIf(this IHtmlStyleRenderer renderer, string name, bool condition, string? value)
         {
             if (condition)
             {
-                writer.Style(name, value);
+                renderer.Style(name, value);
             }
 
-            return writer;
+            return renderer;
         }
 
-        public static IElementStyleWriter StyleIf(this IElementStyleWriter writer, string name, bool condition, double value, string unit)
+        public static IHtmlStyleRenderer StyleIf(this IHtmlStyleRenderer renderer, string name, bool condition, double value, string unit)
         {
             if (condition)
             {
-                writer.Style(name, $"{value}{unit}");
+                renderer.Style(name, $"{value}{unit}");
             }
 
-            return writer;
+            return renderer;
         }
 
-        public static IElementHtmlWriter AttrOrAuto(this IElementHtmlWriter writer, string name, string? value)
+        public static IHtmlAttrRenderer AttrOrAuto(this IHtmlAttrRenderer renderer, string name, string? value)
         {
             if (value == "auto")
             {
-                return writer.Attr(name, "auto");
+                return renderer.Attr(name, "auto");
             }
             else
             {
-                return writer.Attr(name, $"{UnitParser.Parse(value).Value}");
+                return renderer.Attr(name, $"{UnitParser.Parse(value).Value}");
             }
         }
 
-        public static IElementClassWriter Classes(this IElementClassWriter writer, string? classNames, string suffix)
+        public static IHtmlClassRenderer Classes(this IHtmlClassRenderer renderer, string? classNames, string suffix)
         {
             if (string.IsNullOrEmpty(classNames))
             {
-                return writer;
+                return renderer;
             }
 
             if (string.IsNullOrWhiteSpace(suffix))
             {
-                writer.Class(classNames);
-                return writer;
+                renderer.Class(classNames);
+                return renderer;
             }
 
             var span = classNames.AsSpan().Trim();
@@ -57,7 +57,7 @@ namespace Mjml.Net.Extensions
 
                 if (index > 0)
                 {
-                    writer.Class($"{span[..index]}-{suffix}");
+                    renderer.Class($"{span[..index]}-{suffix}");
 
                     span = span[index..].Trim();
                 }
@@ -69,10 +69,10 @@ namespace Mjml.Net.Extensions
 
             if (span.Length > 0)
             {
-                writer.Class($"{span}-{suffix}");
+                renderer.Class($"{span}-{suffix}");
             }
 
-            return writer;
+            return renderer;
         }
     }
 }

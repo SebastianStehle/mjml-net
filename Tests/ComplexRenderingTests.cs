@@ -34,7 +34,7 @@ namespace Tests
                 Beautify = true
             }).Html;
 
-            AssertHelpers.HtmlFileAsset("Amario.html", result, true);
+            AssertHelpers.HtmlFileAsset("Amario.html", result);
         }
     }
 }

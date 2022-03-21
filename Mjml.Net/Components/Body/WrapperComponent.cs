@@ -12,24 +12,28 @@ namespace Mjml.Net.Components.Body
             {
                 if (child.Raw)
                 {
-                    renderer.Content("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.Content("<!--[if mso | IE]>");
                 }
                 else
                 {
-                    renderer.StartElement("tr");
-                    renderer.StartElement("td")
-                        .Attr("align", child.GetAttribute("align"))
-                        .Attr("width", $"{ActualWidth}px")
-                        .Classes(child.GetAttribute("css-class"), "outlook");
-                    renderer.Content("<![endif]-->");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.StartElement("tr");
+                        renderer.StartElement("td")
+                            .Attr("align", child.GetAttribute("align"))
+                            .Attr("width", $"{ActualWidth}px")
+                            .Classes(child.GetAttribute("css-class"), "outlook");
+                    }
+                    renderer.EndConditional("<![endif]-->");
 
                     child.Render(renderer, context);
 
-                    renderer.Content("<!--[if mso | IE]>");
-                    renderer.EndElement("td");
-                    renderer.EndElement("tr");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.EndElement("td");
+                        renderer.EndElement("tr");
+                    }
+                    renderer.EndConditional("<![endif]-->");
                 }
             }
         }

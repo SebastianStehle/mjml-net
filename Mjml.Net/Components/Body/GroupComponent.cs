@@ -70,45 +70,52 @@ namespace Mjml.Net.Components.Body
                 .Style("vertical-align", VerticalAlign)
                 .Style("width", "100%");
 
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("table")
+                    .Attr("bgcolor", BackgroundColor == "none" ? null : BackgroundColor)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation");
 
-            renderer.StartElement("table")
-                .Attr("bgcolor", BackgroundColor == "none" ? null : BackgroundColor)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation");
-
-            renderer.StartElement("tr");
+                renderer.StartElement("tr");
+            }
+            renderer.EndConditional("<![endif]-->");
 
             foreach (var child in ChildNodes)
             {
                 if (child.Raw)
                 {
-                    renderer.Content("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.Content("<!--[if mso | IE]>");
                 }
                 else
                 {
-                    renderer.StartElement("td")
-                        .Style("align", child.GetAttribute("align"))
-                        .Style("vertical-align", child.GetAttribute("vertical-align"))
-                        .Style("width", $"{child.ActualWidth}px");
-
-                    renderer.Content("<![endif]-->");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.StartElement("td")
+                            .Style("align", child.GetAttribute("align"))
+                            .Style("vertical-align", child.GetAttribute("vertical-align"))
+                            .Style("width", $"{child.ActualWidth}px");
+                    }
+                    renderer.EndConditional("<![endif]-->");
 
                     child.Render(renderer, context);
 
-                    renderer.Content("<!--[if mso | IE]>");
-                    renderer.EndElement("td");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.EndElement("td");
+                    }
+                    renderer.EndConditional("<![endif]-->");
                 }
             }
 
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-
-            renderer.Content("<![endif]-->");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
+            renderer.EndConditional("<![endif]-->");
 
             renderer.EndElement("div");
         }

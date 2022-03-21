@@ -222,6 +222,111 @@ namespace Tests
             });
         }
 
+        [Fact]
+        public void Should_not_render_nested_conditional()
+        {
+            sut.StartConditional("<-- open -->");
+            sut.StartConditional("<-- open -->");
+            sut.EndConditional("<-- close -->");
+            sut.EndConditional("<-- close -->");
+
+            AssertText(new[]
+            {
+                "<-- open -->",
+                "<-- close -->"
+            });
+        }
+
+        [Fact]
+        public void Should_not_render_nested_conditional2()
+        {
+            sut.StartConditional("<-- open -->");
+            sut.EndConditional("<-- close -->");
+            sut.StartConditional("<-- open -->");
+            sut.EndConditional("<-- close -->");
+
+            AssertText(new[]
+            {
+                "<-- open -->",
+                "<-- close -->"
+            });
+        }
+
+        [Fact]
+        public void Should_render_conditionals()
+        {
+            sut.StartConditional("<-- open -->");
+            sut.StartElement("div");
+
+            sut.EndElement("div");
+            sut.EndConditional("<-- close -->");
+
+            AssertText(new[]
+            {
+                "<-- open -->",
+                "<div>",
+                "</div>",
+                "<-- close -->"
+            });
+        }
+
+        [Fact]
+        public void Should_render_conditionals2()
+        {
+            sut.StartElement("div");
+            sut.StartConditional("<-- open -->");
+            sut.StartElement("div");
+
+            sut.EndElement("div");
+            sut.EndConditional("<-- close -->");
+            sut.EndElement("div");
+
+            AssertText(new[]
+            {
+                "<div>",
+                "  <-- open -->",
+                "  <div>",
+                "  </div>",
+                "  <-- close -->",
+                "</div>"
+            });
+        }
+
+        [Fact]
+        public void Should_render_conditionals3()
+        {
+            sut.StartConditional("<-- open -->");
+            sut.StartElement("div", true);
+            sut.EndConditional("<-- close -->");
+
+            sut.StartConditional("<-- open -->");
+            sut.StartElement("div", true);
+            sut.EndConditional("<-- close -->");
+
+            AssertText(new[]
+            {
+                "<-- open -->",
+                "<div/>",
+                "<div/>",
+                "<-- close -->"
+            });
+        }
+
+        [Fact]
+        public void Should_render_conditionals_self_closed()
+        {
+            sut.StartConditional("<-- open -->");
+            sut.StartElement("div", true);
+            sut.EndConditional("<-- close -->");
+
+            AssertText(new[]
+            {
+                "<-- open -->",
+                "<div/>",
+                "<-- close -->"
+            });
+        }
+
         private void AssertText(params string[] lines)
         {
             var sb = new StringBuilder();

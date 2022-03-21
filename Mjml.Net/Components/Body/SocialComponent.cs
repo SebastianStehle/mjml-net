@@ -87,29 +87,32 @@
 
         private void RenderHorizontal(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.Content("<!--[if mso | IE]>");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("table")
+                    .Attr("align", Align)
+                    .Attr("border", "0")
+                    .Attr("cellpadding", "0")
+                    .Attr("cellspacing", "0")
+                    .Attr("role", "presentation");
 
-            renderer.StartElement("table")
-                .Attr("align", Align)
-                .Attr("border", "0")
-                .Attr("cellpadding", "0")
-                .Attr("cellspacing", "0")
-                .Attr("role", "presentation");
-
-            renderer.StartElement("tr");
+                renderer.StartElement("tr");
+            }
+            renderer.EndConditional("<![endif]-->");
 
             foreach (var child in ChildNodes)
             {
                 if (child.ContentType == ContentType.Raw)
                 {
-                    renderer.Content("<![endif]-->");
                     child.Render(renderer, context);
-                    renderer.Content("<!--[if mso | IE]>");
                 }
                 else
                 {
-                    renderer.StartElement("td");
-                    renderer.Content("<![endif]-->");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.StartElement("td");
+                    }
+                    renderer.EndConditional("<![endif]-->");
 
                     renderer.StartElement("table")
                         .Attr("align", Align)
@@ -127,14 +130,20 @@
                     renderer.EndElement("tbody");
                     renderer.EndElement("table");
 
-                    renderer.Content("<!--[if mso | IE]>");
-                    renderer.EndElement("td");
+                    renderer.StartConditional("<!--[if mso | IE]>");
+                    {
+                        renderer.EndElement("td");
+                    }
+                    renderer.EndConditional("<![endif]-->");
                 }
             }
 
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
-            renderer.Content("<![endif]-->");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.EndElement("tr");
+                renderer.EndElement("table");
+            }
+            renderer.EndConditional("<![endif]-->");
         }
 
         private void RenderVertical(IHtmlRenderer renderer, GlobalContext context)
