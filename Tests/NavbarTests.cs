@@ -24,5 +24,20 @@ namespace Tests
 
             AssertHelpers.HtmlFileAsset("NavbarWithoutHamburger.html", result);
         }
+
+        [Fact]
+        public void Should_render_navbar()
+        {
+            var source = @"
+<mj-navbar base-url=""https://mjml.io"" hamburger=""hamburger"" ico-color=""black"">
+    <mj-navbar-link href=""/link1"" color=""#ff00ff"">Link1</mj-navbar-link>
+    <mj-navbar-link href=""/link2"" color=""#ff0000"">Link2</mj-navbar-link>
+    <mj-navbar-link href=""/link3"" color=""#0000ff"">Link3</mj-navbar-link>
+</mj-navbar>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAsset("NavbarWithLinks.html", result, ignoreComments: true);
+        }
     }
 }

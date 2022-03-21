@@ -29,6 +29,7 @@ namespace Mjml.Net
             Add<HeroComponent>();
             Add<ImageComponent>();
             Add<NavbarComponent>();
+            Add<NavbarLinkComponent>();
             Add<PreviewComponent>();
             Add<RawComponent>();
             Add<RootComponent>();

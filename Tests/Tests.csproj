@@ -38,6 +38,7 @@
     <None Remove="Tests\Image.html" />
     <None Remove="Tests\ImageWithLink.html" />
     <None Remove="Tests\Navbar.html" />
+    <None Remove="Tests\NavbarWithLinks.html" />
     <None Remove="Tests\NavbarWithoutHamburger.html" />
     <None Remove="Tests\Preview.html" />
     <None Remove="Tests\Section.html" />
@@ -90,6 +91,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tests\NavbarWithLinks.html" />
     <EmbeddedResource Include="Tests\TablePixels.html">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
