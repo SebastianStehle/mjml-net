@@ -7,14 +7,19 @@ namespace Tests
 {
     public class ComplexTests
     {
+        private static readonly HashSet<string> Ignore = new HashSet<string>
+        {
+            "ugg-royale.mjml" // Carousel
+        };
+
         public static IEnumerable<object[]> Templates()
         {
-            var files = Directory.GetFiles("Templates", "*.mjml");
+            var files = Directory.GetFiles("Templates", "*.mjml").Select(x => new FileInfo(x));
 
-            return files.Select(x => new[] { new FileInfo(x).Name });
+            return files.Where(x => !Ignore.Contains(x.Name)).Select(x => new[] { x.Name });
         }
 
-        [Theory(Skip = "Too expensive")]
+        [Theory(Skip = "Expensive")]
         [MemberData(nameof(Templates))]
         public void Should_render_template(string template)
         {
@@ -35,7 +40,10 @@ namespace Tests
 
                 var result = new MjmlRenderer().Render(source, new MjmlOptions
                 {
-                    Beautify = true
+                    Beautify = true,
+
+                    // Cleanup XML, because some are broken.
+                    Lax = true
                 }).Html;
 
                 AssertHelpers.HtmlAssert(template, result, expected);

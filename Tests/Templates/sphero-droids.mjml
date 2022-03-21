@@ -79,7 +79,7 @@
         <mj-image src="https://dmmedia.sphero.com/email-marketing/Star-Wars/sphero-logo-bottom-gray.png" href="https://www.sphero.com" width="134px" align="center"></mj-image>
       </mj-column>
       <mj-column width="33.33333333333333%">
-        <mj-text align="center" color="#ffffff" font-size="10px">&copy; & &trade; Lucasfilm Ltd.</mj-text>
+        <mj-text align="center" color="#ffffff" font-size="10px">&copy; &trade; Lucasfilm Ltd.</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>

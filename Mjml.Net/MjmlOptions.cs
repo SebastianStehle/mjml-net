@@ -13,6 +13,19 @@ namespace Mjml.Net
             ["Ubuntu"] = new Font("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
         };
 
+        private static readonly Dictionary<string, string> DefaultXmlEntities = new Dictionary<string, string>
+        {
+            ["&amp;"] = "&#38;",
+            ["&apos;"] = "&#39;",
+            ["&copy;"] = "&#169;",
+            ["&gt;"] = "&#62;",
+            ["&lt;"] = "&#60;",
+            ["&nbsp;"] = "&#160;",
+            ["&quot;"] = "&#34;",
+            ["&reg;"] = "&#174;",
+            ["&trade;"] = "&#8482;"
+        };
+
         /// <summary>
         /// True to also keep comments.
         /// </summary>
@@ -44,9 +57,22 @@ namespace Mjml.Net
         public bool Minify { get; init; }
 
         /// <summary>
+        /// In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string.
+        /// </summary>
+        /// <remarks>
+        /// Do not turn this on in production, because it can hurt performance.
+        /// </remarks>
+        public bool Lax { get; set; }
+
+        /// <summary>
         /// A list of supported default fonts.
         /// </summary>
         public IReadOnlyDictionary<string, Font> Fonts { get; init; } = DefaultFonts;
+
+        /// <summary>
+        /// A list of supported XML entities.
+        /// </summary>
+        public IReadOnlyDictionary<string, string> XmlEntities { get; init; } = DefaultXmlEntities;
 
         /// <summary>
         /// The current validator.
