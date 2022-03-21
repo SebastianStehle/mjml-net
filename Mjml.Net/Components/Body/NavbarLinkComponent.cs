@@ -77,17 +77,17 @@ namespace Mjml.Net.Components.Body
                 link = $"{NavbarBaseUrl}{link}";
             }
 
-            renderer.Content("<!--[if mso | IE]>");
-
-            renderer.StartElement("td") // Style td
-                .Classes(CssClass, "outlook")
-                .Style("padding", Padding)
-                .Style("padding-bottom", PaddingBottom)
-                .Style("padding-left", PaddingLeft)
-                .Style("padding-right", PaddingRight)
-                .Style("padding-top", PaddingTop);
-
-            renderer.Content("<!--<![endif]-->");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.StartElement("td") // Style td
+                    .Classes(CssClass, "outlook")
+                    .Style("padding", Padding)
+                    .Style("padding-bottom", PaddingBottom)
+                    .Style("padding-left", PaddingLeft)
+                    .Style("padding-right", PaddingRight)
+                    .Style("padding-top", PaddingTop);
+            }
+            renderer.EndConditional("<!--<![endif]-->");
 
             renderer.StartElement("a") // Style a
                 .Attr("href", link)
@@ -115,9 +115,11 @@ namespace Mjml.Net.Components.Body
 
             renderer.EndElement("a");
 
-            renderer.Content("<!--[if mso | IE]>");
-            renderer.EndElement("td");
-            renderer.Content("<!--<![endif]-->");
+            renderer.StartConditional("<!--[if mso | IE]>");
+            {
+                renderer.EndElement("td");
+            }
+            renderer.EndConditional("<!--<![endif]-->");
         }
 
         private void RenderContent(IHtmlRenderer renderer)

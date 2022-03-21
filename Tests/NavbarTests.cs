@@ -37,7 +37,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("NavbarWithLinks.html", result, ignoreComments: true);
+            AssertHelpers.HtmlFileAsset("NavbarWithLinks.html", result);
         }
     }
 }
