@@ -2,7 +2,7 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class TitleTests
     {
@@ -21,7 +21,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new TitleHelper());
 
-            AssertHelpers.HtmlFileAsset("Title.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Title.html", result);
         }
     }
 }

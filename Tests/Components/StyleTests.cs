@@ -2,7 +2,7 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class StyleTests
     {
@@ -25,7 +25,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlFileAsset("Style.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Style.html", result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlFileAsset("Style.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Style.html", result);
         }
     }
 }

@@ -2,7 +2,7 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class PreviewTests
     {
@@ -21,7 +21,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new PreviewHelper());
 
-            AssertHelpers.HtmlFileAsset("Preview.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Preview.html", result);
         }
     }
 }

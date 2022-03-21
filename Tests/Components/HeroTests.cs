@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class HeroTests
     {
@@ -15,7 +15,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Hero.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Hero.html", result);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("HeroDivider.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.HeroDivider.html", result);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("HeroDividers.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.HeroDividers.html", result);
         }
     }
 }

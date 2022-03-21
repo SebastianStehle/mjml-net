@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class NavbarTests
     {
@@ -12,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Navbar.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Navbar.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("NavbarWithoutHamburger.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.NavbarWithoutHamburger.html", result);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("NavbarWithLinks.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.NavbarWithLinks.html", result);
         }
     }
 }

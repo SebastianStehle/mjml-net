@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class WrapperTests
     {
@@ -16,7 +16,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Wrapper.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Wrapper.html", result);
         }
     }
 }

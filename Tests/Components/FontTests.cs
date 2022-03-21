@@ -2,7 +2,7 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class FontTests
     {
@@ -21,7 +21,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAsset("Font.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Font.html", result);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Tests
 
             var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAsset("FontUbuntu.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.FontUbuntu.html", result);
         }
     }
 }

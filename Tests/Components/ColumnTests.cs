@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class ColumnTests
     {
@@ -12,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ColumnOne.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnOne.html", result);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ColumnTwo.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnTwo.html", result);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ColumnThree.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnThree.html", result);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ColumnFour.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnFour.html", result);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ColumnOneWithPadding.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ColumnOneWithPadding.html", result);
         }
     }
 }

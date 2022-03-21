@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class DividerTests
     {
@@ -12,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Divider.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Divider.html", result);
         }
     }
 }

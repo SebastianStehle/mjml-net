@@ -1,18 +1,17 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Mjml.Net;
 using Xunit;
 
 namespace Tests
 {
-    public class MjmlRenderContextTests
+    public class HtmlRenderTests
     {
         private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
         {
             Beautify = true
         });
 
-        public MjmlRenderContextTests()
+        public HtmlRenderTests()
         {
             sut.StartBuffer();
         }

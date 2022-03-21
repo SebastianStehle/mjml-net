@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class ComplexRenderingTests
+    public class ComplexTests
     {
         [Fact]
         public void Should_render_body_only()
@@ -27,14 +27,14 @@ namespace Tests
         [Fact]
         public void Should_render_amario()
         {
-            var source = TestHelper.GetContent("Amario.mjml");
+            var source = TestHelper.GetContent("Tests.Amario.mjml");
 
             var result = new MjmlRenderer().Render(source, new MjmlOptions
             {
                 Beautify = true
             }).Html;
 
-            AssertHelpers.HtmlFileAsset("Amario.html", result);
+            AssertHelpers.HtmlFileAsset("Tests.Amario.html", result);
         }
     }
 }

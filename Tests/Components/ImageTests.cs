@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class ImageTests
     {
@@ -12,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Image.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Image.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ImageWithLink.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ImageWithLink.html", result);
         }
     }
 }

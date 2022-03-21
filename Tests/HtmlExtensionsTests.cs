@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Tests
 {
-    public class CssClassesExtensionsTests
+    public class HtmlExtensionsTests
     {
         private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
         {
             Beautify = true
         });
 
-        public CssClassesExtensionsTests()
+        public HtmlExtensionsTests()
         {
             sut.StartBuffer();
         }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Mjml.Net;
+﻿using Mjml.Net;
 using Mjml.Net.Validators;
 using Xunit;
 

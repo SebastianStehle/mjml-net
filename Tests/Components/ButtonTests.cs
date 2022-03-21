@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class ButtonTests
     {
@@ -16,7 +16,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Button.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Button.html", result);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ButtonLink.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonLink.html", result);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ButtonLinkWithRel.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonLinkWithRel.html", result);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ButtonMixedContent.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonMixedContent.html", result);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("ButtonMixedContent2.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.ButtonMixedContent2.html", result);
         }
     }
 }

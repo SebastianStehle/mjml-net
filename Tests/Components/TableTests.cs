@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Tests.Internal;
+﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class TableTests
     {
@@ -30,7 +29,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Table.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Table.html", result);
         }
 
         [Fact]
@@ -57,7 +56,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("TablePixels.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.TablePixels.html", result);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("TablePercent.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.TablePercent.html", result);
         }
     }
 }

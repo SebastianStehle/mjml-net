@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class SectionTests
     {
@@ -12,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Section.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Section.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("SectionWithBackgroundColor.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithBackgroundColor.html", result);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("SectionWithBackgroundImage.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithBackgroundImage.html", result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("SectionWithColumns.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithColumns.html", result);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("SectionWithGroups.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.SectionWithGroups.html", result);
         }
     }
 }

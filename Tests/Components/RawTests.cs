@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Tests.Internal;
+﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class RawTests
     {

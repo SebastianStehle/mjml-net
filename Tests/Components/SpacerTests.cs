@@ -1,7 +1,7 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests.Components
 {
     public class SpacerTests
     {
@@ -12,7 +12,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("Spacer.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.Spacer.html", result);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Tests
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAsset("SpacerWithHeight.html", result);
+            AssertHelpers.HtmlFileAsset("Components.Outputs.SpacerWithHeight.html", result);
         }
     }
 }
