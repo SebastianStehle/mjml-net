@@ -80,7 +80,7 @@ namespace Mjml.Net.Components.Body
 
         public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
 
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
         {
             var widthValue = 0d;
             var widthUnit = Unit.Pixels;
@@ -101,11 +101,11 @@ namespace Mjml.Net.Components.Body
 
             if (widthUnit != Unit.Pixels)
             {
-                ActualWidth = (int)(parentWidth * widthValue / 100);
+                ActualWidth = parentWidth * widthValue / 100;
             }
             else
             {
-                ActualWidth = (int)widthValue;
+                ActualWidth = widthValue;
             }
 
             var allPaddings =

@@ -73,7 +73,7 @@ namespace Mjml.Net.Components.Body
         [Bind("text-padding", BindType.PixelsOrPercent)]
         public string TextPadding = "4px 4px 4px 0";
 
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
         {
             ActualWidth = parentWidth;
 
@@ -84,7 +84,7 @@ namespace Mjml.Net.Components.Body
                 UnitParser.Parse(PaddingLeft).Value -
                 UnitParser.Parse(PaddingRight).Value;
 
-            MeasureChildren((int)innerWidth);
+            MeasureChildren(innerWidth);
         }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
@@ -244,7 +244,6 @@ namespace Mjml.Net.Components.Body
                 {
                     tableElement // Style background
                         .Style("background", background)
-                        .Style("background-color", BackgroundColor)
                         .Style("background-position", BackgroundPosition)
                         .Style("background-repeat", BackgroundRepeat)
                         .Style("background-size", BackgroundSize);
@@ -576,7 +575,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    var temp = $"{(positionUnitDouble * 100 / 100) - 50.0}";
+                    var temp = $"{((positionUnitDouble * 100) - 50.0) / 100}";
 
                     return (temp, temp);
                 }

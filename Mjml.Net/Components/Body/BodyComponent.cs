@@ -22,7 +22,7 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.Pixels)]
         public string Width = "600px";
 
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
         {
             ActualWidth = (int)UnitParser.Parse(Width).Value;
 

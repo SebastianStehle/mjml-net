@@ -94,7 +94,7 @@ namespace Mjml.Net.Components.Body
         [Bind("width", BindType.Pixels)]
         public string? Width;
 
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
         {
             var width =
                 parentWidth -

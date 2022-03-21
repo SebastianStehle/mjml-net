@@ -73,7 +73,7 @@
         [Bind("width", BindType.Pixels)]
         public string? Width;
 
-        public override void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
         {
             ActualWidth = parentWidth;
 
@@ -82,7 +82,7 @@
                 UnitParser.Parse(PaddingTop).Value -
                 UnitParser.Parse(PaddingBottom).Value;
 
-            MeasureChildren((int)innerWidth);
+            MeasureChildren(innerWidth);
         }
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
