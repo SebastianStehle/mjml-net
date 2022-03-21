@@ -10,7 +10,7 @@ namespace Tests.Internal
 
             return renderer.Render(source, new MjmlOptions
             {
-                Beautify = true
+                Beautify = true, Lax = true
             }).Html;
         }
 

@@ -8,11 +8,21 @@ namespace Tests.Components
         [Fact]
         public void Should_render_text()
         {
-            var source = @"<mj-text>Hello MJML</mj-text>";
+            var source = @"<mj-text>HelloMJML</mj-text>";
 
             var result = TestHelper.Render(source);
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.Text.html", result);
+        }
+
+        [Fact]
+        public void Should_render_text_with_whitespace()
+        {
+            var source = @"<mj-text>Hello&nbsp;MJML</mj-text>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
         }
 
         [Fact]
@@ -33,6 +43,19 @@ namespace Tests.Components
             var result = TestHelper.Render(source);
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithHtml2.html", result);
+        }
+
+        [Fact]
+        public void Should_render_raw_text_with_whitespace()
+        {
+            var source = @"
+<mj-text>
+    <p>Hello&nbsp;MJML</p>
+</mj-text>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.TextRawWhitespace.html", result);
         }
     }
 }

@@ -8,6 +8,16 @@ namespace Tests
         private readonly IMjmlRenderer sut = new MjmlRenderer();
 
         [Fact]
+        public void Should_cleanup_and_in_attributes()
+        {
+            var source = " href=\"url&1=2\">";
+
+            var result = sut.FixXML(source);
+
+            Assert.Equal(" href=\"url&amp;1=2\">", result);
+        }
+
+        [Fact]
         public void Should_cleanup_entity()
         {
             var source = "invalid tag &nbsp; found";
