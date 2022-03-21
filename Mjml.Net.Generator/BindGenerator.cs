@@ -29,9 +29,9 @@ namespace Mjml.Net.Generator
 
             foreach (var group in receiver.Fields.GroupBy(f => f.Field.ContainingType, SymbolEqualityComparer.Default))
             {
-                Console.WriteLine($"Handling {group.Key.Name}");
+                Console.WriteLine($"Handling {group.Key!.Name}");
 
-                var source = ProcessClass(group.Key as INamedTypeSymbol, group.ToList(), attribute);
+                var source = ProcessClass((INamedTypeSymbol)group.Key, group.ToList(), attribute!);
 
                 context.AddSource($"{group.Key.Name}_Binder.cs", SourceText.From(source, Encoding.UTF8));
             }
@@ -41,7 +41,7 @@ namespace Mjml.Net.Generator
         {
             if (!classSymbol.ContainingSymbol.Equals(classSymbol.ContainingNamespace, SymbolEqualityComparer.Default))
             {
-                return null;
+                return string.Empty;
             }
 
             var allFields = new Dictionary<string, FieldInfo>();
@@ -57,15 +57,15 @@ namespace Mjml.Net.Generator
 
                 if (bindAttribute != null)
                 {
-                    fieldAttribute = bindAttribute.ConstructorArguments.First().Value.ToString();
+                    fieldAttribute = bindAttribute.ConstructorArguments.First().Value!.ToString();
 
                     if (bindAttribute.ConstructorArguments.Length >= 2)
                     {
                         var argument = bindAttribute.ConstructorArguments.Last();
 
                         // Value is an integer here so we need to convert it to its Enum.
-                        var valueNumber = (int)bindAttribute.ConstructorArguments.Last().Value;
-                        var valueString = argument.Type.GetMembers()[valueNumber].Name;
+                        var valueNumber = (int)bindAttribute.ConstructorArguments!.Last().Value!;
+                        var valueString = argument.Type!.GetMembers()[valueNumber].Name;
 
                         fieldType = valueString;
                     }
@@ -287,13 +287,18 @@ namespace Mjml.Net.Generator
                 {
                     var fieldSymbol = context.SemanticModel.GetDeclaredSymbol(variable) as IFieldSymbol;
 
-                    if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass.ToDisplayString() == "Mjml.Net.BindAttribute"))
+                    if (fieldSymbol == null)
                     {
-                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString(), false));
+                        return;
                     }
-                    else if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass.ToDisplayString() == "Mjml.Net.BindTextAttribute"))
+
+                    if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "Mjml.Net.BindAttribute"))
                     {
-                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString(), true));
+                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString()!, false));
+                    }
+                    else if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "Mjml.Net.BindTextAttribute"))
+                    {
+                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString()!, true));
                     }
                 }
             }
