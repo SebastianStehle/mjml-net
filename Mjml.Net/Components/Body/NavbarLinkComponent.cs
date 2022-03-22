@@ -1,12 +1,19 @@
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
     public partial class NavbarLinkComponent : BodyComponentBase
     {
-        public override string ComponentName => "mj-navbar-link";
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-navbar"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
 
         public override ContentType ContentType => ContentType.Text;
+
+        public override string ComponentName => "mj-navbar-link";
 
         [Bind("color", BindType.Color)]
         public string Color = "#000000";

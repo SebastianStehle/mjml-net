@@ -2,6 +2,14 @@
 {
     public partial class HeroComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-body",
+            "mj-wrapper"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-hero";
 
         [Bind("align", BindType.Align)]

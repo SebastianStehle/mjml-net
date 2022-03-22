@@ -52,30 +52,16 @@ namespace Tests
         }
 
         [Fact]
-        public void Should_add_error_if_tag_is_not_a_valid_descendant()
-        {
-            var source = @"
-<mjml>
-    <mj-head>
-        <mj-button>Text</mj-button>
-    </mj-head>
-    <mj-body>
-    </mj-body>
-</mjml>
-";
-
-            var errors = Render(source);
-
-            Assert.Equal(new[] { "'mj-button' must be descendant of 'mj-body'." }, errors);
-        }
-
-        [Fact]
         public void Should_add_error_if_component_has_invalid_attribute()
         {
             var source = @"
 <mjml>
     <mj-body>
-        <mj-button invalid=""false"">Text</mj-button>
+        <mj-section>
+            <mj-column>
+                <mj-button invalid=""false"">Text</mj-button>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>
 ";
@@ -91,7 +77,11 @@ namespace Tests
             var source = @"
 <mjml>
     <mj-body>
-        <mj-button width=""red"">Text</mj-button>
+        <mj-section>
+            <mj-column>
+                <mj-button width=""red"">Text</mj-button>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>
 ";
@@ -106,7 +96,11 @@ namespace Tests
             var source = @"
 <mjml>
     <mj-body>
-        <mj-button width=""red"">Text</mj-button>
+        <mj-section>
+            <mj-column>
+                <mj-button width=""red"">Text</mj-button>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>
 ";
@@ -122,7 +116,11 @@ namespace Tests
             var source = @"
 <mjml>
     <mj-body>
-        <mj-button width=""10px"">Text</mj-button>
+        <mj-section>
+            <mj-column>
+                <mj-button width=""10px"">Text</mj-button>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>
 ";

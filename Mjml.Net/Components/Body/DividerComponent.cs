@@ -4,6 +4,14 @@ namespace Mjml.Net.Components.Body
 {
     public partial class DividerComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-column",
+            "mj-group"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-divider";
 
         [Bind("align", BindType.Align)]
