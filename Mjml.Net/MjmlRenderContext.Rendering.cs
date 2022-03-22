@@ -476,7 +476,7 @@ namespace Mjml.Net
                 // Fast track for a single font.
                 if (mjmlOptions.Fonts.TryGetValue(value, out var font))
                 {
-                    context.SetGlobalData(value, font);
+                    context.SetGlobalData(value, font, true);
                 }
             }
         }
