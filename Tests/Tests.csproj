@@ -14,12 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <None Remove="Components\Outputs\Accordion.html" />
     <None Remove="Components\Outputs\AccordionEmptyElements.html" />
-=======
     <None Remove="Components\Outputs\FontUbuntu2.html" />
->>>>>>> f513df0cc4ea202f3b776e879bc43a90351029cd
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithHtml2.html" />
