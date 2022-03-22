@@ -7,7 +7,6 @@ namespace Mjml.Net
     public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
     {
         private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
-        private readonly HashSet<string> analyzedFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private bool elementSelfClosed;
         private bool elementStarted;
         private int numClasses;
@@ -29,7 +28,6 @@ namespace Mjml.Net
 
         private void ClearRenderData()
         {
-            analyzedFonts.Clear();
             buffers.Clear();
             elementStarted = false;
             elementSelfClosed = false;
@@ -170,8 +168,6 @@ namespace Mjml.Net
             {
                 return this;
             }
-
-            DetectFontFamily(name, value);
 
             StartStyle(name);
 
@@ -439,41 +435,6 @@ namespace Mjml.Net
             TextCore(pendingConditionalStart);
 
             pendingConditionalStart = null;
-        }
-
-        private void DetectFontFamily(string name, string value)
-        {
-            if (name != "font-family")
-            {
-                return;
-            }
-
-            if (!analyzedFonts.Add(value))
-            {
-                return;
-            }
-
-            var hasMultipleFonts = value.Contains(',', StringComparison.OrdinalIgnoreCase);
-
-            if (hasMultipleFonts)
-            {
-                // If we have multiple fonts it is faster than a string.Split, because we can avoid allocations.
-                foreach (var (key, font) in mjmlOptions.Fonts)
-                {
-                    if (value.Contains(key, StringComparison.OrdinalIgnoreCase))
-                    {
-                        context.SetGlobalData(key, font, true);
-                    }
-                }
-            }
-            else
-            {
-                // Fast track for a single font.
-                if (mjmlOptions.Fonts.TryGetValue(value, out var font))
-                {
-                    context.SetGlobalData(value, font, true);
-                }
-            }
         }
     }
 }

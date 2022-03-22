@@ -5,6 +5,7 @@ namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext
     {
+        private readonly HashSet<string> analyzedFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
@@ -36,6 +37,7 @@ namespace Mjml.Net
 
         internal void Clear()
         {
+            analyzedFonts.Clear();
             context.Clear();
             errors.Clear();
             mjmlRenderer = null!;
@@ -103,6 +105,8 @@ namespace Mjml.Net
                 validator?.Attribute(attributeName, attributeValue, component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
+
+                DetectFontFamily(attributeName, attributeValue);
             }
 
             if (component.ContentType == ContentType.Text)
@@ -201,6 +205,41 @@ namespace Mjml.Net
             }
 
             return null;
+        }
+
+        private void DetectFontFamily(string name, string value)
+        {
+            if (!name.EndsWith("font-family", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            if (!analyzedFonts.Add(value))
+            {
+                return;
+            }
+
+            var hasMultipleFonts = value.Contains(',', StringComparison.OrdinalIgnoreCase);
+
+            if (hasMultipleFonts)
+            {
+                // If we have multiple fonts it is faster than a string.Split, because we can avoid allocations.
+                foreach (var (key, font) in mjmlOptions.Fonts)
+                {
+                    if (value.Contains(key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        context.SetGlobalData(key, font, true);
+                    }
+                }
+            }
+            else
+            {
+                // Fast track for a single font.
+                if (mjmlOptions.Fonts.TryGetValue(value, out var font))
+                {
+                    context.SetGlobalData(value, font, true);
+                }
+            }
         }
     }
 }
