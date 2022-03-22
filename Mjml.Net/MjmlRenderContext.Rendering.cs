@@ -91,6 +91,8 @@ namespace Mjml.Net
                 return this;
             }
 
+            DetectFontFamily(name, value);
+
             StartAttr(name);
 
             Buffer.Append(value);

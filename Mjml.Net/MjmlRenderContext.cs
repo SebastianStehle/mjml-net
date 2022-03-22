@@ -95,9 +95,12 @@ namespace Mjml.Net
             {
                 reader.MoveToAttribute(i);
 
-                binder.SetAttribute(reader.Name, reader.Value);
+                var attributeName = reader.Name;
+                var attributeValue = reader.Value;
 
-                validator?.Attribute(reader.Name, reader.Value, component,
+                binder.SetAttribute(attributeName, attributeValue);
+
+                validator?.Attribute(attributeName, attributeValue, component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
             }

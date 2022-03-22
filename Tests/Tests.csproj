@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithHtml2.html" />
@@ -94,6 +95,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
