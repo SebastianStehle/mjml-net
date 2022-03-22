@@ -4,6 +4,13 @@ namespace Mjml.Net.Components.Body
 {
     public partial class WrapperComponent : SectionComponent
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-body"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-wrapper";
 
         protected override void RenderWrappedChildren(IHtmlRenderer renderer, GlobalContext context)

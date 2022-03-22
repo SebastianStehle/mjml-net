@@ -9,7 +9,7 @@ namespace Mjml.Net.Components.Body
             "mjml"
         };
 
-        public override AllowedParents? AllowedAsChild => Parents;
+        public override AllowedParents? AllowedParents => Parents;
 
         public override string ComponentName => "mj-body";
 

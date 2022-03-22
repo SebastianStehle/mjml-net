@@ -1,10 +1,17 @@
-﻿using System.Xml;
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
     public partial class SectionComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-body",
+            "mj-wrapper"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-section";
 
         [Bind("background-color", BindType.Color)]

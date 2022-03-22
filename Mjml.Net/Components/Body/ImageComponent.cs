@@ -5,6 +5,14 @@ namespace Mjml.Net.Components.Body
 {
     public partial class ImageComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-column",
+            "mj-hero"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-image";
 
         [Bind("align", BindType.Align)]

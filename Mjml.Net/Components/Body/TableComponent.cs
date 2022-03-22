@@ -2,6 +2,14 @@
 {
     public partial class TableComponent : Component
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-column",
+            "mj-hero"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-table";
 
         public override ContentType ContentType => ContentType.Raw;

@@ -6,6 +6,13 @@ namespace Mjml.Net.Components.Body
 {
     public partial class GroupComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-section"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-group";
 
         [Bind("background-color", BindType.Color)]

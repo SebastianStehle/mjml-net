@@ -1,9 +1,16 @@
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 
 namespace Mjml.Net.Components.Body
 {
     public partial class NavbarLinkComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-navbar"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-navbar-link";
 
         public override ContentType ContentType => ContentType.Text;
