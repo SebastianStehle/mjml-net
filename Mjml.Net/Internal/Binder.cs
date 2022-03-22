@@ -15,13 +15,15 @@
             this.context = context;
         }
 
-        public void Clear(IComponent? newParent = null, string? newElementName = null)
+        public Binder Clear(IComponent? newParent, string? newElementName = null)
         {
             attributes.Clear();
             currentClasses = null;
             currentText = null;
             elementName = newElementName!;
             parent = newParent;
+
+            return this;
         }
 
         public void SetAttribute(string name, string value)

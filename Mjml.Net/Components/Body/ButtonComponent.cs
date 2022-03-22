@@ -4,6 +4,14 @@ namespace Mjml.Net.Components.Body
 {
     public partial class ButtonComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-hero",
+            "mj-column"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override ContentType ContentType => ContentType.Raw;
 
         public override string ComponentName => "mj-button";

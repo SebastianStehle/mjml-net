@@ -50,7 +50,7 @@
                 hasBody = true;
             }
 
-            if (component.AllowedAsDescendant == null && component.AllowedAsChild == null)
+            if (component.AllowedParents == null)
             {
                 if (componentStack.Count > 0)
                 {
@@ -63,18 +63,11 @@
                 {
                     errors.Add($"'{name}' cannot be the root tag.", line, column);
                 }
-                else if (component.AllowedAsChild != null)
+                else if (component.AllowedParents != null)
                 {
-                    if (!component.AllowedAsChild.Contains(previous))
+                    if (!component.AllowedParents.Contains(previous))
                     {
-                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedAsChild)}'.", line, column);
-                    }
-                }
-                else if (component.AllowedAsDescendant != null)
-                {
-                    if (component.AllowedAsDescendant.All(x => !componentStack.Contains(x)))
-                    {
-                        errors.Add($"'{name}' must be descendant of '{string.Join(", ", component.AllowedAsDescendant)}'.", line, column);
+                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.", line, column);
                     }
                 }
             }

@@ -2,9 +2,17 @@
 {
     public partial class TableComponent : Component
     {
-        public override string ComponentName => "mj-table";
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-column",
+            "mj-hero"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
 
         public override ContentType ContentType => ContentType.Raw;
+
+        public override string ComponentName => "mj-table";
 
         [Bind("align", BindType.Align)]
         public string Align = "left";

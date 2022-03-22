@@ -4,9 +4,7 @@ namespace Mjml.Net
 {
     public interface IComponent
     {
-        AllowedParents? AllowedAsDescendant { get; }
-
-        AllowedParents? AllowedAsChild { get; }
+        AllowedParents? AllowedParents { get; }
 
         AllowedAttributes? AllowedFields { get; }
 
@@ -31,6 +29,8 @@ namespace Mjml.Net
         void AddChild(IComponent child);
 
         void AddChild(string rawXml);
+
+        void AfterBind(GlobalContext context, XmlReader reader);
 
         void Render(IHtmlRenderer renderer, GlobalContext context);
 

@@ -174,6 +174,8 @@ namespace Mjml.Net
                 }
             }
 
+            component.AfterBind(context, reader);
+
             reader.Close();
 
             if (parent == null)

@@ -19,6 +19,12 @@ namespace Mjml.Net
         IHtmlAttrRenderer StartElement(string elementName, bool close = false);
 
         /// <summary>
+        /// Returns a string builder back to the pool.
+        /// </summary>
+        /// <param name="stringBuilder">The string builder to return.</param>
+        void ReturnStringBuilder(StringBuilder stringBuilder);
+
+        /// <summary>
         /// Ends an element.
         /// </summary>
         /// <param name="elementName">The name of the element.</param>
