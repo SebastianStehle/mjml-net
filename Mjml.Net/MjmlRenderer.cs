@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Microsoft.Extensions.ObjectPool;
 using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
@@ -14,9 +15,26 @@ namespace Mjml.Net
     /// </summary>
     public sealed class MjmlRenderer : IMjmlRenderer
     {
-        private static readonly Regex AttributeRegex = new Regex(@"\s*(?<Name>[a-z0-9]*)=""(?<Value>.*)""([\s]|>)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private readonly Regex attributeRegex = new Regex(@"\s*(?<Name>[a-z0-9]*)=""(?<Value>.*)""([\s]|>)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private readonly ObjectPool<StringBuilder> poolOfStringBuilders = new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
+        private readonly ObjectPool<MjmlRenderContext> poolOfContexts = new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
         private readonly Dictionary<string, Func<IComponent>> components = new Dictionary<string, Func<IComponent>>();
         private readonly List<IHelper> helpers = new List<IHelper>();
+
+        private sealed class MjmlRenderContextPolicy : PooledObjectPolicy<MjmlRenderContext>
+        {
+            public override MjmlRenderContext Create()
+            {
+                return new MjmlRenderContext();
+            }
+
+            public override bool Return(MjmlRenderContext obj)
+            {
+                obj.Clear();
+
+                return true;
+            }
+        }
 
         /// <summary>
         /// Provides a list of all registered helpers.
@@ -137,7 +155,7 @@ namespace Mjml.Net
 
             mjml = FixLineBreakTags(mjml);
 
-            mjml = AttributeRegex.Replace(mjml, match =>
+            mjml = attributeRegex.Replace(mjml, match =>
             {
                 var raw = match.ToString();
 
@@ -210,9 +228,19 @@ namespace Mjml.Net
             return mjml;
         }
 
+        internal StringBuilder GetStringBuilder()
+        {
+            return poolOfStringBuilders.Get();
+        }
+
+        internal void Return(StringBuilder stringBuilder)
+        {
+            poolOfStringBuilders.Return(stringBuilder);
+        }
+
         private RenderResult Render(XmlReader xml, MjmlOptions? options)
         {
-            var context = ObjectPools.Contexts.Get();
+            var context = poolOfContexts.Get();
             try
             {
                 context.Setup(this, options ?? new MjmlOptions());
@@ -228,12 +256,12 @@ namespace Mjml.Net
                 }
                 finally
                 {
-                    ObjectPools.StringBuilder.Return(buffer!);
+                    Return(buffer!);
                 }
             }
             finally
             {
-                ObjectPools.Contexts.Return(context);
+                poolOfContexts.Return(context);
             }
         }
     }
