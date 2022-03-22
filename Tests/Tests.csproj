@@ -14,8 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <None Remove="Components\Outputs\Accordion.html" />
     <None Remove="Components\Outputs\AccordionEmptyElements.html" />
+=======
+    <None Remove="Components\Outputs\FontUbuntu2.html" />
+>>>>>>> f513df0cc4ea202f3b776e879bc43a90351029cd
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithHtml2.html" />
@@ -98,22 +102,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
+    <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
-    <EmbeddedResource Include="Components\Outputs\TablePixels.html">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\Outputs\TablePercent.html">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\Outputs\Table.html">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
+    <EmbeddedResource Include="Components\Outputs\TablePercent.html" />
+    <EmbeddedResource Include="Components\Outputs\Table.html" />
     <EmbeddedResource Include="Components\Outputs\TextRawWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWithHtml2.html" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Tests\Amario.mjml" />
     <EmbeddedResource Include="Tests\Amario.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu.html" />
