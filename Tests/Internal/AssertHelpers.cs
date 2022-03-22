@@ -125,13 +125,27 @@ namespace Tests.Internal
 
         private static string Cleanup(string source)
         {
-            var regex = new Regex(@"<!--\d{0,}\[(.*)\]\d{0,}>");
+            // Replace ending negated conditional comment to normal comment.
+            source = source.Replace("<!--<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
 
-            // Replace ending conditional tag to normal comment.
+            // Replace ending conditional comment to normal comment.
             source = source.Replace("<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
 
-            // Replace start condition tal to normal comment
-            source = regex.Replace(source, x => $"<!-- [{x.Groups[1].Value}] -->");
+            // Replace starting negated condition comment to normal comment
+            source = Regex.Replace(source, @"<!--\d{0,}\[(.*)\]\d{0,}><!-->", x =>
+            {
+                var text = x.Groups[1].Value.Trim('-', '<', '>', '!');
+
+                return $"<!-- [${text}] -->";
+            });
+
+            // Replace starting condition comment to normal comment
+            source = Regex.Replace(source, @"<!--\d{0,}\[(.*)\]\d{0,}>", x =>
+            {
+                var text = x.Groups[1].Value.Trim('-', '<', '>', '!');
+
+                return $"<!-- [${text}] -->";
+            });
 
             return source;
         }

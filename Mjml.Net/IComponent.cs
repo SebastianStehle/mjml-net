@@ -30,6 +30,8 @@ namespace Mjml.Net
 
         void AddChild(string rawXml);
 
+        void AfterBind(GlobalContext context, XmlReader reader);
+
         void Render(IHtmlRenderer renderer, GlobalContext context);
 
         void Measure(double parentWidth, int numSiblings, int numNonRawSiblings);

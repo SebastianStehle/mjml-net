@@ -93,7 +93,17 @@ namespace Mjml.Net
             childNodes.Add(child);
         }
 
+        public void InsertChild(IComponent child, int index)
+        {
+            childNodes ??= new List<IComponent>(1);
+            childNodes.Insert(index, child);
+        }
+
         public virtual void Bind(IBinder binder, GlobalContext context, XmlReader reader)
+        {
+        }
+
+        public virtual void AfterBind(GlobalContext context, XmlReader reader)
         {
         }
 

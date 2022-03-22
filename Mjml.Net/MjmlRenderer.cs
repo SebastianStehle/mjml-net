@@ -46,6 +46,10 @@ namespace Mjml.Net
         /// </summary>
         public MjmlRenderer()
         {
+            Add<AccordionComponent>();
+            Add<AccordionElementComponent>();
+            Add<AccordionTextComponent>();
+            Add<AccordionTitleComponent>();
             Add<AttributesComponent>();
             Add<BodyComponent>();
             Add<BreakpointComponent>();
@@ -62,6 +66,7 @@ namespace Mjml.Net
             Add<PreviewComponent>();
             Add<RawComponent>();
             Add<RootComponent>();
+            Add<SectionComponent>();
             Add<SocialComponent>();
             Add<SocialElementComponent>();
             Add<SpacerComponent>();
@@ -69,7 +74,6 @@ namespace Mjml.Net
             Add<TableComponent>();
             Add<TextComponent>();
             Add<TitleComponent>();
-            Add<SectionComponent>();
             Add<WrapperComponent>();
 
             Add(new FontHelper());
