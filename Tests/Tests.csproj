@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\Outputs\Carousel.html" />
     <None Remove="Components\Outputs\Comments.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
@@ -96,6 +97,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Components\Outputs\Carousel.html" />
     <EmbeddedResource Include="Components\Outputs\Comments.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />

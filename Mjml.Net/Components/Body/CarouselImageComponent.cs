@@ -1,3 +1,4 @@
+﻿using Mjml.Net.Extensions;
 using Mjml.Net.Helpers;
 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
@@ -85,17 +86,45 @@ namespace Mjml.Net.Components.Body
                 .Attr("src", Src)
                 .Attr("alt", Alt)
                 .Attr("border", "0")
-                // .Attr("width", containerWidth) NOT SURE
+                .Attr("width", $"{ActualWidth}")
                 .Style("border-radius", BorderRadius)
                 .Style("display", "block")
-                // .Style("width", containerWidth) NOT SURE
+                .Style("width", $"{ActualWidth}px")
                 .Style("max-width", "100%")
                 .Style("height", "auto");
         }
 
         internal void RenderThumbnail(IHtmlRenderer renderer, GlobalContext context)
         {
-            throw new NotImplementedException();
+            var (widthParsed, _) = UnitParser.Parse(TbWidth);
+            var imgIndex = CarouselImageIndex + 1;
+
+            renderer.StartElement("a") // Style thumbnails.a
+                .Attr("href", $"#{imgIndex}")
+                .Attr("target", Target)
+                .Class("mj-carousel-thumbnail")
+                .Class($"mj-carousel-{CarouselID}-thumbnail")
+                .Class($"mj-carousel-{CarouselID}-thumbnail-{imgIndex}")
+                .Classes(CssClass, "thumbnail")
+                .Style("border", TbBorder)
+                .Style("border-radius", TbBorderRadius)
+                .Style("display", "inline-block")
+                .Style("overflow", "hidden")
+                .Style("width", $"{TbWidth}px");
+
+            renderer.StartElement("label")
+                .Attr("for", $"mj-carousel-{CarouselID}-radio-{imgIndex}");
+
+            renderer.StartElement("img", true) // Style thumbnails.img
+                .Attr("src", !string.IsNullOrEmpty(ThumbnailsSrc) ? ThumbnailsSrc : Src)
+                .Attr("alt", Alt)
+                .Attr("width", $"{widthParsed}")
+                .Style("display", "block")
+                .Style("width", "100%")
+                .Style("height", "auto");
+
+            renderer.EndElement("label");
+            renderer.EndElement("a");
         }
 
         internal void RenderRadio(IHtmlRenderer renderer, object context)

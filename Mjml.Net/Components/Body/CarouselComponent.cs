@@ -63,32 +63,6 @@ namespace Mjml.Net.Components.Body
 
         public IEnumerable<CarouselImageComponent> CarouselImages { get; private set; }
 
-        public (double widthValue, Unit widthUnit, string widthString, double ActualWidth) CurrentWidth { get; private set; }
-
-        public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
-        {
-            var widthValue = 0d;
-            var widthUnit = Unit.Pixels;
-            var widthString = string.Empty;
-
-            if (TbWidth != null)
-            {
-                (widthValue, widthUnit) = UnitParser.Parse(TbWidth);
-                widthString = TbWidth;
-            }
-            else
-            {
-                var percentWidthDouble = 1d / Math.Max(1, numNonRawSiblings);
-                widthValue = parentWidth * percentWidthDouble;
-                widthUnit = Unit.Pixels;
-                widthString = $"{widthValue}px";
-            }
-
-            CurrentWidth = (widthValue, widthUnit, widthString, ActualWidth);
-
-            // MeasureChildren(innerWidth);
-        }
-
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             CarouselID = Guid.NewGuid().ToString();
@@ -102,7 +76,7 @@ namespace Mjml.Net.Components.Body
             renderer.StartConditional("<!--[if !mso><!-->");
             {
                 renderer.StartElement("div")
-                    .Class("outlook");
+                    .Class("mj-carousel");
 
                 GenerateRadios(renderer, context);
 
@@ -127,12 +101,15 @@ namespace Mjml.Net.Components.Body
 
         private void GenerateRadios(IHtmlRenderer renderer, GlobalContext context)
         {
-            foreach (var carouselImage in CarouselImages)
+            for (int i = 0; i < CarouselImages.Count(); i++)
             {
+                var carouselImage = CarouselImages.ElementAt(i);
+
                 if (carouselImage != null)
                 {
                     carouselImage.CarouselID = CarouselID;
-                    carouselImage.RenderThumbnail(renderer, context);
+                    carouselImage.CarouselImageIndex = i;
+                    carouselImage.RenderRadio(renderer, context);
                 }
             }
         }
@@ -144,15 +121,18 @@ namespace Mjml.Net.Components.Body
                 return;
             }
 
-            foreach (var carouselImage in CarouselImages)
+            for (int i = 0; i < CarouselImages.Count(); i++)
             {
+                var carouselImage = CarouselImages.ElementAt(i);
+
                 if (carouselImage != null)
                 {
                     carouselImage.CarouselID = CarouselID;
+                    carouselImage.CarouselImageIndex = i;
                     carouselImage.TbBorder = TbBorder;
                     carouselImage.TbBorderRadius = TbBorderRadius;
-                    carouselImage.TbWidth = CurrentWidth.widthString;
-                    carouselImage.RenderRadio(renderer, context);
+                    carouselImage.TbWidth = GetThumbnailsWidth();
+                    carouselImage.RenderThumbnail(renderer, context);
                 }
             }
         }
@@ -204,9 +184,9 @@ namespace Mjml.Net.Components.Body
                 var image = CarouselImages.ElementAt(i);
 
                 renderer.StartElement("label")
-                    .Attr("for", $"mj-carousel-{CarouselID}-radio-{i}")
+                    .Attr("for", $"mj-carousel-{CarouselID}-radio-{i + 1}")
                     .Class($"mj-carousel-{direction}")
-                    .Class($"mj-carousel-{direction}-{i}");
+                    .Class($"mj-carousel-{direction}-{i + 1}");
 
                 renderer.StartElement("img") // Style controls.img
                     .Attr("src", icon)
@@ -239,7 +219,6 @@ namespace Mjml.Net.Components.Body
                 image.CarouselID = CarouselID;
                 image.CarouselImageIndex = i;
                 image.BorderRadius = BorderRadius;
-
                 image.Render(renderer, context);
             }
 
@@ -253,12 +232,12 @@ namespace Mjml.Net.Components.Body
 
             if (firstImage != null)
             {
-                renderer.StartConditional("<!--[if mso]>");
+                renderer.Plain("<!--[if mso]>"); // I can't use StartConditional here as it's bugged.
                 {
                     firstImage.BorderRadius = BorderRadius;
                     firstImage.Render(renderer, context);
                 }
-                renderer.EndConditional("<![endif]-->");
+                renderer.Plain("<![endif]-->"); // I can't use EndConditional here as it's bugged.
             }
         }
 
@@ -436,7 +415,7 @@ namespace Mjml.Net.Components.Body
             renderer.Content("[owa] .mj-carousel-thumbnail { display: none !important; }");
 
             renderer.Content("@media screen yahoo {");
-            renderer.Content($".mj-carousel-${CarouselID}-icons-cell,");
+            renderer.Content($".mj-carousel-{CarouselID}-icons-cell,");
             renderer.Content(".mj-carousel-previous-icons,");
             renderer.Content("mj-carousel-next-icons {");
             renderer.Content("  display: none !important;");
@@ -448,6 +427,21 @@ namespace Mjml.Net.Components.Body
             renderer.Content($".mj-carousel-{CarouselID}-radio-1:checked {selectorSibilingsFallback}+ .mj-carousel-content .mj-carousel-${CarouselID}-thumbnail-1");
             renderer.Content("  border-color: transparent;");
             renderer.Content("}");
+        }
+
+        private string GetThumbnailsWidth()
+        {
+            if (!CarouselImages.Any())
+            {
+                return "0";
+            }
+
+            if (!string.IsNullOrEmpty(TbWidth))
+            {
+                return TbWidth;
+            }
+
+            return $"{Math.Min(ActualWidth / CarouselImages.Count(), 110d)}";
         }
     }
 }
