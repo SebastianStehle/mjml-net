@@ -1,4 +1,4 @@
-# MJML.NET 2
+# MJML.NET 2 
 
 An unofficial port of [MJML](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to .NET Core.
 
