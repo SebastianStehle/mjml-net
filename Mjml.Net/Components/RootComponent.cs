@@ -51,7 +51,7 @@ namespace Mjml.Net.Components
             {
                 renderer.Plain(sb);
 
-                ObjectPools.StringBuilder.Return(sb);
+                renderer.ReturnStringBuilder(sb);
             }
 
             renderer.RenderHelpers(HelperTarget.HeadEnd);
@@ -72,7 +72,7 @@ namespace Mjml.Net.Components
             {
                 renderer.Plain(sb);
 
-                ObjectPools.StringBuilder.Return(sb);
+                renderer.ReturnStringBuilder(sb);
             }
 
             renderer.RenderHelpers(HelperTarget.BodyEnd);

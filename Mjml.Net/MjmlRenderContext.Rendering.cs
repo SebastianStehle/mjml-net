@@ -36,9 +36,14 @@ namespace Mjml.Net
             indent = 0;
         }
 
+        public void ReturnStringBuilder(StringBuilder stringBuilder)
+        {
+            mjmlRenderer.Return(stringBuilder);
+        }
+
         public void StartBuffer()
         {
-            buffers.Push(ObjectPools.StringBuilder.Get());
+            buffers.Push(mjmlRenderer.GetStringBuilder());
         }
 
         public StringBuilder? EndBuffer()
