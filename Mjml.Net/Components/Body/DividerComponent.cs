@@ -6,6 +6,7 @@ namespace Mjml.Net.Components.Body
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
+            "mj-column",
             "mj-group"
         };
 

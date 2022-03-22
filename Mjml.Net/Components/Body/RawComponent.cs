@@ -10,6 +10,7 @@
             "mj-column",
             "mj-group",
             "mj-head",
+            "mj-hero",
             "mjml",
             "mj-navbar",
             "mj-section",

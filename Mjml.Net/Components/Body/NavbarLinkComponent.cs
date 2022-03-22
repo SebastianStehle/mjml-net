@@ -11,9 +11,9 @@ namespace Mjml.Net.Components.Body
 
         public override AllowedParents? AllowedParents => Parents;
 
-        public override string ComponentName => "mj-navbar-link";
-
         public override ContentType ContentType => ContentType.Text;
+
+        public override string ComponentName => "mj-navbar-link";
 
         [Bind("color", BindType.Color)]
         public string Color = "#000000";

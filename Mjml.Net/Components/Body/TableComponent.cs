@@ -10,9 +10,9 @@
 
         public override AllowedParents? AllowedParents => Parents;
 
-        public override string ComponentName => "mj-table";
-
         public override ContentType ContentType => ContentType.Raw;
+
+        public override string ComponentName => "mj-table";
 
         [Bind("align", BindType.Align)]
         public string Align = "left";
