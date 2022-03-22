@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using Mjml.Net.Components;
 using Mjml.Net.Internal;
 
 namespace Mjml.Net
@@ -95,9 +96,12 @@ namespace Mjml.Net
             {
                 reader.MoveToAttribute(i);
 
-                binder.SetAttribute(reader.Name, reader.Value);
+                var attributeName = reader.Name;
+                var attributeValue = reader.Value;
 
-                validator?.Attribute(reader.Name, reader.Value, component,
+                binder.SetAttribute(attributeName, attributeValue);
+
+                validator?.Attribute(attributeName, attributeValue, component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
             }
@@ -163,6 +167,9 @@ namespace Mjml.Net
                         case XmlNodeType.Element:
                             ReadElement(reader.Name, reader, component);
                             break;
+                        case XmlNodeType.Comment when mjmlOptions.KeepComments:
+                            ReadComment(reader, component);
+                            break;
                     }
                 }
             }
@@ -178,6 +185,14 @@ namespace Mjml.Net
             validator?.AfterComponent(component,
                 currentLine,
                 currentColumn);
+        }
+
+        private static void ReadComment(XmlReader reader, IComponent parent)
+        {
+            parent.AddChild(new CommentComponent
+            {
+                Text = reader.Value
+            });
         }
 
         private static int? CurrentLine(XmlReader reader)
