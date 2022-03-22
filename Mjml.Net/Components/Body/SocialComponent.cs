@@ -2,6 +2,14 @@
 {
     public partial class SocialComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-column",
+            "mj-hero"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-social";
 
         [Bind("align", BindType.Align)]

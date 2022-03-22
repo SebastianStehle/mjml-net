@@ -1,5 +1,5 @@
+﻿using System.Xml;
 using Mjml.Net.Internal;
-using System.Xml;
 
 namespace Mjml.Net.Components.Body
 {
@@ -10,9 +10,9 @@ namespace Mjml.Net.Components.Body
             "mj-accordion"
         };
 
-        public override string ComponentName => "mj-accordion-element";
+        public override AllowedParents? AllowedParents => Parents;
 
-        public override AllowedParents? AllowedAsChild => Parents;
+        public override string ComponentName => "mj-accordion-element";
 
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;

@@ -4,14 +4,24 @@ namespace Tests.Internal
 {
     public static class TestHelper
     {
-        public static string Render(string source)
+        public static string Render(string source, MjmlOptions? options = null)
         {
             var renderer = new MjmlRenderer().Add<TestComponent>();
 
-            return renderer.Render(source, new MjmlOptions
+            if (options == null)
             {
-                Beautify = true, Lax = true
-            }).Html;
+                options = new MjmlOptions
+                {
+                    Lax = true
+                };
+            }
+
+            options = options with
+            {
+                Beautify = true
+            };
+
+            return renderer.Render(source, options).Html;
         }
 
         public static string Render(string source, params IHelper[] helpers)

@@ -17,9 +17,7 @@ namespace Mjml.Net
 
         public virtual bool Raw => false;
 
-        public virtual AllowedParents? AllowedAsDescendant => null;
-
-        public virtual AllowedParents? AllowedAsChild => null;
+        public virtual AllowedParents? AllowedParents => null;
 
         public virtual AllowedAttributes? AllowedFields => null;
 

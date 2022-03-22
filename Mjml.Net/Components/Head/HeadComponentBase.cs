@@ -7,6 +7,6 @@
             "mj-head"
         };
 
-        public override AllowedParents? AllowedAsDescendant => Parents;
+        public override AllowedParents? AllowedParents => Parents;
     }
 }

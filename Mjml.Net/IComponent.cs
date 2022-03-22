@@ -4,9 +4,7 @@ namespace Mjml.Net
 {
     public interface IComponent
     {
-        AllowedParents? AllowedAsDescendant { get; }
-
-        AllowedParents? AllowedAsChild { get; }
+        AllowedParents? AllowedParents { get; }
 
         AllowedAttributes? AllowedFields { get; }
 

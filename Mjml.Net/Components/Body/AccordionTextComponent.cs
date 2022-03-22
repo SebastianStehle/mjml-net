@@ -1,4 +1,4 @@
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial class AccordionTextComponent : BodyComponentBase
     {
@@ -7,11 +7,11 @@ namespace Mjml.Net.Components.Body
             "mj-accordion-element"
         };
 
-        public override string ComponentName => "mj-accordion-text";
+        public override AllowedParents? AllowedParents => Parents;
 
         public override ContentType ContentType => ContentType.Raw;
 
-        public override AllowedParents? AllowedAsChild => Parents;
+        public override string ComponentName => "mj-accordion-text";
 
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;

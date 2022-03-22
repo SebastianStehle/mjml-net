@@ -14,8 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <None Remove="Components\Outputs\Accordion.html" />
     <None Remove="Components\Outputs\AccordionEmptyElements.html" />
+=======
+    <None Remove="Components\Outputs\Comments.html" />
+>>>>>>> aacb39367bb54b7565c819ff2566bac60e5090a5
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
@@ -99,6 +103,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
+    <EmbeddedResource Include="Components\Outputs\Comments.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html" />

@@ -4,10 +4,10 @@
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
-            "mg-social"
+            "mj-social"
         };
 
-        public override AllowedParents? AllowedAsChild => Parents;
+        public override AllowedParents? AllowedParents => Parents;
 
         public override ContentType ContentType => ContentType.Text;
 

@@ -7,6 +7,14 @@ namespace Mjml.Net.Components.Body
 {
     public partial class ColumnComponent : BodyComponentBase
     {
+        private static readonly AllowedParents Parents = new AllowedParents
+        {
+            "mj-group",
+            "mj-section"
+        };
+
+        public override AllowedParents? AllowedParents => Parents;
+
         public override string ComponentName => "mj-column";
 
         [Bind("background-color", BindType.Color)]
