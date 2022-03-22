@@ -320,7 +320,7 @@ namespace Mjml.Net.Components.Body
 
                 var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
 
-                renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-next-{((i + (1 % length) + length) % length) + 1}, ");              
+                renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-next-{((i + (1 % length) + length) % length) + 1}, ");
             }
 
             // https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-carousel/src/Carousel.js#L113-L121
