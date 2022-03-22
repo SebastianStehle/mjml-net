@@ -45,6 +45,14 @@ namespace Mjml.Net.Components
             {
                 unitType = Unit.Percent;
             }
+            else if (unitSpan.SequenceEqual("em"))
+            {
+                unitType = Unit.Em;
+            }
+            else if (unitSpan.SequenceEqual("rem"))
+            {
+                unitType = Unit.Rem;
+            }
             else if (unitSpan.Length == 0)
             {
                 unitType = Unit.None;

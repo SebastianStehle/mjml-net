@@ -24,7 +24,7 @@ namespace Mjml.Net
 
         string? GetAttribute(string name);
 
-        int ActualWidth { get; }
+        double ActualWidth { get; }
 
         void Bind(IBinder node, GlobalContext context, XmlReader reader);
 
@@ -34,6 +34,6 @@ namespace Mjml.Net
 
         void Render(IHtmlRenderer renderer, GlobalContext context);
 
-        void Measure(int parentWidth, int numSiblings, int numNonRawSiblings);
+        void Measure(double parentWidth, int numSiblings, int numNonRawSiblings);
     }
 }

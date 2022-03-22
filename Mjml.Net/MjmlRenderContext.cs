@@ -95,9 +95,12 @@ namespace Mjml.Net
             {
                 reader.MoveToAttribute(i);
 
-                binder.SetAttribute(reader.Name, reader.Value);
+                var attributeName = reader.Name;
+                var attributeValue = reader.Value;
 
-                validator?.Attribute(reader.Name, reader.Value, component,
+                binder.SetAttribute(attributeName, attributeValue);
+
+                validator?.Attribute(attributeName, attributeValue, component,
                     CurrentLine(reader),
                     CurrentColumn(reader));
             }
@@ -119,23 +122,39 @@ namespace Mjml.Net
 
             if (component.ContentType == ContentType.Raw)
             {
-                while (reader.Read())
+                void Read()
                 {
                     switch (reader.NodeType)
                     {
+                        case XmlNodeType.Comment:
+                            component.AddChild($"<!-- {reader.Value} -->");
+
+                            if (reader.NodeType != XmlNodeType.Comment)
+                            {
+                                Read();
+                            }
+                            break;
+
                         case XmlNodeType.Text:
                             component.AddChild(reader.Value);
+
+                            if (reader.NodeType != XmlNodeType.Text)
+                            {
+                                Read();
+                            }
                             break;
                         case XmlNodeType.Element:
                             component.AddChild(reader.ReadOuterXml().Trim());
-
-                            if (reader.NodeType == XmlNodeType.Text)
-                            {
-                                component.AddChild(reader.Value);
-                            }
-
+                            Read();
                             break;
+                        default:
+                            return;
                     }
+                }
+
+                while (reader.Read())
+                {
+                    Read();
                 }
             }
             else

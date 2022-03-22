@@ -13,11 +13,11 @@
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.BufferStart();
+            renderer.StartBuffer();
 
             RenderChildren(renderer, context);
 
-            context.SetGlobalData("head", renderer.BufferFlush());
+            context.SetGlobalData("head", renderer.EndBuffer());
         }
     }
 }

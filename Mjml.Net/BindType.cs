@@ -7,6 +7,7 @@
         Color,
         FourPixelsOrPercent,
         Pixels,
+        PixelsOrEm,
         PixelsOrAuto,
         PixelsOrPercent,
         PixelsOrPercentOrNone,

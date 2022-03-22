@@ -157,6 +157,8 @@ dotnet_diagnostic.SA1402.severity = none
 # SA1413: Use trailing comma in multi-line initializers
 dotnet_diagnostic.SA1413.severity = none
 
+dotnet_diagnostic.SA1513.severity = none
+
 # SA1515: Single-line comment should be preceded by blank line
 dotnet_diagnostic.SA1515.severity = none
 

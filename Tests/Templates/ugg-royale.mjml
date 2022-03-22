@@ -1,0 +1,204 @@
+<mjml>
+  <mj-head>
+    <mj-title>UGG Royale</mj-title>
+    <mj-attributes>
+      <mj-image alt="" padding="0px"></mj-image>
+      <mj-section padding="0px"></mj-section>
+      <mj-class name="open-sans-button" font-family="Open Sans, Arial, sans-serif" background-color="#111111" color="#ffffff" height="30px" text-transform="uppercase" font-size="16px" text-decoration="none"></mj-class>
+      <mj-class name="footer-text" font-family="Open Sans, Arial, sans-serif" color="#111111" font-size="10px" line-height="14px"></mj-class>
+      <mj-class name="body-text" font-family="Open Sans, Arial, sans-serif" color="#111111" font-size="16px" line-height="26px" align="center"></mj-class>
+      <mj-class name="headline-text" font-family="Big Caslon, Garamond, Times, serif" color="#111111" font-size="40px" line-height="36px" align="center" text-transform="uppercase"></mj-class>
+    </mj-attributes>
+    <mj-font name="Open Sans" href="http://fonts.googleapis.com/css?family=Open+Sans"></mj-font>
+    <mj-style>@media all and (max-width: 600px) { img[title*="img30"] { width:30% !important; } }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#ffffff">
+    <mj-section padding="0px">
+      <mj-column>
+        <mj-text font-size="1px" align="left" color="#ffffff" line-height="1px" font-family="'Open Sans', 'Raleway', Arial, Verdana, sans-serif" padding="0px"><span class="preheader"> No longer on backorder, the Royale is now here and waiting for you.
+            </span></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#f9f9f9">
+      <mj-column>
+        <mj-text mj-class="body-text" font-size="14px" line-height="26px" letter-spacing="2px" text-transform="uppercase">Last Chance: Free two-day shipping on any order $100+ ends today</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-wrapper background-color="#f9f9f9" padding="0px">
+      <mj-section>
+        <mj-column>
+          <mj-image alt="Model in UGG in a baby blue royale" href="http://www.ugg.com/" width="600px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/main.jpg"></mj-image>
+        </mj-column>
+      </mj-section>
+      <mj-section padding="30px 0 20px">
+        <mj-column>
+          <mj-text mj-class="headline-text">the<br> wait
+            <br> is over</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section>
+        <mj-column width="480px">
+          <mj-text mj-class="body-text">Due to popular demand, our best-selling sandal is back. Get yours before they sell out again.</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>&lt;!--[if !mso]&gt;&lt;\!--&gt;</mj-raw>
+      <mj-section>
+        <mj-column width="550px">
+          <mj-carousel tb-border-radius="0px" tb-hover-border-color="red" tb-width="50px" tb-border="0px" left-icon="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/arrow-left.png"
+            right-icon="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/arrow-right.png" icon-width="16px">
+            <mj-carousel-image href="http://www.ugg.com/" thumbnails-src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/BPNK.gif" alt="Side view of the Royal in Baby Pink" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/product1.jpg"></mj-carousel-image>
+            <mj-carousel-image href="http://www.ugg.com/" thumbnails-src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/NOPK.gif" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/product2.jpg"></mj-carousel-image>
+            <mj-carousel-image href="http://www.ugg.com/" thumbnails-src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/BBLU.gif" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/product3.jpg"></mj-carousel-image>
+            <mj-carousel-image href="http://www.ugg.com/" alt="Side view of the Royal in Black" thumbnails-src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/BLK.gif" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/product4.jpg"></mj-carousel-image>
+            <mj-carousel-image href="http://www.ugg.com/" alt="Side view of the Royal in Seal" thumbnails-src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/SEL.gif" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/product5.jpg"></mj-carousel-image>
+            <mj-carousel-image href="http://www.ugg.com/" alt="Side view of the Royal in White" thumbnails-src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/WHT.gif" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/product6.jpg"></mj-carousel-image>
+          </mj-carousel>
+        </mj-column>
+      </mj-section>
+      <mj-section>
+        <mj-column width="480px">
+          <mj-text font-family="Open Sans, Arial, sans-serif" font-size="14px" line-height="26px" color="#bcbec0" text-transform="uppercase" align="center">select color</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>&lt;\!--&lt;![endif]--&gt;</mj-raw>
+      <mj-section padding="10px 0 5px">
+        <mj-column>
+          <mj-button padding="0px" font-family="Open Sans, Arial, sans-serif" href="http://www.ugg.com/" font-size="16px" width="270px" color="#111111" background-color="#f9f9f9"><span style="letter-spacing: 2px; text-transform: uppercase; text-decoration:underline;">shop now
+              </span></mj-button>
+        </mj-column>
+      </mj-section>
+      <mj-section padding="10px 0 30px">
+        <mj-column>
+          <mj-button padding="0px" font-family="Open Sans, Arial, sans-serif" href="http://www.ugg.com/" font-size="16px" width="270px" color="#111111" background-color="#f9f9f9"><span style="letter-spacing: 2px; text-transform: uppercase; text-decoration:underline;">shop in store
+              </span></mj-button>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-wrapper padding="0px">
+      <mj-section background-color="#f9f9f9">
+        <mj-column width="270px">
+          <mj-image href="http://www.ugg.com/" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/secondary.jpg" alt="Guy on a beach with an UGGxGrain surfboard" width="270px"></mj-image>
+        </mj-column>
+        <mj-column width="270px">
+          <mj-text color="#111" font-size="30px" line-height="30px" padding="30px 10px 15px" text-transform="uppercase" font-family="Big Caslon, Garamond, Times, serif" align="center">uggxgrain<br>surfboards<br>giveaway.</mj-text>
+          <mj-text mj-class="body-text" padding="5px 15px">Enter for a chance to win a custom UGGxGrain surfboard and a $200 UGG giftcard.</mj-text>
+          <mj-button background-color="#111" color="#f3b656" font-family="Open Sans, Arial, sans-serif" font-size="16px" align="center" padding="15px 10px" width="190px" height="40px" border-radius="0px" href="http://www.ugg.com/"><span style="text-transform:uppercase; letter-spacing: 2px;">enter to win</span></mj-button>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-wrapper background-color="#f9f9f9" padding="40px 0 0">
+      <mj-section background-color="#f9f9f9">
+        <mj-column>
+          <mj-image src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/rewards-logo-top.gif" alt="Shop rewards" width="600px"></mj-image>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#000">
+        <mj-column>
+          <mj-text mj-class="body-text" padding="15px 15px" text-transform="uppercase" font-size="18px" color="#fff">Earn points</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#000">
+        <mj-column>
+          <mj-text mj-class="body-text" padding="5px 15px" color="#fff">When you shop, share, or review products.</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section padding="10px 0 30px" background-color="#000">
+        <mj-column>
+          <mj-button padding="0px" href="http://www.ugg.com/" font-size="16px" width="270px" color="#fff" background-color="#111" font-family="Open Sans, Arial, sans-serif"><span style="letter-spacing: 2px; text-transform: uppercase; text-decoration:underline;">join now</span></mj-button>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-section padding="25px 0 15px">
+      <mj-column>
+        <mj-image alt="Find a store" href="http://www.ugg.com/" width="168px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/find-a-store.gif"></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="10px 0">
+      <mj-column>
+        <mj-button padding="5px 2px" mj-class="open-sans-button" border-radius="0px" href="http://www.ugg.com/women" width="100%"><span style="letter-spacing: 2px;">women</span></mj-button>
+      </mj-column>
+      <mj-column>
+        <mj-button padding="5px 2px" mj-class="open-sans-button" border-radius="0px" href="http://www.ugg.com/men" width="100%"><span style="letter-spacing: 2px;">men</span></mj-button>
+      </mj-column>
+      <mj-column>
+        <mj-button padding="5px 2px" mj-class="open-sans-button" border-radius="0px" href="http://www.ugg.com/kids" width="100%"><span style="letter-spacing: 2px;">kids</span></mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-family="Open Sans, Arial" font-size="16px" align="center" text-transform="uppercase" font-weight="bold" letter-spacing="2px">free shipping. free returns *</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-group>
+        <mj-column>
+          <mj-image alt="ugg facebook" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-facebook.gif"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image alt="ugg instagram" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-instagram.gif"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image alt="ugg snapchat" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-snapchat.gif"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image alt="ugg pinterest" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-pinterest.gif"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image alt="ugg twitter" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-twitter.gif"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image alt="ugg youtube" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-youtube.gif"></mj-image>
+        </mj-column>
+        <mj-column>
+          <mj-image alt="ugg blog" href="http://www.ugg.com/" width="40px" src="https://static.cdn.responsys.net/i2/responsysimages/uggs/contentlibrary/promotional/2017/06-june/20170615_u_royale-b/images/share-blog.gif"></mj-image>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+    <mj-section padding="10px 45px">
+      <mj-group>
+        <mj-column width="27%">
+          <mj-text padding="7px 0" text-transform="uppercase" font-family="Open Sans, Arial, sans-serif" font-size="12px" text-decoration="none" align="center"><a href="http://www.ugg.com/" style="text-decoration:none; color:#111111" class="apple-link-black"><strong>live chat</strong></a></mj-text>
+        </mj-column>
+        <mj-column width="46%">
+          <mj-text padding="7px 0" text-transform="uppercase" font-family="Open Sans, Arial, sans-serif" font-size="11px" text-decoration="none" align="center"><a href="" style="text-decoration:none; color:#111111" class="apple-link-black"><strong>call us</strong>
+                <br />
+                1 (888) 432-8530
+              </a></mj-text>
+        </mj-column>
+        <mj-column width="27%">
+          <mj-text padding="7px 0" text-transform="uppercase" font-family="Open Sans, Arial, sans-serif" font-size="12px" text-decoration="none" align="center"><a href="http://www.ugg.com/" style="text-decoration:none; color:#111111;" class="apple-link-black"><strong>email us</strong></a>
+            <br />
+            <br /></mj-text>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+    <mj-section padding="0px">
+      <mj-column>
+        <mj-text mj-class="footer-text" align="center" padding="0 10px">
+          <p style="Margin:0; padding-bottom:10px; font-size:10px; line-height:15px; Margin-bottom:10px; color:#111111; font-family: 'Open Sans', 'Raleway', Arial, Helvetica, sans-serif;">We only send emails to individuals who have registered at our site:
+            <a href="http://www.ugg.com/" name="footer_ugghomepage" style="color:#111111; text-decoration:underline;">www.ugg.com</a>
+          </p>
+          <p style="Margin:0; padding-bottom:10px; font-size:10px; line-height:15px; Margin-bottom:10px; color:#111111; font-family: 'Open Sans', 'Raleway', Arial, Helvetica, sans-serif;">*A free return label will be included with your order. This offer only applies to full price orders shipped within the continental United States and placed on
+            <span class="apple-link-black">ugg.com</span>. Please note this offer does not apply to clearance product.
+          </p>
+          <p style="Margin:0; padding-bottom:10px; font-size:10px; line-height:15px; Margin-bottom:10px; color:#111111; font-family: 'Open Sans', 'Raleway', Arial, Helvetica, sans-serif;">
+            <span style="color:#111111 !important; text-decoration:none;">
+                <strong>1.888.432.8530</strong>
+                <br /> 123 North Leroux Street, Flagstaff, AZ 86001
+              </span>
+            <br />
+            <a href="http://www.ugg.com/" name="footer_privacy" style="color:#111111; text-decoration:underline;">
+                <strong>Privacy Policy</strong>
+              </a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="http://www.ugg.com/" style="text-decoration:underline; color:#111111;">
+                <strong>Unsubscribe</strong>
+              </a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="https://email.ugg.com/pub/sf/ResponseForm?_ri_=X0Gzc2X%3DYQpglLjHJlTQGjmR9kDzfwzbMzackp9f3F8d45ze2zfbW8hYB6AzgB7gaIYB3tN5qwvasVXMtX%3DYQpglLjHJlTQGNXlMNF3fFUYHWCzdBj2rGzgJpzem2KonGoezgzbfUyABevzgl4CepTMC&_ei_=EolaGGF4SNMvxFF7KucKuWP7XpARYKtbBY43fLBYxvXNpGx2Z89j4M"
+              style="text-decoration:underline; color:#111111;">View in Browser</a>
+          </p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

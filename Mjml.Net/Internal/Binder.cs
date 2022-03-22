@@ -41,19 +41,6 @@
                 return attribute;
             }
 
-            if (context.AttributesByName.TryGetValue(name, out var byType))
-            {
-                if (byType.TryGetValue(elementName, out attribute))
-                {
-                    return attribute;
-                }
-
-                if (byType.TryGetValue(Constants.All, out attribute))
-                {
-                    return attribute;
-                }
-            }
-
             if (context.AttributesByClass.Count > 0)
             {
                 if (currentClasses == null)
@@ -77,6 +64,19 @@
                             return attribute;
                         }
                     }
+                }
+            }
+
+            if (context.AttributesByName.TryGetValue(name, out var byType))
+            {
+                if (byType.TryGetValue(elementName, out attribute))
+                {
+                    return attribute;
+                }
+
+                if (byType.TryGetValue(Constants.All, out attribute))
+                {
+                    return attribute;
                 }
             }
 

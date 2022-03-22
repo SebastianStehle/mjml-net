@@ -13,7 +13,7 @@ namespace Mjml.Net
             get => childNodes ?? Enumerable.Empty<IComponent>();
         }
 
-        public int ActualWidth { get; protected set; }
+        public double ActualWidth { get; protected set; }
 
         public virtual bool Raw => false;
 
@@ -48,8 +48,6 @@ namespace Mjml.Net
             {
                 return;
             }
-
-            renderer.Content(string.Empty, false);
 
             var i = 0;
             foreach (var xml in childXml)
@@ -101,14 +99,14 @@ namespace Mjml.Net
         {
         }
 
-        public virtual void Measure(int parentWidth, int numSiblings, int numNonRawSiblings)
+        public virtual void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
         {
             ActualWidth = parentWidth;
 
             MeasureChildren(ActualWidth);
         }
 
-        protected void MeasureChildren(int width)
+        protected void MeasureChildren(double width)
         {
             if (childNodes != null)
             {

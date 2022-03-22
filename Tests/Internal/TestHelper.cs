@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Mjml.Net;
+﻿using Mjml.Net;
 
 namespace Tests.Internal
 {
@@ -11,7 +10,7 @@ namespace Tests.Internal
 
             return renderer.Render(source, new MjmlOptions
             {
-                Beautify = true
+                Beautify = true, Lax = true
             }).Html;
         }
 
@@ -32,7 +31,7 @@ namespace Tests.Internal
 
         public static string GetContent(string content)
         {
-            var stream = typeof(TestHelper).Assembly.GetManifestResourceStream($"Tests.Tests.{content}")!;
+            var stream = typeof(TestHelper).Assembly.GetManifestResourceStream($"Tests.{content}")!;
 
             return new StreamReader(stream).ReadToEnd();
         }

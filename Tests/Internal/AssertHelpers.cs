@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
@@ -40,10 +36,15 @@ namespace Tests.Internal
             return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
 
-        public static void HtmlFileAsset(string name, string actual, bool ignoreComments = false)
+        public static void HtmlFileAssert(string name, string actual)
         {
             var expected = TestHelper.GetContent(name);
 
+            HtmlAssert(name, actual, expected);
+        }
+
+        public static void HtmlAssert(string name, string actual, string expected)
+        {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 
@@ -56,18 +57,18 @@ namespace Tests.Internal
             {
             }
 
-            HtmlAssertCore(lhs, rhs, ignoreComments);
+            HtmlAssertCore(lhs, rhs);
         }
 
-        public static void HtmlAssert(string expected, string actual, bool ignoreComments = false)
+        public static void HtmlAssert(string expected, string actual)
         {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 
-            HtmlAssertCore(lhs, rhs, ignoreComments);
+            HtmlAssertCore(lhs, rhs);
         }
 
-        private static void HtmlAssertCore(string expected, string actual, bool ignoreComments )
+        private static void HtmlAssertCore(string expected, string actual)
         {
             var diffs =
                 DiffBuilder
@@ -87,11 +88,6 @@ namespace Tests.Internal
                         options.AddStyleSheetComparer();
                         options.AddTextComparer(WhitespaceOption.Normalize, ignoreCase: false);
                         options.IgnoreDiffAttributes();
-
-                        if (ignoreComments)
-                        {
-                            options.IgnoreComments();
-                        }
                     })
                     .Build();
 
@@ -111,6 +107,12 @@ namespace Tests.Internal
 
                 // Some problem with comments diff.
                 if (d is NodeDiff n && n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal) && n.Control.Node.NodeType == NodeType.Comment)
+                {
+                    return false;
+                }
+
+                // Ids are random. Therefore we ignore them.
+                if (d is AttrDiff a && (a.Test.Attribute.Name == "id" || a.Test.Attribute.Name == "for"))
                 {
                     return false;
                 }
