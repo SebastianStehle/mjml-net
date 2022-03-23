@@ -20,7 +20,7 @@ namespace Mjml.Net.Components.Head
             if (Text != null)
             {
                 // Allow multiple styles.
-                context.SetGlobalData(Guid.NewGuid().ToString(), Style.Static(Text));
+                context.SetGlobalData(Text, Style.Static(Text));
             }
         }
     }

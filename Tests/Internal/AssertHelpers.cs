@@ -36,14 +36,14 @@ namespace Tests.Internal
             return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
         }
 
-        public static void HtmlFileAssert(string name, string actual)
+        public static void HtmlFileAssert(string name, string actual, bool ignoreIds = false)
         {
             var expected = TestHelper.GetContent(name);
 
-            HtmlAssert(name, actual, expected);
+            HtmlAssert(name, actual, expected, ignoreIds);
         }
 
-        public static void HtmlAssert(string name, string actual, string expected)
+        public static void HtmlAssert(string name, string actual, string expected, bool ignoreIds = false)
         {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
@@ -57,18 +57,18 @@ namespace Tests.Internal
             {
             }
 
-            HtmlAssertCore(lhs, rhs);
+            HtmlAssertCore(lhs, rhs, ignoreIds);
         }
 
-        public static void HtmlAssert(string expected, string actual)
+        public static void HtmlAssert(string expected, string actual, bool ignoreIds = false)
         {
             var lhs = Cleanup(expected);
             var rhs = Cleanup(actual);
 
-            HtmlAssertCore(lhs, rhs);
+            HtmlAssertCore(lhs, rhs, ignoreIds);
         }
 
-        private static void HtmlAssertCore(string expected, string actual)
+        private static void HtmlAssertCore(string expected, string actual, bool ignoreIds)
         {
             var diffs =
                 DiffBuilder
@@ -88,39 +88,18 @@ namespace Tests.Internal
                         options.AddStyleSheetComparer();
                         options.AddTextComparer(WhitespaceOption.Normalize, ignoreCase: false);
                         options.IgnoreDiffAttributes();
+                        options.IgnoreCommentContent();
+                        options.IgnoreEmptyAttributes();
+
+                        if (ignoreIds)
+                        {
+                            options.IgnoreAttribute("for");
+                            options.IgnoreAttribute("id");
+                        }
                     })
                     .Build();
 
-            var cleaned = diffs.Where(d =>
-            {
-                // Ingore unexpected empty attributes, because mjml sometimes renders style=""
-                if (d is UnexpectedAttrDiff u && string.IsNullOrEmpty(u.Test.Attribute.Value))
-                {
-                    return false;
-                }
-
-                // Ingore missing empty attributes.
-                if (d is MissingAttrDiff m && string.IsNullOrEmpty(m.Control.Attribute.Value))
-                {
-                    return false;
-                }
-
-                // Some problem with comments diff.
-                if (d is NodeDiff n && n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal) && n.Control.Node.NodeType == NodeType.Comment)
-                {
-                    return false;
-                }
-
-                // Ids are random. Therefore we ignore them.
-                if (d is AttrDiff a && (a.Test.Attribute.Name == "id" || a.Test.Attribute.Name == "for"))
-                {
-                    return false;
-                }
-
-                return true;
-            }).ToList();
-
-            Assert.True(!cleaned.Any(), PrintDiffs(cleaned));
+            Assert.True(!diffs.Any(), FormatDiffs(diffs));
         }
 
         private static string Cleanup(string source)
@@ -150,66 +129,103 @@ namespace Tests.Internal
             return source;
         }
 
-        private static string PrintDiffs(IEnumerable<IDiff> diffs)
+        private static string FormatDiffs(IEnumerable<IDiff> diffs)
         {
             var sb = new StringBuilder();
 
             var i = 1;
-            foreach (var d in diffs)
+            foreach (var diff in diffs)
             {
                 sb.Append(' ');
                 sb.Append(i);
                 sb.Append(' ');
 
-                switch (d)
-                {
-                    case NodeDiff diff when diff.Target == DiffTarget.Text && diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
-                        sb.AppendLine($"The text in {diff.Control.Path} is different.");
-                        sb.AppendLine($"   *   Actual: '{diff.Test.Node.Text()}'.");
-                        sb.AppendLine($"   * Expected: '{diff.Control.Node.Text()}'.");
-                        break;
-                    case NodeDiff diff when diff.Target == DiffTarget.Text:
-                        sb.AppendLine($"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} is different.");
-                        break;
-                    case NodeDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
-                        sb.AppendLine($"The {NodeName(diff.Control)}s at {diff.Control.Path} are different.");
-                        break;
-                    case NodeDiff diff:
-                        sb.AppendLine($"The expected {NodeName(diff.Control)} at {diff.Control.Path} and the actual {NodeName(diff.Test)} at {diff.Test.Path} are different.");
-                        break;
-                    case AttrDiff diff when diff.Control.Path.Equals(diff.Test.Path, StringComparison.Ordinal):
-                        sb.AppendLine($"The values of the attributes at {diff.Control.Path} are different.");
-                        sb.AppendLine($"   *   Actual: '{diff.Test.Attribute.Value}'.");
-                        sb.AppendLine($"   * Expected: '{diff.Control.Attribute.Value}'.");
-                        break;
-                    case AttrDiff diff:
-                        sb.AppendLine($"The value of the attribute {diff.Control.Path} and actual attribute {diff.Test.Path} are different.");
-                        sb.AppendLine($"   *   Actual: '{diff.Test.Attribute.Value}'.");
-                        sb.AppendLine($"   * Expected: '{diff.Control.Attribute.Value}'.");
-                        break;
-                    case MissingNodeDiff diff:
-                        sb.AppendLine($"The {NodeName(diff.Control)} at {diff.Control.Path} is missing.");
-                        break;
-                    case MissingAttrDiff diff:
-                        sb.AppendLine($"The attribute at {diff.Control.Path} is missing.");
-                        break;
-                    case UnexpectedNodeDiff diff:
-                        sb.AppendLine($"The {NodeName(diff.Test)} at {diff.Test.Path} was not expected.");
-                        break;
-                    case UnexpectedAttrDiff diff:
-                        sb.AppendLine($"The attribute at {diff.Test.Path} was not expected.");
-                        break;
-                    default:
-                        sb.AppendLine("Other error");
-                        break;
-                }
+                FormatDiff(diff, sb);
 
                 i++;
             }
 
             return sb.ToString();
+        }
 
-            static string NodeName(ComparisonSource source) => source.Node.NodeType.ToString().ToLowerInvariant();
+        private static void FormatDiff(IDiff diff, StringBuilder sb)
+        {
+            switch (diff)
+            {
+                case NodeDiff n:
+                    FormatNodeDiff(n, sb);
+                    break;
+                case AttrDiff a:
+                    FormatAttrDiff(a, sb);
+                    break;
+                case MissingNodeDiff m:
+                    sb.AppendDiff($"The {NodeName(m.Control)} at {m.Control.Path} is missing.");
+                    break;
+                case MissingAttrDiff m:
+                    sb.AppendDiff($"The attribute at {m.Control.Path} is missing.");
+                    break;
+                case UnexpectedNodeDiff u:
+                    sb.AppendDiff($"The {NodeName(u.Test)} at {u.Test.Path} was not expected.");
+                    break;
+                case UnexpectedAttrDiff u:
+                    sb.AppendDiff($"The attribute at {u.Test.Path} was not expected.");
+                    break;
+                default:
+                    sb.AppendDiff("Other error");
+                    break;
+            }
+        }
+
+        private static void FormatNodeDiff(NodeDiff n, StringBuilder sb)
+        {
+            if (n.Target == DiffTarget.Text && n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
+            {
+                sb.AppendDiff($"The text in {n.Control.Path} is different.", n.Test.Node.Text(), n.Control.Node.Text());
+            }
+            else if (n.Target == DiffTarget.Text)
+            {
+                sb.AppendDiff($"The expected {NodeName(n.Control)} at {n.Control.Path} and the actual {NodeName(n.Test)} at {n.Test.Path} is different.");
+            }
+            else if (n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
+            {
+                sb.AppendDiff($"The {NodeName(n.Control)}s at {n.Control.Path} are different.");
+            }
+            else
+            {
+                sb.AppendDiff($"The expected {NodeName(n.Control)} at {n.Control.Path} and the actual {NodeName(n.Test)} at {n.Test.Path} are different.");
+            }
+        }
+
+        private static void FormatAttrDiff(AttrDiff a, StringBuilder sb)
+        {
+            if (a.Control.Path.Equals(a.Test.Path, StringComparison.Ordinal))
+            {
+                sb.AppendDiff($"The values of the attributes at {a.Control.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
+            }
+            else
+            {
+                sb.AppendDiff($"The value of the attribute {a.Control.Path} and actual attribute {a.Test.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
+            }
+        }
+
+        private static void AppendDiff(this StringBuilder sb, string message, string? actual = null, string? expected = null)
+        {
+            sb.AppendLine(message);
+
+            if (actual != null)
+            {
+                sb.AppendLine($" * Actual: '{actual}'.");
+            }
+
+            if (expected != null)
+            {
+                sb.AppendLine($" * Should: '{expected}'.");
+            }
+        }
+
+        private static string NodeName(ComparisonSource source)
+        {
+            return source.Node.NodeType.ToString().ToLowerInvariant();
         }
     }
 }

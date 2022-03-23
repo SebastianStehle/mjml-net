@@ -1,4 +1,5 @@
-﻿using Tests.Internal;
+﻿using Mjml.Net;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests.Components
@@ -10,7 +11,10 @@ namespace Tests.Components
         {
             var source = @"<mj-navbar hamburger=""hamburger""></mj-navbar>";
 
-            var result = TestHelper.Render(source);
+            var result = TestHelper.Render(source, new MjmlOptions
+            {
+                IdGenerator = new StaticIdGenerator("4c48e6fe53b37010")
+            });
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.Navbar.html", result);
         }
@@ -20,7 +24,10 @@ namespace Tests.Components
         {
             var source = @"<mj-navbar></mj-navbar>";
 
-            var result = TestHelper.Render(source);
+            var result = TestHelper.Render(source, new MjmlOptions
+            {
+                IdGenerator = new StaticIdGenerator("b5e7b1c2f1d5bc37")
+            });
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.NavbarWithoutHamburger.html", result);
         }
@@ -35,7 +42,10 @@ namespace Tests.Components
     <mj-navbar-link href=""/link3"" color=""#0000ff"">Link3</mj-navbar-link>
 </mj-navbar>";
 
-            var result = TestHelper.Render(source);
+            var result = TestHelper.Render(source, new MjmlOptions
+            {
+                IdGenerator = new StaticIdGenerator("b5e7b1c2f1d5bc37")
+            });
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.NavbarWithLinks.html", result);
         }

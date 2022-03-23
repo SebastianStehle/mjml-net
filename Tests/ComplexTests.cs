@@ -48,7 +48,7 @@ namespace Tests
                 // Fix whitespaces for easier comparison.
                 result = result.Replace("&amp;#160;", " ", StringComparison.Ordinal);
 
-                AssertHelpers.HtmlAssert(template, result, expected);
+                AssertHelpers.HtmlAssert(template, result, expected, true);
             }
             finally
             {
