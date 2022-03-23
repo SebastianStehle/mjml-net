@@ -5,11 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<NoWarn>1591</NoWarn>
-	<Version>1.0.0</Version>
-	<Description>A blazingly-fast unofficial port of MJML (by MailJet) to .NET 6.</Description>
-	<Authors>Liam Riddell, Sebastian Stehle</Authors>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWarn>1591</NoWarn>
+	  <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
