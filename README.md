@@ -45,9 +45,9 @@ using Mjml.Net;
 Finally, the boilerplate code.
 ```csharp
 public static void Main (string[] args) {
-    var mjmlParser = new MjmlRenderer();
+    var mjmlRenderer = new MjmlRenderer();
 
-    string mjml = @"
+    string text = @"
 <mjml>
     <mj-head>
         <mj-title>Hello World Example</mj-title>
