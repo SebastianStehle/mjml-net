@@ -129,63 +129,74 @@ througput while mainintaing low memory footprint. Below are the benchmarks for e
 If you'd like to run the benchmarks your self then you can run the `Mjml.Net.Benchmarks` project in `release` mode.
 
 ### Benchmark Specs
-```
-* BenchmarkDotNet=v0.13.1, 
-* OS=Windows 10.0.19043.1586 (21H1/May2021Update)
-* Intel Core i7-4790 CPU 3.60GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
-* .NET SDK=6.0.101
+```ini
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19043.1586 (21H1/May2021Update)
+Intel Core i7-4790 CPU 3.60GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
+.NET SDK=6.0.101
   [Host]     : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
-  DefaultJob : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+  Job-YRBKPS : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+
+Jit=RyuJit  Platform=X64  IterationCount=100 
 ```
 ### Benchmark Key
 ```
-Mean   : Arithmetic mean of all measurements
-Error  : Half of 99.9% confidence interval
-StdDev : Standard deviation of all measurements
-Median : Value separating the higher half of all measurements (50th percentile)
-1 us   : 1 Microsecond (0.000001 sec)
+MjmlTemplateFilePath : Value of the 'MjmlTemplateFilePath' parameter
+Mean                 : Arithmetic mean of all measurements
+Error                : Half of 99.9% confidence interval
+StdDev               : Standard deviation of all measurements
+Median               : Value separating the higher half of all measurements (50th percentile)
+Gen 0                : GC Generation 0 collects per 1000 operations
+Gen 1                : GC Generation 1 collects per 1000 operations
+Gen 2                : GC Generation 2 collects per 1000 operations
+Allocated            : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+1 us                 : 1 Microsecond (0.000001 sec)
 ```
 ### Benchmark Results
-|                                  Method |     Mean |    Error |   StdDev |   Median |
-|---------------------------------------- |---------:|---------:|---------:|---------:|
-|      Render_Template_Arturia_Beautified |       NA |       NA |       NA |       NA |
-|       Render_Template_Austin_Beautified | 298.0 us |  5.92 us |  9.38 us | 295.6 us |
-|  Render_Template_BlackFriday_Beautified | 199.7 us |  5.56 us | 16.23 us | 196.0 us |
-|         Render_Template_Card_Beautified | 284.4 us |  5.68 us | 11.48 us | 281.8 us |
-|    Render_Template_Christmas_Beautified | 407.6 us |  7.90 us | 20.25 us | 401.1 us |
-| Render_Template_HappyNewYEar_Beautified | 152.1 us |  3.01 us |  5.73 us | 150.6 us |
-|      Render_Template_OnePage_Beautified | 435.9 us |  8.65 us | 21.71 us | 431.5 us |
-|        Render_Template_Proof_Beautified | 203.6 us |  4.22 us | 12.39 us | 201.9 us |
-|       Render_Template_Racoon_Beautified | 955.7 us | 27.12 us | 79.11 us | 924.6 us |
-| Render_Template_Reactivation_Beautified | 266.5 us |  5.16 us | 11.97 us | 264.1 us |
-|   Render_Template_RealEstate_Beautified | 729.5 us | 14.23 us | 23.37 us | 728.7 us |
-|       Render_Template_Recast_Beautified |       NA |       NA |       NA |       NA |
-|      Render_Template_Receipt_Beautified | 288.7 us |  5.36 us | 10.06 us | 287.8 us |
-|     Render_Template_Referral_Beautified | 140.7 us |  2.77 us |  5.59 us | 139.1 us |
-| Render_Template_SpheroDroids_Beautified |       NA |       NA |       NA |       NA |
-|   Render_Template_SpheroMini_Beautified | 420.2 us |  7.91 us | 21.39 us | 415.0 us |
-|    Render_Template_UggRoyale_Beautified |       NA |       NA |       NA |       NA |
-|      Render_Template_Welcome_Beautified | 131.0 us |  2.59 us |  5.51 us | 129.6 us |
-|      Render_Template_Worldly_Beautified | 584.1 us | 11.50 us | 11.81 us | 580.3 us |
-|        Render_Template_Arturia_Minified |       NA |       NA |       NA |       NA |
-|         Render_Template_Austin_Minified | 283.1 us |  5.52 us |  9.95 us | 282.4 us |
-|    Render_Template_BlackFriday_Minified | 181.5 us |  3.43 us |  3.21 us | 182.1 us |
-|           Render_Template_Card_Minified | 285.9 us |  5.70 us | 15.13 us | 282.6 us |
-|      Render_Template_Christmas_Minified | 410.4 us |  8.04 us | 14.29 us | 407.4 us |
-|   Render_Template_HappyNewYEar_Minified | 156.6 us |  2.97 us |  6.40 us | 155.7 us |
-|        Render_Template_OnePage_Minified | 414.5 us |  8.11 us |  9.96 us | 412.5 us |
-|          Render_Template_Proof_Minified | 189.9 us |  3.73 us |  3.11 us | 188.1 us |
-|         Render_Template_Racoon_Minified | 909.5 us | 18.07 us | 29.69 us | 912.7 us |
-|   Render_Template_Reactivation_Minified | 261.3 us |  4.92 us | 11.32 us | 257.6 us |
-|     Render_Template_RealEstate_Minified | 697.7 us |  6.38 us |  5.33 us | 698.0 us |
-|         Render_Template_Recast_Minified |       NA |       NA |       NA |       NA |
-|        Render_Template_Receipt_Minified | 277.3 us |  5.45 us |  8.16 us | 275.1 us |
-|       Render_Template_Referral_Minified | 151.0 us |  3.08 us |  9.04 us | 150.3 us |
-|   Render_Template_SpheroDroids_Minified |       NA |       NA |       NA |       NA |
-|     Render_Template_SpheroMini_Minified | 395.4 us |  6.26 us |  5.55 us | 393.6 us |
-|      Render_Template_UggRoyale_Minified |       NA |       NA |       NA |       NA |
-|        Render_Template_Welcome_Minified | 131.9 us |  2.65 us |  7.74 us | 130.2 us |
-|        Render_Template_Worldly_Minified | 597.1 us | 10.85 us | 30.42 us | 583.7 us |
+
+|                   Method | MjmlTemplateFilePath |       Mean |    Error |   StdDev |     Median |    Gen 0 |    Gen 1 |    Gen 2 | Allocated |
+|------------------------- |--------------------- |-----------:|---------:|---------:|-----------:|---------:|---------:|---------:|----------:|
+| **Render_Template_Beautify** | **Amario.mjml** |   **924.9 μs** |  **7.24 μs** | **20.42 μs** |   **920.8 μs** | **109.3750** | **103.5156** | **103.5156** |    **810 KB** |
+|   Render_Template_Minify | Amario.mjml |   980.1 μs | 25.57 μs | 75.39 μs |   974.1 μs | 109.3750 | 103.5156 | 103.5156 |    810 KB |
+| **Render_Template_Beautify** | **Arturia.mjml** |   **438.2 μs** |  **9.29 μs** | **27.38 μs** |   **438.9 μs** |  **83.0078** |  **52.7344** |  **27.3438** |    **384 KB** |
+|   Render_Template_Minify | Arturia.mjml |   430.0 μs |  8.62 μs | 25.28 μs |   430.9 μs |  83.0078 |  27.3438 |  27.3438 |    384 KB |
+| **Render_Template_Beautify** | **Austin.mjml** |   **762.0 μs** | **13.06 μs** | **38.30 μs** |   **759.7 μs** |  **94.7266** |  **94.7266** |  **94.7266** |    **615 KB** |
+|   Render_Template_Minify | Austin.mjml |   756.0 μs | 13.42 μs | 39.16 μs |   756.3 μs |  94.7266 |  94.7266 |  94.7266 |    615 KB |
+| **Render_Template_Beautify** | **BlackFriday.mjml** |   **188.3 μs** |  **4.39 μs** | **12.94 μs** |   **189.2 μs** |  **45.4102** |   **6.3477** |        **-** |    **186 KB** |
+|   Render_Template_Minify | BlackFriday.mjml |   194.7 μs |  4.99 μs | 14.31 μs |   197.0 μs |  45.4102 |   6.3477 |        - |    186 KB |
+| **Render_Template_Beautify** | **Card.mjml** |   **290.3 μs** |  **7.10 μs** | **20.04 μs** |   **290.0 μs** |  **62.0117** |  **20.9961** |        **-** |    **259 KB** |
+|   Render_Template_Minify | Card.mjml |   284.3 μs |  5.82 μs | 17.17 μs |   287.0 μs |  62.0117 |  20.9961 |        - |    259 KB |
+| **Render_Template_Beautify** | **Christmas.mjml** |   **413.5 μs** |  **8.55 μs** | **25.09 μs** |   **417.3 μs** |  **74.7070** |  **24.9023** |        **-** |    **360 KB** |
+|   Render_Template_Minify | Christmas.mjml |   401.5 μs |  7.19 μs | 21.20 μs |   403.1 μs |  74.7070 |  24.9023 |        - |    360 KB |
+| **Render_Template_Beautify** | **HappyNewYear.mjml** |   **156.3 μs** |  **3.30 μs** |  **9.72 μs** |   **156.4 μs** |  **40.5273** |  **10.0098** |        **-** |    **166 KB** |
+|   Render_Template_Minify | HappyNewYear.mjml |   155.2 μs |  3.46 μs | 10.21 μs |   155.2 μs |  40.5273 |  10.0098 |        - |    166 KB |
+| **Render_Template_Beautify** | **ManyHeroes.mjml** |   **705.7 μs** | **13.98 μs** | **40.33 μs** |   **700.0 μs** | **142.5781** | **142.5781** | **142.5781** |    **830 KB** |
+|   Render_Template_Minify | ManyHeroes.mjml |   667.6 μs |  9.15 μs | 26.41 μs |   653.7 μs | 142.5781 | 142.5781 | 142.5781 |    830 KB |
+| **Render_Template_Beautify** | **OnePage.mjml** |   **414.9 μs** |  **8.47 μs** | **24.58 μs** |   **403.5 μs** |  **80.0781** |  **38.0859** |        **-** |    **399 KB** |
+|   Render_Template_Minify | OnePage.mjml |   424.5 μs |  9.15 μs | 26.83 μs |   416.4 μs |  80.0781 |  39.0625 |        - |    399 KB |
+| **Render_Template_Beautify** | **Proof.mjml** |   **184.2 μs** |  **2.90 μs** |  **8.33 μs** |   **181.6 μs** |  **51.7578** |   **0.4883** |        **-** |    **213 KB** |
+|   Render_Template_Minify | Proof.mjml |   189.0 μs |  3.53 μs |  9.90 μs |   186.8 μs |  51.7578 |   0.4883 |        - |    213 KB |
+| **Render_Template_Beautify** | **Racoon.mjml** |   **928.5 μs** |  **8.38 μs** | **23.78 μs** |   **921.1 μs** | **109.3750** | **103.5156** | **103.5156** |    **810 KB** |
+|   Render_Template_Minify | Racoon.mjml |   926.7 μs | 11.90 μs | 32.98 μs |   912.9 μs | 109.3750 | 103.5156 | 103.5156 |    810 KB |
+| **Render_Template_Beautify** | **Reactivation.mjml** |   **261.1 μs** |  **4.12 μs** | **12.07 μs** |   **257.7 μs** |  **60.0586** |  **13.6719** |        **-** |    **259 KB** |
+|   Render_Template_Minify | Reactivation.mjml |   263.5 μs |  5.63 μs | 16.34 μs |   260.6 μs |  60.0586 |  13.6719 |        - |    259 KB |
+| **Render_Template_Beautify** | **RealEstate.mjml** |   **707.6 μs** | **11.65 μs** | **33.43 μs** |   **701.2 μs** |  **94.7266** |  **94.7266** |  **94.7266** |    **623 KB** |
+|   Render_Template_Minify | RealEstate.mjml |   725.4 μs | 20.80 μs | 58.66 μs |   708.5 μs |  94.7266 |  94.7266 |  94.7266 |    623 KB |
+| **Render_Template_Beautify** | **Recast.mjml** |   **674.6 μs** |  **7.13 μs** | **20.12 μs** |   **666.0 μs** | **152.3438** |  **76.1719** |  **76.1719** |    **619 KB** |
+|   Render_Template_Minify | Recast.mjml |   661.1 μs |  3.86 μs | 10.63 μs |   659.8 μs | 152.3438 |  76.1719 |  76.1719 |    619 KB |
+| **Render_Template_Beautify** | **Receipt.mjml** |   **275.5 μs** |  **2.64 μs** |  **7.26 μs** |   **272.8 μs** |  **63.4766** |  **20.9961** |        **-** |    **263 KB** |
+|   Render_Template_Minify | Receipt.mjml |   274.5 μs |  1.93 μs |  5.50 μs |   272.8 μs |  63.4766 |  20.9961 |        - |    263 KB |
+| **Render_Template_Beautify** | **Referral.mjml** |   **135.3 μs** |  **0.75 μs** |  **2.19 μs** |   **134.9 μs** |  **32.9590** |        **-** |        **-** |    **136 KB** |
+|   Render_Template_Minify | Referral.mjml |   133.4 μs |  0.86 μs |  2.43 μs |   132.8 μs |  32.9590 |        - |        - |    136 KB |
+| **Render_Template_Beautify** | **SpheroDroids.mjml** |   **376.4 μs** |  **2.28 μs** |  **6.43 μs** |   **374.7 μs** |  **80.0781** |  **52.7344** |  **26.8555** |    **351 KB** |
+|   Render_Template_Minify | SpheroDroids.mjml |   374.5 μs |  3.66 μs | 10.01 μs |   371.8 μs |  71.2891 |  26.8555 |  26.8555 |    351 KB |
+| **Render_Template_Beautify** | **SpheroMini.mjml** |   **395.9 μs** |  **4.43 μs** | **12.79 μs** |   **390.4 μs** |  **70.3125** |  **26.8555** |  **26.8555** |    **368 KB** |
+|   Render_Template_Minify | SpheroMini.mjml |   395.4 μs |  2.11 μs |  6.13 μs |   394.3 μs |  71.7773 |  26.8555 |  26.8555 |    368 KB |
+| **Render_Template_Beautify** | **UGGRoyale.mjml** | **1,126.0 μs** |  **6.03 μs** | **17.09 μs** | **1,122.9 μs** | **142.5781** | **142.5781** | **142.5781** |  **1,004 KB** |
+|   Render_Template_Minify | UGGRoyale.mjml | 1,154.0 μs | 10.93 μs | 31.89 μs | 1,142.2 μs | 142.5781 | 142.5781 | 142.5781 |  1,004 KB |
+| **Render_Template_Beautify** | **Welcome.mjml** |   **125.1 μs** |  **0.89 μs** |  **2.49 μs** |   **124.1 μs** |  **31.7383** |   **0.2441** |        **-** |    **131 KB** |
+|   Render_Template_Minify | Welcome.mjml |   126.3 μs |  1.51 μs |  4.42 μs |   125.3 μs |  31.7383 |   0.2441 |        - |    131 KB |
+| Render_Template_Beautify | Worldly.mjml |   637.6 μs |  3.21 μs |  9.22 μs |   634.9 μs |  83.0078 |  83.0078 |  83.0078 |    572 KB |
+|   Render_Template_Minify | Worldly.mjml |   629.6 μs |  4.24 μs | 11.60 μs |   627.9 μs |  83.0078 |  83.0078 |  83.0078 |    572 KB |
 
 
 
