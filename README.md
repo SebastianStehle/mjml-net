@@ -71,54 +71,54 @@ public static void Main (string[] args) {
 ## Options
 You can also specify options to the MJML parser.
 
-|       Name       |              Data Type              |           Default           |                                                                              Description                                                                              |
-|:----------------:|:-----------------------------------:|:---------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-|   KeepComments   |                 bool                |            false            |                                                                         True to keep comments.                                                                        |
-|    Breakpoint    |                string               |            480px            |                                                            The default breakpoint to switch to mobile view.                                                           |
-|      Styles      |               Style[]               |              []             |                                                                        A list of custom styles.                                                                       |
-|  ForceOWAQueries |                 bool                |            false            |                                                                 True to enable media queries for OWA.                                                                 |
-|     Beautify     |                 bool                |             true            |                                                                       True to beatify the HTML. Impacts performance (slower).                                                                 |
-|      Minify      |                 bool                |            false            |                                                                        True to minify the HTML.                                                                       |
-|        Lax       |                 bool                |            false            | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance. |
-|    IdGenerator   | IIdGenerator                        | DefaultIDGenerator.Instance | The ID generator to create random values for attributes like Ids.                                                                                                     |
-| Fonts            | IReadOnlyDictionary<string, Font>   | DefaultFonts                | A list of supported default fonts.                                                                                                                                    |
-|    XmlEntities   | IReadOnlyDictionary<string, string> |      DefaultXmlEntities     |                                                                   A list of supported XML entities.                                                                   |
-| ValidatorFactory | IValidatorFactory?                  | null                        | The current validator.                                                                                                                                                |
+| Name             | Data Type                  | Default                     | Description                                                                                                                                                           |
+|------------------|----------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| KeepComments     | bool                       | false                       | True to keep comments.                                                                                                                                                |
+| Breakpoint       | string                     | 480px                       | The default breakpoint to switch to mobile view.                                                                                                                      |
+| Styles           | Style[]                    | []                          | A list of custom styles.                                                                                                                                              |
+| ForceOWAQueries  | bool                       | false                       | True to enable media queries for OWA.                                                                                                                                 |
+| Beautify         | bool                       | true                        | True to beatify the HTML. Impacts performance (slower).                                                                                                               |
+| Minify           | bool                       | false                       | True to minify the HTML.                                                                                                                                              |
+| Lax              | bool                       | false                       | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance. |
+| IdGenerator      | IIdGenerator               | DefaultIDGenerator.Instance | The ID generator to create random values for attributes like Ids.                                                                                                     |
+| Fonts            | Dictionary<string, Font>   | DefaultFonts                | A list of supported default fonts.                                                                                                                                    |
+| XmlEntities      | Dictionary<string, string> | DefaultXmlEntities          | A list of supported XML entities.                                                                                                                                     |
+| ValidatorFactory | IValidatorFactory?         | null                        | The current validator.                                                                                                                                                |
 
 ## Supported Components
 `MJML.NET` tries to implement all functionality `1-2-1` with the MJML 4 project. However, due to JavaScript not being a typed language this means there has been considerate refactoring to the code to make it more aligned with C# typed requirements. 
 
-| Type | Component                                                                  | Implemented        | Tests              | State            |
-| ---- | -------------------------------------------------------------------------- | ------------------ | ------------------ | ---------------- |
-| Core | [mjml](https://documentation.mjml.io/#mjml)                                | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Core | [mj-head](https://documentation.mjml.io/#mj-head)                          | :white_check_mark: | :white_check_mark: | Feature Complete | 
-| Core | [mj-body](https://documentation.mjml.io/#mj-body)                          | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Core | [mj-include](https://documentation.mjml.io/#mj-include)                    | :x:                | :x:                | Not Planned      |
-| Head | [mj-attributes](https://documentation.mjml.io/#mj-attributes)              | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | `mj-class`                                                                 | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | `mj-all`                                                                   | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | [mj-breakpoint](https://documentation.mjml.io/#mj-breakpoint)              | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | [mj-font](https://documentation.mjml.io/#mj-font)                          | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | [mj-html-attributes](https://documentation.mjml.io/#mj-html-attributes)    | :x:                | :x:                | Not Planned      |
-| Head | [mj-preview](https://documentation.mjml.io/#mj-preview)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | [mj-style](https://documentation.mjml.io/#mj-style)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | [mj-title](https://documentation.mjml.io/#mj-title)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-accordion](https://documentation.mjml.io/#mj-accordion)                | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-button](https://documentation.mjml.io/#mj-button)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-carousel](https://documentation.mjml.io/#mj-carousel)                  | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-column](https://documentation.mjml.io/#mj-column)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-divider](https://documentation.mjml.io/#mj-divider)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-group](https://documentation.mjml.io/#mj-group)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-hero](https://documentation.mjml.io/#mj-hero)                          | :white_check_mark: | :white_check_mark: | Feature Complete | 
-| Body | [mj-image](https://documentation.mjml.io/#mj-image)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-navbar](https://documentation.mjml.io/#mj-navbar)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-raw](https://documentation.mjml.io/#mj-raw)                            | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-section](https://documentation.mjml.io/#mj-section)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-social](https://documentation.mjml.io/#mj-social)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-spacer](https://documentation.mjml.io/#mj-spacer)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-table](https://documentation.mjml.io/#mj-table)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-text](https://documentation.mjml.io/#mj-text)                          | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Body | [mj-wrapper](https://documentation.mjml.io/#mj-wrapper)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Type | Component                                                               | Implemented        | Tests              | State            |
+|------|-------------------------------------------------------------------------|--------------------|--------------------|------------------|
+| Core | [mjml](https://documentation.mjml.io/#mjml)                             | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Core | [mj-head](https://documentation.mjml.io/#mj-head)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Core | [mj-body](https://documentation.mjml.io/#mj-body)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Core | [mj-include](https://documentation.mjml.io/#mj-include)                 | :x:                | :x:                | Not Planned      |
+| Head | [mj-attributes](https://documentation.mjml.io/#mj-attributes)           | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | `mj-class`                                                              | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | `mj-all`                                                                | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-breakpoint](https://documentation.mjml.io/#mj-breakpoint)           | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-font](https://documentation.mjml.io/#mj-font)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-html-attributes](https://documentation.mjml.io/#mj-html-attributes) | :x:                | :x:                | Not Planned      |
+| Head | [mj-preview](https://documentation.mjml.io/#mj-preview)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-style](https://documentation.mjml.io/#mj-style)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-title](https://documentation.mjml.io/#mj-title)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-accordion](https://documentation.mjml.io/#mj-accordion)             | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-button](https://documentation.mjml.io/#mj-button)                   | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-carousel](https://documentation.mjml.io/#mj-carousel)               | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-column](https://documentation.mjml.io/#mj-column)                   | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-divider](https://documentation.mjml.io/#mj-divider)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-group](https://documentation.mjml.io/#mj-group)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-hero](https://documentation.mjml.io/#mj-hero)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-image](https://documentation.mjml.io/#mj-image)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-navbar](https://documentation.mjml.io/#mj-navbar)                   | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-raw](https://documentation.mjml.io/#mj-raw)                         | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-section](https://documentation.mjml.io/#mj-section)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-social](https://documentation.mjml.io/#mj-social)                   | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-spacer](https://documentation.mjml.io/#mj-spacer)                   | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-table](https://documentation.mjml.io/#mj-table)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-text](https://documentation.mjml.io/#mj-text)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-wrapper](https://documentation.mjml.io/#mj-wrapper)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
 
 ## Benchmarks
 Performance was one of the key focuses for this project. We're aiming to support high
@@ -163,51 +163,52 @@ Allocated            : Allocated memory per single operation (managed only, incl
 ```
 ### Benchmark Results
 
-|                   Method | MjmlTemplateFilePath |       Mean |    Error |   StdDev |     Median |    Gen 0 |    Gen 1 |    Gen 2 | Allocated |
-|------------------------- |--------------------- |-----------:|---------:|---------:|-----------:|---------:|---------:|---------:|----------:|
-| **Render_Template_Beautify** | **Amario.mjml** |   **924.9 μs** |  **7.24 μs** | **20.42 μs** |   **920.8 μs** | **109.3750** | **103.5156** | **103.5156** |    **810 KB** |
-|   Render_Template_Minify | Amario.mjml |   980.1 μs | 25.57 μs | 75.39 μs |   974.1 μs | 109.3750 | 103.5156 | 103.5156 |    810 KB |
-| **Render_Template_Beautify** | **Arturia.mjml** |   **438.2 μs** |  **9.29 μs** | **27.38 μs** |   **438.9 μs** |  **83.0078** |  **52.7344** |  **27.3438** |    **384 KB** |
-|   Render_Template_Minify | Arturia.mjml |   430.0 μs |  8.62 μs | 25.28 μs |   430.9 μs |  83.0078 |  27.3438 |  27.3438 |    384 KB |
-| **Render_Template_Beautify** | **Austin.mjml** |   **762.0 μs** | **13.06 μs** | **38.30 μs** |   **759.7 μs** |  **94.7266** |  **94.7266** |  **94.7266** |    **615 KB** |
-|   Render_Template_Minify | Austin.mjml |   756.0 μs | 13.42 μs | 39.16 μs |   756.3 μs |  94.7266 |  94.7266 |  94.7266 |    615 KB |
-| **Render_Template_Beautify** | **BlackFriday.mjml** |   **188.3 μs** |  **4.39 μs** | **12.94 μs** |   **189.2 μs** |  **45.4102** |   **6.3477** |        **-** |    **186 KB** |
-|   Render_Template_Minify | BlackFriday.mjml |   194.7 μs |  4.99 μs | 14.31 μs |   197.0 μs |  45.4102 |   6.3477 |        - |    186 KB |
-| **Render_Template_Beautify** | **Card.mjml** |   **290.3 μs** |  **7.10 μs** | **20.04 μs** |   **290.0 μs** |  **62.0117** |  **20.9961** |        **-** |    **259 KB** |
-|   Render_Template_Minify | Card.mjml |   284.3 μs |  5.82 μs | 17.17 μs |   287.0 μs |  62.0117 |  20.9961 |        - |    259 KB |
-| **Render_Template_Beautify** | **Christmas.mjml** |   **413.5 μs** |  **8.55 μs** | **25.09 μs** |   **417.3 μs** |  **74.7070** |  **24.9023** |        **-** |    **360 KB** |
-|   Render_Template_Minify | Christmas.mjml |   401.5 μs |  7.19 μs | 21.20 μs |   403.1 μs |  74.7070 |  24.9023 |        - |    360 KB |
-| **Render_Template_Beautify** | **HappyNewYear.mjml** |   **156.3 μs** |  **3.30 μs** |  **9.72 μs** |   **156.4 μs** |  **40.5273** |  **10.0098** |        **-** |    **166 KB** |
-|   Render_Template_Minify | HappyNewYear.mjml |   155.2 μs |  3.46 μs | 10.21 μs |   155.2 μs |  40.5273 |  10.0098 |        - |    166 KB |
-| **Render_Template_Beautify** | **ManyHeroes.mjml** |   **705.7 μs** | **13.98 μs** | **40.33 μs** |   **700.0 μs** | **142.5781** | **142.5781** | **142.5781** |    **830 KB** |
-|   Render_Template_Minify | ManyHeroes.mjml |   667.6 μs |  9.15 μs | 26.41 μs |   653.7 μs | 142.5781 | 142.5781 | 142.5781 |    830 KB |
-| **Render_Template_Beautify** | **OnePage.mjml** |   **414.9 μs** |  **8.47 μs** | **24.58 μs** |   **403.5 μs** |  **80.0781** |  **38.0859** |        **-** |    **399 KB** |
-|   Render_Template_Minify | OnePage.mjml |   424.5 μs |  9.15 μs | 26.83 μs |   416.4 μs |  80.0781 |  39.0625 |        - |    399 KB |
-| **Render_Template_Beautify** | **Proof.mjml** |   **184.2 μs** |  **2.90 μs** |  **8.33 μs** |   **181.6 μs** |  **51.7578** |   **0.4883** |        **-** |    **213 KB** |
-|   Render_Template_Minify | Proof.mjml |   189.0 μs |  3.53 μs |  9.90 μs |   186.8 μs |  51.7578 |   0.4883 |        - |    213 KB |
-| **Render_Template_Beautify** | **Racoon.mjml** |   **928.5 μs** |  **8.38 μs** | **23.78 μs** |   **921.1 μs** | **109.3750** | **103.5156** | **103.5156** |    **810 KB** |
-|   Render_Template_Minify | Racoon.mjml |   926.7 μs | 11.90 μs | 32.98 μs |   912.9 μs | 109.3750 | 103.5156 | 103.5156 |    810 KB |
-| **Render_Template_Beautify** | **Reactivation.mjml** |   **261.1 μs** |  **4.12 μs** | **12.07 μs** |   **257.7 μs** |  **60.0586** |  **13.6719** |        **-** |    **259 KB** |
-|   Render_Template_Minify | Reactivation.mjml |   263.5 μs |  5.63 μs | 16.34 μs |   260.6 μs |  60.0586 |  13.6719 |        - |    259 KB |
-| **Render_Template_Beautify** | **RealEstate.mjml** |   **707.6 μs** | **11.65 μs** | **33.43 μs** |   **701.2 μs** |  **94.7266** |  **94.7266** |  **94.7266** |    **623 KB** |
-|   Render_Template_Minify | RealEstate.mjml |   725.4 μs | 20.80 μs | 58.66 μs |   708.5 μs |  94.7266 |  94.7266 |  94.7266 |    623 KB |
-| **Render_Template_Beautify** | **Recast.mjml** |   **674.6 μs** |  **7.13 μs** | **20.12 μs** |   **666.0 μs** | **152.3438** |  **76.1719** |  **76.1719** |    **619 KB** |
-|   Render_Template_Minify | Recast.mjml |   661.1 μs |  3.86 μs | 10.63 μs |   659.8 μs | 152.3438 |  76.1719 |  76.1719 |    619 KB |
-| **Render_Template_Beautify** | **Receipt.mjml** |   **275.5 μs** |  **2.64 μs** |  **7.26 μs** |   **272.8 μs** |  **63.4766** |  **20.9961** |        **-** |    **263 KB** |
-|   Render_Template_Minify | Receipt.mjml |   274.5 μs |  1.93 μs |  5.50 μs |   272.8 μs |  63.4766 |  20.9961 |        - |    263 KB |
-| **Render_Template_Beautify** | **Referral.mjml** |   **135.3 μs** |  **0.75 μs** |  **2.19 μs** |   **134.9 μs** |  **32.9590** |        **-** |        **-** |    **136 KB** |
-|   Render_Template_Minify | Referral.mjml |   133.4 μs |  0.86 μs |  2.43 μs |   132.8 μs |  32.9590 |        - |        - |    136 KB |
-| **Render_Template_Beautify** | **SpheroDroids.mjml** |   **376.4 μs** |  **2.28 μs** |  **6.43 μs** |   **374.7 μs** |  **80.0781** |  **52.7344** |  **26.8555** |    **351 KB** |
-|   Render_Template_Minify | SpheroDroids.mjml |   374.5 μs |  3.66 μs | 10.01 μs |   371.8 μs |  71.2891 |  26.8555 |  26.8555 |    351 KB |
-| **Render_Template_Beautify** | **SpheroMini.mjml** |   **395.9 μs** |  **4.43 μs** | **12.79 μs** |   **390.4 μs** |  **70.3125** |  **26.8555** |  **26.8555** |    **368 KB** |
-|   Render_Template_Minify | SpheroMini.mjml |   395.4 μs |  2.11 μs |  6.13 μs |   394.3 μs |  71.7773 |  26.8555 |  26.8555 |    368 KB |
-| **Render_Template_Beautify** | **UGGRoyale.mjml** | **1,126.0 μs** |  **6.03 μs** | **17.09 μs** | **1,122.9 μs** | **142.5781** | **142.5781** | **142.5781** |  **1,004 KB** |
-|   Render_Template_Minify | UGGRoyale.mjml | 1,154.0 μs | 10.93 μs | 31.89 μs | 1,142.2 μs | 142.5781 | 142.5781 | 142.5781 |  1,004 KB |
-| **Render_Template_Beautify** | **Welcome.mjml** |   **125.1 μs** |  **0.89 μs** |  **2.49 μs** |   **124.1 μs** |  **31.7383** |   **0.2441** |        **-** |    **131 KB** |
-|   Render_Template_Minify | Welcome.mjml |   126.3 μs |  1.51 μs |  4.42 μs |   125.3 μs |  31.7383 |   0.2441 |        - |    131 KB |
-| Render_Template_Beautify | Worldly.mjml |   637.6 μs |  3.21 μs |  9.22 μs |   634.9 μs |  83.0078 |  83.0078 |  83.0078 |    572 KB |
-|   Render_Template_Minify | Worldly.mjml |   629.6 μs |  4.24 μs | 11.60 μs |   627.9 μs |  83.0078 |  83.0078 |  83.0078 |    572 KB |
+All times are in μs (1ms = 1000 μs)
 
+| Method                       | MjmlTemplateFilePath  | Mean        | Error     | StdDev    | Median      | Gen 0        | Gen 1        | Gen 2        | Allocated    |
+|------------------------------|-----------------------|------------:|----------:|----------:|------------:|-------------:|-------------:|--:-----------|-------------:|
+| **Render_Template_Beautify** | **Amario.mjml**       | **924.9**   | **7.24**  | **20.42** | **920.8**   | **109.3750** | **103.5156** | **103.5156** | **810 KB**   |
+| Render_Template_Minify       | Amario.mjml           | 980.1       | 25.57     | 75.39     | 974.1       | 109.3750     | 103.5156     | 103.5156     | 810 KB       |
+| **Render_Template_Beautify** | **Arturia.mjml**      | **438.2**   | **9.29**  | **27.38** | **438.9**   | **83.0078**  | **52.7344**  | **27.3438**  | **384 KB**   |
+| Render_Template_Minify       | Arturia.mjml          | 430.0       | 8.62      | 25.28     | 430.9       | 83.0078      | 27.3438      | 27.3438      | 384 KB       |
+| **Render_Template_Beautify** | **Austin.mjml**       | **762.0**   | **13.06** | **38.30** | **759.7**   | **94.7266**  | **94.7266**  | **94.7266**  | **615 KB**   |
+| Render_Template_Minify       | Austin.mjml           | 756.0       | 13.42     | 39.16     | 756.3       | 94.7266      | 94.7266      | 94.7266      | 615 KB       |
+| **Render_Template_Beautify** | **BlackFriday.mjml**  | **188.3**   | **4.39**  | **12.94** | **189.2**   | **45.4102**  | **6.3477**   | **-**        | **186 KB**   |
+| Render_Template_Minify       | BlackFriday.mjml      | 194.7       | 4.99      | 14.31     | 197.0       | 45.4102      | 6.3477       | -            | 186 KB       |
+| **Render_Template_Beautify** | **Card.mjml**         | **290.3**   | **7.10**  | **20.04** | **290.0**   | **62.0117**  | **20.9961**  | **-**        | **259 KB**   |
+| Render_Template_Minify       | Card.mjml             | 284.3       | 5.82      | 17.17     | 287.0       | 62.0117      | 20.9961      | -            | 259 KB       |
+| **Render_Template_Beautify** | **Christmas.mjml**    | **413.5**   | **8.55**  | **25.09** | **417.3**   | **74.7070**  | **24.9023**  | **-**        | **360 KB**   |
+| Render_Template_Minify       | Christmas.mjml        | 401.5       | 7.19      | 21.20     | 403.1       | 74.7070      | 24.9023      | -            | 360 KB       |
+| **Render_Template_Beautify** | **HappyNewYear.mjml** | **156.3**   | **3.30**  | **9.72**  | **156.4**   | **40.5273**  | **10.0098**  | **-**        | **166 KB**   |
+| Render_Template_Minify       | HappyNewYear.mjml     | 155.2       | 3.46      | 10.21     | 155.2       | 40.5273      | 10.0098      | -            | 166 KB       |
+| **Render_Template_Beautify** | **ManyHeroes.mjml**   | **705.7**   | **13.98** | **40.33** | **700.0**   | **142.5781** | **142.5781** | **142.5781** | **830 KB**   |
+| Render_Template_Minify       | ManyHeroes.mjml       | 667.6       | 9.15      | 26.41     | 653.7       | 142.5781     | 142.5781     | 142.5781     | 830 KB       |
+| **Render_Template_Beautify** | **OnePage.mjml**      | **414.9**   | **8.47**  | **24.58** | **403.5**   | **80.0781**  | **38.0859**  | **-**        | **399 KB**   |
+| Render_Template_Minify       | OnePage.mjml          | 424.5       | 9.15      | 26.83     | 416.4       | 80.0781      | 39.0625      | -            | 399 KB       |
+| **Render_Template_Beautify** | **Proof.mjml**        | **184.2**   | **2.90**  | **8.33**  | **181.6**   | **51.7578**  | **0.4883**   | **-**        | **213 KB**   |
+| Render_Template_Minify       | Proof.mjml            | 189.0       | 3.53      | 9.90      | 186.8       | 51.7578      | 0.4883       | -            | 213 KB       |
+| **Render_Template_Beautify** | **Racoon.mjml**       | **928.5**   | **8.38**  | **23.78** | **921.1**   | **109.3750** | **103.5156** | **103.5156** | **810 KB**   |
+| Render_Template_Minify       | Racoon.mjml           | 926.7       | 11.90     | 32.98     | 912.9       | 109.3750     | 103.5156     | 103.5156     | 810 KB       |
+| **Render_Template_Beautify** | **Reactivation.mjml** | **261.1**   | **4.12**  | **12.07** | **257.7**   | **60.0586**  | **13.6719**  | **-**        | **259 KB**   |
+| Render_Template_Minify       | Reactivation.mjml     | 263.5       | 5.63      | 16.34     | 260.6       | 60.0586      | 13.6719      | -            | 259 KB       |
+| **Render_Template_Beautify** | **RealEstate.mjml**   | **707.6**   | **11.65** | **33.43** | **701.2**   | **94.7266**  | **94.7266**  | **94.7266**  | **623 KB**   |
+| Render_Template_Minify       | RealEstate.mjml       | 725.4       | 20.80     | 58.66     | 708.5       | 94.7266      | 94.7266      | 94.7266      | 623 KB       |
+| **Render_Template_Beautify** | **Recast.mjml**       | **674.6**   | **7.13**  | **20.12** | **666.0**   | **152.3438** | **76.1719**  | **76.1719**  | **619 KB**   |
+| Render_Template_Minify       | Recast.mjml           | 661.1       | 3.86      | 10.63     | 659.8       | 152.3438     | 76.1719      | 76.1719      | 619 KB       |
+| **Render_Template_Beautify** | **Receipt.mjml**      | **275.5**   | **2.64**  | **7.26**  | **272.8**   | **63.4766**  | **20.9961**  | **-**        | **263 KB**   |
+| Render_Template_Minify       | Receipt.mjml          | 274.5       | 1.93      | 5.50      | 272.8       | 63.4766      | 20.9961      | -            | 263 KB       |
+| **Render_Template_Beautify** | **Referral.mjml**     | **135.3**   | **0.75**  | **2.19**  | **134.9**   | **32.9590**  | **-**        | **-**        | **136 KB**   |
+| Render_Template_Minify       | Referral.mjml         | 133.4       | 0.86      | 2.43      | 132.8       | 32.9590      | -            | -            | 136 KB       |
+| **Render_Template_Beautify** | **SpheroDroids.mjml** | **376.4**   | **2.28**  | **6.43**  | **374.7**   | **80.0781**  | **52.7344**  | **26.8555**  | **351 KB**   |
+| Render_Template_Minify       | SpheroDroids.mjml     | 374.5       | 3.66      | 10.01     | 371.8       | 71.2891      | 26.8555      | 26.8555      | 351 KB       |
+| **Render_Template_Beautify** | **SpheroMini.mjml**   | **395.9**   | **4.43**  | **12.79** | **390.4**   | **70.3125**  | **26.8555**  | **26.8555**  | **368 KB**   |
+| Render_Template_Minify       | SpheroMini.mjml       | 395.4       | 2.11      | 6.13      | 394.3       | 71.7773      | 26.8555      | 26.8555      | 368 KB       |
+| **Render_Template_Beautify** | **UGGRoyale.mjml**    | **1,126.0** | **6.03**  | **17.09** | **1,122.9** | **142.5781** | **142.5781** | **142.5781** | **1,004 KB** |
+| Render_Template_Minify       | UGGRoyale.mjml        | 1,154.0     | 10.93     | 31.89     | 1,142.2     | 142.5781     | 142.5781     | 142.5781     | 1,004 KB     |
+| **Render_Template_Beautify** | **Welcome.mjml**      | **125.1**   | **0.89**  | **2.49**  | **124.1**   | **31.7383**  | **0.2441**   | **-**        | **131 KB**   |
+| Render_Template_Minify       | Welcome.mjml          | 126.3       | 1.51      | 4.42      | 125.3       | 31.7383      | 0.2441       | -            | 131 KB       |
+| **Render_Template_Beautify** | **Worldly.mjml**      | **637.6**   | **3.21**  | **9.22**  | **634.9**   | **83.0078**  | **83.0078**  | **83.0078**  | **572 KB**   |
+| Render_Template_Minify       | Worldly.mjml          | 629.6       | 4.24      | 11.60     | 627.9       | 83.0078      | 83.0078      | 83.0078      | 572 KB       |
 
 
 ## Known Issues
@@ -230,6 +231,7 @@ Here are some of the common HTML Character Entities:
 | ©      | copyright                          | `&copy;`    | `&#169;`      |
 | ®      | registered trademark               | `&reg;`     | `&#174;`      |
 | ™      | registered trademark               | `&trade;`   | `&#8482`      |
+
 ### Non-encoded URL
 We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJMl document. This solution is to URL encode all of the URLs in the template.
 
