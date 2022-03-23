@@ -221,7 +221,7 @@ The solution is to change the HTML Character Entity Names (e.g. `&copy;`) to the
 Here are some of the common HTML Character Entities:
 
 | Result | Description                        | Entity Name | Entity Number |
-| ------ | ---------------------------------- | ----------- | ------------- |
+|--------|------------------------------------|-------------|---------------|
 |        | non-breaking space                 | `&nbsp;`    | `&#160;`      |
 | <      | less than                          | `&lt`       | `&#60;`       |
 | >      | greater than                       | `&gt;`      | `&#62;`       |
