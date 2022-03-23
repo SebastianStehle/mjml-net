@@ -68,6 +68,58 @@ public static void Main (string[] args) {
     }).Html;
 }
 ```
+## Options
+You can also specify options to the MJML parser.
+
+|       Name       |              Data Type              |           Default           |                                                                              Description                                                                              |
+|:----------------:|:-----------------------------------:|:---------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|   KeepComments   |                 bool                |            false            |                                                                         True to keep comments.                                                                        |
+|    Breakpoint    |                string               |            480px            |                                                            The default breakpoint to switch to mobile view.                                                           |
+|      Styles      |               Style[]               |              []             |                                                                        A list of custom styles.                                                                       |
+|  ForceOWAQueries |                 bool                |            false            |                                                                 True to enable media queries for OWA.                                                                 |
+|     Beautify     |                 bool                |             true            |                                                                       True to beatify the HTML.                                                                       |
+|      Minify      |                 bool                |            false            |                                                                        True to minify the HTML.                                                                       |
+|        Lax       |                 bool                |            false            | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance. |
+|    IdGenerator   | IIdGenerator                        | DefaultIDGenerator.Instance | The ID generator to create random values for attributes like Ids.                                                                                                     |
+| Fonts            | IReadOnlyDictionary<string, Font>   | DefaultFonts                | A list of supported default fonts.                                                                                                                                    |
+|    XmlEntities   | IReadOnlyDictionary<string, string> |      DefaultXmlEntities     |                                                                   A list of supported XML entities.                                                                   |
+| ValidatorFactory | IValidatorFactory?                  | null                        | The current validator.                                                                                                                                                |
+
+## Supported Components
+`MJML.NET` tries to implement all functionality `1-2-1` with the MJML 4 project. However, due to JavaScript not being a typed language this means there has been considerate refactoring to the code to make it more aligned with C# typed requirements. 
+
+| Type | Component                                                                  | Implemented        | Tests              | State            |
+| ---- | -------------------------------------------------------------------------- | ------------------ | ------------------ | ---------------- |
+| Core | [mjml](https://documentation.mjml.io/#mjml)                                | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Core | [mj-head](https://documentation.mjml.io/#mj-head)                          | :white_check_mark: | :white_check_mark: | Feature Complete | 
+| Core | [mj-body](https://documentation.mjml.io/#mj-body)                          | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Core | [mj-include](https://documentation.mjml.io/#mj-include)                    | :x:                | :x:                | Not Planned      |
+| Head | [mj-attributes](https://documentation.mjml.io/#mj-attributes)              | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | `mj-class`                                                                 | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | `mj-all`                                                                   | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-breakpoint](https://documentation.mjml.io/#mj-breakpoint)              | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-font](https://documentation.mjml.io/#mj-font)                          | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-html-attributes](https://documentation.mjml.io/#mj-html-attributes)    | :x:                | :x:                | Not Planned      |
+| Head | [mj-preview](https://documentation.mjml.io/#mj-preview)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-style](https://documentation.mjml.io/#mj-style)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Head | [mj-title](https://documentation.mjml.io/#mj-title)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-accordion](https://documentation.mjml.io/#mj-accordion)                | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-button](https://documentation.mjml.io/#mj-button)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-carousel](https://documentation.mjml.io/#mj-carousel)                  | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-column](https://documentation.mjml.io/#mj-column)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-divider](https://documentation.mjml.io/#mj-divider)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-group](https://documentation.mjml.io/#mj-group)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-hero](https://documentation.mjml.io/#mj-hero)                          | :white_check_mark: | :white_check_mark: | Feature Complete | 
+| Body | [mj-image](https://documentation.mjml.io/#mj-image)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-navbar](https://documentation.mjml.io/#mj-navbar)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-raw](https://documentation.mjml.io/#mj-raw)                            | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-section](https://documentation.mjml.io/#mj-section)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-social](https://documentation.mjml.io/#mj-social)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-spacer](https://documentation.mjml.io/#mj-spacer)                      | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-table](https://documentation.mjml.io/#mj-table)                        | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-text](https://documentation.mjml.io/#mj-text)                          | :white_check_mark: | :white_check_mark: | Feature Complete |
+| Body | [mj-wrapper](https://documentation.mjml.io/#mj-wrapper)                    | :white_check_mark: | :white_check_mark: | Feature Complete |
+
 ## Benchmarks
 Performance was one of the key focuses for this project. We're aiming to support high
 througput while mainintaing low memory footprint. Below are the benchmarks for every public MJML template compiled (beautified and minified). 
