@@ -124,6 +124,27 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_carousel_image_href()
+        {
+            var source = @"
+<mj-carousel>
+    <mj-carousel-image href=""https://google.com"" src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+</mj-carousel>
+";
+
+            var result = TestHelper.Render(source, new MjmlOptions
+            {
+                IdGenerator = new StaticIdGenerator("0ecde39840c5")
+            });
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.CarouselImageWithHref.html", result);
+        }
+
+        [Fact]
         public void Should_render_carousel_head_styles()
         {
             var source = @"
