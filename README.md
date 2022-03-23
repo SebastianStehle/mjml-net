@@ -128,6 +128,16 @@ througput while mainintaing low memory footprint. Below are the benchmarks for e
 
 If you'd like to run the benchmarks your self then you can run the `Mjml.Net.Benchmarks` project in `release` mode.
 
+### BenchmarkDotNet
+```
+> .\Mjml.Net.Benchmark.exe
+```
+
+### Profiler
+```
+> .\Mjml.Net.Benchmark.exe -p -i 100
+```
+
 ### Benchmark Specs
 ```ini
 BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19043.1586 (21H1/May2021Update)
