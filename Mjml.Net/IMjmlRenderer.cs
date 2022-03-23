@@ -3,6 +3,9 @@
     /// <summary>
     /// Main entry point for MJML rendering.
     /// </summary>
+    /// <remarks>
+    /// Rendering a HTML with this class is thread safe. To improve performance it will hold some buffers. Reuse your instance if possible.
+    /// </remarks>
     public interface IMjmlRenderer
     {
         /// <summary>
@@ -12,6 +15,9 @@
         /// <returns>
         /// The current instance to chain method calls.
         /// </returns>
+        /// <remarks>
+        /// This method is not thread safe.
+        /// </remarks>
         IMjmlRenderer Add<T>() where T : IComponent, new();
 
         /// <summary>
@@ -21,6 +27,9 @@
         /// <returns>
         /// The current instance to chain method calls.
         /// </returns>
+        /// <remarks>
+        /// This method is not thread safe.
+        /// </remarks>
         IMjmlRenderer Add(IHelper helper);
 
         /// <summary>
@@ -29,6 +38,9 @@
         /// <returns>
         /// The current instance to chain method calls.
         /// </returns>
+        /// <remarks>
+        /// This method is not thread safe.
+        /// </remarks>
         IMjmlRenderer ClearComponents();
 
         /// <summary>
@@ -37,6 +49,9 @@
         /// <returns>
         /// The current instance to chain method calls.
         /// </returns>
+        /// <remarks>
+        /// This method is not thread safe.
+        /// </remarks>
         IMjmlRenderer ClearHelpers();
 
         /// <summary>
@@ -47,6 +62,9 @@
         /// <returns>
         /// The fixed MJML.
         /// </returns>
+        /// <remarks>
+        /// This method is thread safe.
+        /// </remarks>
         string FixXML(string mjml, MjmlOptions? options = null);
 
         /// <summary>
@@ -57,6 +75,9 @@
         /// <returns>
         /// The result of rendering, including the HTML and validation errors.
         /// </returns>
+        /// <remarks>
+        /// This method is thread safe.
+        /// </remarks>
         RenderResult Render(string mjml, MjmlOptions? options = null);
 
         /// <summary>
@@ -67,6 +88,9 @@
         /// <returns>
         /// The result of rendering, including the HTML and validation errors.
         /// </returns>
+        /// <remarks>
+        /// This method is thread safe.
+        /// </remarks>
         RenderResult Render(Stream mjml, MjmlOptions? options = null);
 
         /// <summary>
@@ -77,6 +101,9 @@
         /// <returns>
         /// The result of rendering, including the HTML and validation errors.
         /// </returns>
+        /// <remarks>
+        /// This method is thread safe.
+        /// </remarks>
         RenderResult Render(TextReader mjml, MjmlOptions? options = null);
     }
 }

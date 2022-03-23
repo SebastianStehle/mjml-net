@@ -65,6 +65,11 @@ namespace Mjml.Net
         public bool Lax { get; set; }
 
         /// <summary>
+        /// The ID generator to create random values for attributes like Ids.
+        /// </summary>
+        public IIdGenerator IdGenerator { get; init; } = DefaultIDGenerator.Instance;
+
+        /// <summary>
         /// A list of supported default fonts.
         /// </summary>
         public IReadOnlyDictionary<string, Font> Fonts { get; init; } = DefaultFonts;

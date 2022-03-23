@@ -8,20 +8,7 @@ namespace Tests.Internal
         {
             var renderer = new MjmlRenderer().Add<TestComponent>();
 
-            if (options == null)
-            {
-                options = new MjmlOptions
-                {
-                    Lax = true
-                };
-            }
-
-            options = options with
-            {
-                Beautify = true
-            };
-
-            return renderer.Render(source, options).Html;
+            return renderer.Render(source, BuildOptions(options)).Html;
         }
 
         public static string Render(string source, params IHelper[] helpers)
@@ -33,10 +20,23 @@ namespace Tests.Internal
                 renderer.Add(helper);
             }
 
-            return renderer.Render(source, new MjmlOptions
+            return renderer.Render(source, BuildOptions(null)).Html;
+        }
+
+        private static MjmlOptions BuildOptions(MjmlOptions? options)
+        {
+            if (options == null)
+            {
+                options = new MjmlOptions
+                {
+                    Lax = true
+                };
+            }
+
+            return options with
             {
                 Beautify = true
-            }).Html;
+            };
         }
 
         public static string GetContent(string content)

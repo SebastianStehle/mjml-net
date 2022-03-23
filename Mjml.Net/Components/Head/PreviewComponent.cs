@@ -17,7 +17,7 @@ namespace Mjml.Net.Components.Head
             if (Text != null)
             {
                 // Allow multiple previews.
-                context.SetGlobalData(Guid.NewGuid().ToString(), new Preview(Text));
+                context.SetGlobalData(Text, new Preview(Text));
             }
         }
     }
