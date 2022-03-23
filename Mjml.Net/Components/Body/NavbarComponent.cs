@@ -121,7 +121,7 @@ namespace Mjml.Net.Components.Body
 
         private void RenderHamburger(IHtmlRenderer renderer, GlobalContext context)
         {
-            var key = Guid.NewGuid().ToString();
+            var key = context.Options.IdGenerator.Next();
 
             renderer.StartConditional("<!--[if !mso><!-->");
             {
