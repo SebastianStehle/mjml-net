@@ -54,6 +54,8 @@ namespace Mjml.Net
             Add<BodyComponent>();
             Add<BreakpointComponent>();
             Add<ButtonComponent>();
+            Add<CarouselComponent>();
+            Add<CarouselImageComponent>();
             Add<ColumnComponent>();
             Add<DividerComponent>();
             Add<FontComponent>();

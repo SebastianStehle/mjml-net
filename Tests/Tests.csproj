@@ -16,6 +16,14 @@
   <ItemGroup>
     <None Remove="Components\Outputs\Accordion.html" />
     <None Remove="Components\Outputs\AccordionEmptyElements.html" />
+    <None Remove="Components\Outputs\Carousel.html" />
+    <None Remove="Components\Outputs\CarouselHeadStyles.html" />
+    <None Remove="Components\Outputs\CarouselIconWidth.html" />
+    <None Remove="Components\Outputs\CarouselImagesFive.html" />
+    <None Remove="Components\Outputs\CarouselImagesOne.html" />
+    <None Remove="Components\Outputs\CarouselImagesTwo.html" />
+    <None Remove="Components\Outputs\CarouselImageWithHref.html" />
+    <None Remove="Components\Outputs\CarouselThumbnailWidth.html" />
     <None Remove="Components\Outputs\Comments.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
@@ -98,6 +106,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Components\Outputs\Carousel.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselHeadStyles.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselImageWithHref.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselIconWidth.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselImagesFive.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselImagesOne.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselImagesTwo.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselThumbnailWidth.html" />
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
     <EmbeddedResource Include="Components\Outputs\Comments.html" />

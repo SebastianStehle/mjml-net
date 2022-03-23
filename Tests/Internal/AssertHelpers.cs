@@ -97,7 +97,8 @@ namespace Tests.Internal
                             options.IgnoreAttribute("id");
                         }
                     })
-                    .Build();
+                    .Build()
+                    .ToList();
 
             Assert.True(!diffs.Any(), FormatDiffs(diffs));
         }
@@ -136,7 +137,6 @@ namespace Tests.Internal
             var i = 1;
             foreach (var diff in diffs)
             {
-                sb.Append(' ');
                 sb.Append(i);
                 sb.Append(' ');
 
