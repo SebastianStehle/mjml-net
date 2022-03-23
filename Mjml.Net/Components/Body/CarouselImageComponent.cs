@@ -33,7 +33,7 @@ namespace Mjml.Net.Components.Body
         [Bind("tb-border-radius", BindType.PixelsOrPercent)]
         public string? TbBorderRadius;
 
-        [Bind("tb-width", BindType.PixelsOrPercent)]
+        [Bind("tb-width", BindType.Pixels)]
         public string? TbWidth;
 
         [Bind("thumbnails-src", BindType.String)]
@@ -110,7 +110,7 @@ namespace Mjml.Net.Components.Body
                 .Style("border-radius", TbBorderRadius)
                 .Style("display", "inline-block")
                 .Style("overflow", "hidden")
-                .Style("width", $"{TbWidth}px");
+                .Style("width", TbWidth);
 
             renderer.StartElement("label")
                 .Attr("for", $"mj-carousel-{CarouselID}-radio-{imgIndex}");
