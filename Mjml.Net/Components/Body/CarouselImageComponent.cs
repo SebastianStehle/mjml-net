@@ -1,7 +1,4 @@
 ﻿using Mjml.Net.Extensions;
-using Mjml.Net.Helpers;
-
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
 
 namespace Mjml.Net.Components.Body
 {
@@ -82,16 +79,16 @@ namespace Mjml.Net.Components.Body
         private void RenderImage(IHtmlRenderer renderer, GlobalContext context)
         {
             renderer.StartElement("img", true) // Style images.img
-                .Attr("title", Title)
-                .Attr("src", Src)
                 .Attr("alt", Alt)
                 .Attr("border", "0")
+                .Attr("src", Src)
+                .Attr("title", Title)
                 .Attr("width", $"{ActualWidth}")
                 .Style("border-radius", BorderRadius)
                 .Style("display", "block")
-                .Style("width", $"{ActualWidth}px")
+                .Style("height", "auto")
                 .Style("max-width", "100%")
-                .Style("height", "auto");
+                .Style("width", $"{ActualWidth}px");
         }
 
         internal void RenderThumbnail(IHtmlRenderer renderer, GlobalContext context)
@@ -110,18 +107,18 @@ namespace Mjml.Net.Components.Body
                 .Style("border-radius", TbBorderRadius)
                 .Style("display", "inline-block")
                 .Style("overflow", "hidden")
-                .Style("width", TbWidth);
+                .Style("width", $"{widthParsed}px");
 
             renderer.StartElement("label")
                 .Attr("for", $"mj-carousel-{CarouselID}-radio-{imgIndex}");
 
             renderer.StartElement("img", true) // Style thumbnails.img
-                .Attr("src", !string.IsNullOrEmpty(ThumbnailsSrc) ? ThumbnailsSrc : Src)
                 .Attr("alt", Alt)
+                .Attr("src", !string.IsNullOrEmpty(ThumbnailsSrc) ? ThumbnailsSrc : Src)
                 .Attr("width", $"{widthParsed}")
                 .Style("display", "block")
-                .Style("width", "100%")
-                .Style("height", "auto");
+                .Style("height", "auto")
+                .Style("width", "100%");
 
             renderer.EndElement("label");
             renderer.EndElement("a");
@@ -130,10 +127,10 @@ namespace Mjml.Net.Components.Body
         internal void RenderRadio(IHtmlRenderer renderer, object context)
         {
             renderer.StartElement("input", true) // Style radio.input
-                .Attr("type", "radio")
-                .Attr("name", $"mj-carousel-radio-{CarouselID}")
-                .Attr("id", $"mj-carousel-{CarouselID}-radio-{CarouselImageIndex + 1}")
                 .Attr("checked", CarouselImageIndex == 0 ? "checked" : null)
+                .Attr("id", $"mj-carousel-{CarouselID}-radio-{CarouselImageIndex + 1}")
+                .Attr("name", $"mj-carousel-radio-{CarouselID}")
+                .Attr("type", "radio")
                 .Class("mj-carousel-radio")
                 .Class($"mj-carousel-{CarouselID}-radio")
                 .Class($"mj-carousel-{CarouselID}-radio-{CarouselImageIndex + 1}")

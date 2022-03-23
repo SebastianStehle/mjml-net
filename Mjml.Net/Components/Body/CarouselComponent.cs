@@ -1,7 +1,5 @@
 ﻿using Mjml.Net.Helpers;
 
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-
 namespace Mjml.Net.Components.Body
 {
     public partial class CarouselComponent : BodyComponentBase
@@ -91,10 +89,10 @@ namespace Mjml.Net.Components.Body
                 renderer.StartElement("div") // Style carousel.div
                     .Class($"mj-carousel-content mj-carousel-{CarouselID}-content")
                     .Style("display", "table")
-                    .Style("width", "100%")
+                    .Style("font-size", "0px")
                     .Style("table-layout", "fixed")
                     .Style("text-align", "center")
-                    .Style("font-size", "0px");
+                    .Style("width", "100%");
 
                 GenerateThumbnails(renderer, context);
                 GenerateCarousel(renderer, context);
@@ -151,8 +149,8 @@ namespace Mjml.Net.Components.Body
                 .Attr("border", "0")
                 .Attr("cell-padding", "0")
                 .Attr("cell-spacing", "0")
-                .Attr("width", "100%")
                 .Attr("role", "presentation")
+                .Attr("width", "100%")
                 .Class("mj-carousel-main")
                 .Style("caption-side", "top")
                 .Style("display", "table-caption")
@@ -177,8 +175,8 @@ namespace Mjml.Net.Components.Body
 
             renderer.StartElement("td") // Style controls.td
                 .Class($"mj-carousel-{CarouselID}-icons-cell")
-                .Style("font-size", "0px")
                 .Style("display", "none")
+                .Style("font-size", "0px")
                 .Style("mso-hide", "all")
                 .Style("padding", "0px");
 
@@ -197,8 +195,8 @@ namespace Mjml.Net.Components.Body
                     .Class($"mj-carousel-{direction}-{i + 1}");
 
                 renderer.StartElement("img", true) // Style controls.img
-                    .Attr("src", icon)
                     .Attr("alt", direction)
+                    .Attr("src", icon)
                     .Attr("width", $"{iconWidth}")
                     .Style("display", "block")
                     .Style("height", "auto")
