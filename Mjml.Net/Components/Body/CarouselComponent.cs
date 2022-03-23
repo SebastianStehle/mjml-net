@@ -196,7 +196,7 @@ namespace Mjml.Net.Components.Body
                     .Class($"mj-carousel-{direction}")
                     .Class($"mj-carousel-{direction}-{i + 1}");
 
-                renderer.StartElement("img") // Style controls.img
+                renderer.StartElement("img", true) // Style controls.img
                     .Attr("src", icon)
                     .Attr("alt", direction)
                     .Attr("width", $"{iconWidth}")
@@ -204,7 +204,6 @@ namespace Mjml.Net.Components.Body
                     .Style("height", "auto")
                     .Style("width", IconWidth);
 
-                renderer.EndElement("img");
                 renderer.EndElement("label");
             }
 

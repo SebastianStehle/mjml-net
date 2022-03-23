@@ -103,6 +103,27 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_carousel_icon_width()
+        {
+            var source = @"
+<mj-carousel icon-width=""36px"">
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+</mj-carousel>
+";
+
+            var result = TestHelper.Render(source, new MjmlOptions
+            {
+                IdGenerator = new StaticIdGenerator("e4cd685c98ce")
+            });
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.CarouselIconWidth.html", result);
+        }
+
+        [Fact]
         public void Should_render_carousel_head_styles()
         {
             var source = @"
