@@ -4,27 +4,22 @@ using Xunit;
 
 namespace Tests.Components
 {
-    public class CommentTests
+    public class CarouselTests
     {
         [Fact]
-        public void Should_keep_comments()
+        public void Should_render_carousel()
         {
             var source = @"
-<mjml-test head=""false"">
-    <!-- COMMENT 1 -->
-    <mj-spacer />
-    <!-- COMMENT 2 -->
-    <mj-spacer />
-    <!-- COMMENT 3 -->
-</mjml-test>
+<mj-carousel>
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/3@1x.png"" />
+    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png"" />
+</mj-carousel>
 ";
 
-            var result = TestHelper.Render(source, new MjmlOptions
-            {
-                KeepComments = true
-            });
+            var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Comments.html", result);
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Carousel.html", result);
         }
     }
 }
