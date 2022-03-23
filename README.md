@@ -1,8 +1,6 @@
-# MJML.NET 2 
+# MJML.NET 
 
-An unofficial port of [MJML](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to .NET Core.
-
-This project is currently in an **experimental state** and should not be used in a production environment.
+A blazingly-fast unofficial port of [MJML](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to [.NET 6](https://dotnet.microsoft.com/).
 
 ## Introduction
 
@@ -36,7 +34,7 @@ You can find out more about MJML 4 from the official website.
 Firstly, you'll need to reference the `MJML.NET 2` NuGet Package into your project.
 
 ```cmd
-PM > Install-Package MjmlDotNet2
+PM > Install-Package Mjml.Net
 ```
 ## Benchmarks
 Performance was one of the key focuses for this project. We're aiming to support high
@@ -111,8 +109,7 @@ Median : Value separating the higher half of all measurements (50th percentile)
 
 ### Unknown HTML Entity
 
-We are aware with an issue where by using HTML Character Entities (e.g. `&copy;`) are unknown and throw an unhandled exception during the rendering of the MJML document. This is because
-we use XmlReader as the main driver for parsing the MJMl document.
+We are aware with an issue where by using HTML Character Entities (e.g. `&copy;`) are unknown and throw an unhandled exception during the rendering of the MJML document. This is because we use XmlReader as the main driver for parsing the MJMl document.
 
 The solution is to change the HTML Character Entity Names (e.g. `&copy;`) to there corresponding HTML Character Entity Number (e.g. `&#169;`) in the MJML document.
 Here are some of the common HTML Character Entities:
@@ -128,6 +125,9 @@ Here are some of the common HTML Character Entities:
 | ©      | copyright                          | `&copy;`    | `&#169;`      |
 | ®      | registered trademark               | `&reg;`     | `&#174;`      |
 
+### Non-encoded URL
+We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJMl document. This solution is to URL encode all of the URLs in the template.
+
 ## Contribution
 
 We really appreciate any contribution to the project to help provide a native version of MJML to C#.
@@ -138,7 +138,7 @@ Side Note: In your PR you should summarise your changes, bug fixes or general mo
 
 ## Appreciations
 
-Once again, it's good to share some appreciation to the projects that make `MJML.NET V2` possible.
+Once again, it's good to share some appreciation to the projects that make `MJML.NET` possible.
 
 - [MJML](https://github.com/mjmlio/mjml)
 - [MJML.NET V1](https://github.com/LiamRiddell/MJML.NET)
