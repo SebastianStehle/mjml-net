@@ -382,6 +382,8 @@ namespace Mjml.Net.Components.Body
                     renderer.Content($".mj-carousel-{CarouselID}-thumbnail:hover {selectorSibilings}+ .mj-carousel-main .mj-carousel-image, ");
                 }
             }
+            renderer.Content("  display: none !important;");
+            renderer.Content("}");
 
             renderer.Content(".mj-carousel-thumbnail:hover {");
             renderer.Content($"  border-color: {TbHoverBorderColor} !important;");
@@ -400,7 +402,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    renderer.Content($".mj-carousel-{CarouselID}-thumbnail-{i + 1}:hover {selectorSibilings}+ .mj-carousel-main .mj-carousel-image-{i + 1} ");
+                    renderer.Content($".mj-carousel-{CarouselID}-thumbnail-{i + 1}:hover {selectorSibilings}+ .mj-carousel-main .mj-carousel-image-{i + 1}, ");
                 }
             }
             renderer.Content("  display: block !important;");
@@ -417,14 +419,14 @@ namespace Mjml.Net.Components.Body
             renderer.Content("@media screen yahoo {");
             renderer.Content($".mj-carousel-{CarouselID}-icons-cell,");
             renderer.Content(".mj-carousel-previous-icons,");
-            renderer.Content("mj-carousel-next-icons {");
+            renderer.Content(".mj-carousel-next-icons {");
             renderer.Content("  display: none !important;");
             renderer.Content("}");
 
             // https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-carousel/src/Carousel.js#L188-L193
             var selectorSibilingsFallback = string.Concat(Enumerable.Repeat("+ * ", length - 1));
 
-            renderer.Content($".mj-carousel-{CarouselID}-radio-1:checked {selectorSibilingsFallback}+ .mj-carousel-content .mj-carousel-${CarouselID}-thumbnail-1");
+            renderer.Content($".mj-carousel-{CarouselID}-radio-1:checked {selectorSibilingsFallback}+ .mj-carousel-content .mj-carousel-{CarouselID}-thumbnail-1 {{");
             renderer.Content("  border-color: transparent;");
             renderer.Content("}");
         }
