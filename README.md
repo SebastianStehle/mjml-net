@@ -36,6 +36,38 @@ Firstly, you'll need to reference the `MJML.NET 2` NuGet Package into your proje
 ```cmd
 PM > Install-Package Mjml.Net
 ```
+
+Secondly, include `MJML.NET` namespace into your project.
+```csharp
+using Mjml.Net;
+```
+
+Finally, the boilerplate code.
+```csharp
+public static void Main (string[] args) {
+    var mjmlParser = new MjmlRenderer();
+
+    string mjml = @"
+<mjml>
+    <mj-head>
+        <mj-title>Hello World Example</mj-title>
+    </mj-head>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    Hello World!
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>";
+
+    var html = mjmlRenderer.Render(text, new MjmlOptions {
+        Beautify = false
+    }).Html;
+}
+```
 ## Benchmarks
 Performance was one of the key focuses for this project. We're aiming to support high
 througput while mainintaing low memory footprint. Below are the benchmarks for every public MJML template compiled (beautified and minified). 
@@ -130,11 +162,7 @@ We are aware of an issue with non-encoded URL's being recognized as character en
 
 ## Contribution
 
-We really appreciate any contribution to the project to help provide a native version of MJML to C#.
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Side Note: In your PR you should summarise your changes, bug fixes or general modifications.
+We really appreciate any contribution to the project to help provide a native version of MJML to C#. Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Appreciations
 
