@@ -2,6 +2,10 @@
 
 namespace Mjml.Net.Benchmarking
 {
+    [MemoryDiagnoser]
+    [MarkdownExporterAttribute.GitHub]
+    [RyuJitX64Job]
+    [IterationCount(20)]
     public class TemplateBenchmarks
     {
         private readonly MjmlRenderer MjmlRenderer;
