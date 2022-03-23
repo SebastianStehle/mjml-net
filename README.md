@@ -208,7 +208,7 @@ Here are some of the common HTML Character Entities:
 | '      | single quotation mark (apostrophe) | `&apos;`    | `&#39;`       |
 | ©      | copyright                          | `&copy;`    | `&#169;`      |
 | ®      | registered trademark               | `&reg;`     | `&#174;`      |
-
+| ™      | registered trademark               | `&trade;`   | `&#8482`      |
 ### Non-encoded URL
 We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJMl document. This solution is to URL encode all of the URLs in the template.
 
