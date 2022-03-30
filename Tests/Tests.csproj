@@ -29,6 +29,7 @@
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithHtml2.html" />
+    <None Remove="Components\Outputs\TextWithHtmlAndWhitespace.html" />
     <None Remove="Tests\Amario.html" />
     <None Remove="Tests\Amario.mjml" />
     <None Remove="Tests\Breakpoint.html" />
@@ -124,6 +125,7 @@
     <EmbeddedResource Include="Components\Outputs\Table.html" />
     <EmbeddedResource Include="Components\Outputs\TextRawWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWhitespace.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWithHtmlAndWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWithHtml2.html" />
     <EmbeddedResource Include="Tests\Amario.mjml" />
     <EmbeddedResource Include="Tests\Amario.html" />

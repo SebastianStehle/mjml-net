@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Mjml.Net;
 using Xunit;
 
@@ -14,6 +15,14 @@ namespace Tests
         public HtmlRenderTests()
         {
             sut.StartBuffer();
+        }
+
+        public static IEnumerable<object[]> Cultures()
+        {
+            yield return new object[] { CultureInfo.GetCultureInfo("en-US") };
+            yield return new object[] { CultureInfo.GetCultureInfo("de-DE") };
+            yield return new object[] { CultureInfo.GetCultureInfo("es-ES") };
+            yield return new object[] { CultureInfo.InvariantCulture };
         }
 
         [Fact]
@@ -332,6 +341,113 @@ namespace Tests
                 "<div/>",
                 "<-- close -->"
             });
+        }
+
+        [Theory]
+        [MemberData(nameof(Cultures))]
+        public void Should_render_interolated_content_with_invariant_culture(CultureInfo culture)
+        {
+            var currentCulture = CultureInfo.CurrentCulture;
+            var currentUICulture = CultureInfo.CurrentUICulture;
+
+            try
+            {
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+
+                sut.Content($"<div class=\"{0.3333}px\">");
+
+                AssertText(new[]
+                {
+                    "<div class=\"0.3333px\">"
+                });
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = currentCulture;
+                CultureInfo.CurrentUICulture = currentUICulture;
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Cultures))]
+        public void Should_render_interolated_class_with_invariant_culture(CultureInfo culture)
+        {
+            var currentCulture = CultureInfo.CurrentCulture;
+            var currentUICulture = CultureInfo.CurrentUICulture;
+
+            try
+            {
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+
+                sut.StartElement("div")
+                    .Class($"{0.3333}px");
+
+                AssertText(new[]
+                {
+                    "<div class=\"0.3333px\">"
+                });
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = currentCulture;
+                CultureInfo.CurrentUICulture = currentUICulture;
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Cultures))]
+        public void Should_render_interolated_attribute_with_invariant_culture(CultureInfo culture)
+        {
+            var currentCulture = CultureInfo.CurrentCulture;
+            var currentUICulture = CultureInfo.CurrentUICulture;
+
+            try
+            {
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+
+                sut.StartElement("div")
+                    .Attr("width", $"{0.3333}px");
+
+                AssertText(new[]
+                {
+                    "<div width=\"0.3333px\">"
+                });
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = currentCulture;
+                CultureInfo.CurrentUICulture = currentUICulture;
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Cultures))]
+        public void Should_render_interolated_style_with_invariant_culture(CultureInfo culture)
+        {
+            var currentCulture = CultureInfo.CurrentCulture;
+            var currentUICulture = CultureInfo.CurrentUICulture;
+
+            try
+            {
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+
+                sut.StartElement("div")
+                    .Style("width", $"{0.3333}px");
+
+                AssertText(new[]
+                {
+                    "<div style=\"width:0.3333px;\">"
+                });
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = currentCulture;
+                CultureInfo.CurrentUICulture = currentUICulture;
+            }
         }
 
         private void AssertText(params string[] lines)

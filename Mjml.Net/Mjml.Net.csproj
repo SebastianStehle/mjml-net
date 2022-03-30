@@ -7,7 +7,6 @@
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <NoWarn>1591</NoWarn>
-	  <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

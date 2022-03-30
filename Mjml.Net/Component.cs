@@ -47,9 +47,15 @@ namespace Mjml.Net
                 return;
             }
 
-            var i = 0;
-            foreach (var xml in childXml)
+            for (int i = 0; i < childXml.Count; i++)
             {
+                var xml = childXml[i];
+
+                if (string.IsNullOrEmpty(xml))
+                {
+                    continue;
+                }
+
                 var toRender = xml.AsSpan();
 
                 if (i == 0)

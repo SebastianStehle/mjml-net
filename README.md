@@ -1,6 +1,8 @@
 # MJML.NET 
 
-A blazingly-fast unofficial port of [MJML](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to [.NET 6](https://dotnet.microsoft.com/).
+A blazingly-fast unofficial port of [MJML 4](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to [.NET 6](https://dotnet.microsoft.com/).
+
+![Nuget](https://img.shields.io/nuget/v/Mjml.Net)
 
 ## Introduction
 
@@ -31,7 +33,7 @@ You can find out more about MJML 4 from the official website.
 
 ## Usage
 
-Firstly, you'll need to reference the `MJML.NET 2` NuGet Package into your project.
+Firstly, you'll need to reference the [`MJML.NET` NuGet Package](https://www.nuget.org/packages/Mjml.Net/) into your project.
 
 ```cmd
 PM > Install-Package Mjml.Net
@@ -210,7 +212,7 @@ All times are in μs (1ms = 1000 μs)
 
 ### Unknown HTML Entity
 
-We are aware with an issue where by using HTML Character Entities (e.g. `&copy;`) are unknown and throw an unhandled exception during the rendering of the MJML document. This is because we use XmlReader as the main driver for parsing the MJMl document.
+We are aware with an issue where by using HTML Character Entities (e.g. `&copy;`) are unknown and throw an unhandled exception during the rendering of the MJML document. This is because we use XmlReader as the main driver for parsing the MJML document.
 
 The solution is to change the HTML Character Entity Names (e.g. `&copy;`) to there corresponding HTML Character Entity Number (e.g. `&#169;`) in the MJML document.
 Here are some of the common HTML Character Entities:
@@ -228,7 +230,7 @@ Here are some of the common HTML Character Entities:
 | ™      | registered trademark               | `&trade;`   | `&#8482`      |
 
 ### Non-encoded URL
-We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJMl document. This solution is to URL encode all of the URLs in the template.
+We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJML document. This solution is to URL encode all of the URLs in the template.
 
 ## Contribution
 
