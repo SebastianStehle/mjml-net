@@ -14,7 +14,7 @@ namespace Mjml.Net.Helpers
     {
         public static MediaQuery Width(string className, string width)
         {
-            return new MediaQuery(className, $"{{\r\nwidth:{width} !important;\r\nmax-width: {width};\r\n}}");
+            return new MediaQuery(className, FormattableString.Invariant($"{{\r\nwidth:{width} !important;\r\nmax-width: {width};\r\n}}"));
         }
     }
 

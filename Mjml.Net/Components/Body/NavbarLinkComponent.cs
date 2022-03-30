@@ -81,7 +81,7 @@ namespace Mjml.Net.Components.Body
 
             if (NavbarBaseUrl != null)
             {
-                link = $"{NavbarBaseUrl}{link}";
+                link = FormattableString.Invariant($"{NavbarBaseUrl}{link}");
             }
 
             renderer.StartConditional("<!--[if mso | IE]>");
@@ -127,11 +127,6 @@ namespace Mjml.Net.Components.Body
                 renderer.EndElement("td");
             }
             renderer.EndConditional("<!--<![endif]-->");
-        }
-
-        private void RenderContent(IHtmlRenderer renderer)
-        {
-            throw new NotImplementedException();
         }
     }
 }

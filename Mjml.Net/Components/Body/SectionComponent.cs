@@ -466,7 +466,7 @@ namespace Mjml.Net.Components.Body
                 return BackgroundColor;
             }
 
-            return $"{BackgroundColor} url('{BackgroundUrl}') {GetBackgroundPositionString()} / {BackgroundSize} {BackgroundRepeat}";
+            return FormattableString.Invariant($"{BackgroundColor} url('{BackgroundUrl}') {GetBackgroundPositionString()} / {BackgroundSize} {BackgroundRepeat}");
         }
 
         private string? GetBackgroundPositionString()
@@ -476,7 +476,7 @@ namespace Mjml.Net.Components.Body
             var x = string.IsNullOrEmpty(BackgroundPositionX) ? parsedX : BackgroundPositionX;
             var y = string.IsNullOrEmpty(BackgroundPositionY) ? parsedY : BackgroundPositionY;
 
-            return $"{x} {y}";
+            return FormattableString.Invariant($"{x} {y}");
         }
 
         private (string x, string y) ParseBackgroundPosition()
@@ -587,7 +587,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    var temp = $"{((positionUnitDouble * 100) - 50.0) / 100}";
+                    var temp = (((positionUnitDouble * 100) - 50.0) / 100).ToInvariantString();
 
                     return (temp, temp);
                 }

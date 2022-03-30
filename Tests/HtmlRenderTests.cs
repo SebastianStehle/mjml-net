@@ -1,6 +1,6 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using Mjml.Net;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests
@@ -19,10 +19,10 @@ namespace Tests
 
         public static IEnumerable<object[]> Cultures()
         {
-            yield return new object[] { CultureInfo.GetCultureInfo("en-US") };
-            yield return new object[] { CultureInfo.GetCultureInfo("de-DE") };
-            yield return new object[] { CultureInfo.GetCultureInfo("es-ES") };
-            yield return new object[] { CultureInfo.InvariantCulture };
+            yield return new object[] { "en-US" };
+            yield return new object[] { "de-DE" };
+            yield return new object[] { "es-ES" };
+            yield return new object[] { string.Empty };
         }
 
         [Fact]
@@ -345,42 +345,25 @@ namespace Tests
 
         [Theory]
         [MemberData(nameof(Cultures))]
-        public void Should_render_interolated_content_with_invariant_culture(CultureInfo culture)
+        public void Should_render_interolated_content_with_invariant_culture(string culture)
         {
-            var currentCulture = CultureInfo.CurrentCulture;
-            var currentUICulture = CultureInfo.CurrentUICulture;
-
-            try
+            TestHelper.TestWithCulture(culture, () =>
             {
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-
                 sut.Content($"<div class=\"{0.3333}px\">");
 
                 AssertText(new[]
                 {
                     "<div class=\"0.3333px\">"
                 });
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = currentCulture;
-                CultureInfo.CurrentUICulture = currentUICulture;
-            }
+            });
         }
 
         [Theory]
         [MemberData(nameof(Cultures))]
-        public void Should_render_interolated_class_with_invariant_culture(CultureInfo culture)
+        public void Should_render_interolated_class_with_invariant_culture(string culture)
         {
-            var currentCulture = CultureInfo.CurrentCulture;
-            var currentUICulture = CultureInfo.CurrentUICulture;
-
-            try
+            TestHelper.TestWithCulture(culture, () =>
             {
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-
                 sut.StartElement("div")
                     .Class($"{0.3333}px");
 
@@ -388,26 +371,15 @@ namespace Tests
                 {
                     "<div class=\"0.3333px\">"
                 });
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = currentCulture;
-                CultureInfo.CurrentUICulture = currentUICulture;
-            }
+            });
         }
 
         [Theory]
         [MemberData(nameof(Cultures))]
-        public void Should_render_interolated_attribute_with_invariant_culture(CultureInfo culture)
+        public void Should_render_interolated_attribute_with_invariant_culture(string culture)
         {
-            var currentCulture = CultureInfo.CurrentCulture;
-            var currentUICulture = CultureInfo.CurrentUICulture;
-
-            try
+            TestHelper.TestWithCulture(culture, () =>
             {
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-
                 sut.StartElement("div")
                     .Attr("width", $"{0.3333}px");
 
@@ -415,26 +387,15 @@ namespace Tests
                 {
                     "<div width=\"0.3333px\">"
                 });
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = currentCulture;
-                CultureInfo.CurrentUICulture = currentUICulture;
-            }
+            });
         }
 
         [Theory]
         [MemberData(nameof(Cultures))]
-        public void Should_render_interolated_style_with_invariant_culture(CultureInfo culture)
+        public void Should_render_interolated_style_with_invariant_culture(string culture)
         {
-            var currentCulture = CultureInfo.CurrentCulture;
-            var currentUICulture = CultureInfo.CurrentUICulture;
-
-            try
+            TestHelper.TestWithCulture(culture, () =>
             {
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-
                 sut.StartElement("div")
                     .Style("width", $"{0.3333}px");
 
@@ -442,12 +403,7 @@ namespace Tests
                 {
                     "<div style=\"width:0.3333px;\">"
                 });
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = currentCulture;
-                CultureInfo.CurrentUICulture = currentUICulture;
-            }
+            });
         }
 
         private void AssertText(params string[] lines)

@@ -104,7 +104,7 @@ namespace Mjml.Net.Components.Body
             {
                 widthValue = 100d / Math.Max(1, numNonRawSiblings);
                 widthUnit = Unit.Percent;
-                widthString = $"{widthValue}%";
+                widthString = FormattableString.Invariant($"{widthValue}%");
             }
 
             if (widthUnit != Unit.Pixels)
@@ -272,13 +272,15 @@ namespace Mjml.Net.Components.Body
         {
             string className;
 
+            var widthValue = CurrentWidth.Value.ToInvariantString().Replace('.', '-');
+
             if (CurrentWidth.Unit == Unit.Percent)
             {
-                className = $"mj-column-per-{CurrentWidth.Value.ToInvariantString().Replace('.', '-')}";
+                className = FormattableString.Invariant($"mj-column-per-{widthValue}");
             }
             else
             {
-                className = $"mj-column-px-{CurrentWidth.Value.ToInvariantString().Replace('.', '-')}";
+                className = FormattableString.Invariant($"mj-column-px-{widthValue}");
             }
 
             context.SetGlobalData(className, MediaQuery.Width(className, CurrentWidth.WidthString));

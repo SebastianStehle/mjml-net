@@ -1,4 +1,5 @@
-﻿using Mjml.Net.Helpers;
+﻿using Mjml.Net.Extensions;
+using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body
 {
@@ -448,7 +449,7 @@ namespace Mjml.Net.Components.Body
                 return TbWidth;
             }
 
-            return $"{Math.Min(ActualWidth / CarouselImages.Count(), 110d)}";
+            return Math.Min(ActualWidth / CarouselImages.Count(), 110d).ToInvariantString();
         }
     }
 }

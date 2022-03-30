@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net.Components.Body
+﻿using Mjml.Net.Extensions;
+
+namespace Mjml.Net.Components.Body
 {
     public partial class TableComponent : Component
     {
@@ -80,7 +82,7 @@
                 .Attr("cellpadding", CellPadding)
                 .Attr("cellspacing", CellSpacing)
                 .Attr("role", Role)
-                .Attr("width", widthUnit == Unit.Percent ? Width : $"{widthValue}")
+                .Attr("width", widthUnit == Unit.Percent ? Width : widthValue.ToInvariantString())
                 .Style("border", Border)
                 .Style("color", Color)
                 .Style("font-family", FontFamily)

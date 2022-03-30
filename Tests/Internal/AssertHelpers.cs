@@ -105,6 +105,9 @@ namespace Tests.Internal
 
         private static string Cleanup(string source)
         {
+            // Replace whitespaces.
+            source = source.Replace("&amp;#160;", " ", StringComparison.OrdinalIgnoreCase);
+
             // Replace ending negated conditional comment to normal comment.
             source = source.Replace("<!--<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
 
