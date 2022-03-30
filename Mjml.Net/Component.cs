@@ -49,7 +49,14 @@ namespace Mjml.Net
 
             for (int i = 0; i < childXml.Count; i++)
             {
-                var toRender = childXml[i].AsSpan();
+                var xml = childXml[i];
+
+                if (string.IsNullOrEmpty(xml))
+                {
+                    continue;
+                }
+
+                var toRender = xml.AsSpan();
 
                 if (i == 0)
                 {
