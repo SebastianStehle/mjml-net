@@ -47,10 +47,9 @@ namespace Mjml.Net
                 return;
             }
 
-            var i = 0;
-            foreach (var xml in childXml)
+            for (int i = 0; i < childXml.Count; i++)
             {
-                var toRender = xml.AsSpan();
+                var toRender = childXml[i].AsSpan();
 
                 if (i == 0)
                 {
@@ -64,6 +63,24 @@ namespace Mjml.Net
 
                 renderer.Plain(toRender);
             }
+
+            // var i = 0;
+            //foreach (var xml in childXml)
+            //{
+            //    var toRender = xml.AsSpan();
+
+            //    if (i == 0)
+            //    {
+            //        toRender = toRender.TrimXmlStart();
+            //    }
+
+            //    if (i == childXml.Count - 1)
+            //    {
+            //        toRender = toRender.TrimXmlEnd();
+            //    }
+
+            //    renderer.Plain(toRender);
+            //}
         }
 
         public virtual string? GetInheritingAttribute(string name)

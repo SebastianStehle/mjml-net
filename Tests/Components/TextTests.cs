@@ -57,5 +57,15 @@ namespace Tests.Components
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.TextRawWhitespace.html", result);
         }
+
+        [Fact]
+        public void Should_render_text_with_html_and_whitespace()
+        {
+            var source = @"<mj-text>This <strong>should</strong> respect <strong>whitespaces.</strong> after the <strong>HTML Tag</strong></mj-text>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithHtmlAndWhitespace.html", result);
+        }
     }
 }
