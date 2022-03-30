@@ -1,4 +1,5 @@
-﻿using Tests.Internal;
+﻿using Mjml.Net;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests.Components
@@ -61,11 +62,19 @@ namespace Tests.Components
         [Fact]
         public void Should_render_text_with_html_and_whitespace()
         {
-            var source = @"<mj-text>This <strong>should</strong> respect <strong>whitespaces.</strong> after the <strong>HTML Tag</strong></mj-text>";
+            var source = @"<mj-text>This <strong>should</strong> respect <strong>whitespaces.</strong> after the <strong>HTML Tags</strong></mj-text>";
 
-            var result = TestHelper.Render(source);
+            var renderer = new MjmlRenderer().Add<TestComponent>();
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithHtmlAndWhitespace.html", result);
+            var result = renderer.Render(source, new MjmlOptions()
+            {
+                Minify = true,
+                Beautify = false
+            }).Html;
+
+            var expected = TestHelper.GetContent("Components.Outputs.TextWithHtmlAndWhitespace.html");
+
+            Assert.True(result.TrimEnd().Equals(expected.TrimEnd(), StringComparison.OrdinalIgnoreCase));
         }
     }
 }
