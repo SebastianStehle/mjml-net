@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using Mjml.Net;
 using Tests.Internal;
 using Xunit;
@@ -7,53 +8,89 @@ namespace Tests
 {
     public class ComplexTests
     {
-        private static readonly HashSet<string> Ignore = new HashSet<string>
+        private static readonly ConcurrentDictionary<string, string> Cache = new ConcurrentDictionary<string, string>();
+
+        private static readonly MjmlOptions Options = new MjmlOptions
         {
-            "ugg-royale.mjml" // Carousel
+            // Easier for debugging errors.
+            Beautify = true,
+
+            // Cleanup XML, because some are broken.
+            Lax = true
         };
 
-        public static IEnumerable<object[]> Templates()
+        public static IEnumerable<string> Cultures()
         {
-            var files = Directory.GetFiles("Templates", "*.mjml").Select(x => new FileInfo(x));
+            yield return "en-US";
+            yield return "de-DE";
+            yield return "es-ES";
+            yield return string.Empty;
+        }
 
-            return files.Where(x => !Ignore.Contains(x.Name)).Select(x => new[] { x.Name });
+        public static IEnumerable<string> Templates()
+        {
+            foreach (var file in Directory.GetFiles("Templates", "*.mjml").Select(x => new FileInfo(x)))
+            {
+                yield return file.Name;
+            }
+        }
+
+        public static IEnumerable<object[]> TestCases()
+        {
+            foreach (var file in Templates())
+            {
+                foreach (var culture in Cultures())
+                {
+                    yield return new object[] { file, culture };
+                }
+            }
         }
 
         [Theory]
-        [MemberData(nameof(Templates))]
-        public void Should_render_template(string template)
+        [MemberData(nameof(TestCases))]
+        public void Should_render_template(string template, string culture)
         {
-            var tempFile = Guid.NewGuid().ToString();
-            try
+            TestHelper.TestWithCulture(culture, () =>
             {
-                var process = new Process();
-                process.StartInfo.UseShellExecute = true;
-                process.StartInfo.FileName = "npx";
-                process.StartInfo.Arguments = $"mjml Templates/{template} -o {tempFile}";
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.Start();
-                process.WaitForExit();
+                var expected = CompileWithNode(template);
 
-                var expected = File.ReadAllText(tempFile);
-
-                var source = File.ReadAllText($"Templates/{template}");
-
-                var result = new MjmlRenderer().Render(source, new MjmlOptions
-                {
-                    Beautify = true,
-                    // Cleanup XML, because some are broken.
-                    Lax = true
-                }).Html;
-
-                // Fix whitespaces for easier comparison.
-                result = result.Replace("&amp;#160;", " ", StringComparison.Ordinal);
+                var result = CompileWithNet(template);
 
                 AssertHelpers.HtmlAssert(template, result, expected, true);
-            }
-            finally
+            });
+        }
+
+        private static string CompileWithNet(string template)
+        {
+            var source = File.ReadAllText($"Templates/{template}");
+
+            return new MjmlRenderer().Render(source, Options).Html;
+        }
+
+        private static string CompileWithNode(string template)
+        {
+            return Cache.GetOrAdd(template, _ =>
             {
-                File.Delete(tempFile);
-            }
+                var tempFile = Guid.NewGuid().ToString();
+
+                try
+                {
+                    var process = new Process();
+                    process.StartInfo.UseShellExecute = true;
+                    process.StartInfo.FileName = "npx";
+                    process.StartInfo.Arguments = $"mjml Templates/{template} -o {tempFile}";
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.Start();
+                    process.WaitForExit();
+
+                    return File.ReadAllText(tempFile);
+                }
+                finally
+                {
+
+                    File.Delete(tempFile);
+                }
+            });
         }
     }
 }

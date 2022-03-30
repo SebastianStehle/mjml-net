@@ -232,9 +232,6 @@
     <None Update="Templates\ticketshop.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\ugg-royale.mjml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Templates\welcome-email.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

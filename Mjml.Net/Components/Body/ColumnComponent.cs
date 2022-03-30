@@ -104,7 +104,7 @@ namespace Mjml.Net.Components.Body
             {
                 widthValue = 100d / Math.Max(1, numNonRawSiblings);
                 widthUnit = Unit.Percent;
-                widthString = FormattableString.rInvariant($"{widthValue}%");
+                widthString = FormattableString.Invariant($"{widthValue}%");
             }
 
             if (widthUnit != Unit.Pixels)

@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Mjml.Net.Helpers;
-using Mjml.Net.Internal;
 using Mjml.Net.Properties;
 
 namespace Mjml.Net.Components
