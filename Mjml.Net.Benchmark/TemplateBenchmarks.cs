@@ -13,7 +13,7 @@ namespace Mjml.Net.Benchmarking
         [ParamsSource(nameof(MjmlTemplates))]
         public string MjmlTemplateFilePath { get; set; }
 
-        public IEnumerable<string> MjmlTemplates => Directory.GetFiles("./Templates/", "*.mjml");
+        public static IEnumerable<string> MjmlTemplates => Directory.GetFiles("./Templates/", "*.mjml");
 
         public string MjmlTemplate { get; set; }
 

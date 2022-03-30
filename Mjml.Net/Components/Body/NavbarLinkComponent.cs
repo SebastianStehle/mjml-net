@@ -128,10 +128,5 @@ namespace Mjml.Net.Components.Body
             }
             renderer.EndConditional("<!--<![endif]-->");
         }
-
-        private void RenderContent(IHtmlRenderer renderer)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

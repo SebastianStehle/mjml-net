@@ -1,5 +1,5 @@
-﻿using Mjml.Net;
-using System.Globalization;
+﻿using System.Globalization;
+using Mjml.Net;
 
 namespace Tests.Internal
 {

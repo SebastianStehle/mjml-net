@@ -69,7 +69,7 @@ namespace Tests
 
         private static string CompileWithNode(string template)
         {
-            return Cache.GetOrAdd(template, _ =>
+            return Cache.GetOrAdd(template, fileName =>
             {
                 var tempFile = Guid.NewGuid().ToString();
 
@@ -78,7 +78,7 @@ namespace Tests
                     var process = new Process();
                     process.StartInfo.UseShellExecute = true;
                     process.StartInfo.FileName = "npx";
-                    process.StartInfo.Arguments = $"mjml Templates/{template} -o {tempFile}";
+                    process.StartInfo.Arguments = $"mjml Templates/{fileName} -o {tempFile}";
                     process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     process.Start();
                     process.WaitForExit();
@@ -87,7 +87,6 @@ namespace Tests
                 }
                 finally
                 {
-
                     File.Delete(tempFile);
                 }
             });

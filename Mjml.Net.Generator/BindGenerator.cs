@@ -282,9 +282,7 @@ namespace Mjml.Net.Generator
             {
                 foreach (var variable in fieldDeclarationSyntax.Declaration.Variables)
                 {
-                    var fieldSymbol = context.SemanticModel.GetDeclaredSymbol(variable) as IFieldSymbol;
-
-                    if (fieldSymbol == null)
+                    if (context.SemanticModel.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSymbol)
                     {
                         return;
                     }
