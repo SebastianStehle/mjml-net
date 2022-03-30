@@ -33,7 +33,7 @@ You can find out more about MJML 4 from the official website.
 
 ## Usage
 
-Firstly, you'll need to reference the `MJML.NET 2` NuGet Package into your project.
+Firstly, you'll need to reference the [`MJML.NET` NuGet Package](https://www.nuget.org/packages/Mjml.Net/) into your project.
 
 ```cmd
 PM > Install-Package Mjml.Net
