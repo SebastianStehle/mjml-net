@@ -49,7 +49,7 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var borderSetting = $"{BorderStyle} {BorderWidth} {BorderColor}";
+            var borderSetting = FormattableString.Invariant($"{BorderStyle} {BorderWidth} {BorderColor}");
 
             var margin = GetMargin(Align);
 

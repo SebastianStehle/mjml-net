@@ -101,7 +101,7 @@
 
             if (BackgroundUrl != null)
             {
-                backgroundString = $"{backgroundString} url({BackgroundUrl}) no-repeat {BackgroundPosition} / cover";
+                backgroundString = FormattableString.Invariant($"{backgroundString} url({BackgroundUrl}) no-repeat {BackgroundPosition} / cover");
             }
 
             var backgroundRatio = Math.Round(100 *

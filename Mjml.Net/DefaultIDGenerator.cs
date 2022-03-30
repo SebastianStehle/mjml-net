@@ -21,7 +21,7 @@
         {
             Interlocked.Increment(ref counter);
 
-            return $"{counter}";
+            return FormattableString.Invariant($"{counter}");
         }
     }
 }
