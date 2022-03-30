@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Mjml.Net
@@ -35,7 +36,7 @@ namespace Mjml.Net
         {
             writer.StartStyle(name);
 
-            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder);
+            inner = new StringBuilder.AppendInterpolatedStringHandler(literalLength, formattedCount, writer.StringBuilder, CultureInfo.InvariantCulture);
         }
 
         public void AppendLiteral(string value)
