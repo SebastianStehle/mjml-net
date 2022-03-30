@@ -131,13 +131,15 @@ namespace Mjml.Net.Components.Body
         {
             string className;
 
+            var widthValue = (int)CurrentWidth.Value;
+
             if (CurrentWidth.Unit == Unit.Percent)
             {
-                className = FormattableString.Invariant($"mj-column-per-{(int)CurrentWidth.Value}");
+                className = FormattableString.Invariant($"mj-column-per-{widthValue}");
             }
             else
             {
-                className = FormattableString.Invariant($"mj-column-px-{(int)CurrentWidth.Value}");
+                className = FormattableString.Invariant($"mj-column-px-{widthValue}");
             }
 
             context.SetGlobalData(className, MediaQuery.Width(className, CurrentWidth.WidthString));

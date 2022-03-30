@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net
+﻿using Mjml.Net.Extensions;
+
+namespace Mjml.Net
 {
     /// <summary>
     /// The default ID generator.
@@ -21,7 +23,7 @@
         {
             Interlocked.Increment(ref counter);
 
-            return FormattableString.Invariant($"{counter}");
+            return counter.ToInvariantString();
         }
     }
 }

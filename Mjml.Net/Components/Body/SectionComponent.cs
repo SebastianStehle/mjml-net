@@ -587,7 +587,7 @@ namespace Mjml.Net.Components.Body
                 }
                 else
                 {
-                    var temp = FormattableString.Invariant($"{((positionUnitDouble * 100) - 50.0) / 100}");
+                    var temp = (((positionUnitDouble * 100) - 50.0) / 100).ToInvariantString();
 
                     return (temp, temp);
                 }
