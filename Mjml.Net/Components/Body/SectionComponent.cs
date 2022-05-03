@@ -59,7 +59,7 @@ namespace Mjml.Net.Components.Body
         [Bind("full-width")]
         public string? FullWidth;
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "20px 0";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

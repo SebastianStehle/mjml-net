@@ -37,7 +37,7 @@
         [Bind("line-height", BindType.PixelsOrPercentOrNone)]
         public string LineHeight = "1";
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "16px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

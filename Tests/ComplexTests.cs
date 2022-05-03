@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using Mjml.Net;
+using Mjml.Net.Validators;
 using Tests.Internal;
 using Xunit;
 
@@ -16,7 +17,10 @@ namespace Tests
             Beautify = true,
 
             // Cleanup XML, because some are broken.
-            Lax = true
+            Lax = true,
+
+            // Use validation, so that we also catch errors here.
+            ValidatorFactory = StrictValidatorFactory.Instance
         };
 
         public static IEnumerable<string> Cultures()
@@ -64,7 +68,11 @@ namespace Tests
         {
             var source = File.ReadAllText($"Templates/{template}");
 
-            return new MjmlRenderer().Render(source, Options).Html;
+            var (html, errors) = new MjmlRenderer().Render(source, Options);
+
+            Assert.Empty(errors.Where(x => x.Type != ValidationErrorType.UnknownAttribute));
+
+            return html;
         }
 
         private static string CompileWithNode(string template)

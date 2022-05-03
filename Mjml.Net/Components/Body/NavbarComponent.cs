@@ -65,7 +65,7 @@ namespace Mjml.Net.Components.Body
         [Bind("ico-text-transform", BindType.String)]
         public string IcoTextTransform = "uppercase";
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string? Padding;
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

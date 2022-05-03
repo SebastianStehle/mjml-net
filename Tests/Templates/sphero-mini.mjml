@@ -11,7 +11,6 @@
         <mj-image width="46px" href="https://www.sphero.com" src="https://dmmedia.sphero.com/email-marketing/Sphero/Mini-Launch-email-launch-logotop.png" align="center" alt="Sphero"></mj-image>
       </mj-column>
     </mj-section>
-    <mj-spacer height="20px"></mj-spacer>
     <mj-raw>
       <!-- Logos and Title -->
     </mj-raw>

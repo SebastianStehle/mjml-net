@@ -42,7 +42,7 @@ namespace Mjml.Net.Components.Body
         [Bind("name", BindType.String)]
         public string? Name;
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "15px 10px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

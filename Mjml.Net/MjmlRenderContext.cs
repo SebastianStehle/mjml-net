@@ -27,19 +27,23 @@ namespace Mjml.Net
         public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
         {
             this.mjmlRenderer = mjmlRenderer;
+
+            // Just for convience.
             this.mjmlOptions = mjmlOptions ?? new MjmlOptions();
 
+            // We have to create a new instance each time, because it could another factory.
             validator = this.mjmlOptions.ValidatorFactory?.Create();
 
-            // Reuse the context and therefore do not set them over the properties.
+            // Reuse the context and therefore do not set them over the constructor.
             context.SetOptions(this.mjmlOptions);
         }
 
         internal void Clear()
         {
             context.Clear();
-            errors.Clear();
+            mjmlOptions = null!;
             mjmlRenderer = null!;
+            errors.Clear();
 
             ClearRenderData();
         }
@@ -72,6 +76,7 @@ namespace Mjml.Net
             if (component == null)
             {
                 errors.Add($"Invalid element '{name}'.",
+                    ValidationErrorType.UnknownElement,
                     currentLine,
                     currentColumn);
                 return;

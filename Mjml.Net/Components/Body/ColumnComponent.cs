@@ -65,7 +65,7 @@ namespace Mjml.Net.Components.Body
         [Bind("mobile-width")]
         public string? MobileWidth;
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string? Padding;
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

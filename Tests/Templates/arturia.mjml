@@ -1,6 +1,6 @@
 <mjml>
   <mj-body background-color="#F2F2F2">
-    <mj-section vertical-align="center" padding-bottom="0px">
+    <mj-section padding-bottom="0px">
       <mj-column vertical-align="middle">
         <mj-image width="144px" align="center" src="https://www.arturia.com/images/newsletters/2016-02-black/Logo-Baseline-0.15x.png" href="https://www.arturia.com" alt=""></mj-image>
       </mj-column>

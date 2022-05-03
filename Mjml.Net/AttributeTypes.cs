@@ -7,6 +7,8 @@ namespace Mjml.Net
     {
         public static readonly IType Align = new EnumType("left", "center", "right");
 
+        public static readonly IType AlignJustify = new EnumType("left", "center", "right", "justify");
+
         public static readonly IType Boolean = new EnumType("true", "false");
 
         public static readonly IType Color = new ColorType();

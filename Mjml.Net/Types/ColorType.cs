@@ -160,7 +160,7 @@ namespace Mjml.Net.Types
 
         private static readonly Regex Rgba = new Regex(@"^rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d(\.\d{1,3})?\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         private static readonly Regex Rgb = new Regex(@"^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-        private static readonly Regex Hex = new Regex(@"^#([0-9a-f]{3}){1,2}?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private static readonly Regex Hex = new Regex(@"^#([0-9a-fA-F]{3}){1,2}?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
         public bool Validate(string value)
         {

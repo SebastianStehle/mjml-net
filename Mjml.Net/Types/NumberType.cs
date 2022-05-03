@@ -13,6 +13,13 @@ namespace Mjml.Net.Types
 
         public bool Validate(string value)
         {
+            var trimmed = value.AsSpan().Trim();
+
+            if (trimmed.Length == 1 && trimmed[0] == '0')
+            {
+                return true;
+            }
+
             var (_, unit) = UnitParser.Parse(value);
 
             return units.Contains(unit);
