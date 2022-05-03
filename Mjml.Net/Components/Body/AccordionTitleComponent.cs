@@ -4,7 +4,7 @@
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
-            "mj-accordion-title"
+            "mj-accordion-element"
         };
 
         public override AllowedParents? AllowedParents => Parents;
