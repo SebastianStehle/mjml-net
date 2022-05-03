@@ -46,7 +46,7 @@ namespace Mjml.Net.Components.Body
         [Bind("line-height", BindType.PixelsOrPercent)]
         public string LineHeight = "22px";
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

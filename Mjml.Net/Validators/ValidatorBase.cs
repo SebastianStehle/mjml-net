@@ -16,7 +16,7 @@
         {
             if (!hasBody)
             {
-                errors.Add("Document must have 'mj-body' tag.");
+                errors.Add("Document must have 'mj-body' tag.", ValidationErrorType.Other);
             }
 
             return errors;
@@ -33,11 +33,11 @@
 
             if (!allowedAttributes.TryGetValue(name, out var attribute))
             {
-                errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.", line, column);
+                errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.", ValidationErrorType.UnknownAttribute, line, column);
             }
             else if (validateAttributeValue && !attribute.Validate(value))
             {
-                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.", line, column);
+                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.", ValidationErrorType.InvalidAttribute, line, column);
             }
         }
 
@@ -50,24 +50,24 @@
                 hasBody = true;
             }
 
-            if (component.AllowedParents == null)
+            if (component.AllowedParents == null || component.AllowedParents.Count == 0)
             {
                 if (componentStack.Count > 0)
                 {
-                    errors.Add($"'{name}' must be the root tag.", line, column);
+                    errors.Add($"'{name}' must be the root tag.", ValidationErrorType.InvalidParent, line, column);
                 }
             }
             else
             {
                 if (!componentStack.TryPeek(out var previous))
                 {
-                    errors.Add($"'{name}' cannot be the root tag.", line, column);
+                    errors.Add($"'{name}' cannot be the root tag.", ValidationErrorType.InvalidParent, line, column);
                 }
                 else if (component.AllowedParents != null)
                 {
                     if (!component.AllowedParents.Contains(previous))
                     {
-                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.", line, column);
+                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.", ValidationErrorType.InvalidParent, line, column);
                     }
                 }
             }

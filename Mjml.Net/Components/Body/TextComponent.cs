@@ -14,7 +14,7 @@
 
         public override string ComponentName => "mj-text";
 
-        [Bind("align", BindType.Align)]
+        [Bind("align", BindType.AlignJustify)]
         public string Align = "left";
 
         [Bind("color", BindType.Color)]
@@ -41,7 +41,7 @@
         [Bind("letter-spacing", BindType.Pixels)]
         public string LetterSpacing;
 
-        [Bind("line-height", BindType.Pixels)]
+        [Bind("line-height", BindType.PixelsOrPercentOrNone)]
         public string LineHeight = "1";
 
         [Bind("padding", BindType.FourPixelsOrPercent)]

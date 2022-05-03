@@ -30,7 +30,7 @@ namespace Mjml.Net.Components.Body
         [Bind("left-icon", BindType.String)]
         public string LeftIcon = "https://i.imgur.com/xTh3hln.png";
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string? Padding;
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

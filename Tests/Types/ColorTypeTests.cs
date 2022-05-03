@@ -10,6 +10,7 @@ namespace Tests.Types
         [InlineData("rgba(100, 100, 100, 0.5) ")]
         [InlineData("rgb(100, 100, 100)")]
         [InlineData("rgb(100, 100, 100) ")]
+        [InlineData("#FF00FF")]
         [InlineData("#ff00ff")]
         [InlineData("#ff00ff ")]
         [InlineData("#f0f")]

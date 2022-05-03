@@ -3,6 +3,7 @@
     public enum BindType
     {
         Align,
+        AlignJustify,
         Boolean,
         Color,
         FourPixelsOrPercent,

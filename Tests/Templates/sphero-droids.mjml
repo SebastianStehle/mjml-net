@@ -14,7 +14,7 @@
     <mj-raw>
       <!-- Features Section -->
     </mj-raw>
-    <mj-section background-color="#000000" padding-top="10">
+    <mj-section background-color="#000000" padding-top="10px">
       <mj-column>
         <mj-image src="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1_features.jpg" alt="Featuring Authentic Movement, Holographic Simulation, Droid to Droid Experience, and Watch With Me" padding="0px"></mj-image>
       </mj-column>
@@ -22,7 +22,7 @@
     <mj-raw>
       <!-- R2-D2 Section -->
     </mj-raw>
-    <mj-section background-color="#000000" background-url="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1.r2BG.jpg" background-repeat="no-repeat" padding-top="80" padding-bottom="0px" padding-left="20px">
+    <mj-section background-color="#000000" background-url="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1.r2BG.jpg" background-repeat="no-repeat" padding-top="80px" padding-bottom="0px" padding-left="20px">
       <mj-column>
         <mj-spacer height="15px"></mj-spacer>
         <mj-image src="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1_R2text.png" width="196px" alt="Buy R2D2" href="https://www.sphero.com/starwars/r2d2"></mj-image>
@@ -39,7 +39,7 @@
     <mj-raw>
       <!-- BB-9E Section -->
     </mj-raw>
-    <mj-section background-color="#000000" background-url="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1REDbg.jpg" background-repeat="no-repeat" padding-top="30" padding-left="20px">
+    <mj-section background-color="#000000" background-url="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1REDbg.jpg" background-repeat="no-repeat" padding-top="30px" padding-left="20px">
       <mj-column>
         <mj-spacer height="37px"></mj-spacer>
         <mj-image src="https://dmmedia.sphero.com/email-marketing/Star-Wars/Star_Wars_Launch_Email_1_BB-9E-text.png" width="196px" alt="Buy BB-9E" href="https://www.sphero.com/starwars/bb9e"></mj-image>

@@ -33,7 +33,7 @@
         [Bind("height", BindType.Pixels)]
         public string Height = "20px";
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string? Padding;
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

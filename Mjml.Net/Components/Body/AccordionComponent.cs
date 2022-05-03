@@ -47,7 +47,7 @@ namespace Mjml.Net.Components.Body
         [Bind("icon-wrapped-url", BindType.String)]
         public string IconWrappedUrl = "https://i.imgur.com/bIXv1bk.png";
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "10px 25px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

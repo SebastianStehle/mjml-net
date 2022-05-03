@@ -58,7 +58,7 @@
         [Bind("name")]
         public string? Name;
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "4px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]

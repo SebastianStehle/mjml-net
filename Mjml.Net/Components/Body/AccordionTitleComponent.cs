@@ -52,7 +52,7 @@
         [Bind("icon-wrapped-alt", BindType.String)]
         public string IconWrappedAlt;
 
-        [Bind("padding", BindType.PixelsOrPercent)]
+        [Bind("padding", BindType.FourPixelsOrPercent)]
         public string Padding = "16px";
 
         [Bind("padding-bottom", BindType.PixelsOrPercent)]
