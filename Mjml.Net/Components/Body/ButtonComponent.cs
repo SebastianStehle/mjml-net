@@ -1,4 +1,5 @@
 ﻿using Mjml.Net.Extensions;
+using Mjml.Net.Types;
 
 namespace Mjml.Net.Components.Body
 {

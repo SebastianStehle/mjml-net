@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Components;
-
-namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types
 {
     public sealed class NumberType : IType
     {

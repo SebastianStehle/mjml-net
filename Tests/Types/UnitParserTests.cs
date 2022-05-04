@@ -1,7 +1,8 @@
-﻿using Mjml.Net.Components;
+﻿using Mjml.Net;
+using Mjml.Net.Types;
 using Xunit;
 
-namespace Tests
+namespace Tests.Types
 {
     public class UnitParserTests
     {
@@ -49,8 +50,6 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData(" 100 px")]
-        [InlineData("100 px")]
         [InlineData("100px")]
         [InlineData("100px ")]
         public void Should_parse_without_pixels(string value)
@@ -61,8 +60,6 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData(" 54.3 %")]
-        [InlineData("54.3 %")]
         [InlineData("54.3%")]
         [InlineData("54.3% ")]
         public void Should_parse_without_percentage(string value)
