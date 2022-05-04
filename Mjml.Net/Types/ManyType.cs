@@ -15,7 +15,7 @@
 
         public bool Validate(string value)
         {
-            var parts = value.Split(" ");
+            var parts = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             return parts.Length >= min && parts.Length <= max && parts.All(unit.Validate);
         }

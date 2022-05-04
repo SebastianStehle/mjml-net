@@ -1,4 +1,4 @@
-﻿namespace Mjml.Net.Components
+﻿namespace Mjml.Net
 {
     public enum Unit
     {

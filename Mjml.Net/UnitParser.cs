@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Mjml.Net.Components
+namespace Mjml.Net
 {
     public static class UnitParser
     {
@@ -32,7 +32,7 @@ namespace Mjml.Net.Components
                 }
             }
 
-            var unitSpan = span[i..].Trim();
+            var unitSpan = span[i..];
             var unitType = Unit.Unknown;
 
             var f = new string(unitSpan);

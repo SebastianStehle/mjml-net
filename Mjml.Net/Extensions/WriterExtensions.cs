@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Components;
-
-namespace Mjml.Net.Extensions
+﻿namespace Mjml.Net.Extensions
 {
     public static class WriterExtensions
     {

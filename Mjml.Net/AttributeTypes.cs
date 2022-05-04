@@ -1,5 +1,4 @@
-﻿using Mjml.Net.Components;
-using Mjml.Net.Types;
+﻿using Mjml.Net.Types;
 
 namespace Mjml.Net
 {

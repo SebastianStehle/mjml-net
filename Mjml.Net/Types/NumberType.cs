@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Components;
-
-namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types
 {
     public sealed class NumberType : IType
     {
@@ -13,9 +11,12 @@ namespace Mjml.Net.Types
 
         public bool Validate(string value)
         {
-            var trimmed = value.AsSpan().Trim();
+            if (value.AsSpan().Trim().Length != value.Length)
+            {
+                return false;
+            }
 
-            if (trimmed.Length == 1 && trimmed[0] == '0')
+            if (value == "0")
             {
                 return true;
             }
