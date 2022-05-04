@@ -8,8 +8,13 @@ namespace Tests.Types
     {
         [Theory]
         [InlineData("0")]
+        [InlineData("0 ")]
         [InlineData("10%")]
         [InlineData("10px")]
+        [InlineData("10% ")]
+        [InlineData("10px ")]
+        [InlineData(" 10%")]
+        [InlineData(" 10px")]
         public void Should_validate_valid_values(string value)
         {
             var isValid = new NumberType(Unit.Percent, Unit.Pixels).Validate(value);
@@ -21,7 +26,6 @@ namespace Tests.Types
         [InlineData("")]
         [InlineData("2 px")]
         [InlineData("2 %")]
-        [InlineData("0 ")]
         [InlineData("0 rem")]
         [InlineData("0rem")]
         [InlineData("10 px ")]
