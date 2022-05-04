@@ -11,11 +11,6 @@
 
         public bool Validate(string value)
         {
-            if (value.AsSpan().Trim().Length != value.Length)
-            {
-                return false;
-            }
-
             if (value == "0")
             {
                 return true;

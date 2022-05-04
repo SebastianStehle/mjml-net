@@ -8,6 +8,7 @@ namespace Tests.Types
     {
         [Theory]
         [InlineData("0")]
+        [InlineData("0 ")]
         [InlineData("10%")]
         [InlineData("10px")]
         [InlineData("10px 20px")]
@@ -25,7 +26,6 @@ namespace Tests.Types
         [InlineData("")]
         [InlineData("2 px")]
         [InlineData("2 %")]
-        [InlineData("0 ")]
         [InlineData("0 rem")]
         [InlineData("0rem")]
         [InlineData("10 px ")]
