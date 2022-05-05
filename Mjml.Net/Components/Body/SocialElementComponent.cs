@@ -133,7 +133,7 @@
                 .Style("vertical-align", "middle")
                 .Style("width", IconSize);
 
-            if (href != null)
+            if (Href != null)
             {
                 renderer.StartElement("a")
                     .Attr("href", href)
