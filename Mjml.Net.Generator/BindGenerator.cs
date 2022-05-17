@@ -207,7 +207,7 @@ namespace Mjml.Net.Generator
                 return false;
             }
 
-            if (!IsCandidate("margin") && !IsCandidate("padding"))
+            if (!IsCandidate("margin") && !IsCandidate("padding") && !IsCandidate("border"))
             {
                 return;
             }
