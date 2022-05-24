@@ -141,7 +141,7 @@
                     .Attr("target", Target);
             }
 
-            renderer.StartElement("img") // Style img
+            renderer.StartElement("img", true) // Style img
                 .Attr("alt", Alt)
                 .Attr("height", $"{UnitParser.Parse(IconHeight ?? IconSize).Value}")
                 .Attr("sizes", Sizes)
