@@ -125,7 +125,7 @@ namespace Mjml.Net.Components.Body
 
             renderer.StartConditional("<!--[if !mso><!-->");
             {
-                renderer.StartElement("input")
+                renderer.StartElement("input", true)
                     .Attr("id", key)
                     .Attr("type", "checkbox")
                     .Class("mj-menu-checkbox")
