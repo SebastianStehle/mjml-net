@@ -205,6 +205,8 @@
                 {
                     renderer.EndElement("span");
                 }
+                
+                renderer.EndElement("td");
             }
 
             renderer.EndElement("tr");
