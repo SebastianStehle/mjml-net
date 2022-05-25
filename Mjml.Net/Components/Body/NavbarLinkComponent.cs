@@ -94,7 +94,7 @@ namespace Mjml.Net.Components.Body
                     .Style("padding-right", PaddingRight)
                     .Style("padding-top", PaddingTop);
             }
-            renderer.EndConditional("<!--<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
 
             renderer.StartElement("a") // Style a
                 .Attr("href", link)
@@ -126,7 +126,7 @@ namespace Mjml.Net.Components.Body
             {
                 renderer.EndElement("td");
             }
-            renderer.EndConditional("<!--<![endif]-->");
+            renderer.EndConditional("<![endif]-->");
         }
     }
 }
