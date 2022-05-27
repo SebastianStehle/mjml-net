@@ -9,7 +9,7 @@ namespace Mjml.Net.Components.Body
         [Bind("alt", BindType.String)]
         public string? Alt;
 
-        [Bind("border-radius", BindType.PixelsOrPercent)]
+        [Bind("border-radius", BindType.FourPixelsOrPercent)]
         public string? BorderRadius;
 
         [Bind("href", BindType.String)]
@@ -27,7 +27,7 @@ namespace Mjml.Net.Components.Body
         [Bind("tb-border", BindType.String)]
         public string? TbBorder;
 
-        [Bind("tb-border-radius", BindType.PixelsOrPercent)]
+        [Bind("tb-border-radius", BindType.FourPixelsOrPercent)]
         public string? TbBorderRadius;
 
         [Bind("tb-width", BindType.Pixels)]

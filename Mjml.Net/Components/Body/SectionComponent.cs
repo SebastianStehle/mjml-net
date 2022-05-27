@@ -77,7 +77,7 @@ namespace Mjml.Net.Components.Body
         [Bind("text-align", BindType.Align)]
         public string TextAlign = "center";
 
-        [Bind("text-padding", BindType.PixelsOrPercent)]
+        [Bind("text-padding", BindType.FourPixelsOrPercent)]
         public string TextPadding = "4px 4px 4px 0";
 
         public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)

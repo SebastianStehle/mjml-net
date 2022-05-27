@@ -30,7 +30,7 @@ namespace Mjml.Net.Components.Body
         [Bind("border-left")]
         public string? BorderLeft;
 
-        [Bind("border-radius", BindType.PixelsOrPercent)]
+        [Bind("border-radius", BindType.FourPixelsOrPercent)]
         public string? BorderRadius;
 
         [Bind("border-right")]
@@ -54,7 +54,7 @@ namespace Mjml.Net.Components.Body
         [Bind("inner-border-left")]
         public string? InnerBorderLeft;
 
-        [Bind("inner-border-radius", BindType.PixelsOrPercent)]
+        [Bind("inner-border-radius", BindType.FourPixelsOrPercent)]
         public string? InnerBorderRadius;
 
         [Bind("inner-border-right")]
