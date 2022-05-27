@@ -46,7 +46,7 @@
         [Bind("icon-height", BindType.PixelsOrPercent)]
         public string? IconHeight;
 
-        [Bind("icon-padding", BindType.PixelsOrPercent)]
+        [Bind("icon-padding", BindType.FourPixelsOrPercent)]
         public string? IconPadding;
 
         [Bind("icon-size", BindType.PixelsOrPercent)]
@@ -91,7 +91,7 @@
         [Bind("text-decoration")]
         public string TextDecoration = "none";
 
-        [Bind("text-padding", BindType.PixelsOrPercent)]
+        [Bind("text-padding", BindType.FourPixelsOrPercent)]
         public string TextPadding = "4px 4px 4px 0";
 
         [Bind("title")]

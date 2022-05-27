@@ -44,7 +44,7 @@ namespace Mjml.Net.Components.Body
         [Bind("ico-open", BindType.String)]
         public string IcoOpen = "&#9776;";
 
-        [Bind("ico-padding", BindType.PixelsOrPercent)]
+        [Bind("ico-padding", BindType.FourPixelsOrPercent)]
         public string IcoPadding = "10px";
 
         [Bind("ico-padding-bottom", BindType.PixelsOrPercent)]
