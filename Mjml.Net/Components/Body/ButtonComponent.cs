@@ -159,7 +159,6 @@ namespace Mjml.Net.Components.Body
                 .Style("font-style", FontStyle)
                 .Style("font-weight", FontWeight)
                 .Style("letter-spacing", LetterSpacing)
-                .Style("letter-spacing", LetterSpacing)
                 .Style("line-height", LineHeight)
                 .Style("margin", "0")
                 .Style("mso-padding-alt", "0px")
