@@ -164,7 +164,6 @@ namespace Mjml.Net.Components.Body
                 .Style("margin", "0")
                 .Style("mso-padding-alt", "0px")
                 .Style("padding", InnerPadding)
-                .Style("text-align", TextAlign)
                 .Style("text-decoration", TextDecoration)
                 .Style("text-transform", TextTransform)
                 .StyleOrNone("width", CalculateButtonWidth());
