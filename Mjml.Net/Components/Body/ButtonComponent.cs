@@ -68,6 +68,18 @@ namespace Mjml.Net.Components.Body
         [Bind("inner-padding", BindType.FourPixelsOrPercent)]
         public string InnerPadding = "10px 25px";
 
+        [Bind("inner-padding-bottom", BindType.PixelsOrPercent)]
+        public string? InnerPaddingBottom;
+
+        [Bind("inner-padding-left", BindType.PixelsOrPercent)]
+        public string? InnerPaddingLeft;
+
+        [Bind("inner-padding-right", BindType.PixelsOrPercent)]
+        public string? InnerPaddingRight;
+
+        [Bind("inner-padding-top", BindType.PixelsOrPercent)]
+        public string? InnerPaddingTop;
+
         [Bind("letter-spacing", BindType.Pixels)]
         public string? LetterSpacing;
 
@@ -189,8 +201,8 @@ namespace Mjml.Net.Components.Body
                 UnitParser.Parse(BorderRight).Value;
 
             var innerPadding =
-                UnitParser.Parse(PaddingLeft).Value +
-                UnitParser.Parse(PaddingRight).Value;
+                UnitParser.Parse(InnerPaddingLeft).Value +
+                UnitParser.Parse(InnerPaddingRight).Value;
 
             return widthParsed.Value - innerPadding - borders;
         }
