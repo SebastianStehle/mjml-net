@@ -177,7 +177,7 @@ namespace Mjml.Net.Components.Body
                 .Style("padding", InnerPadding)
                 .Style("text-decoration", TextDecoration)
                 .Style("text-transform", TextTransform)
-                .StyleOrNone("width", CalculateButtonWidth());
+                .StyleIfNumber("width", CalculateButtonWidth(), "px");
 
             RenderRaw(renderer);
 

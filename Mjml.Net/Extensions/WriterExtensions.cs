@@ -22,7 +22,7 @@
             return renderer;
         }
 
-        public static IHtmlStyleRenderer StyleOrNone(this IHtmlStyleRenderer renderer, string name, double value)
+        public static IHtmlStyleRenderer StyleIfNumber(this IHtmlStyleRenderer renderer, string name, double value, string unit)
         {
             if (double.IsNaN(value))
             {
@@ -30,7 +30,7 @@
             }
             else
             {
-                return renderer.Style(name, $"{value}px");
+                return renderer.Style(name, $"{value}{unit}");
             }
         }
 
