@@ -179,7 +179,7 @@
                         .Style("font-family", FontFamily)
                         .Style("font-size", FontSize)
                         .Style("font-style", FontStyle)
-                        .Style("font-weigh", FontWeight)
+                        .Style("font-weight", FontWeight)
                         .Style("line-height", LineHeight)
                         .Style("text-decoration", TextDecoration);
                 }
@@ -190,7 +190,7 @@
                         .Style("font-family", FontFamily)
                         .Style("font-size", FontSize)
                         .Style("font-style", FontStyle)
-                        .Style("font-weigh", FontWeight)
+                        .Style("font-weight", FontWeight)
                         .Style("line-height", LineHeight)
                         .Style("text-decoration", TextDecoration);
                 }
