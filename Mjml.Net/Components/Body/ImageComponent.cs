@@ -158,8 +158,7 @@ namespace Mjml.Net.Components.Body
                   .Attr("href", Href)
                   .Attr("name", Name)
                   .Attr("rel", Rel)
-                  .Attr("target", Target)
-                  .Attr("title", Title);
+                  .Attr("target", Target);
 
                 RenderImage(renderer, isFullWidth);
 
