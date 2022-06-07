@@ -37,19 +37,19 @@ namespace Mjml.Net
 
             var f = new string(unitSpan);
 
-            if (unitSpan.SequenceEqual("px"))
+            if (unitSpan.StartsWith("px", StringComparison.OrdinalIgnoreCase))
             {
                 unitType = Unit.Pixels;
             }
-            else if (unitSpan.SequenceEqual("%"))
+            else if (unitSpan.StartsWith("%", StringComparison.OrdinalIgnoreCase))
             {
                 unitType = Unit.Percent;
             }
-            else if (unitSpan.SequenceEqual("em"))
+            else if (unitSpan.StartsWith("em", StringComparison.OrdinalIgnoreCase))
             {
                 unitType = Unit.Em;
             }
-            else if (unitSpan.SequenceEqual("rem"))
+            else if (unitSpan.StartsWith("rem", StringComparison.OrdinalIgnoreCase))
             {
                 unitType = Unit.Rem;
             }

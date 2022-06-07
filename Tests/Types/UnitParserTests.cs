@@ -52,7 +52,7 @@ namespace Tests.Types
         [Theory]
         [InlineData("100px")]
         [InlineData("100px ")]
-        public void Should_parse_without_pixels(string value)
+        public void Should_parse_with_pixels(string value)
         {
             var result = UnitParser.Parse(value);
 
@@ -62,11 +62,21 @@ namespace Tests.Types
         [Theory]
         [InlineData("54.3%")]
         [InlineData("54.3% ")]
-        public void Should_parse_without_percentage(string value)
+        public void Should_parse_with_percentage(string value)
         {
             var result = UnitParser.Parse(value);
 
             Assert.Equal((54.3, Unit.Percent), result);
+        }
+
+        [Theory]
+        [InlineData("100px solid black")]
+        [InlineData("100px solid black  ")]
+        public void Should_parse_as_border(string value)
+        {
+            var result = UnitParser.Parse(value);
+
+            Assert.Equal((100, Unit.Pixels), result);
         }
     }
 }

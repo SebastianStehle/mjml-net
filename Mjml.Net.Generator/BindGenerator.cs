@@ -228,7 +228,16 @@ namespace Mjml.Net.Generator
 
             source.AppendLine($"if ({fieldName} != null && ({fieldName}Top == null || {fieldName}Right == null || {fieldName}Bottom == null || {fieldName}Left == null))");
             source.AppendLine("{").MoveIn();
-            source.AppendLine($"var (t, r, b, l) = BindingHelper.ParseShorthandValue({fieldName});");
+
+            if (attribute == "border")
+            {
+                source.AppendLine($"var (t, r, b, l) = BindingHelper.ParseShorthandBorder({fieldName});");
+            }
+            else
+            {
+                source.AppendLine($"var (t, r, b, l) = BindingHelper.ParseShorthandValue({fieldName});");
+            }
+
             source.AppendLine();
             source.AppendLine($"if ({fieldName}Top == null)");
             source.AppendLine("{").MoveIn();

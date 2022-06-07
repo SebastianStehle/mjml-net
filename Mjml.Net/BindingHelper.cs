@@ -2,6 +2,16 @@
 {
     public static class BindingHelper
     {
+        public static (string?, string?, string?, string?) ParseShorthandBorder(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return (null, null, null, null);
+            }
+
+            return (value, value, value, value);
+        }
+
         public static (string?, string?, string?, string?) ParseShorthandValue(string value)
         {
             if (string.IsNullOrEmpty(value))
