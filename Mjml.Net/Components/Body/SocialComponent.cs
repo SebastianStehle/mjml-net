@@ -185,6 +185,8 @@
                     return FontSize;
                 case "font-style":
                     return FontStyle;
+                case "font-weight":
+                    return FontWeight;
                 case "icon-height":
                     return IconHeight;
                 case "icon-padding":
@@ -192,7 +194,7 @@
                 case "icon-size":
                     return IconSize;
                 case "line-height":
-                    return IconHeight;
+                    return LineHeight;
                 case "text-padding":
                     return TextPadding;
                 case "text-decoration":
