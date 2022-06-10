@@ -118,8 +118,8 @@ namespace Mjml.Net.Components.Body
             }
 
             var allPaddings =
-                UnitParser.Parse(PaddingTop).Value +
-                UnitParser.Parse(PaddingBottom).Value +
+                UnitParser.Parse(PaddingLeft).Value +
+                UnitParser.Parse(PaddingRight).Value +
                 UnitParser.Parse(BorderLeft).Value +
                 UnitParser.Parse(BorderRight).Value +
                 UnitParser.Parse(InnerBorderLeft).Value +
