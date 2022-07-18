@@ -193,6 +193,8 @@
                     return IconPadding;
                 case "icon-size":
                     return IconSize;
+                case "padding":
+                    return InnerPadding;
                 case "line-height":
                     return LineHeight;
                 case "text-padding":
