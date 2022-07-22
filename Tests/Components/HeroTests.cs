@@ -19,6 +19,19 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_hero_without_width_unit()
+        {
+            var source = @"
+<mj-hero width=""500"">
+</mj-hero>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Hero.html", result);
+        }
+
+        [Fact]
         public void Should_render_hero_with_child()
         {
             var source = @"

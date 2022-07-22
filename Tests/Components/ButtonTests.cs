@@ -74,5 +74,19 @@ namespace Tests.Components
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonMixedContent2.html", result);
         }
+
+        [Fact]
+        public void Should_render_button_without_width_unit()
+        {
+            var source = @"
+<mj-button width=""500"">
+    Button
+</mj-button>
+";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonWithoutWidthUnit.html", result);
+        }
     }
 }

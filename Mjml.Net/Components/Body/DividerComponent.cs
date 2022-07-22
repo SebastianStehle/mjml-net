@@ -112,7 +112,7 @@ namespace Mjml.Net.Components.Body
                 UnitParser.Parse(PaddingLeft).Value +
                 UnitParser.Parse(PaddingRight).Value;
 
-            var (width, unit) = UnitParser.Parse(Width);
+            var (width, unit) = UnitParser.Parse(Width, Unit.Pixels);
 
             switch (unit)
             {

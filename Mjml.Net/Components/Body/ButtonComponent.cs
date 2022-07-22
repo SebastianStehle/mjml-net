@@ -189,7 +189,7 @@ namespace Mjml.Net.Components.Body
 
         private double CalculateButtonWidth()
         {
-            var widthParsed = UnitParser.Parse(Width);
+            var widthParsed = UnitParser.Parse(Width, Unit.Pixels);
 
             if (widthParsed.Value <= 0 || widthParsed.Unit != Unit.Pixels)
             {

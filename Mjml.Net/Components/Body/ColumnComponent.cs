@@ -97,7 +97,7 @@ namespace Mjml.Net.Components.Body
 
             if (Width != null)
             {
-                (widthValue, widthUnit) = UnitParser.Parse(Width);
+                (widthValue, widthUnit) = UnitParser.Parse(Width, Unit.Pixels);
 
                 widthString = Width;
             }
