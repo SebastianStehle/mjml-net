@@ -49,6 +49,28 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_font_with_last_class_attribute()
+        {
+            var source = @"
+<mjml-test body=""false"">
+  <mj-head>
+    <mj-attributes>
+      <mj-class name=""red"" href=""https://fonts.googleapis.com/css?family=Mono"" />
+      <mj-class name=""blue"" href=""https://fonts.googleapis.com/css?family=Raleway"" />
+    </mj-attributes>
+    <mj-font mj-class=""red blue"" />
+  </mj-head>
+  <mj-body>
+  </mj-body>
+</mjml-test>
+";
+
+            var result = TestHelper.Render(source, new FontHelper());
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+        }
+
+        [Fact]
         public void Should_render_font_with_multiple_attributes()
         {
             var source = @"

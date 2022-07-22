@@ -57,15 +57,23 @@
                     }
                 }
 
+                string? classAttribute = null;
+
+                // Loop over all classes and use the last match.
                 foreach (var className in currentClasses)
                 {
                     if (context.AttributesByClass.TryGetValue(className, out var byName))
                     {
                         if (byName.TryGetValue(name, out attribute))
                         {
-                            return attribute;
+                            classAttribute = attribute;
                         }
                     }
+                }
+
+                if (classAttribute != null)
+                {
+                    return classAttribute;
                 }
             }
 
