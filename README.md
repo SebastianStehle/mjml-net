@@ -242,4 +242,3 @@ Once again, it's good to share some appreciation to the projects that make `MJML
 
 - [MJML](https://github.com/mjmlio/mjml)
 - [MJML.NET V1](https://github.com/LiamRiddell/MJML.NET)
-- [AngleSharp](https://github.com/AngleSharp/AngleSharp)
