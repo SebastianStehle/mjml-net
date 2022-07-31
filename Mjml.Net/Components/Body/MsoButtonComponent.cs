@@ -5,19 +5,6 @@ namespace Mjml.Net.Components.Body
 {
     public partial class MsoButtonComponent : ButtonComponent
     {
-        private Dictionary<string, string> BorderstyleAdapter = new()
-        {
-            { "solid", "Solid" },
-            { "dotted", "Dot" },
-            { "dashed", "Dash" },
-            { "double", "Solid" },
-            { "groove", "Solid" },
-            { "ridge", "Solid" },
-            { "inset", "Solid" },
-            { "outset", "Solid" },
-            { "none", "Solid" },
-            { "hidden", "Solid" }
-        };
         public override string ComponentName => "mj-msobutton";
 
         [Bind("mso-proof", BindType.Boolean)]
@@ -31,7 +18,7 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var isMsoProof = MsoProof == "true";
+            var isMsoProof = string.Equals(MsoProof, "true", StringComparison.OrdinalIgnoreCase);
             if (isMsoProof)
             {
                 RenderMso(renderer);
@@ -49,18 +36,17 @@ namespace Mjml.Net.Components.Body
 
         private void RenderMso(IHtmlRenderer renderer)
         {
-            var borderAttributes = new[] { "0pt", "Solid", "#000000" };
+            var borderWeight = "0pt";
+            var borderStyle = "Solid";
+            var borderColor = "#000000";
             var stroked = Border != "none";
-            var hasBackgroundColor = !string.IsNullOrEmpty(BackgroundColor) && BackgroundColor != "none";
+            var hasBackgroundColor = !string.IsNullOrWhiteSpace(BackgroundColor) && BackgroundColor != "none";
             if (stroked)
             {
                 var border = Border.Split(" ");
-                borderAttributes = new[]
-                {
-                    border.Length > 0 ? border[0] : borderAttributes[0],
-                    border.Length > 1 ? BorderstyleAdapter[border[1]] : borderAttributes[1],
-                    border.Length == 3 ? border[2] : borderAttributes[2],
-                };
+                borderWeight = border.Length > 0 ? border[0] : borderWeight;
+                borderStyle = border.Length > 1 ? AdaptBorderStyle(border[1]) : borderStyle;
+                borderColor = border.Length == 3 ? border[2] : borderColor;
             }
 
             renderer.Content("<!--[if mso]>");
@@ -88,8 +74,8 @@ namespace Mjml.Net.Components.Body
                     .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                     .Attr("xmlns:w", "urn:schemas-microsoft-com:office:word")
                     .Attr("fill", hasBackgroundColor ? "t" : "f")
-                    .Attr("strokeweight", stroked ? borderAttributes[0] : "0pt")
-                    .Attr("strokecolor", borderAttributes[2])
+                    .Attr("strokeweight", borderWeight)
+                    .Attr("strokecolor", borderColor)
                     .Attr("stroked", stroked ? "t" : "f")
                     .Attr("arcsize", CalculateArcsize())
                     .Attr("href", Href)
@@ -101,7 +87,7 @@ namespace Mjml.Net.Components.Body
                 if (stroked)
                 {
                     renderer.StartElement("v:stroke", true)
-                        .Attr("dashstyle", borderAttributes[1]);
+                        .Attr("dashstyle", borderStyle);
                 }
 
                 if (hasBackgroundColor)
@@ -139,15 +125,30 @@ namespace Mjml.Net.Components.Body
 
             if (radius.Unit == Unit.Pixels)
             {
-                const string defaultArcsize = "8%";
                 var height = UnitParser.Parse(MsoHeight ?? Height);
-                var percent = Math.Round(radius.Value / height.Value * 100, MidpointRounding.AwayFromZero);
-                return radius.Value > height.Value ? defaultArcsize : $"{percent}%";
+                var arcsize = ConvertBorderRadiusToArcsize(height.Value, radius.Value);
+                return $"{arcsize}%";
             }
 
             return string.Empty;
         }
 
+        private static string AdaptBorderStyle(string cssBorderStyle)
+        {
+            return cssBorderStyle switch
+            {
+                "dotted" => "Dot",
+                "dashed" => "Dash",
+                _ => "Solid"
+            };
+        }
 
+        private static double ConvertBorderRadiusToArcsize(double boxHeight, double borderRadius)
+        {
+            const double defaultArcsize = 8;
+            return borderRadius > boxHeight
+                ? defaultArcsize
+                : Math.Round(borderRadius / boxHeight * 100, MidpointRounding.AwayFromZero);
+        }
     }
 }
