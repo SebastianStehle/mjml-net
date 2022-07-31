@@ -43,6 +43,13 @@
                 return attribute;
             }
 
+            var inherited = parent?.GetInheritingAttribute(name);
+
+            if (inherited != null)
+            {
+                return inherited;
+            }
+
             if (context.AttributesByClass.Count > 0)
             {
                 if (currentClasses == null)
@@ -87,16 +94,6 @@
                 if (byType.TryGetValue(Constants.All, out attribute))
                 {
                     return attribute;
-                }
-            }
-
-            if (parent != null)
-            {
-                var inherited = parent.GetInheritingAttribute(name);
-
-                if (inherited != null)
-                {
-                    return inherited;
                 }
             }
 
