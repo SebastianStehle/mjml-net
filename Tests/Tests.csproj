@@ -123,6 +123,8 @@
     <EmbeddedResource Include="Components\Outputs\Comments.html" />
     <EmbeddedResource Include="Components\Outputs\DividerWithoutWidthUnit.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
+    <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
+    <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
     <EmbeddedResource Include="Components\Outputs\TablePercent.html" />

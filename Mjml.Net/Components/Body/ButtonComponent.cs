@@ -127,8 +127,6 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var buttonHtmlTag = !string.IsNullOrEmpty(Href) ? "a" : "p";
-
             renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
@@ -157,6 +155,17 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", TextAlign)
                 .Style("background", BackgroundColor);
 
+            RenderButton(renderer);
+
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
+        }
+
+        protected void RenderButton(IHtmlRenderer renderer)
+        {
+            var buttonHtmlTag = !string.IsNullOrEmpty(Href) ? "a" : "p";
+
             renderer.StartElement(buttonHtmlTag)
                 .Attr("href", Href)
                 .Attr("rel", Rel)
@@ -182,9 +191,6 @@ namespace Mjml.Net.Components.Body
             RenderRaw(renderer);
 
             renderer.EndElement(buttonHtmlTag);
-            renderer.EndElement("td");
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
         }
 
         private double CalculateButtonWidth()
