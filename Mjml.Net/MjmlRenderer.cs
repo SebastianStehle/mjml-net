@@ -62,6 +62,7 @@ namespace Mjml.Net
             Add<HeadComponent>();
             Add<HeroComponent>();
             Add<ImageComponent>();
+            Add<MsoButtonComponent>();
             Add<NavbarComponent>();
             Add<NavbarLinkComponent>();
             Add<PreviewComponent>();
