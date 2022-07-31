@@ -8,6 +8,6 @@
     <PackageProjectUrl>https://github.com/SebastianStehle/mjml-net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SebastianStehle/mjml-net.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
   </PropertyGroup>
 </Project>
