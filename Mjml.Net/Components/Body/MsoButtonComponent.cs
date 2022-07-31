@@ -1,7 +1,4 @@
-﻿using Mjml.Net.Extensions;
-using Mjml.Net.Types;
-
-namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body
 {
     public partial class MsoButtonComponent : ButtonComponent
     {
@@ -19,9 +16,11 @@ namespace Mjml.Net.Components.Body
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
             var isMsoProof = string.Equals(MsoProof, "true", StringComparison.OrdinalIgnoreCase);
+
             if (isMsoProof)
             {
                 RenderMso(renderer);
+
                 renderer.Content("<!--[if !mso]><!-->");
                 {
                     base.Render(renderer, context);
@@ -41,9 +40,11 @@ namespace Mjml.Net.Components.Body
             var borderColor = "#000000";
             var stroked = Border != "none";
             var hasBackgroundColor = !string.IsNullOrWhiteSpace(BackgroundColor) && BackgroundColor != "none";
+
             if (stroked)
             {
                 var border = Border.Split(" ");
+
                 borderWeight = border.Length > 0 ? border[0] : borderWeight;
                 borderStyle = border.Length > 1 ? AdaptBorderStyle(border[1]) : borderStyle;
                 borderColor = border.Length == 3 ? border[2] : borderColor;
@@ -52,6 +53,7 @@ namespace Mjml.Net.Components.Body
             renderer.Content("<!--[if mso]>");
             {
                 renderer.StartElement("tr");
+
                 renderer.StartElement("td")
                     .Attr("align", Align)
                     .Attr("bgcolor", BackgroundColor)
@@ -113,6 +115,7 @@ namespace Mjml.Net.Components.Body
         private string CalculateArcsize()
         {
             var radius = UnitParser.Parse(BorderRadius);
+
             if (radius.Value <= 0)
             {
                 return string.Empty;
@@ -127,6 +130,7 @@ namespace Mjml.Net.Components.Body
             {
                 var height = UnitParser.Parse(MsoHeight ?? Height);
                 var arcsize = ConvertBorderRadiusToArcsize(height.Value, radius.Value);
+
                 return $"{arcsize}%";
             }
 
@@ -146,6 +150,7 @@ namespace Mjml.Net.Components.Body
         private static double ConvertBorderRadiusToArcsize(double boxHeight, double borderRadius)
         {
             const double defaultArcsize = 8;
+
             return borderRadius > boxHeight
                 ? defaultArcsize
                 : Math.Round(borderRadius / boxHeight * 100, MidpointRounding.AwayFromZero);
