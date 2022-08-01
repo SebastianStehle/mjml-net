@@ -52,26 +52,7 @@
 
             renderer.Content("<!--[if mso]>");
             {
-                renderer.StartElement("tr");
-
-                renderer.StartElement("td")
-                    .Attr("align", Align)
-                    .Attr("bgcolor", BackgroundColor)
-                    .Attr("role", "presentation")
-                    .Attr("valign", VerticalAlign)
-                    .Style("border", Border)
-                    .Style("border-bottom", BorderBottom)
-                    .Style("border-left", BorderLeft)
-                    .Style("border-right", BorderRight)
-                    .Style("border-top", BorderTop)
-                    .Style("border-radius", BorderRadius)
-                    .Style("cursor", "auto")
-                    .Style("font-style", FontStyle)
-                    .Style("height", Height)
-                    .Style("mso-padding-alt", InnerPadding)
-                    .Style("text-align", TextAlign)
-                    .Style("background", BackgroundColor);
-
+                renderer.StartElement("div");
                 renderer.StartElement("v:roundrect")
                     .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                     .Attr("xmlns:w", "urn:schemas-microsoft-com:office:word")
@@ -105,9 +86,7 @@
 
                 renderer.EndElement("center");
                 renderer.EndElement("v:roundrect");
-
-                renderer.EndElement("td");
-                renderer.EndElement("tr");
+                renderer.EndElement("div");
             }
             renderer.Content("<![endif]-->");
         }
