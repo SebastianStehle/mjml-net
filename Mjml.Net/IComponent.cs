@@ -30,7 +30,7 @@ namespace Mjml.Net
 
         void AddChild(string rawXml);
 
-        void AfterBind(GlobalContext context, XmlReader reader);
+        void AfterBind(GlobalContext context, XmlReader reader, IXmlReader xmlReader);
 
         void Render(IHtmlRenderer renderer, GlobalContext context);
 

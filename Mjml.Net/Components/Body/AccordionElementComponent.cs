@@ -47,7 +47,7 @@ namespace Mjml.Net.Components.Body
         [Bind("icon-wrapped-url", BindType.String)]
         public string? IconWrappedUrl;
 
-        public override void AfterBind(GlobalContext context, XmlReader reader)
+        public override void AfterBind(GlobalContext context, XmlReader reader, IXmlReader xmlReader)
         {
             Binder? binder = null;
 

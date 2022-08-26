@@ -83,5 +83,10 @@ namespace Mjml.Net
         /// The current validator.
         /// </summary>
         public IValidatorFactory? ValidatorFactory { get; init; }
+
+        /// <summary>
+        /// The loader for included texts.
+        /// </summary>
+        public IFileLoader? FileLoader { get; init; }
     }
 }

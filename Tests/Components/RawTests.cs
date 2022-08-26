@@ -59,8 +59,8 @@ Hello MJML"
                 @"
 <div>
     <table>
-    <button type=""submit"">Submit1</button>
-    <button type=""submit"">Submit2</button>
+        <button type=""submit"">Submit1</button>
+        <button type=""submit"">Submit2</button>
     </table>
 </div>"
             };

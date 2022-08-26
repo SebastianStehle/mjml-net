@@ -4,7 +4,7 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext
+    public sealed partial class MjmlRenderContext : IXmlReader
     {
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
@@ -26,16 +26,15 @@ namespace Mjml.Net
 
         public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
         {
-            this.mjmlRenderer = mjmlRenderer;
-
             // Just for convience.
-            this.mjmlOptions = mjmlOptions ?? new MjmlOptions();
+            this.mjmlRenderer = mjmlRenderer;
+            this.mjmlOptions = mjmlOptions ??= new MjmlOptions();
 
             // We have to create a new instance each time, because it could another factory.
-            validator = this.mjmlOptions.ValidatorFactory?.Create();
+            validator = mjmlOptions.ValidatorFactory?.Create();
 
             // Reuse the context and therefore do not set them over the constructor.
-            context.SetOptions(this.mjmlOptions);
+            context.SetOptions(mjmlOptions);
         }
 
         internal void Clear()
@@ -53,14 +52,17 @@ namespace Mjml.Net
             return validator?.Complete() ?? new ValidationErrors();
         }
 
-        public void Read(XmlReader reader)
+        public void ReadFragment(XmlReader reader, IComponent? parent)
         {
             while (reader.Read())
             {
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, null);
+                        ReadElement(reader.Name, reader, parent);
+                        break;
+                    case XmlNodeType.Comment when mjmlOptions.KeepComments && parent != null:
+                        ReadComment(reader, parent);
                         break;
                 }
             }
@@ -165,21 +167,10 @@ namespace Mjml.Net
             }
             else
             {
-                while (reader.Read())
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            ReadElement(reader.Name, reader, component);
-                            break;
-                        case XmlNodeType.Comment when mjmlOptions.KeepComments:
-                            ReadComment(reader, component);
-                            break;
-                    }
-                }
+                ReadFragment(reader, component);
             }
 
-            component.AfterBind(context, reader);
+            component.AfterBind(context, reader, this);
 
             reader.Close();
 
