@@ -10,24 +10,6 @@ namespace Tests.Internal
     /// </remarks>
     public sealed class InMemoryFileLoader : Dictionary<string, string?>, IFileLoader
     {
-        /// <summary>
-        /// Adds the content.
-        /// </summary>
-        /// <param name="path">The path to the file.</param>
-        /// <param name="content">The file content.</param>
-        /// <returns>The current instance.</returns>
-        public InMemoryFileLoader AddContent(string path, string? content)
-        {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-
-            this[path] = content;
-
-            return this;
-        }
-
         /// <inheritdoc />
         public bool ContainsFile(string path)
         {
