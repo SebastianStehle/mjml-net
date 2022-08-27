@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Generator
 {
-    public class SourceWriter
+    public sealed class SourceWriter
     {
         private readonly StringBuilder sb = new StringBuilder();
         private int indent;

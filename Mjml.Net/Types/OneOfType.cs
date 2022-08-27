@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Types
 {
-    public sealed class OneOfType : IType
+    public class OneOfType : IType
     {
         private readonly IType[] units;
 
@@ -9,9 +9,17 @@
             this.units = units;
         }
 
-        public bool Validate(string value)
+        public bool Validate(string value, ref ValidationContext context)
         {
-            return units.Any(x => x.Validate(value));
+            foreach (var unit in units)
+            {
+                if (unit.Validate(value, ref context))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

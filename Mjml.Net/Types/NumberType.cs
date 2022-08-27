@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Types
 {
-    public sealed class NumberType : IType
+    public class NumberType : IType
     {
         private readonly Unit[] units;
 
@@ -9,7 +9,7 @@
             this.units = units;
         }
 
-        public bool Validate(string value)
+        public bool Validate(string value, ref ValidationContext context)
         {
             var trimmed = value.AsSpan().Trim();
 

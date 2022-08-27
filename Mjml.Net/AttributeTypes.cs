@@ -4,21 +4,23 @@ namespace Mjml.Net
 {
     public static class AttributeTypes
     {
-        public static readonly IType Align = new EnumType("left", "center", "right");
+        public static readonly IType Align = new EnumType(false, "left", "center", "right");
 
-        public static readonly IType AlignJustify = new EnumType("left", "center", "right", "justify");
+        public static readonly IType AlignJustify = new EnumType(false, "left", "center", "right", "justify");
 
-        public static readonly IType Boolean = new EnumType("true", "false");
+        public static readonly IType Boolean = new EnumType(false, "true", "false");
 
         public static readonly IType Color = new ColorType();
 
-        public static readonly IType Direction = new EnumType("ltr", "rtl");
+        public static readonly IType Direction = new EnumType(false, "ltr", "rtl");
 
-        public static readonly IType LeftRight = new EnumType("left", "right");
+        public static readonly IType LeftRight = new EnumType(false, "left", "right");
+
+        public static readonly IType IncludeType = new EnumType(true, "mjml", "html", "css");
 
         public static readonly IType Pixels = new NumberType(Unit.Pixels);
 
-        public static readonly IType PixelsOrAuto = new OneOfType(new EnumType("auto"), Pixels);
+        public static readonly IType PixelsOrAuto = new OneOfType(new EnumType(false, "auto"), Pixels);
 
         public static readonly IType PixelsOrEm = new NumberType(Unit.Pixels, Unit.Em);
 
@@ -30,10 +32,10 @@ namespace Mjml.Net
 
         public static readonly IType String = new StringType();
 
-        public static readonly IType VerticalAlign = new EnumType("top", "middle", "bottom");
+        public static readonly IType VerticalAlign = new EnumType(false, "top", "middle", "bottom");
 
-        public static readonly IType SocialTableLayout = new EnumType("auto", "fixed");
+        public static readonly IType SocialTableLayout = new EnumType(false, "auto", "fixed");
 
-        public static readonly IType SocialMode = new EnumType("vertical", "horizontal");
+        public static readonly IType SocialMode = new EnumType(false, "vertical", "horizontal");
     }
 }

@@ -10,6 +10,7 @@ namespace Mjml.Net
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
+        private ValidationContext validationContext;
         private MjmlOptions mjmlOptions;
         private MjmlRenderer mjmlRenderer;
         private IValidator? validator;
@@ -36,6 +37,8 @@ namespace Mjml.Net
 
             // Reuse the context and therefore do not set them over the constructor.
             context.SetOptions(mjmlOptions);
+
+            validationContext.Options = mjmlOptions;
         }
 
         internal void Clear()
@@ -110,9 +113,10 @@ namespace Mjml.Net
 
             binder.Clear(parent, component.ComponentName);
 
-            validator?.BeforeComponent(component,
-                currentLine,
-                currentColumn);
+            validationContext.XmlLine = currentLine;
+            validationContext.XmlColumn = currentColumn;
+
+            validator?.BeforeComponent(component, ref validationContext);
 
             reader.Read();
 
@@ -125,9 +129,10 @@ namespace Mjml.Net
 
                 binder.SetAttribute(attributeName, attributeValue);
 
-                validator?.Attribute(attributeName, attributeValue, component,
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                validationContext.XmlLine = CurrentLine(reader);
+                validationContext.XmlColumn = CurrentColumn(reader);
+
+                validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
             }
 
             if (component.ContentType == ContentType.Text)
@@ -200,9 +205,10 @@ namespace Mjml.Net
                 component.Render(this, context);
             }
 
-            validator?.AfterComponent(component,
-                currentLine,
-                currentColumn);
+            validationContext.XmlLine = currentLine;
+            validationContext.XmlColumn = currentColumn;
+
+            validator?.AfterComponent(component, ref validationContext);
         }
 
         private static void ReadComment(XmlReader reader, IComponent parent)
