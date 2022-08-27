@@ -17,7 +17,9 @@ namespace Tests.Types
         [InlineData(" 10px")]
         public void Should_validate_valid_values(string value)
         {
-            var isValid = new NumberType(Unit.Percent, Unit.Pixels).Validate(value);
+            var context = default(ValidationContext);
+
+            var isValid = new NumberType(Unit.Percent, Unit.Pixels).Validate(value, ref context);
 
             Assert.True(isValid);
         }
@@ -31,7 +33,9 @@ namespace Tests.Types
         [InlineData("10 px ")]
         public void Should_validate_invalid_values(string value)
         {
-            var isValid = new NumberType(Unit.Percent, Unit.Pixels).Validate(value);
+            var context = default(ValidationContext);
+
+            var isValid = new NumberType(Unit.Percent, Unit.Pixels).Validate(value, ref context);
 
             Assert.False(isValid);
         }

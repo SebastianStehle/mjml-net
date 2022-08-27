@@ -19,7 +19,9 @@ namespace Tests.Types
         [InlineData("red ")]
         public void Should_validate_valid_values(string value)
         {
-            var isValid = AttributeTypes.Color.Validate(value);
+            var context = default(ValidationContext);
+
+            var isValid = AttributeTypes.Color.Validate(value, ref context);
 
             Assert.True(isValid);
         }

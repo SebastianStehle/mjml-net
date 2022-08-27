@@ -26,6 +26,8 @@ namespace Mjml.Net
 
             attributesByClass.Clear();
             attributesByName.Clear();
+
+            Options = null!;
         }
 
         public void SetGlobalData(string name, object? value, bool doNotOverride = false)

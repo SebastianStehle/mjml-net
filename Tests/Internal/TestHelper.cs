@@ -14,6 +14,11 @@ namespace Tests.Internal
 
         public static string Render(string source, params IHelper[] helpers)
         {
+            return Render(source, null, helpers);
+        }
+
+        public static string Render(string source, MjmlOptions? options, params IHelper[] helpers)
+        {
             var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
 
             foreach (var helper in helpers)
@@ -21,7 +26,7 @@ namespace Tests.Internal
                 renderer.Add(helper);
             }
 
-            return renderer.Render(source, BuildOptions(null)).Html;
+            return renderer.Render(source, BuildOptions(options)).Html;
         }
 
         private static MjmlOptions BuildOptions(MjmlOptions? options)

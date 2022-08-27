@@ -162,7 +162,7 @@ namespace Mjml.Net.Types
         private static readonly Regex Rgb = new Regex(@"^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         private static readonly Regex Hex = new Regex(@"^#([0-9a-fA-F]{3}){1,2}?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
-        public bool Validate(string value)
+        public bool Validate(string value, ref ValidationContext context)
         {
             // Unfortunately we cannot avoid the allocation here, but it is only necessary in strict validation mode.
             var trimmed = value.Trim();
