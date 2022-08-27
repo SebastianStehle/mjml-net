@@ -252,7 +252,7 @@ namespace Mjml.Net
             {
                 context.Setup(this, options ?? new MjmlOptions());
                 context.StartBuffer();
-                context.ReadFragment(xml, null);
+                context.ReadXml(xml, null);
 
                 StringBuilder? buffer = null;
                 try

@@ -4,14 +4,16 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext : IXmlReader
+    public sealed partial class MjmlRenderContext : IMjmlReader
     {
+        private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment };
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
         private MjmlOptions mjmlOptions;
         private MjmlRenderer mjmlRenderer;
         private IValidator? validator;
+        private IComponent? currentComponent;
 
         public MjmlRenderContext()
         {
@@ -26,7 +28,6 @@ namespace Mjml.Net
 
         public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
         {
-            // Just for convience.
             this.mjmlRenderer = mjmlRenderer;
             this.mjmlOptions = mjmlOptions ??= new MjmlOptions();
 
@@ -52,7 +53,23 @@ namespace Mjml.Net
             return validator?.Complete() ?? new ValidationErrors();
         }
 
-        public void ReadFragment(XmlReader reader, IComponent? parent)
+        public void ReadFragment(TextReader mjml)
+        {
+            using (var xml = XmlReader.Create(mjml, ReaderSettings))
+            {
+                ReadXml(xml, currentComponent);
+            }
+        }
+
+        public void ReadFragment(string mjml)
+        {
+            using (var xml = XmlReader.Create(new StringReader(mjml), ReaderSettings))
+            {
+                ReadXml(xml, currentComponent);
+            }
+        }
+
+        public void ReadXml(XmlReader reader, IComponent? parent)
         {
             while (reader.Read())
             {
@@ -167,8 +184,11 @@ namespace Mjml.Net
             }
             else
             {
-                ReadFragment(reader, component);
+                ReadXml(reader, component);
             }
+
+            // Assign the current component, in case we read fragments.
+            currentComponent = component;
 
             component.AfterBind(context, reader, this);
 

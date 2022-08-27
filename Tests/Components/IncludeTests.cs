@@ -10,7 +10,7 @@ namespace Tests.Components
         [Fact]
         public void Should_include_css()
         {
-            var files = new DictionaryFileLoader
+            var files = new InMemoryFileLoader
             {
                 ["./style.css"] = @"
 .red-text div {
@@ -36,7 +36,7 @@ namespace Tests.Components
         [Fact]
         public void Should_include_mjml_fragments()
         {
-            var files = new DictionaryFileLoader
+            var files = new InMemoryFileLoader
             {
                 ["./text.mjml"] = @"
 <mj-group>
@@ -61,7 +61,7 @@ namespace Tests.Components
         [Fact]
         public void Should_include_mjml()
         {
-            var files = new DictionaryFileLoader
+            var files = new InMemoryFileLoader
             {
                 ["./text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
             };
@@ -80,7 +80,7 @@ namespace Tests.Components
         [Fact]
         public void Should_include_html()
         {
-            var files = new DictionaryFileLoader
+            var files = new InMemoryFileLoader
             {
                 ["./text.html"] = @"<strong>Hello</strong> <strong>MJML</strong"
             };

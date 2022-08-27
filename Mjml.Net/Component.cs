@@ -109,7 +109,7 @@ namespace Mjml.Net
         {
         }
 
-        public virtual void AfterBind(GlobalContext context, XmlReader reader, IXmlReader xmlReader)
+        public virtual void AfterBind(GlobalContext context, XmlReader reader, IMjmlReader mjmlReader)
         {
         }
 
