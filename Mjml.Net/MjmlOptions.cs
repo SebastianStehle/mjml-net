@@ -85,7 +85,7 @@ namespace Mjml.Net
         public IValidatorFactory? ValidatorFactory { get; init; }
 
         /// <summary>
-        /// The loader for included texts.
+        /// The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute.
         /// </summary>
         public IFileLoader? FileLoader { get; init; }
     }
