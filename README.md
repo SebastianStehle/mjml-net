@@ -94,7 +94,7 @@ You can also specify options to the MJML parser.
 | Core | [mjml](https://documentation.mjml.io/#mjml)                             | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Core | [mj-head](https://documentation.mjml.io/#mj-head)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Core | [mj-body](https://documentation.mjml.io/#mj-body)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Core | [mj-include](https://documentation.mjml.io/#mj-include)                 | :x:                | :x:                | Not Planned      |
+| Core | [mj-include](https://documentation.mjml.io/#mj-include)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-attributes](https://documentation.mjml.io/#mj-attributes)           | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | `mj-class`                                                              | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | `mj-all`                                                                | :white_check_mark: | :white_check_mark: | Feature Complete |
