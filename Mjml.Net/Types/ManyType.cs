@@ -24,7 +24,7 @@
 
             foreach (var part in parts)
             {
-                if (!unit.Validate(value, ref context))
+                if (!unit.Validate(part, ref context))
                 {
                     return false;
                 }
