@@ -6,7 +6,11 @@ namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : IMjmlReader
     {
-        private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment };
+        private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
+        {
+            ConformanceLevel = ConformanceLevel.Fragment,
+            DtdProcessing = DtdProcessing.Ignore
+        };
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
