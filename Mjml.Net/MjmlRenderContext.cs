@@ -8,7 +8,9 @@ namespace Mjml.Net
     {
         private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
         {
+            // Allow XML documents without a single root.
             ConformanceLevel = ConformanceLevel.Fragment,
+            // Prevent XML external entity (XXE) processing attacks.
             DtdProcessing = DtdProcessing.Ignore
         };
         private readonly GlobalContext context = new GlobalContext();
