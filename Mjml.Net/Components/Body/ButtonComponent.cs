@@ -79,7 +79,7 @@ namespace Mjml.Net.Components.Body
         [Bind("inner-padding-top", BindType.PixelsOrPercent)]
         public string? InnerPaddingTop;
 
-        [Bind("letter-spacing", BindType.Pixels)]
+        [Bind("letter-spacing", BindType.PixelsOrEm)]
         public string? LetterSpacing;
 
         [Bind("line-height", BindType.PixelsOrPercent)]

@@ -38,7 +38,7 @@
         [Bind("height", BindType.Pixels)]
         public string? Height;
 
-        [Bind("letter-spacing", BindType.Pixels)]
+        [Bind("letter-spacing", BindType.PixelsOrEm)]
         public string LetterSpacing;
 
         [Bind("line-height", BindType.PixelsOrPercentOrNone)]
