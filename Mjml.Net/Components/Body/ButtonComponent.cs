@@ -31,7 +31,7 @@ namespace Mjml.Net.Components.Body
         [Bind("border-left")]
         public string? BorderLeft;
 
-        [Bind("border-radius")]
+        [Bind("border-radius", BindType.PixelsOrPercent)]
         public string BorderRadius = "3px";
 
         [Bind("border-right")]

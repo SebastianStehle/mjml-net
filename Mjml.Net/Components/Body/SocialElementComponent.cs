@@ -22,7 +22,7 @@
         [Bind("background-color", BindType.Color)]
         public string? BackgroundColor;
 
-        [Bind("border-radius", BindType.Pixels)]
+        [Bind("border-radius", BindType.PixelsOrPercent)]
         public string BorderRadius = "3px";
 
         [Bind("color", BindType.Color)]

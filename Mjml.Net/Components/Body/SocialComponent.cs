@@ -15,7 +15,7 @@
         [Bind("align", BindType.Align)]
         public string Align = "center";
 
-        [Bind("border-radius")]
+        [Bind("border-radius", BindType.PixelsOrPercent)]
         public string BorderRadius = "3px";
 
         [Bind("color")]
