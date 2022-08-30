@@ -25,19 +25,19 @@ namespace Mjml.Net.Components.Body
         [Bind("border")]
         public string Border = "none";
 
-        [Bind("border-bottom", BindType.Pixels)]
+        [Bind("border-bottom")]
         public string? BorderBottom;
 
-        [Bind("border-left", BindType.Pixels)]
+        [Bind("border-left")]
         public string? BorderLeft;
 
-        [Bind("border-radius", BindType.Pixels)]
+        [Bind("border-radius")]
         public string BorderRadius = "3px";
 
-        [Bind("border-right", BindType.Pixels)]
+        [Bind("border-right")]
         public string? BorderRight;
 
-        [Bind("border-top", BindType.Pixels)]
+        [Bind("border-top")]
         public string? BorderTop;
 
         [Bind("color", BindType.Color)]
