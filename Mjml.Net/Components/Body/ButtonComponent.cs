@@ -118,7 +118,7 @@ namespace Mjml.Net.Components.Body
         [Bind("text-transform")]
         public string TextTransform = "none";
 
-        [Bind("vertical-align")]
+        [Bind("vertical-align", BindType.VerticalAlign)]
         public string VerticalAlign = "middle";
 
         [Bind("width", BindType.PixelsOrPercent)]
