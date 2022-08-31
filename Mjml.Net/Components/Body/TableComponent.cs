@@ -43,7 +43,7 @@ namespace Mjml.Net.Components.Body
         [Bind("font-weight", BindType.String)]
         public string? FontWeight;
 
-        [Bind("line-height", BindType.PixelsOrPercent)]
+        [Bind("line-height", BindType.PixelsOrPercentOrNone)]
         public string LineHeight = "22px";
 
         [Bind("padding", BindType.FourPixelsOrPercent)]

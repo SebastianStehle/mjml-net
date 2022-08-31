@@ -48,7 +48,7 @@
         [Bind("inner-padding", BindType.FourPixelsOrPercent)]
         public string? InnerPadding;
 
-        [Bind("line-height", BindType.PixelsOrPercent)]
+        [Bind("line-height", BindType.PixelsOrPercentOrNone)]
         public string LineHeight = "22px";
 
         [Bind("mode", BindType.SocialMode)]

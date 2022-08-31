@@ -36,7 +36,7 @@ namespace Mjml.Net.Components.Body
         [Bind("letter-spacing", BindType.PixelsOrEm)]
         public string? LetterSpacing;
 
-        [Bind("line-height", BindType.PixelsOrPercent)]
+        [Bind("line-height", BindType.PixelsOrPercentOrNone)]
         public string LineHeight = "22px";
 
         [Bind("name", BindType.String)]
