@@ -203,7 +203,7 @@ namespace Mjml.Net.Components.Body
             var background = hasBackground ? GetBackground() : null;
 
             var divElement = renderer.StartElement("div") // Style div
-                .Attr("class", fullWidth ? null : CssClass)
+                .Class(fullWidth ? null : CssClass)
                 .Style("border-radius", BorderRadius)
                 .Style("margin", "0px auto")
                 .Style("max-width", $"{ActualWidth}px");

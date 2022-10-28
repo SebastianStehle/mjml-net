@@ -1,6 +1,5 @@
 ﻿#pragma warning disable SA1119 // Statement should not use unnecessary parenthesis
 
-using Mjml.Net.Types;
 
 namespace Mjml.Net.Components.Body
 {

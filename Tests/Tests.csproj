@@ -24,6 +24,7 @@
     <None Remove="Components\Outputs\CarouselImagesTwo.html" />
     <None Remove="Components\Outputs\CarouselImageWithHref.html" />
     <None Remove="Components\Outputs\CarouselThumbnailWidth.html" />
+    <None Remove="Components\Outputs\ColumnClass.html" />
     <None Remove="Components\Outputs\Comments.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
@@ -108,6 +109,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Components\Outputs\Carousel.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnClass.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselHeadStyles.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselImageWithHref.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselIconWidth.html" />
