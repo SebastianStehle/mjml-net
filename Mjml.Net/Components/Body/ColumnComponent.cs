@@ -96,7 +96,7 @@ namespace Mjml.Net.Components.Body
 
             if (Width != null)
             {
-                (widthValue, widthUnit) = UnitParser.Parse(Width);
+                (widthValue, widthUnit) = UnitParser.Parse(Width, Unit.Pixels);
 
                 widthString = Width;
             }
@@ -117,8 +117,8 @@ namespace Mjml.Net.Components.Body
             }
 
             var allPaddings =
-                UnitParser.Parse(PaddingTop).Value +
-                UnitParser.Parse(PaddingBottom).Value +
+                UnitParser.Parse(PaddingLeft).Value +
+                UnitParser.Parse(PaddingRight).Value +
                 UnitParser.Parse(BorderLeft).Value +
                 UnitParser.Parse(BorderRight).Value +
                 UnitParser.Parse(InnerBorderLeft).Value +

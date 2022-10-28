@@ -1,6 +1,5 @@
 ﻿#pragma warning disable SA1119 // Statement should not use unnecessary parenthesis
 
-
 namespace Mjml.Net.Components.Body
 {
     public partial class DividerComponent : BodyComponentBase
@@ -8,7 +7,7 @@ namespace Mjml.Net.Components.Body
         private static readonly AllowedParents Parents = new AllowedParents
         {
             "mj-column",
-            "mj-group"
+            "mj-hero"
         };
 
         public override AllowedParents? AllowedParents => Parents;
@@ -111,7 +110,7 @@ namespace Mjml.Net.Components.Body
                 UnitParser.Parse(PaddingLeft).Value +
                 UnitParser.Parse(PaddingRight).Value;
 
-            var (width, unit) = UnitParser.Parse(Width);
+            var (width, unit) = UnitParser.Parse(Width, Unit.Pixels);
 
             switch (unit)
             {

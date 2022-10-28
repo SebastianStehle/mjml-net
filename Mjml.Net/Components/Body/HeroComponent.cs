@@ -30,7 +30,7 @@
         [Bind("background-width", BindType.PixelsOrPercent)]
         public string? BackgroundWidth;
 
-        [Bind("border-radius")]
+        [Bind("border-radius", BindType.PixelsOrPercent)]
         public string? BorderRadius;
 
         [Bind("container-background-color", BindType.Color)]

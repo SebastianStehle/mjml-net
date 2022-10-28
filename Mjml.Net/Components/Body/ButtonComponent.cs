@@ -25,19 +25,19 @@ namespace Mjml.Net.Components.Body
         [Bind("border")]
         public string Border = "none";
 
-        [Bind("border-bottom", BindType.Pixels)]
+        [Bind("border-bottom")]
         public string? BorderBottom;
 
-        [Bind("border-left", BindType.Pixels)]
+        [Bind("border-left")]
         public string? BorderLeft;
 
-        [Bind("border-radius", BindType.Pixels)]
+        [Bind("border-radius", BindType.PixelsOrPercent)]
         public string BorderRadius = "3px";
 
-        [Bind("border-right", BindType.Pixels)]
+        [Bind("border-right")]
         public string? BorderRight;
 
-        [Bind("border-top", BindType.Pixels)]
+        [Bind("border-top")]
         public string? BorderTop;
 
         [Bind("color", BindType.Color)]
@@ -79,10 +79,10 @@ namespace Mjml.Net.Components.Body
         [Bind("inner-padding-top", BindType.PixelsOrPercent)]
         public string? InnerPaddingTop;
 
-        [Bind("letter-spacing", BindType.Pixels)]
+        [Bind("letter-spacing", BindType.PixelsOrEm)]
         public string? LetterSpacing;
 
-        [Bind("line-height", BindType.PixelsOrPercent)]
+        [Bind("line-height", BindType.PixelsOrPercentOrNone)]
         public string LineHeight = "120%";
 
         [Bind("name")]
@@ -118,7 +118,7 @@ namespace Mjml.Net.Components.Body
         [Bind("text-transform")]
         public string TextTransform = "none";
 
-        [Bind("vertical-align")]
+        [Bind("vertical-align", BindType.VerticalAlign)]
         public string VerticalAlign = "middle";
 
         [Bind("width", BindType.PixelsOrPercent)]
@@ -126,8 +126,6 @@ namespace Mjml.Net.Components.Body
 
         public override void Render(IHtmlRenderer renderer, GlobalContext context)
         {
-            var buttonHtmlTag = !string.IsNullOrEmpty(Href) ? "a" : "p";
-
             renderer.StartElement("table")
                 .Attr("border", "0")
                 .Attr("cellpadding", "0")
@@ -156,6 +154,17 @@ namespace Mjml.Net.Components.Body
                 .Style("text-align", TextAlign)
                 .Style("background", BackgroundColor);
 
+            RenderButton(renderer);
+
+            renderer.EndElement("td");
+            renderer.EndElement("tr");
+            renderer.EndElement("table");
+        }
+
+        protected void RenderButton(IHtmlRenderer renderer)
+        {
+            var buttonHtmlTag = !string.IsNullOrEmpty(Href) ? "a" : "p";
+
             renderer.StartElement(buttonHtmlTag)
                 .Attr("href", Href)
                 .Attr("rel", Rel)
@@ -181,14 +190,11 @@ namespace Mjml.Net.Components.Body
             RenderRaw(renderer);
 
             renderer.EndElement(buttonHtmlTag);
-            renderer.EndElement("td");
-            renderer.EndElement("tr");
-            renderer.EndElement("table");
         }
 
         private double CalculateButtonWidth()
         {
-            var widthParsed = UnitParser.Parse(Width);
+            var widthParsed = UnitParser.Parse(Width, Unit.Pixels);
 
             if (widthParsed.Value <= 0 || widthParsed.Unit != Unit.Pixels)
             {

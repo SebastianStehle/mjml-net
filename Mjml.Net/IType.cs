@@ -2,6 +2,6 @@
 {
     public interface IType
     {
-        bool Validate(string value);
+        bool Validate(string value, ref ValidationContext context);
     }
 }

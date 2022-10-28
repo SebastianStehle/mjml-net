@@ -4,7 +4,7 @@ namespace Mjml.Net
 {
     public static class UnitParser
     {
-        public static (double Value, Unit Unit) Parse(string? rawValue)
+        public static (double Value, Unit Unit) Parse(string? rawValue, Unit defaultUnit = Unit.None)
         {
             if (string.IsNullOrWhiteSpace(rawValue))
             {
@@ -55,7 +55,7 @@ namespace Mjml.Net
             }
             else if (unitSpan.Length == 0)
             {
-                unitType = Unit.None;
+                unitType = defaultUnit;
             }
 
             var valueSpan = span[..i];
@@ -68,6 +68,11 @@ namespace Mjml.Net
             if (hasSeparator)
             {
                 double.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
+
+                if (unitType == Unit.Pixels)
+                {
+                    return ((int)temp, unitType);
+                }
 
                 return (temp, unitType);
             }

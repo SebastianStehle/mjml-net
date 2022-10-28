@@ -1,11 +1,12 @@
 ﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
 
 namespace Mjml.Net
 {
     /// <summary>
-    /// Renders html for MJML.
+    /// Renders HTML for MJML.
     /// </summary>
     public interface IHtmlRenderer
     {

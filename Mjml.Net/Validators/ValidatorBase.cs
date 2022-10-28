@@ -22,7 +22,7 @@
             return errors;
         }
 
-        public void Attribute(string name, string value, IComponent component, int? line, int? column)
+        public void Attribute(string name, string value, IComponent component, ref ValidationContext context)
         {
             var allowedAttributes = component.AllowedFields;
 
@@ -33,15 +33,21 @@
 
             if (!allowedAttributes.TryGetValue(name, out var attribute))
             {
-                errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.", ValidationErrorType.UnknownAttribute, line, column);
+                errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.",
+                    ValidationErrorType.UnknownAttribute,
+                    context.XmlLine,
+                    context.XmlColumn);
             }
-            else if (validateAttributeValue && !attribute.Validate(value))
+            else if (validateAttributeValue && !attribute.Validate(value, ref context))
             {
-                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.", ValidationErrorType.InvalidAttribute, line, column);
+                errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.",
+                    ValidationErrorType.InvalidAttribute,
+                    context.XmlLine,
+                    context.XmlColumn);
             }
         }
 
-        public void BeforeComponent(IComponent component, int? line, int? column)
+        public void BeforeComponent(IComponent component, ref ValidationContext context)
         {
             var name = component.ComponentName;
 
@@ -54,20 +60,29 @@
             {
                 if (componentStack.Count > 0)
                 {
-                    errors.Add($"'{name}' must be the root tag.", ValidationErrorType.InvalidParent, line, column);
+                    errors.Add($"'{name}' must be the root tag.",
+                        ValidationErrorType.InvalidParent,
+                        context.XmlLine,
+                        context.XmlColumn);
                 }
             }
             else
             {
                 if (!componentStack.TryPeek(out var previous))
                 {
-                    errors.Add($"'{name}' cannot be the root tag.", ValidationErrorType.InvalidParent, line, column);
+                    errors.Add($"'{name}' cannot be the root tag.",
+                        ValidationErrorType.InvalidParent,
+                        context.XmlLine,
+                        context.XmlColumn);
                 }
                 else if (component.AllowedParents != null)
                 {
                     if (!component.AllowedParents.Contains(previous))
                     {
-                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.", ValidationErrorType.InvalidParent, line, column);
+                        errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
+                            ValidationErrorType.InvalidParent,
+                            context.XmlLine,
+                            context.XmlColumn);
                     }
                 }
             }
@@ -75,7 +90,7 @@
             componentStack.Push(component.ComponentName);
         }
 
-        public void AfterComponent(IComponent component, int? line, int? column)
+        public void AfterComponent(IComponent component, ref ValidationContext context)
         {
             componentStack.TryPop(out var _);
         }

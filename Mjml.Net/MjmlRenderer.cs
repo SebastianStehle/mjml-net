@@ -61,7 +61,9 @@ namespace Mjml.Net
             Add<GroupComponent>();
             Add<HeadComponent>();
             Add<HeroComponent>();
+            Add<IncludeComponent>();
             Add<ImageComponent>();
+            Add<MsoButtonComponent>();
             Add<NavbarComponent>();
             Add<NavbarLinkComponent>();
             Add<PreviewComponent>();
@@ -250,7 +252,7 @@ namespace Mjml.Net
             {
                 context.Setup(this, options ?? new MjmlOptions());
                 context.StartBuffer();
-                context.Read(xml);
+                context.ReadXml(xml, null);
 
                 StringBuilder? buffer = null;
                 try

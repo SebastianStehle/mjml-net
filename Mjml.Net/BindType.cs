@@ -6,6 +6,7 @@
         AlignJustify,
         Boolean,
         Color,
+        File,
         FourPixelsOrPercent,
         LeftRight,
         Pixels,

@@ -75,16 +75,18 @@ You can also specify options to the MJML parser.
 
 | Name             | Data Type          | Default | Description                                                                                                                                                           |
 |------------------|--------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| KeepComments     | bool               | false   | True to keep comments.                                                                                                                                                |
-| Breakpoint       | string             | 480px   | The default breakpoint to switch to mobile view.                                                                                                                      |
-| Styles           | Style[]            | []      | A list of custom styles.                                                                                                                                              |
-| ForceOWAQueries  | bool               | false   | True to enable media queries for OWA.                                                                                                                                 |
-| Beautify         | bool               | true    | True to beatify the HTML. Impacts performance (slower).                                                                                                               |
-| Minify           | bool               | false   | True to minify the HTML.                                                                                                                                              |
-| Lax              | bool               | false   | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance. |
-| Fonts            | [string] => Fond   | Preset  | A list of supported default fonts.                                                                                                                                    |
-| XmlEntities      | [string] => string | Preset  | A list of supported XML entities.                                                                                                                                     |
-| ValidatorFactory | IValidatorFactory? | null    | The current validator, which also defines the validation mode.                                                                                                        |
+| KeepComments     | bool                                  | false              | True to keep comments.                                                                                                                                                |
+| Breakpoint       | string                                | 480px              | The default breakpoint to switch to mobile view.                                                                                                                      |
+| Styles           | Style[]?                              | []                 | A list of custom styles.                                                                                                                                              |
+| ForceOWAQueries  | bool                                  | false              | True to enable media queries for OWA.                                                                                                                                 |
+| Beautify         | bool                                  | true               | True to beatify the HTML. Impacts performance (slower).                                                                                                               |
+| Minify           | bool                                  | false              | True to minify the HTML.                                                                                                                                              |
+| Lax              | bool                                  | false              | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance. |
+| IdGenerator      | IIdGenerator                          | Preset             | The ID generator to create random values for attributes like Ids.
+| Fonts            | IReadOnlyDictionary<string, Font[]>   | Preset             | A list of supported default fonts.                                                                                                                                    |
+| XmlEntities      | IReadOnlyDictionary<string, string>   | Preset             | A list of supported XML entities.                                                                                                                                     |
+| ValidatorFactory | IValidatorFactory?                    | null               | The current validator, which also defines the validation mode.
+| FileLoader       | IFileLoader?                          | null               | The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. For example, SqlDatabaseFileLoader, InMemoryFileLoader, DiskFileLoader, etc...
 
 ## Supported Components
 `MJML.NET` tries to implement all functionality `1-2-1` with the MJML 4 project. However, due to JavaScript not being a typed language this means there has been considerate refactoring to the code to make it more aligned with C# typed requirements. 
@@ -94,7 +96,7 @@ You can also specify options to the MJML parser.
 | Core | [mjml](https://documentation.mjml.io/#mjml)                             | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Core | [mj-head](https://documentation.mjml.io/#mj-head)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Core | [mj-body](https://documentation.mjml.io/#mj-body)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Core | [mj-include](https://documentation.mjml.io/#mj-include)                 | :x:                | :x:                | Not Planned      |
+| Core | [mj-include](https://documentation.mjml.io/#mj-include)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-attributes](https://documentation.mjml.io/#mj-attributes)           | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | `mj-class`                                                              | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | `mj-all`                                                                | :white_check_mark: | :white_check_mark: | Feature Complete |
@@ -242,4 +244,3 @@ Once again, it's good to share some appreciation to the projects that make `MJML
 
 - [MJML](https://github.com/mjmlio/mjml)
 - [MJML.NET V1](https://github.com/LiamRiddell/MJML.NET)
-- [AngleSharp](https://github.com/AngleSharp/AngleSharp)

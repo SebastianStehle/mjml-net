@@ -43,6 +43,13 @@
                 return attribute;
             }
 
+            var inherited = parent?.GetInheritingAttribute(name);
+
+            if (inherited != null)
+            {
+                return inherited;
+            }
+
             if (context.AttributesByClass.Count > 0)
             {
                 if (currentClasses == null)
@@ -57,15 +64,23 @@
                     }
                 }
 
+                string? classAttribute = null;
+
+                // Loop over all classes and use the last match.
                 foreach (var className in currentClasses)
                 {
                     if (context.AttributesByClass.TryGetValue(className, out var byName))
                     {
                         if (byName.TryGetValue(name, out attribute))
                         {
-                            return attribute;
+                            classAttribute = attribute;
                         }
                     }
+                }
+
+                if (classAttribute != null)
+                {
+                    return classAttribute;
                 }
             }
 
@@ -79,16 +94,6 @@
                 if (byType.TryGetValue(Constants.All, out attribute))
                 {
                     return attribute;
-                }
-            }
-
-            if (parent != null)
-            {
-                var inherited = parent.GetInheritingAttribute(name);
-
-                if (inherited != null)
-                {
-                    return inherited;
                 }
             }
 

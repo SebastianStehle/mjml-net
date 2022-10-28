@@ -4,14 +4,23 @@ using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
-    public sealed partial class MjmlRenderContext
+    public sealed partial class MjmlRenderContext : IMjmlReader
     {
+        private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
+        {
+            // Allow XML documents without a single root.
+            ConformanceLevel = ConformanceLevel.Fragment,
+            // Prevent XML external entity (XXE) processing attacks.
+            DtdProcessing = DtdProcessing.Ignore
+        };
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
+        private ValidationContext validationContext;
         private MjmlOptions mjmlOptions;
         private MjmlRenderer mjmlRenderer;
         private IValidator? validator;
+        private IComponent? currentComponent;
 
         public MjmlRenderContext()
         {
@@ -27,15 +36,15 @@ namespace Mjml.Net
         public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
         {
             this.mjmlRenderer = mjmlRenderer;
-
-            // Just for convience.
-            this.mjmlOptions = mjmlOptions ?? new MjmlOptions();
+            this.mjmlOptions = mjmlOptions ??= new MjmlOptions();
 
             // We have to create a new instance each time, because it could another factory.
-            validator = this.mjmlOptions.ValidatorFactory?.Create();
+            validator = mjmlOptions.ValidatorFactory?.Create();
 
             // Reuse the context and therefore do not set them over the constructor.
-            context.SetOptions(this.mjmlOptions);
+            context.SetOptions(mjmlOptions);
+
+            validationContext.Options = mjmlOptions;
         }
 
         internal void Clear()
@@ -53,14 +62,33 @@ namespace Mjml.Net
             return validator?.Complete() ?? new ValidationErrors();
         }
 
-        public void Read(XmlReader reader)
+        public void ReadFragment(TextReader mjml)
+        {
+            using (var xml = XmlReader.Create(mjml, ReaderSettings))
+            {
+                ReadXml(xml, currentComponent);
+            }
+        }
+
+        public void ReadFragment(string mjml)
+        {
+            using (var xml = XmlReader.Create(new StringReader(mjml), ReaderSettings))
+            {
+                ReadXml(xml, currentComponent);
+            }
+        }
+
+        public void ReadXml(XmlReader reader, IComponent? parent)
         {
             while (reader.Read())
             {
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        ReadElement(reader.Name, reader, null);
+                        ReadElement(reader.Name, reader, parent);
+                        break;
+                    case XmlNodeType.Comment when mjmlOptions.KeepComments && parent != null:
+                        ReadComment(reader, parent);
                         break;
                 }
             }
@@ -91,9 +119,10 @@ namespace Mjml.Net
 
             binder.Clear(parent, component.ComponentName);
 
-            validator?.BeforeComponent(component,
-                currentLine,
-                currentColumn);
+            validationContext.XmlLine = currentLine;
+            validationContext.XmlColumn = currentColumn;
+
+            validator?.BeforeComponent(component, ref validationContext);
 
             reader.Read();
 
@@ -106,9 +135,10 @@ namespace Mjml.Net
 
                 binder.SetAttribute(attributeName, attributeValue);
 
-                validator?.Attribute(attributeName, attributeValue, component,
-                    CurrentLine(reader),
-                    CurrentColumn(reader));
+                validationContext.XmlLine = CurrentLine(reader);
+                validationContext.XmlColumn = CurrentColumn(reader);
+
+                validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
             }
 
             if (component.ContentType == ContentType.Text)
@@ -165,21 +195,13 @@ namespace Mjml.Net
             }
             else
             {
-                while (reader.Read())
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            ReadElement(reader.Name, reader, component);
-                            break;
-                        case XmlNodeType.Comment when mjmlOptions.KeepComments:
-                            ReadComment(reader, component);
-                            break;
-                    }
-                }
+                ReadXml(reader, component);
             }
 
-            component.AfterBind(context, reader);
+            // Assign the current component, in case we read fragments.
+            currentComponent = component;
+
+            component.AfterBind(context, reader, this);
 
             reader.Close();
 
@@ -189,9 +211,10 @@ namespace Mjml.Net
                 component.Render(this, context);
             }
 
-            validator?.AfterComponent(component,
-                currentLine,
-                currentColumn);
+            validationContext.XmlLine = currentLine;
+            validationContext.XmlColumn = currentColumn;
+
+            validator?.AfterComponent(component, ref validationContext);
         }
 
         private static void ReadComment(XmlReader reader, IComponent parent)

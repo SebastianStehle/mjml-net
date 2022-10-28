@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Remove="Components\Outputs\Accordion.html" />
     <None Remove="Components\Outputs\AccordionEmptyElements.html" />
+    <None Remove="Components\Outputs\ButtonWithoutWidthUnit.html" />
     <None Remove="Components\Outputs\Carousel.html" />
     <None Remove="Components\Outputs\CarouselHeadStyles.html" />
     <None Remove="Components\Outputs\CarouselIconWidth.html" />
@@ -26,6 +27,7 @@
     <None Remove="Components\Outputs\CarouselThumbnailWidth.html" />
     <None Remove="Components\Outputs\ColumnClass.html" />
     <None Remove="Components\Outputs\Comments.html" />
+    <None Remove="Components\Outputs\DividerWithoutWidthUnit.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
@@ -108,6 +110,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Components\Outputs\ButtonWithoutWidthUnit.html" />
     <EmbeddedResource Include="Components\Outputs\Carousel.html" />
     <EmbeddedResource Include="Components\Outputs\ColumnClass.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselHeadStyles.html" />
@@ -120,7 +123,10 @@
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
     <EmbeddedResource Include="Components\Outputs\Comments.html" />
+    <EmbeddedResource Include="Components\Outputs\DividerWithoutWidthUnit.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
+    <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
+    <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
     <EmbeddedResource Include="Components\Outputs\TablePercent.html" />

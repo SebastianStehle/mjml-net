@@ -1,9 +1,8 @@
 ﻿using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-#pragma warning disable IDE0056 // Use index operator
+#pragma warning disable MA0098 // Use indexer instead of LINQ methods
 
 namespace Mjml.Net.Generator
 {
@@ -12,12 +11,12 @@ namespace Mjml.Net.Generator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
-            context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+            context.RegisterForSyntaxNotifications(() => new FieldSyntaxReceiver());
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            if (context.SyntaxContextReceiver is not SyntaxReceiver receiver)
+            if (context.SyntaxContextReceiver is not FieldSyntaxReceiver receiver)
             {
                 return;
             }
@@ -26,11 +25,13 @@ namespace Mjml.Net.Generator
 
             foreach (var group in receiver.Fields.GroupBy(f => f.Field.ContainingType, SymbolEqualityComparer.Default))
             {
-                Console.WriteLine($"Handling {group.Key!.Name}");
+                var componentName = group.Key!.Name;
+
+                Console.WriteLine($"Handling {componentName}");
 
                 var source = ProcessClass((INamedTypeSymbol)group.Key, group.ToList(), attribute!);
 
-                context.AddSource($"{group.Key.Name}_Binder.cs", SourceText.From(source, Encoding.UTF8));
+                context.AddSource($"{componentName}_Binder.cs", SourceText.From(source, Encoding.UTF8));
             }
         }
 
@@ -41,79 +42,52 @@ namespace Mjml.Net.Generator
                 return string.Empty;
             }
 
-            var allFields = new Dictionary<string, FieldInfo>();
-
-            foreach (var (field, value, text) in fields)
-            {
-                var fieldName = field.Name;
-                var fieldType = "String";
-                var fieldAttribute = "none";
-
-                // Get the attribute name and the type.
-                var bindAttribute = field.GetAttributes().FirstOrDefault(a => a.AttributeClass.Equals(attribute, SymbolEqualityComparer.Default));
-
-                if (bindAttribute != null)
-                {
-                    fieldAttribute = bindAttribute.ConstructorArguments.First().Value!.ToString();
-
-                    if (bindAttribute.ConstructorArguments.Length >= 2)
-                    {
-                        var argument = bindAttribute.ConstructorArguments.Last();
-
-                        // Value is an integer here so we need to convert it to its Enum.
-                        var valueNumber = (int)bindAttribute.ConstructorArguments!.Last().Value!;
-                        var valueString = argument.Type!.GetMembers()[valueNumber].Name;
-
-                        fieldType = valueString;
-                    }
-                }
-
-                allFields[fieldName] = new FieldInfo(fieldName, fieldAttribute, value ?? "null", fieldType, text);
-            }
-
-            var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
-
-            var nonTextFields = allFields.Values.Where(x => !x.Text).ToList();
+            var fieldsInfo = FieldInfo.Build(fields, attribute);
+            var fieldsNormal = fieldsInfo.Values.Where(x => !x.IsText).ToList();
 
             var source = new SourceWriter();
             source.AppendLine("#pragma warning disable");
             source.AppendLine("// Auto-generated code");
             source.AppendLine("using Mjml.Net;");
             source.AppendLine();
-            source.AppendLine($"namespace {namespaceName}");
+            source.AppendLine($"namespace {classSymbol.ContainingNamespace.ToDisplayString()}");
             source.AppendLine("{").MoveIn();
             source.AppendLine($"public partial class {classSymbol.Name}");
             source.AppendLine("{").MoveIn();
-            source.AppendLine("public override void Bind(Mjml.Net.IBinder binder, Mjml.Net.GlobalContext context, System.Xml.XmlReader reader)");
-            source.AppendLine("{").MoveIn();
-            source.AppendLine("base.Bind(binder, context, reader);");
 
-            foreach (var field in nonTextFields)
+            var customTypes = fieldsInfo.Values.Where(x => x.CustomType != null);
+
+            if (customTypes.Any())
             {
-                ProcessField(source, field, field == nonTextFields[nonTextFields.Count - 1]);
+                foreach (var field in customTypes)
+                {
+                    source.AppendLine($"public static readonly IType {field.CustomTypeName} = new {field.CustomType}();");
+                }
+
+                source.AppendLine();
             }
 
-            foreach (var field in nonTextFields)
-            {
-                ProcessFieldExpand(source, field, allFields);
-            }
+            GenerateBindMethod(fieldsInfo, fieldsNormal, source);
 
-            var textField = allFields.Values.FirstOrDefault(x => x.Text);
+            source.AppendLine();
 
-            if (textField != null)
-            {
-                ProcessFieldText(source, textField);
-            }
+            GenerateAllowedFields(fieldsNormal, source);
 
             source.MoveOut().AppendLine("}");
-            source.AppendLine();
+            source.MoveOut().AppendLine("}");
+
+            return source.ToString();
+        }
+
+        private void GenerateAllowedFields(List<FieldInfo> fieldsNormal, SourceWriter source)
+        {
             source.AppendLine("public override AllowedAttributes AllowedFields");
             source.AppendLine("{").MoveIn();
             source.AppendLine("get");
             source.AppendLine("{").MoveIn();
             source.AppendLine("var result = new AllowedAttributes();");
 
-            foreach (var field in nonTextFields)
+            foreach (var field in fieldsNormal)
             {
                 ProcessFieldType(source, field);
             }
@@ -136,7 +110,7 @@ namespace Mjml.Net.Generator
             source.AppendLine("switch (name)");
             source.AppendLine("{").MoveIn();
 
-            foreach (var field in nonTextFields)
+            foreach (var field in fieldsNormal)
             {
                 ProcessFieldAttribute(source, field);
             }
@@ -144,10 +118,32 @@ namespace Mjml.Net.Generator
             source.MoveOut().AppendLine("}");
             source.AppendLine("return base.GetAttribute(name);");
             source.MoveOut().AppendLine("}");
-            source.MoveOut().AppendLine("}");
-            source.MoveOut().AppendLine("}");
+        }
 
-            return source.ToString();
+        private void GenerateBindMethod(Dictionary<string, FieldInfo> fieldsInfo, List<FieldInfo> fieldsNormal, SourceWriter source)
+        {
+            source.AppendLine("public override void Bind(Mjml.Net.IBinder binder, Mjml.Net.GlobalContext context, System.Xml.XmlReader reader)");
+            source.AppendLine("{").MoveIn();
+            source.AppendLine("base.Bind(binder, context, reader);");
+
+            foreach (var field in fieldsNormal)
+            {
+                ProcessFieldBinding(source, field, field == fieldsNormal.Last());
+            }
+
+            foreach (var field in fieldsNormal)
+            {
+                ProcessFieldExpand(source, field, fieldsInfo);
+            }
+
+            var textField = fieldsInfo.Values.FirstOrDefault(x => x.IsText);
+
+            if (textField != null)
+            {
+                ProcessFieldText(source, textField);
+            }
+
+            source.MoveOut().AppendLine("}");
         }
 
         private void ProcessFieldText(SourceWriter source, FieldInfo field)
@@ -157,7 +153,14 @@ namespace Mjml.Net.Generator
 
         private void ProcessFieldType(SourceWriter source, FieldInfo field)
         {
-            source.AppendLine($"result[\"{field.Attribute}\"] = AttributeTypes.{field.Type};");
+            if (field.CustomType != null)
+            {
+                source.AppendLine($"result[\"{field.Attribute}\"] = {field.CustomTypeName};");
+            }
+            else
+            {
+                source.AppendLine($"result[\"{field.Attribute}\"] = AttributeTypes.{field.DefaultType};");
+            }
         }
 
         private void ProcessFieldAttribute(SourceWriter source, FieldInfo field)
@@ -166,11 +169,11 @@ namespace Mjml.Net.Generator
             source.AppendLine($"return {field.Name};").MoveOut();
         }
 
-        private void ProcessField(SourceWriter source, FieldInfo field, bool isLast)
+        private void ProcessFieldBinding(SourceWriter source, FieldInfo field, bool isLast)
         {
             var assignment = $"source{field.Name}";
 
-            if (field.Type == "Color")
+            if (field.DefaultType == "Color")
             {
                 assignment = $"BindingHelper.CoerceColor(source{field.Name})";
             }
@@ -256,56 +259,6 @@ namespace Mjml.Net.Generator
             source.AppendLine($"{fieldName}Left = l;");
             source.MoveOut().AppendLine("}");
             source.MoveOut().AppendLine("}");
-        }
-    }
-
-    internal sealed class FieldInfo
-    {
-        public string Name { get; }
-
-        public string Attribute { get; }
-
-        public string AttributeDefault { get; }
-
-        public string Type { get; }
-
-        public bool Text { get; }
-
-        public FieldInfo(string name, string attribute, string attributeDefault, string type, bool text)
-        {
-            Name = name;
-            Attribute = attribute;
-            AttributeDefault = attributeDefault;
-            Type = type;
-            Text = text;
-        }
-    }
-
-    internal sealed class SyntaxReceiver : ISyntaxContextReceiver
-    {
-        public List<(IFieldSymbol Field, string Value, bool AsText)> Fields { get; } = new List<(IFieldSymbol Field, string Value, bool AsText)>();
-
-        public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
-        {
-            if (context.Node is FieldDeclarationSyntax fieldDeclarationSyntax && fieldDeclarationSyntax.AttributeLists.Count > 0)
-            {
-                foreach (var variable in fieldDeclarationSyntax.Declaration.Variables)
-                {
-                    if (context.SemanticModel.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSymbol)
-                    {
-                        return;
-                    }
-
-                    if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "Mjml.Net.BindAttribute"))
-                    {
-                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString()!, false));
-                    }
-                    else if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "Mjml.Net.BindTextAttribute"))
-                    {
-                        Fields.Add((fieldSymbol, variable.Initializer?.Value.ToString()!, true));
-                    }
-                }
-            }
         }
     }
 }

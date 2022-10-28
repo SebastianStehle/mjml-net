@@ -17,6 +17,30 @@ namespace Tests.Types
         }
 
         [Fact]
+        public void Should_parse_with_default_unit()
+        {
+            var result = UnitParser.Parse("42", Unit.Pixels);
+
+            Assert.Equal((42, Unit.Pixels), result);
+        }
+
+        [Fact]
+        public void Should_floor_pixels()
+        {
+            var result = UnitParser.Parse("60.5px", Unit.Pixels);
+
+            Assert.Equal((60, Unit.Pixels), result);
+        }
+
+        [Fact]
+        public void Should_floor_pixels_with_default_unit()
+        {
+            var result = UnitParser.Parse("60.5px", Unit.Pixels);
+
+            Assert.Equal((60, Unit.Pixels), result);
+        }
+
+        [Fact]
         public void Should_parse_without_unit()
         {
             var result = UnitParser.Parse("60.5");
