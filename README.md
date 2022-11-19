@@ -64,12 +64,45 @@ public static void Main (string[] args) {
         </mj-section>
     </mj-body>
 </mjml>";
-
-    var html = mjmlRenderer.Render(text, new MjmlOptions {
+    var options = new MjmlOptions {
         Beautify = false
-    }).Html;
+    };
+
+    var (html, errors) = mjmlRenderer.Render(text, options);
 }
 ```
+
+MJML is not necessarily valid XML. To allow the XML parser to work properly, the MJML string needs to be sanitized before you render it. You can use the method ` FixXML` for that. If you store the MJML text in the database, it is store to keep the original version and the sanitized version. More about this under "Known Issues".
+
+```csharp
+public static void Main (string[] args) {
+    var mjmlRenderer = new MjmlRenderer();
+
+    string text = @"
+<mjml>
+    <mj-head>
+        <mj-title>Hello World Example</mj-title>
+    </mj-head>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    Hello World!
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>";
+    var options = new MjmlOptions {
+        Beautify = false
+    };
+
+    var xml = mjmlRenderer.FixXML(text, options);
+
+    var (html, errors) = mjmlRenderer.Render(xml, options).Html;
+}
+```
+
 ## Options
 You can also specify options to the MJML parser.
 
