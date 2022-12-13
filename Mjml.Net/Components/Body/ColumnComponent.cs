@@ -212,8 +212,8 @@ namespace Mjml.Net.Components.Body
                     renderer.StartElement("tr");
                     renderer.StartElement("td")
                         .Attr("align", child.GetAttribute("align"))
-                        .Attr("class", child.GetAttribute("css-class"))
                         .Attr("vertical-align", child.GetAttribute("vertical-align"))
+                        .Class(child.GetAttribute("css-class"))
                         .Style("background", child.GetAttribute("container-background-color"))
                         .Style("font-size", "0px")
                         .Style("padding", child.GetAttribute("padding"))

@@ -61,6 +61,24 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_column_with_class()
+        {
+            var source = @"
+<mjml-test head=""false"">
+    <mj-attributes>
+          <mj-table css-class=""test""></mj-table>
+    </mj-attributes>
+    <mj-column>
+        <mj-table></mj-table>
+    </mj-column>
+</mjml-test>";
+
+            var result = TestHelper.Render(source);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnClass.html", result);
+        }
+
+        [Fact]
         public void Should_render_column_one_with_padding()
         {
             var source = @"<mj-column background-color=""red"" padding=""20px 52px""></mj-column>";

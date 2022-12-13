@@ -143,7 +143,7 @@
 
             renderer.StartElement("div") // Style div
                 .Attr("align", Align)
-                .Attr("class", CssClass)
+                .Class(CssClass)
                 .Style("margin", "0 auto")
                 .Style("max-width", $"{ActualWidth}px");
 
@@ -300,7 +300,7 @@
                     renderer.StartElement("td")
                         .Attr("align", child.GetAttribute("align"))
                         .Attr("background", backgroundColor)
-                        .Attr("class", child.GetAttribute("css-class"))
+                        .Class(child.GetAttribute("css-class"))
                         .Style("background", backgroundColor)
                         .Style("font-size", "0px")
                         .Style("padding", child.GetAttribute("padding"))
