@@ -9,10 +9,12 @@ namespace Tools
         {
             var directory = new DirectoryInfo("../../../../Mjml.Net");
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
             var argumentRegex = new Regex("\\[\"(?<Name>.*)\"\\] = AttributeTypes\\.(?<Type>[^,]*),?", RegexOptions.Singleline | RegexOptions.Compiled);
             var argumentAccessRegex = new Regex("node\\.GetAttribute\\(\"(?<Name>[^\"]*)\"\\)", RegexOptions.Singleline | RegexOptions.Compiled);
 
             var defaultRegex = new Regex("\\[\"(?<Name>.*)\"\\] = \"(?<Value>.*)\"", RegexOptions.Singleline | RegexOptions.Compiled);
+#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
 
             foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
             {

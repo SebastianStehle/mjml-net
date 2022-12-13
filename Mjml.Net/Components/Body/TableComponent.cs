@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Components.Body
 {
-    public partial class TableComponent : BodyComponent
+    public partial class TableComponent : BodyComponentBase
     {
         private static readonly AllowedParents Parents = new AllowedParents
         {
