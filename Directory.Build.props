@@ -3,11 +3,12 @@
     <Authors>Liam Riddell, Sebastian Stehle</Authors>
     <Description>A blazingly-fast unofficial port of MJML (by MailJet) to .NET 6.</Description>
     <Copyright>MIT</Copyright>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageTags>email,mjml,templates</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SebastianStehle/mjml-net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SebastianStehle/mjml-net.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.11.0</Version>
+    <Version>1.12.0</Version>
   </PropertyGroup>
 </Project>

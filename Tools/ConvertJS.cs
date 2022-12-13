@@ -8,8 +8,9 @@ namespace Tools
     {
         public static void Run()
         {
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
             var propertyRegex = new Regex("'?(?<Name>[a-z\\-]*)'?: '(?<Value>[^']*)'");
-
+#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
             var directory = new DirectoryInfo("../../../../Mjml.Net");
 
             foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
