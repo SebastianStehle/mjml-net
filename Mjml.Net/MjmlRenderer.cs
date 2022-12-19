@@ -17,7 +17,7 @@ namespace Mjml.Net
 #if NET7_0
         private readonly Regex attributeRegex = AttributeRegexFactory();
 #else
-        private readonly Regex attributeRegex = new Regex(@"\s*(?<Name>[a-z0-9]*)=""(?<Value>.*)""([\s]|>)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private readonly Regex attributeRegex = new Regex(@"\s*(?<Name>[a-z0-9-]*)=""(?<Value>.*)""([\s]|>)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 #endif
         private readonly ObjectPool<StringBuilder> poolOfStringBuilders = new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
         private readonly ObjectPool<MjmlRenderContext> poolOfContexts = new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
@@ -277,7 +277,7 @@ namespace Mjml.Net
         }
 
 #if NET7_0
-        [GeneratedRegex("\\s*(?<Name>[a-z0-9]*)=\"(?<Value>.*)\"([\\s]|>)", RegexOptions.ExplicitCapture | RegexOptions.Compiled)]
+        [GeneratedRegex("\\s*(?<Name>[a-z0-9-]*)=\"(?<Value>.*)\"([\\s]|>)", RegexOptions.ExplicitCapture | RegexOptions.Compiled)]
         private static partial Regex AttributeRegexFactory();
 #endif
     }
