@@ -29,19 +29,19 @@
       <mj-column>
         <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qy.png" alt="New York" width="184px" padding="0 25px"></mj-image>
         <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" vertical-align="top" padding="20px 25px"><strong>New York</strong> <br />
-          <p style="font-size: 15px;color:#000000;">$399&#xA0;</p>
+          <p style="font-size: 15px;color:#000000;">$399</p>
         </mj-text>
       </mj-column>
       <mj-column>
         <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qr.png" alt="London" width="184px" padding="0 25px"></mj-image>
         <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" vertical-align="top" padding="20px 25px"><strong>London</strong> <br />
-          <p style="font-size: 15px;color:#000000;">$399&#xA0;</p>
+          <p style="font-size: 15px;color:#000000;">$399</p>
         </mj-text>
       </mj-column>
       <mj-column>
         <mj-image src="http://go.mailjet.com/tplimg/mtrq/b/ox8s/mg1qv.png" alt="Berlin" width="184px" padding="0 25px"></mj-image>
         <mj-text align="center" color="#EC652D" font-size="20px" font-family="Lato, Helvetica, Arial, sans-serif" vertical-align="top" padding="20px 25px"><strong>Berlin</strong> <br />
-          <p style="font-size: 15px;color:#000000;">$399&#xA0;</p>
+          <p style="font-size: 15px;color:#000000;">$399</p>
         </mj-text>
       </mj-column>
     </mj-section>
