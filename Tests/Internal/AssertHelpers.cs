@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
@@ -62,18 +63,15 @@ namespace Tests.Internal
 
         public static void HtmlAssert(string expected, string actual, bool ignoreIds = false)
         {
-            var lhs = Cleanup(expected);
-            var rhs = Cleanup(actual);
-
-            HtmlAssertCore(lhs, rhs, ignoreIds);
+            HtmlAssertCore(Cleanup(expected), Cleanup(actual), ignoreIds);
         }
 
         private static void HtmlAssertCore(string expected, string actual, bool ignoreIds)
         {
             var diffs =
                 DiffBuilder
-                    .Compare(expected)
-                    .WithTest(actual)
+                    .Compare(actual)
+                    .WithTest(expected)
                     .WithOptions(options =>
                     {
                         options.AddAttributeComparer();

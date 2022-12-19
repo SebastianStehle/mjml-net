@@ -43,7 +43,7 @@
         <mj-image src="http://191n.mj.am/img/191n/3s/xmw.jpg" alt="CD" width="147px" padding="0px"></mj-image>
       </mj-column>
       <mj-column width="25%">
-        <mj-text align="center" font-size="16px" padding="0 25px">LAST ALBUM AVAILABLE <span style="font-weight: bold;">12,99&#x20AC;</span></mj-text>
+        <mj-text align="center" font-size="16px" padding="0 25px">LAST ALBUM AVAILABLE <span style="font-weight: bold;">12,99€</span></mj-text>
         <mj-button mj-class="button" font-size="17px" href="https://mjml.io" padding="10px 0">BUY IT !</mj-button>
       </mj-column>
       <mj-column width="50%">
