@@ -17,24 +17,6 @@ namespace Tests.Internal
         }
 
         /// <inheritdoc />
-        public TextReader? LoadReader(string path)
-        {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-
-            var text = LoadText(path);
-
-            if (text != null)
-            {
-                return new StringReader(text);
-            }
-
-            return null;
-        }
-
-        /// <inheritdoc />
         public string? LoadText(string path)
         {
             if (path == null)

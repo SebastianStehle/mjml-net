@@ -1,4 +1,6 @@
-﻿using Mjml.Net.Helpers;
+﻿using System.Globalization;
+using System.Xml;
+using Mjml.Net.Helpers;
 
 namespace Mjml.Net
 {
@@ -7,6 +9,8 @@ namespace Mjml.Net
     /// </summary>
     public sealed record MjmlOptions
     {
+        private static readonly XmlParserContext DefaultParserContext;
+
         /// <summary>
         /// Gets the default font.
         /// </summary>
@@ -34,6 +38,12 @@ namespace Mjml.Net
             ["&reg;"] = "&#174;",
             ["&trade;"] = "&#8482;"
         };
+        private IReadOnlyDictionary<string, string> xmlEntities = DefaultXmlEntities;
+
+        static MjmlOptions()
+        {
+            DefaultParserContext = BuilContext(DefaultXmlEntities);
+        }
 
         /// <summary>
         /// True to also keep comments. The default is: <c>false</c>.
@@ -84,11 +94,6 @@ namespace Mjml.Net
         public IReadOnlyDictionary<string, Font> Fonts { get; init; } = DefaultFonts;
 
         /// <summary>
-        /// A list of supported XML entities. The default is: <see cref="DefaultXmlEntities"/>.
-        /// </summary>
-        public IReadOnlyDictionary<string, string> XmlEntities { get; init; } = DefaultXmlEntities;
-
-        /// <summary>
         /// The current validator. The default is: The default is: <c>null</c>.The default is: <c>null</c>.
         /// </summary>
         public IValidatorFactory? ValidatorFactory { get; init; }
@@ -97,5 +102,59 @@ namespace Mjml.Net
         /// The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. The default is: <c>null</c>.
         /// </summary>
         public IFileLoader? FileLoader { get; init; }
+
+        /// <summary>
+        /// The current parser context. Derived from xml entities.
+        /// </summary>
+        public XmlParserContext ParserContext { get; init; }
+
+        /// <summary>
+        /// A list of supported XML entities. The default is: <see cref="DefaultXmlEntities"/>.
+        /// </summary>
+        public IReadOnlyDictionary<string, string> XmlEntities
+        {
+            get => xmlEntities;
+            init
+            {
+                xmlEntities = value;
+
+                if (ReferenceEquals(value, DefaultXmlEntities))
+                {
+                    ParserContext = DefaultParserContext;
+                }
+                else
+                {
+                    ParserContext = BuilContext(value);
+                }
+            }
+        }
+
+        private static XmlParserContext BuilContext(IReadOnlyDictionary<string, string>? entities)
+        {
+            var context = new XmlParserContext(null, null, null, XmlSpace.None)
+            {
+                DocTypeName = "Html"
+            };
+
+            if (entities?.Count > 0)
+            {
+                var sb = DefaultPools.StringBuilders.Get();
+                try
+                {
+                    foreach (var (key, value) in entities)
+                    {
+                        sb.AppendLine(CultureInfo.InvariantCulture, $"!ENTITY {key[1..]} \"{value}\">");
+                    }
+
+                    context.InternalSubset = sb.ToString();
+                }
+                finally
+                {
+                    DefaultPools.StringBuilders.Return(sb);
+                }
+            }
+
+            return context;
+        }
     }
 }

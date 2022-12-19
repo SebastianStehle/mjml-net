@@ -38,12 +38,12 @@ namespace Mjml.Net
 
         public void ReturnStringBuilder(StringBuilder stringBuilder)
         {
-            mjmlRenderer.Return(stringBuilder);
+            DefaultPools.StringBuilders.Return(stringBuilder);
         }
 
         public void StartBuffer()
         {
-            buffers.Push(mjmlRenderer.GetStringBuilder());
+            buffers.Push(DefaultPools.StringBuilders.Get());
         }
 
         public StringBuilder? EndBuffer()

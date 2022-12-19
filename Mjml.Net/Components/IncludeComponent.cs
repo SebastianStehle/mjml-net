@@ -67,7 +67,7 @@ namespace Mjml.Net.Components
                 return;
             }
 
-            var content = context.Options.FileLoader?.LoadReader(Path);
+            var content = context.Options.FileLoader?.LoadText(Path);
 
             if (content == null)
             {

@@ -34,6 +34,12 @@ Hello MJML"
             yield return new object[]
             {
                 @"
+<strong>Hello</strong>Entity&nbsp;<strong>Whats Up</strong>"
+            };
+
+            yield return new object[]
+            {
+                @"
 <button type=""submit"">Submit1</button>"
             };
 

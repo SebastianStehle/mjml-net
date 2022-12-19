@@ -6,13 +6,6 @@ namespace Mjml.Net
 {
     public sealed partial class MjmlRenderContext : IMjmlReader
     {
-        private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
-        {
-            // Allow XML documents without a single root.
-            ConformanceLevel = ConformanceLevel.Fragment,
-            // Prevent XML external entity (XXE) processing attacks.
-            DtdProcessing = DtdProcessing.Ignore
-        };
         private readonly GlobalContext context = new GlobalContext();
         private readonly ValidationErrors errors = new ValidationErrors();
         private readonly Binder binder;
@@ -62,19 +55,25 @@ namespace Mjml.Net
             return validator?.Complete() ?? new ValidationErrors();
         }
 
-        public void ReadFragment(TextReader mjml)
-        {
-            using (var xml = XmlReader.Create(mjml, ReaderSettings))
-            {
-                ReadXml(xml, currentComponent);
-            }
-        }
-
         public void ReadFragment(string mjml)
         {
-            using (var xml = XmlReader.Create(new StringReader(mjml), ReaderSettings))
+            if (mjmlOptions.Lax)
             {
-                ReadXml(xml, currentComponent);
+                mjml = XmlFixer.FixXML(mjml, mjmlOptions);
+            }
+
+            var fragmentReader = new XmlTextReader(mjml, XmlNodeType.Element, mjmlOptions.ParserContext)
+            {
+                // Parse the doctype definition for the allowed entities.
+                DtdProcessing = DtdProcessing.Parse,
+
+                // Keep the entities.
+                EntityHandling = EntityHandling.ExpandCharEntities
+            };
+
+            using (fragmentReader)
+            {
+                ReadXml(fragmentReader, currentComponent);
             }
         }
 
@@ -174,7 +173,7 @@ namespace Mjml.Net
                         case XmlNodeType.Text:
                             component.AddChild(reader.Value);
 
-                            if (reader.NodeType != XmlNodeType.Text)
+                            if (reader.NodeType != XmlNodeType.Text && reader.NodeType != XmlNodeType.EntityReference)
                             {
                                 Read();
                             }
@@ -183,6 +182,11 @@ namespace Mjml.Net
                             component.AddChild(reader.ReadOuterXml().Trim());
                             Read();
                             break;
+
+                        case XmlNodeType.EntityReference:
+                            component.AddChild($"&{reader.Name};");
+                            break;
+
                         default:
                             return;
                     }
