@@ -42,7 +42,7 @@ namespace Mjml.Net
 
         static MjmlOptions()
         {
-            DefaultParserContext = BuilContext(DefaultXmlEntities);
+            DefaultParserContext = BuildContext(DefaultXmlEntities);
         }
 
         /// <summary>
@@ -124,12 +124,12 @@ namespace Mjml.Net
                 }
                 else
                 {
-                    ParserContext = BuilContext(value);
+                    ParserContext = BuildContext(value);
                 }
             }
         }
 
-        private static XmlParserContext BuilContext(IReadOnlyDictionary<string, string>? entities)
+        private static XmlParserContext BuildContext(IReadOnlyDictionary<string, string>? entities)
         {
             var context = new XmlParserContext(null, null, null, XmlSpace.None)
             {

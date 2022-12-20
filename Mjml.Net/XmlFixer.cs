@@ -4,7 +4,7 @@ namespace Mjml.Net
 {
     public static partial class XmlFixer
     {
-        public static string FixXML(string mjml, MjmlOptions options)
+        public static string Process(string mjml, MjmlOptions options)
         {
             var sb = DefaultPools.StringBuilders.Get();
 

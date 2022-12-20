@@ -121,7 +121,7 @@ namespace Mjml.Net
 
         public string FixXML(string mjml, MjmlOptions? options = null)
         {
-            return XmlFixer.FixXML(mjml, options ?? new MjmlOptions());
+            return XmlFixer.Process(mjml, options ?? new MjmlOptions());
         }
 
         /// <inheritdoc />

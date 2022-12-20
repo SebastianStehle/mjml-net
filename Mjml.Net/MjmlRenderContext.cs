@@ -59,7 +59,7 @@ namespace Mjml.Net
         {
             if (mjmlOptions.Lax)
             {
-                mjml = XmlFixer.FixXML(mjml, mjmlOptions);
+                mjml = XmlFixer.Process(mjml, mjmlOptions);
             }
 
             var fragmentReader = new XmlTextReader(mjml, XmlNodeType.Element, mjmlOptions.ParserContext)
