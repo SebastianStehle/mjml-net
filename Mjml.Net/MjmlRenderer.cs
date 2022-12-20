@@ -146,6 +146,21 @@ namespace Mjml.Net
         {
             options ??= new MjmlOptions();
 
+            var sb = DefaultPools.StringBuilders.Get();
+            try
+            {
+                // We need the doctype parsing for xml entities, but it is a potential security issue. 
+                // Therefore we setup a dummy doctype, which will cause an exception if the mjml has a dtd.
+                sb.Append("\r\n<!DOCTYPE mjml>");
+                sb.Append(mjml);
+
+                mjml = sb.ToString();
+            }
+            finally
+            {
+                DefaultPools.StringBuilders.Return(sb);
+            }
+
             if (options.Lax)
             {
                 mjml = FixXML(mjml, options);
