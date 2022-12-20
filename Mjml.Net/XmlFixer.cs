@@ -14,49 +14,27 @@ namespace Mjml.Net
 
                 static ReadOnlySpan<char> FixNextSequence(ReadOnlySpan<char> span, StringBuilder sb, MjmlOptions options)
                 {
-                    var nextAmbersand = span.IndexOfAny('&', '<');
+                    var nextTagStart = span.IndexOf('<');
 
-                    if (nextAmbersand < 0)
+                    if (nextTagStart < 0)
                     {
                         // Add everything that is left.
                         sb.Append(span);
                         return default;
                     }
 
-                    if (nextAmbersand > 0)
+                    if (nextTagStart > 0)
                     {
                         // Add everything to the character.
-                        sb.Append(span[..nextAmbersand]);
+                        sb.Append(span[..nextTagStart]);
 
                         // Move to the character.
-                        span = span[nextAmbersand..];
+                        span = span[nextTagStart..];
                     }
 
                     var first = span[0];
 
-                    if (first == '&')
-                    {
-                        var isUnknownEntity = true;
-
-                        foreach (var (key, value) in options.XmlEntities)
-                        {
-                            if (span.StartsWith(key, StringComparison.Ordinal))
-                            {
-                                isUnknownEntity = false;
-                                break;
-                            }
-                        }
-
-                        if (isUnknownEntity)
-                        {
-                            sb.Append("&amp;");
-                        }
-                        else
-                        {
-                            sb.Append(first);
-                        }
-                    }
-                    else if (StartWithIgnoreWhitespace(span, "<br*>", out var charsRead))
+                    if (StartWithIgnoreWhitespace(span, "<br*>", out var charsRead))
                     {
                         var afterBr = span[charsRead..];
 

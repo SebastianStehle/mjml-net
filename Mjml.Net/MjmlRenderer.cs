@@ -139,38 +139,22 @@ namespace Mjml.Net
         /// <inheritdoc />
         public RenderResult Render(TextReader mjml, MjmlOptions? options = null)
         {
-            return Render(mjml.ReadToEnd(), options);
+            return RenderCore(mjml.ReadToEnd(), options);
         }
 
         private RenderResult RenderCore(string mjml, MjmlOptions? options)
         {
             options ??= new MjmlOptions();
 
-            var sb = DefaultPools.StringBuilders.Get();
-            try
-            {
-                // We need the doctype parsing for xml entities, but it is a potential security issue. 
-                // Therefore we setup a dummy doctype, which will cause an exception if the mjml has a dtd.
-                sb.Append("\r\n<!DOCTYPE mjml>");
-                sb.Append(mjml);
-
-                mjml = sb.ToString();
-            }
-            finally
-            {
-                DefaultPools.StringBuilders.Return(sb);
-            }
-
             if (options.Lax)
             {
-                mjml = FixXML(mjml, options);
+                mjml = XmlFixer.Process(mjml, options);
             }
 
-            // Set the node type to document to disallow multiple root.
-            var xml = new XmlTextReader(mjml, XmlNodeType.Document, options.ParserContext)
+            var xml = new XmlTextReader(mjml, XmlNodeType.Document, null)
             {
-                // Parse the doctype definition for the allowed entities.
-                DtdProcessing = DtdProcessing.Parse,
+                // Disable dtd for security reasons.
+                DtdProcessing = DtdProcessing.Prohibit,
 
                 // Keep the entities.
                 EntityHandling = EntityHandling.ExpandCharEntities

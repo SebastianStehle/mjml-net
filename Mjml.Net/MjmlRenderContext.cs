@@ -62,10 +62,10 @@ namespace Mjml.Net
                 mjml = XmlFixer.Process(mjml, mjmlOptions);
             }
 
-            var fragmentReader = new XmlTextReader(mjml, XmlNodeType.Element, mjmlOptions.ParserContext)
+            var fragmentReader = new XmlTextReader(mjml, XmlNodeType.Element, (XmlParserContext?)null)
             {
-                // Parse the doctype definition for the allowed entities.
-                DtdProcessing = DtdProcessing.Parse,
+                // Disable dtd for security reasons.
+                DtdProcessing = DtdProcessing.Prohibit,
 
                 // Keep the entities.
                 EntityHandling = EntityHandling.ExpandCharEntities
