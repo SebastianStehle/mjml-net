@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.ExceptionServices;
+using System.Text;
 
 namespace Mjml.Net
 {
@@ -14,27 +15,38 @@ namespace Mjml.Net
 
                 static ReadOnlySpan<char> FixNextSequence(ReadOnlySpan<char> span, StringBuilder sb, MjmlOptions options)
                 {
-                    var nextTagStart = span.IndexOf('<');
+                    var nextEntityOrTag = span.IndexOfAny('&', '<');
 
-                    if (nextTagStart < 0)
+                    if (nextEntityOrTag < 0)
                     {
                         // Add everything that is left.
                         sb.Append(span);
                         return default;
                     }
 
-                    if (nextTagStart > 0)
+                    if (nextEntityOrTag > 0)
                     {
                         // Add everything to the character.
-                        sb.Append(span[..nextTagStart]);
+                        sb.Append(span[..nextEntityOrTag]);
 
                         // Move to the character.
-                        span = span[nextTagStart..];
+                        span = span[nextEntityOrTag..];
                     }
 
                     var first = span[0];
 
-                    if (StartWithIgnoreWhitespace(span, "<br*>", out var charsRead))
+                    if (first == '&')
+                    {
+                        if (!IsEntity(span))
+                        {
+                            sb.Append("&amp;");
+                        }
+                        else
+                        {
+                            sb.Append(first);
+                        }
+                    }
+                    else if (StartWithIgnoreWhitespace(span, "<br*>", out var charsRead))
                     {
                         var afterBr = span[charsRead..];
 
@@ -68,6 +80,28 @@ namespace Mjml.Net
             {
                 DefaultPools.StringBuilders.Return(sb);
             }
+        }
+
+        private static bool IsEntity(ReadOnlySpan<char> input)
+        {
+            var indexOfEnding = input.IndexOf(';');
+
+            if (indexOfEnding < 0 || indexOfEnding > 5)
+            {
+                return false;
+            }
+
+            for (var i = 1; i < indexOfEnding - 1; i++)
+            {
+                var c = input[i];
+
+                if (!char.IsLetterOrDigit(c) && c != '#')
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static bool StartWithIgnoreWhitespace(ReadOnlySpan<char> input, string test, out int charsRead)
