@@ -106,20 +106,20 @@ public static void Main (string[] args) {
 ## Options
 You can also specify options to the MJML parser.
 
-| Name             | Data Type          | Default | Description                                                                                                                                                           |
-|------------------|--------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| KeepComments     | bool                                  | false              | True to keep comments.                                                                                                                                                |
-| Breakpoint       | string                                | 480px              | The default breakpoint to switch to mobile view.                                                                                                                      |
-| Styles           | Style[]?                              | []                 | A list of custom styles.                                                                                                                                              |
-| ForceOWAQueries  | bool                                  | false              | True to enable media queries for OWA.                                                                                                                                 |
-| Beautify         | bool                                  | true               | True to beatify the HTML. Impacts performance (slower).                                                                                                               |
-| Minify           | bool                                  | false              | True to minify the HTML.                                                                                                                                              |
-| Lax              | bool                                  | false              | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance. |
-| IdGenerator      | IIdGenerator                          | Preset             | The ID generator to create random values for attributes like Ids.
-| Fonts            | IReadOnlyDictionary<string, Font[]>   | Preset             | A list of supported default fonts.                                                                                                                                    |
-| XmlEntities      | IReadOnlyDictionary<string, string>   | Preset             | A list of supported XML entities.                                                                                                                                     |
-| ValidatorFactory | IValidatorFactory?                    | null               | The current validator, which also defines the validation mode.
-| FileLoader       | IFileLoader?                          | null               | The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. For example, SqlDatabaseFileLoader, InMemoryFileLoader, DiskFileLoader, etc...
+| Name             | Data Type                           | Default | Description                                                                                                                                                                                                         |
+|------------------|-------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| KeepComments     | bool                                | false   | True to keep comments.                                                                                                                                                                                              |
+| Breakpoint       | string                              | 480px   | The default breakpoint to switch to mobile view.                                                                                                                                                                    |
+| Styles           | Style[]?                            | []      | A list of custom styles.                                                                                                                                                                                            |
+| ForceOWAQueries  | bool                                | false   | True to enable media queries for OWA.                                                                                                                                                                               |
+| Beautify         | bool                                | true    | True to beatify the HTML. Impacts performance (slower).                                                                                                                                                             |
+| Minify           | bool                                | false   | True to minify the HTML.                                                                                                                                                                                            |
+| Lax              | bool                                | false   | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance.                                               |
+| IdGenerator      | IIdGenerator                        | Preset  | The ID generator to create random values for attributes like Ids.                                                                                                                                                   |
+| Fonts            | IReadOnlyDictionary<string, Font[]> | Preset  | A list of supported default fonts.                                                                                                                                                                                  |
+| XmlEntities      | IReadOnlyDictionary<string, string> | Preset  | A list of supported XML entities (**deprecated with version 1.16.0**)                                                                                                                                               |
+| ValidatorFactory | IValidatorFactory?                  | null    | The current validator, which also defines the validation mode.                                                                                                                                                      |
+| FileLoader       | IFileLoader?                        | null    | The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. For example, SqlDatabaseFileLoader, InMemoryFileLoader, DiskFileLoader, etc... |
 
 ## Supported Components
 `MJML.NET` tries to implement all functionality `1-2-1` with the MJML 4 project. However, due to JavaScript not being a typed language this means there has been considerate refactoring to the code to make it more aligned with C# typed requirements. 
@@ -245,7 +245,7 @@ All times are in μs (1ms = 1000 μs)
 
 ## Known Issues
 
-### Unknown HTML Entity
+### **Before Version 1.17.0**: Unknown HTML Entities
 
 We are aware with an issue where by using HTML Character Entities (e.g. `&copy;`) are unknown and throw an unhandled exception during the rendering of the MJML document. This is because we use XmlReader as the main driver for parsing the MJML document.
 
@@ -265,7 +265,10 @@ Here are some of the common HTML Character Entities:
 | ™      | registered trademark               | `&trade;`   | `&#8482`      |
 
 ### Non-encoded URL
-We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJML document. This solution is to URL encode all of the URLs in the template.
+We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJML document. This solution is to URL encode all of the URLs in the template or turn on the lax mode with `options.Lax = true`.
+
+### Html tag that is not XML.
+Some HTML tags are not valid HTML. Especially line break (`<br>`). Convert these tags to XHTML (`<br></br>` or `<br />`) or turn on the lax mode with `options.Lax = true`.
 
 ## Contribution
 
