@@ -20,22 +20,6 @@ namespace Mjml.Net
         };
 
         /// <summary>
-        /// Gets the default xml entities.
-        /// </summary>
-        public static readonly IReadOnlyDictionary<string, string> DefaultXmlEntities = new Dictionary<string, string>
-        {
-            ["&amp;"] = "&#38;",
-            ["&apos;"] = "&#39;",
-            ["&copy;"] = "&#169;",
-            ["&gt;"] = "&#62;",
-            ["&lt;"] = "&#60;",
-            ["&nbsp;"] = "&#160;",
-            ["&quot;"] = "&#34;",
-            ["&reg;"] = "&#174;",
-            ["&trade;"] = "&#8482;"
-        };
-
-        /// <summary>
         /// True to also keep comments. The default is: <c>false</c>.
         /// </summary>
         public bool KeepComments { get; init; }
@@ -84,11 +68,6 @@ namespace Mjml.Net
         public IReadOnlyDictionary<string, Font> Fonts { get; init; } = DefaultFonts;
 
         /// <summary>
-        /// A list of supported XML entities. The default is: <see cref="DefaultXmlEntities"/>.
-        /// </summary>
-        public IReadOnlyDictionary<string, string> XmlEntities { get; init; } = DefaultXmlEntities;
-
-        /// <summary>
         /// The current validator. The default is: The default is: <c>null</c>.The default is: <c>null</c>.
         /// </summary>
         public IValidatorFactory? ValidatorFactory { get; init; }
@@ -97,5 +76,11 @@ namespace Mjml.Net
         /// The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. The default is: <c>null</c>.
         /// </summary>
         public IFileLoader? FileLoader { get; init; }
+
+        /// <summary>
+        /// A list of supported XML entities.
+        /// </summary>
+        [Obsolete("Not needed anymore.")]
+        public IReadOnlyDictionary<string, string>? XmlEntities { get; set; } = null!;
     }
 }

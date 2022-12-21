@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
 using Microsoft.Extensions.ObjectPool;
 using Mjml.Net.Components;
@@ -14,13 +13,7 @@ namespace Mjml.Net
     /// </summary>
     public sealed partial class MjmlRenderer : IMjmlRenderer
     {
-#if NET7_0
-        private readonly Regex attributeRegex = AttributeRegexFactory();
-#else
-        private readonly Regex attributeRegex = new Regex(@"\s*(?<Name>[a-z0-9-]*)=""(?<Value>.*)""([\s]|>)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-#endif
-        private readonly ObjectPool<StringBuilder> poolOfStringBuilders = new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy());
-        private readonly ObjectPool<MjmlRenderContext> poolOfContexts = new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
+        private readonly ObjectPool<MjmlRenderContext> contextPool = new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
         private readonly Dictionary<string, Func<IComponent>> components = new Dictionary<string, Func<IComponent>>();
         private readonly List<IHelper> helpers = new List<IHelper>();
 
@@ -126,135 +119,51 @@ namespace Mjml.Net
             return components.GetValueOrDefault(name)?.Invoke();
         }
 
+        public string FixXML(string mjml, MjmlOptions? options = null)
+        {
+            return XmlFixer.Process(mjml, options ?? new MjmlOptions());
+        }
+
         /// <inheritdoc />
         public RenderResult Render(string mjml, MjmlOptions? options = null)
         {
-            if (options?.Lax == true)
-            {
-                mjml = FixXML(mjml, options);
-            }
-
-            var xml = XmlReader.Create(new StringReader(mjml));
-
-            return Render(xml, options);
+            return RenderCore(mjml, options);
         }
 
         /// <inheritdoc />
         public RenderResult Render(Stream mjml, MjmlOptions? options = null)
         {
-            var xml = XmlReader.Create(mjml);
-
-            return Render(xml, options);
+            return Render(new StreamReader(mjml), options);
         }
 
         /// <inheritdoc />
         public RenderResult Render(TextReader mjml, MjmlOptions? options = null)
         {
-            var xml = XmlReader.Create(mjml);
-
-            return Render(xml, options);
+            return RenderCore(mjml.ReadToEnd(), options);
         }
 
-        public string FixXML(string mjml, MjmlOptions? options = null)
+        private RenderResult RenderCore(string mjml, MjmlOptions? options)
         {
             options ??= new MjmlOptions();
 
-            foreach (var (key, value) in options.XmlEntities)
+            if (options.Lax)
             {
-                mjml = mjml.Replace(key, value, StringComparison.OrdinalIgnoreCase);
+                mjml = XmlFixer.Process(mjml, options);
             }
 
-            mjml = FixLineBreakTags(mjml);
-
-            mjml = attributeRegex.Replace(mjml, match =>
+            var xml = new XmlTextReader(mjml, XmlNodeType.Document, null)
             {
-                var raw = match.ToString();
+                // Disable dtd for security reasons.
+                DtdProcessing = DtdProcessing.Prohibit,
 
-                var value = match.Groups["Value"].Value;
+                // Keep the entities.
+                EntityHandling = EntityHandling.ExpandCharEntities
+            };
 
-                if (!value.Contains('&', StringComparison.OrdinalIgnoreCase))
-                {
-                    return raw;
-                }
-
-                value = value.Replace("&", "&amp;", StringComparison.OrdinalIgnoreCase);
-
-                return $" {match.Groups["Name"].Value}=\"{value}\"{raw[^1]}";
-            });
-
-            static string FixLineBreakTags(string input)
-            {
-                var currentIndex = 0;
-
-                const string OpeningTag = "<br>";
-
-                while (true)
-                {
-                    var indexOfBr = input.IndexOf(OpeningTag, currentIndex, StringComparison.OrdinalIgnoreCase);
-
-                    if (indexOfBr >= 0)
-                    {
-                        static bool HasCloseTag(string input, int startIndex, string closing)
-                        {
-                            var closeIndex = input.IndexOf(closing, startIndex, StringComparison.OrdinalIgnoreCase);
-
-                            if (closeIndex < 0)
-                            {
-                                return false;
-                            }
-
-                            for (var i = startIndex; i < closeIndex; i++)
-                            {
-                                var c = input[i];
-
-                                if (c != ' ' && c != '\r' && c != '\n')
-                                {
-                                    return false;
-                                }
-                            }
-
-                            return true;
-                        }
-
-                        currentIndex = indexOfBr + 4;
-
-                        if (HasCloseTag(input, currentIndex, "</br>") ||
-                            HasCloseTag(input, currentIndex, "</ br>"))
-                        {
-                            continue;
-                        }
-
-                        input = input.Remove(indexOfBr, OpeningTag.Length);
-                        input = input.Insert(indexOfBr, "<br />");
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                return input;
-            }
-
-            return mjml;
-        }
-
-        internal StringBuilder GetStringBuilder()
-        {
-            return poolOfStringBuilders.Get();
-        }
-
-        internal void Return(StringBuilder stringBuilder)
-        {
-            poolOfStringBuilders.Return(stringBuilder);
-        }
-
-        private RenderResult Render(XmlReader xml, MjmlOptions? options)
-        {
-            var context = poolOfContexts.Get();
+            var context = contextPool.Get();
             try
             {
-                context.Setup(this, options ?? new MjmlOptions());
+                context.Setup(this, options);
                 context.StartBuffer();
                 context.ReadXml(xml, null);
 
@@ -267,18 +176,13 @@ namespace Mjml.Net
                 }
                 finally
                 {
-                    Return(buffer!);
+                    DefaultPools.StringBuilders.Return(buffer!);
                 }
             }
             finally
             {
-                poolOfContexts.Return(context);
+                contextPool.Return(context);
             }
         }
-
-#if NET7_0
-        [GeneratedRegex("\\s*(?<Name>[a-z0-9-]*)=\"(?<Value>.*)\"([\\s]|>)", RegexOptions.ExplicitCapture | RegexOptions.Compiled)]
-        private static partial Regex AttributeRegexFactory();
-#endif
     }
 }
