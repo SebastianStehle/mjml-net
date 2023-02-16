@@ -186,6 +186,9 @@
     <None Update="Templates\amario.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\austin.mjml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\arturia.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
