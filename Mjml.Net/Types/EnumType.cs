@@ -5,6 +5,10 @@
         private readonly HashSet<string> allowedValues;
         private readonly bool isOptional;
 
+        public bool IsOptional => isOptional;
+
+        public IReadOnlySet<string> AllowedValues => allowedValues;
+
         public EnumType(bool isOptional, params string[] values)
         {
             allowedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);

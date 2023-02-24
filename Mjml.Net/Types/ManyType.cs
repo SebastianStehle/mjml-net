@@ -6,6 +6,12 @@
         private readonly int min;
         private readonly int max;
 
+        public IType Unit => unit;
+
+        public int Min => min;
+
+        public int Max => max;
+
         public ManyType(IType unit, int min, int max)
         {
             this.unit = unit;

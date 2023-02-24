@@ -4,6 +4,8 @@
     {
         private readonly IType[] units;
 
+        public IReadOnlyCollection<Unit> Units => units;
+
         public OneOfType(params IType[] units)
         {
             this.units = units;
