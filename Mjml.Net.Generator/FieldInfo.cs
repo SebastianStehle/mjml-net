@@ -1,7 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 
-#pragma warning disable MA0098 // Use indexer instead of LINQ methods
-
 namespace Mjml.Net.Generator
 {
     internal sealed record FieldInfo
@@ -10,7 +8,7 @@ namespace Mjml.Net.Generator
 
         public string Attribute { get; set; }
 
-        public string AttributeDefault { get; set; }
+        public string DefaultValue { get; set; }
 
         public string DefaultType { get; set; }
 
@@ -32,17 +30,17 @@ namespace Mjml.Net.Generator
                 {
                     Name = field.Name,
                     Attribute = "none",
-                    AttributeDefault = value ?? "null",
+                    DefaultValue = value ?? "null",
                     DefaultType = "String",
                     IsText = isText
                 };
 
                 // Get the attribute name and the type.
-                var bindAttribute = field.GetAttributes().FirstOrDefault(a => a.AttributeClass.Equals(attribute, SymbolEqualityComparer.Default));
+                var bindAttribute = field.GetAttributes().FirstOrDefault(a => a.AttributeClass!.Equals(attribute, SymbolEqualityComparer.Default));
 
                 if (bindAttribute != null)
                 {
-                    fieldInfo.Attribute = bindAttribute.ConstructorArguments.First().Value!.ToString();
+                    fieldInfo.Attribute = bindAttribute.ConstructorArguments.First().Value!.ToString()!;
 
                     if (bindAttribute.ConstructorArguments.Length >= 2)
                     {
@@ -50,7 +48,7 @@ namespace Mjml.Net.Generator
 
                         if (argument.Type?.Name == "Type")
                         {
-                            fieldInfo.CustomType = bindAttribute.ConstructorArguments!.Last().Value!.ToString();
+                            fieldInfo.CustomType = bindAttribute.ConstructorArguments!.Last().Value!.ToString()!;
                             fieldInfo.CustomTypeName = $"__CustomType{customTypes}";
 
                             customTypes++;
