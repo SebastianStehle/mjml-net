@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Types
 {
-    public class NumberType : IType
+    public sealed class NumberType : IType
     {
         private readonly Unit[] units;
 

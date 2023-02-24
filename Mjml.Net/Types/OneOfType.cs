@@ -1,14 +1,14 @@
 ﻿namespace Mjml.Net.Types
 {
-    public class OneOfType : IType
+    public sealed class OneOfType : IType
     {
-        private readonly IType[] units;
+        private readonly List<IType> units;
 
-        public IReadOnlyCollection<Unit> Units => units;
+        public IReadOnlyCollection<IType> Units => units;
 
         public OneOfType(params IType[] units)
         {
-            this.units = units;
+            this.units = units.ToList();
         }
 
         public bool Validate(string value, ref ValidationContext context)

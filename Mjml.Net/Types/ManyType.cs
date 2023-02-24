@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Types
 {
-    public class ManyType : IType
+    public sealed class ManyType : IType
     {
         private readonly IType unit;
         private readonly int min;

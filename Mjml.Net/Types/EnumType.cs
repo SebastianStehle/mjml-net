@@ -1,6 +1,6 @@
 ﻿namespace Mjml.Net.Types
 {
-    public class EnumType : IType
+    public sealed class EnumType : IType
     {
         private readonly HashSet<string> allowedValues;
         private readonly bool isOptional;
