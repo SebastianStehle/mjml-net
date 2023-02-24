@@ -44,6 +44,22 @@
         IMjmlRenderer ClearComponents();
 
         /// <summary>
+        /// Gets a list of all registered components.
+        /// </summary>
+        /// <remarks>
+        /// This method is not thread safe.
+        /// </remarks>
+        IReadOnlyCollection<Func<IComponent>> Components { get; }
+
+        /// <summary>
+        /// Gets a list of all registered helpers.
+        /// </summary>
+        /// <remarks>
+        /// This method is not thread safe.
+        /// </remarks>
+        IReadOnlyCollection<IHelper> Helpers { get; }
+
+        /// <summary>
         /// Clears the list of default helpers.
         /// </summary>
         /// <returns>

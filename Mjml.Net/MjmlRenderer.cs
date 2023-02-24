@@ -32,10 +32,11 @@ namespace Mjml.Net
             }
         }
 
-        /// <summary>
-        /// Provides a list of all registered helpers.
-        /// </summary>
-        public IEnumerable<IHelper> Helpers => helpers;
+        /// <inheritdoc />
+        public IReadOnlyCollection<Func<IComponent>> Components => components.Values;
+
+        /// <inheritdoc />
+        public IReadOnlyCollection<IHelper> Helpers => helpers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MjmlRenderer"/> class.
