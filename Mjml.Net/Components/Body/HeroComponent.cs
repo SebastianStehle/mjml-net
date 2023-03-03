@@ -128,7 +128,7 @@
                     .Style("font-size", "0")
                     .Style("mso-line-height-rule", "exactly"); // Style: outlook-td
 
-                renderer.StartElement("v:image") // Style: outlook-image
+                renderer.StartElement("v:image", true) // Style: outlook-image
                     .Attr("src", BackgroundUrl)
                     .Attr("xmlns:v", "urn:schemas-microsoft-com:vml")
                     .Style("border", "0")
