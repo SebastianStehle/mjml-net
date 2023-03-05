@@ -99,6 +99,7 @@ namespace Tests.Internal
                         options.IgnoreDiffAttributes();
                         options.IgnoreCommentContent();
                         options.IgnoreEmptyAttributes();
+                        options.IgnoreElement("br");
 
                         if (ignoreIds)
                         {
