@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Diffing.Core;
 using AngleSharp.Diffing.Strategies;
 using AngleSharp.Dom;
+using AngleSharp.Html.Parser.Tokens;
 
 namespace Tests.Internal
 {

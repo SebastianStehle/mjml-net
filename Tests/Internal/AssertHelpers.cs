@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
 using AngleSharp.Diffing.Strategies.AttributeStrategies;
+using AngleSharp.Diffing.Strategies.ElementStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
 using AngleSharp.Dom;
 using Xunit;
@@ -12,25 +12,25 @@ using Xunit;
 
 namespace Tests.Internal
 {
-    public static class AssertHelpers
+    public static partial class AssertHelpers
     {
         public static void TrimmedEqual(string expected, string actual)
         {
-            var lhs = Trim(expected);
-            var rhs = Trim(actual);
+            var lhs = TrimNewLine(expected);
+            var rhs = TrimNewLine(actual);
 
             Assert.Equal(lhs, rhs);
         }
 
         public static void TrimmedContains(string expected, string actual)
         {
-            var lhs = Trim(expected);
-            var rhs = Trim(actual);
+            var lhs = TrimNewLine(expected);
+            var rhs = TrimNewLine(actual);
 
             Assert.Contains(lhs, rhs, StringComparison.Ordinal);
         }
 
-        private static string Trim(string value)
+        private static string TrimNewLine(this string value)
         {
             var lines = value.Split('\n');
 
@@ -44,30 +44,40 @@ namespace Tests.Internal
             HtmlAssert(name, actual, expected, ignoreIds);
         }
 
-        public static void HtmlAssert(string name, string actual, string expected, bool ignoreIds = false)
+        public static void HtmlAssert(string fileName, string actual, string expected, bool ignoreIds = false)
         {
-            var lhs = Cleanup(expected);
-            var rhs = Cleanup(actual);
-
-            try
-            {
-                File.WriteAllText($"{name}.expected.html", lhs);
-                File.WriteAllText($"{name}.actual.html", rhs);
-            }
-            catch (IOException)
-            {
-            }
-
-            HtmlAssertCore(lhs, rhs, ignoreIds);
+            HtmlAssertCore(expected, actual, ignoreIds, fileName);
         }
 
         public static void HtmlAssert(string expected, string actual, bool ignoreIds = false)
         {
-            HtmlAssertCore(Cleanup(expected), Cleanup(actual), ignoreIds);
+            HtmlAssertCore(expected, actual, ignoreIds, null);
         }
 
-        private static void HtmlAssertCore(string expected, string actual, bool ignoreIds)
+        private static void HtmlAssertCore(string expected, string actual, bool ignoreIds, string? fileName)
         {
+            expected =
+                expected
+                    .ConvertConditionalComment()
+                    .ConvertNegatedConditionalComment();
+
+            actual =
+                actual
+                    .ConvertConditionalComment()
+                    .ConvertNegatedConditionalComment();
+
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                try
+                {
+                    File.WriteAllText($"{fileName}.expected.html", expected);
+                    File.WriteAllText($"{fileName}.actual.html", actual);
+                }
+                catch (IOException)
+                {
+                }
+            }
+
             var diffs =
                 DiffBuilder
                     .Compare(actual)
@@ -80,6 +90,7 @@ namespace Tests.Internal
                         options.AddClassAttributeComparer();
                         options.AddCssSelectorMatcher();
                         options.AddElementComparer();
+                        options.AddComparer(ElementClosingComparer.Compare);
                         options.AddIgnoreElementSupport();
                         options.AddSearchingNodeMatcher();
                         options.AddStyleAttributeComparer(ignoreOrder: true);
@@ -99,36 +110,6 @@ namespace Tests.Internal
                     .ToList();
 
             Assert.True(!diffs.Any(), FormatDiffs(diffs));
-        }
-
-        private static string Cleanup(string source)
-        {
-            // Replace whitespaces.
-            source = source.Replace("&amp;#160;", " ", StringComparison.OrdinalIgnoreCase);
-
-            // Replace ending negated conditional comment to normal comment.
-            source = source.Replace("<!--<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
-
-            // Replace ending conditional comment to normal comment.
-            source = source.Replace("<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
-
-            // Replace starting negated condition comment to normal comment
-            source = Regex.Replace(source, @"<!--\d{0,}\[(.*)\]\d{0,}><!-->", x =>
-            {
-                var text = x.Groups[1].Value.Trim('-', '<', '>', '!');
-
-                return $"<!-- [${text}] -->";
-            });
-
-            // Replace starting condition comment to normal comment
-            source = Regex.Replace(source, @"<!--\d{0,}\[(.*)\]\d{0,}>", x =>
-            {
-                var text = x.Groups[1].Value.Trim('-', '<', '>', '!');
-
-                return $"<!-- [${text}] -->";
-            });
-
-            return source;
         }
 
         private static string FormatDiffs(IEnumerable<IDiff> diffs)
@@ -160,13 +141,13 @@ namespace Tests.Internal
                     FormatAttrDiff(a, sb);
                     break;
                 case MissingNodeDiff m:
-                    sb.AppendDiff($"The {NodeName(m.Control)} at {m.Control.Path} is missing.");
+                    sb.AppendDiff($"The {Name(m.Control)} at {m.Control.Path} is missing.");
                     break;
                 case MissingAttrDiff m:
                     sb.AppendDiff($"The attribute at {m.Control.Path} is missing.");
                     break;
                 case UnexpectedNodeDiff u:
-                    sb.AppendDiff($"The {NodeName(u.Test)} at {u.Test.Path} was not expected.");
+                    sb.AppendDiff($"The {Name(u.Test)} at {u.Test.Path} was not expected.");
                     break;
                 case UnexpectedAttrDiff u:
                     sb.AppendDiff($"The attribute at {u.Test.Path} was not expected.");
@@ -185,15 +166,15 @@ namespace Tests.Internal
             }
             else if (n.Target == DiffTarget.Text)
             {
-                sb.AppendDiff($"The expected {NodeName(n.Control)} at {n.Control.Path} and the actual {NodeName(n.Test)} at {n.Test.Path} is different.");
+                sb.AppendDiff($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} is different.");
             }
             else if (n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
             {
-                sb.AppendDiff($"The {NodeName(n.Control)}s at {n.Control.Path} are different.");
+                sb.AppendDiff($"The {Name(n.Control)}s at {n.Control.Path} are different.");
             }
             else
             {
-                sb.AppendDiff($"The expected {NodeName(n.Control)} at {n.Control.Path} and the actual {NodeName(n.Test)} at {n.Test.Path} are different.");
+                sb.AppendDiff($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} are different.");
             }
         }
 
@@ -224,9 +205,43 @@ namespace Tests.Internal
             }
         }
 
-        private static string NodeName(ComparisonSource source)
+        private static string Name(this ComparisonSource source)
         {
             return source.Node.NodeType.ToString().ToLowerInvariant();
         }
+
+        private static string ConvertNegatedConditionalComment(this string source)
+        {
+            source = source.Replace("<!--<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
+
+            source = NegatedConditionalCommentStart().Replace(source, x =>
+            {
+                var text = x.Groups[1].Value.Trim('-', '<', '>', '!');
+
+                return $"<!-- [${text}] -->";
+            });
+
+            return source;
+        }
+
+        private static string ConvertConditionalComment(this string source)
+        {
+            source = source.Replace("<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);
+
+            source = ConditionalCommentStart().Replace(source, x =>
+            {
+                var text = x.Groups[1].Value.Trim('-', '<', '>', '!');
+
+                return $"<!-- [${text}] -->";
+            });
+
+            return source;
+        }
+
+        [GeneratedRegex(@"<!--\d{0,}\[(.*)\]\d{0,}>")]
+        private static partial Regex ConditionalCommentStart();
+
+        [GeneratedRegex(@"<!--\d{0,}\[(.*)\]\d{0,}><!-->")]
+        private static partial Regex NegatedConditionalCommentStart();
     }
 }

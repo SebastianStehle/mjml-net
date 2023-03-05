@@ -24,7 +24,7 @@
 
             foreach (var font in context.GlobalData.Values.OfType<Font>())
             {
-                renderer.StartElement("link", true)
+                renderer.StartElement("link")
                     .Attr("href", font.Href)
                     .Attr("rel", "stylesheet")
                     .Attr("type", "text/css");
