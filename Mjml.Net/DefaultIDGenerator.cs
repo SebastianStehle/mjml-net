@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 
 namespace Mjml.Net
 {

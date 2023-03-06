@@ -1,5 +1,4 @@
-﻿using Mjml.Net;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 using Tests.Internal;
 using Xunit;
 

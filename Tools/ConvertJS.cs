@@ -106,11 +106,11 @@ namespace Tools
                                 break;
                         }
 
-                        sb.AppendTabbed(2, $"[Bind(\"{name}\", BindType.{actualType})]");
+                        sb.AppendTabbed(2, @$"[Bind(""{name}"", BindType.{actualType})]");
 
                         if (defaultAttributes.TryGetValue(name, out var defaultValue) && defaultValue.Length > 0)
                         {
-                            sb.AppendTabbed(2, $"public string {name.ToPascalCase()} = \"{defaultValue}\";");
+                            sb.AppendTabbed(2, @$"public string {name.ToPascalCase()} = ""{defaultValue}"";");
                         }
                         else
                         {

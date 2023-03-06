@@ -6,6 +6,7 @@ using AngleSharp.Diffing.Strategies.AttributeStrategies;
 using AngleSharp.Diffing.Strategies.ElementStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
 using AngleSharp.Dom;
+using Mjml.Net;
 using Xunit;
 
 #pragma warning disable MA0011 // IFormatProvider is missing
@@ -14,27 +15,18 @@ namespace Tests.Internal
 {
     public static partial class AssertHelpers
     {
-        public static void TrimmedEqual(string expected, string actual)
+        public static void MultilineText(MjmlRenderContext sut, params string[] lines)
         {
-            var lhs = TrimNewLine(expected);
-            var rhs = TrimNewLine(actual);
+            var sb = new StringBuilder();
 
-            Assert.Equal(lhs, rhs);
-        }
+            foreach (var line in lines)
+            {
+                sb.AppendLine(line.Replace('\'', '"'));
+            }
 
-        public static void TrimmedContains(string expected, string actual)
-        {
-            var lhs = TrimNewLine(expected);
-            var rhs = TrimNewLine(actual);
+            var actual = sut.EndBuffer()!.ToString();
 
-            Assert.Contains(lhs, rhs, StringComparison.Ordinal);
-        }
-
-        private static string TrimNewLine(this string value)
-        {
-            var lines = value.Split('\n');
-
-            return string.Join(Environment.NewLine, lines.Select(x => x.Trim()).Where(x => x.Length > 0));
+            Assert.Equal(sb.ToString(), actual);
         }
 
         public static void HtmlFileAssert(string name, string actual, bool ignoreIds = false)
@@ -107,8 +99,7 @@ namespace Tests.Internal
                             options.IgnoreAttribute("id");
                         }
                     })
-                    .Build()
-                    .ToList();
+                    .Build().ToList();
 
             Assert.True(!diffs.Any(), FormatDiffs(diffs));
         }
@@ -117,13 +108,28 @@ namespace Tests.Internal
         {
             var sb = new StringBuilder();
 
+            void AppendDiff(string message, string? actual = null, string? expected = null)
+            {
+                sb.AppendLine(message);
+
+                if (actual != null)
+                {
+                    sb.AppendLine($" * Actual: '{actual}'.");
+                }
+
+                if (expected != null)
+                {
+                    sb.AppendLine($" * Should: '{expected}'.");
+                }
+            }
+
             var i = 1;
             foreach (var diff in diffs)
             {
                 sb.Append(i);
                 sb.Append(' ');
 
-                FormatDiff(diff, sb);
+                FormatDiff(diff, AppendDiff);
 
                 i++;
             }
@@ -131,78 +137,63 @@ namespace Tests.Internal
             return sb.ToString();
         }
 
-        private static void FormatDiff(IDiff diff, StringBuilder sb)
+        private static void FormatDiff(IDiff diff, Action<string, string?, string?> append)
         {
             switch (diff)
             {
                 case NodeDiff n:
-                    FormatNodeDiff(n, sb);
+                    FormatNodeDiff(n, append);
                     break;
                 case AttrDiff a:
-                    FormatAttrDiff(a, sb);
+                    FormatAttrDiff(a, append);
                     break;
                 case MissingNodeDiff m:
-                    sb.AppendDiff($"The {Name(m.Control)} at {m.Control.Path} is missing.");
+                    append($"The {Name(m.Control)} at {m.Control.Path} is missing.", null, null);
                     break;
                 case MissingAttrDiff m:
-                    sb.AppendDiff($"The attribute at {m.Control.Path} is missing.");
+                    append($"The attribute at {m.Control.Path} is missing.", null, null);
                     break;
                 case UnexpectedNodeDiff u:
-                    sb.AppendDiff($"The {Name(u.Test)} at {u.Test.Path} was not expected.");
+                    append($"The {Name(u.Test)} at {u.Test.Path} was not expected.", null, null);
                     break;
                 case UnexpectedAttrDiff u:
-                    sb.AppendDiff($"The attribute at {u.Test.Path} was not expected.");
+                    append($"The attribute at {u.Test.Path} was not expected.", null, null);
                     break;
                 default:
-                    sb.AppendDiff("Other error");
+                    append("Other error", null, null);
                     break;
             }
         }
 
-        private static void FormatNodeDiff(NodeDiff n, StringBuilder sb)
+        private static void FormatNodeDiff(NodeDiff n, Action<string, string?, string?> append)
         {
             if (n.Target == DiffTarget.Text && n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
             {
-                sb.AppendDiff($"The text in {n.Control.Path} is different.", n.Test.Node.Text(), n.Control.Node.Text());
+                append($"The text in {n.Control.Path} is different.", n.Test.Node.Text(), n.Control.Node.Text());
             }
             else if (n.Target == DiffTarget.Text)
             {
-                sb.AppendDiff($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} is different.");
+                append($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} is different.", null, null);
             }
             else if (n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
             {
-                sb.AppendDiff($"The {Name(n.Control)}s at {n.Control.Path} are different.");
+                append($"The {Name(n.Control)}s at {n.Control.Path} are different.", null, null);
             }
             else
             {
-                sb.AppendDiff($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} are different.");
+                append($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} are different.", null, null);
             }
         }
 
-        private static void FormatAttrDiff(AttrDiff a, StringBuilder sb)
+        private static void FormatAttrDiff(AttrDiff a, Action<string, string?, string?> append)
         {
             if (a.Control.Path.Equals(a.Test.Path, StringComparison.Ordinal))
             {
-                sb.AppendDiff($"The values of the attributes at {a.Control.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
+                append($"The values of the attributes at {a.Control.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
             }
             else
             {
-                sb.AppendDiff($"The value of the attribute {a.Control.Path} and actual attribute {a.Test.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
-            }
-        }
-
-        private static void AppendDiff(this StringBuilder sb, string message, string? actual = null, string? expected = null)
-        {
-            sb.AppendLine(message);
-
-            if (actual != null)
-            {
-                sb.AppendLine($" * Actual: '{actual}'.");
-            }
-
-            if (expected != null)
-            {
-                sb.AppendLine($" * Should: '{expected}'.");
+                append($"The value of the attribute {a.Control.Path} and actual attribute {a.Test.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
             }
         }
 
