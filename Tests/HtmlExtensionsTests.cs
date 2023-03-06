@@ -24,7 +24,7 @@ namespace Tests
                 .Classes("class1", "outlook");
 
             AssertHelpers.MultilineText(sut,
-                @"<div class=""class1 -outlook"">"
+                @"<div class=""class1-outlook"">"
             );
         }
 
@@ -35,7 +35,7 @@ namespace Tests
                 .Classes("class1 class2", "outlook");
 
             AssertHelpers.MultilineText(sut,
-                @"<div class=""class1 -outlook class2-outlook"">"
+                @"<div class=""class1-outlook class2-outlook"">"
             );
         }
 
