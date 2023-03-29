@@ -42,7 +42,7 @@ namespace Mjml.Net.Benchmarking
         {
             return MjmlRenderer.Render(MjmlTemplate, new MjmlOptions
             {
-                Beautify = true
+                Minify = true
             }).Html;
         }
     }
