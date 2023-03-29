@@ -81,8 +81,7 @@ namespace Tests.Internal
                         options.AddBooleanAttributeComparer(BooleanAttributeComparision.Strict);
                         options.AddClassAttributeComparer();
                         options.AddCssSelectorMatcher();
-                        options.AddElementComparer();
-                        options.AddComparer(ElementClosingComparer.Compare);
+                        options.AddElementComparer(true);
                         options.AddIgnoreElementSupport();
                         options.AddSearchingNodeMatcher();
                         options.AddStyleAttributeComparer(ignoreOrder: true);
@@ -108,93 +107,13 @@ namespace Tests.Internal
         {
             var sb = new StringBuilder();
 
-            void AppendDiff(string message, string? actual = null, string? expected = null)
-            {
-                sb.AppendLine(message);
-
-                if (actual != null)
-                {
-                    sb.AppendLine($" * Actual: '{actual}'.");
-                }
-
-                if (expected != null)
-                {
-                    sb.AppendLine($" * Should: '{expected}'.");
-                }
-            }
-
-            var i = 1;
             foreach (var diff in diffs)
             {
-                sb.Append(i);
-                sb.Append(' ');
-
-                FormatDiff(diff, AppendDiff);
-
-                i++;
+                sb.Append(" - ");
+                sb.AppendLine(diff.ToString()!);
             }
 
             return sb.ToString();
-        }
-
-        private static void FormatDiff(IDiff diff, Action<string, string?, string?> append)
-        {
-            switch (diff)
-            {
-                case NodeDiff n:
-                    FormatNodeDiff(n, append);
-                    break;
-                case AttrDiff a:
-                    FormatAttrDiff(a, append);
-                    break;
-                case MissingNodeDiff m:
-                    append($"The {Name(m.Control)} at {m.Control.Path} is missing.", null, null);
-                    break;
-                case MissingAttrDiff m:
-                    append($"The attribute at {m.Control.Path} is missing.", null, null);
-                    break;
-                case UnexpectedNodeDiff u:
-                    append($"The {Name(u.Test)} at {u.Test.Path} was not expected.", null, null);
-                    break;
-                case UnexpectedAttrDiff u:
-                    append($"The attribute at {u.Test.Path} was not expected.", null, null);
-                    break;
-                default:
-                    append("Other error", null, null);
-                    break;
-            }
-        }
-
-        private static void FormatNodeDiff(NodeDiff n, Action<string, string?, string?> append)
-        {
-            if (n.Target == DiffTarget.Text && n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
-            {
-                append($"The text in {n.Control.Path} is different.", n.Test.Node.Text(), n.Control.Node.Text());
-            }
-            else if (n.Target == DiffTarget.Text)
-            {
-                append($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} is different.", null, null);
-            }
-            else if (n.Control.Path.Equals(n.Test.Path, StringComparison.Ordinal))
-            {
-                append($"The {Name(n.Control)}s at {n.Control.Path} are different.", null, null);
-            }
-            else
-            {
-                append($"The expected {Name(n.Control)} at {n.Control.Path} and the actual {Name(n.Test)} at {n.Test.Path} are different.", null, null);
-            }
-        }
-
-        private static void FormatAttrDiff(AttrDiff a, Action<string, string?, string?> append)
-        {
-            if (a.Control.Path.Equals(a.Test.Path, StringComparison.Ordinal))
-            {
-                append($"The values of the attributes at {a.Control.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
-            }
-            else
-            {
-                append($"The value of the attribute {a.Control.Path} and actual attribute {a.Test.Path} are different.", a.Test.Attribute.Value, a.Control.Attribute.Value);
-            }
         }
 
         private static string Name(this ComparisonSource source)
