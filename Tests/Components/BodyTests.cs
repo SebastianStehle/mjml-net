@@ -17,7 +17,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.TrimmedContains("</body>", result);
+            Assert.Contains("</body>", result, StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Tests.Components
 
             var result = TestHelper.Render(source);
 
-            AssertHelpers.TrimmedContains(@"<body style=""background-color:red;word-spacing:normal;"">", result);
+            Assert.Contains(@"<body style=""background-color:red;word-spacing:normal;"">", result, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

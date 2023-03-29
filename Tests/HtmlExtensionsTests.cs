@@ -1,6 +1,6 @@
-﻿using System.Text;
-using Mjml.Net;
+﻿using Mjml.Net;
 using Mjml.Net.Extensions;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests
@@ -23,7 +23,9 @@ namespace Tests
             sut.StartElement("div")
                 .Classes("class1", "outlook");
 
-            AssertText("<div class=\"class1-outlook\">");
+            AssertHelpers.MultilineText(sut,
+                @"<div class=""class1-outlook"">"
+            );
         }
 
         [Fact]
@@ -32,7 +34,9 @@ namespace Tests
             sut.StartElement("div")
                 .Classes("class1 class2", "outlook");
 
-            AssertText("<div class=\"class1-outlook class2-outlook\">");
+            AssertHelpers.MultilineText(sut,
+                @"<div class=""class1-outlook class2-outlook"">"
+            );
         }
 
         [Fact]
@@ -41,7 +45,8 @@ namespace Tests
             sut.StartElement("div")
                 .Classes("class1  class2", "outlook");
 
-            AssertText("<div class=\"class1-outlook class2-outlook\">");
+            AssertHelpers.MultilineText(sut,
+                @"<div class=""class1-outlook class2-outlook"">");
         }
 
         [Fact]
@@ -50,7 +55,9 @@ namespace Tests
             sut.StartElement("div")
                 .Classes(" class1 class2 ", "outlook");
 
-            AssertText("<div class=\"class1-outlook class2-outlook\">");
+            AssertHelpers.MultilineText(sut,
+                @"<div class=""class1-outlook class2-outlook"">"
+            );
         }
 
         [Fact]
@@ -59,7 +66,9 @@ namespace Tests
             sut.StartElement("div")
                 .Classes(string.Empty, "outlook");
 
-            AssertText("<div>");
+            AssertHelpers.MultilineText(sut,
+                "<div>"
+            );
         }
 
         [Fact]
@@ -68,21 +77,9 @@ namespace Tests
             sut.StartElement("div")
                 .Classes("class1 class2", string.Empty);
 
-            AssertText("<div class=\"class1 class2\">");
-        }
-
-        private void AssertText(params string[] lines)
-        {
-            var sb = new StringBuilder();
-
-            foreach (var line in lines)
-            {
-                sb.AppendLine(line.Replace('\'', '"'));
-            }
-
-            var actual = sut.EndBuffer()!.ToString();
-
-            Assert.Equal(sb.ToString(), actual);
+            AssertHelpers.MultilineText(sut,
+                @"<div class=""class1 class2"">"
+            );
         }
     }
 }

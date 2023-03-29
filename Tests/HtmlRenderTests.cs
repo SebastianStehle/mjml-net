@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Mjml.Net;
+﻿using Mjml.Net;
 using Tests.Internal;
 using Xunit;
 
@@ -30,10 +29,9 @@ namespace Tests
         {
             sut.StartElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div>"
-            });
+            );
         }
 
         [Fact]
@@ -42,11 +40,10 @@ namespace Tests
             sut.StartElement("div");
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div>",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -60,11 +57,10 @@ namespace Tests
 
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div attr1='1' attr2='2' attr3='3'>",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -78,11 +74,10 @@ namespace Tests
 
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div style='style1:1;style2:2;style3:3;'>",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -96,11 +91,10 @@ namespace Tests
 
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div class='class1 class2 class3'>",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -123,8 +117,7 @@ namespace Tests
 
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div>",
                 "  <div1>",
                 "  </div1>",
@@ -135,7 +128,7 @@ namespace Tests
                 "    </div2_2>",
                 "  </div2>",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -148,14 +141,13 @@ namespace Tests
             sut.Content($"{3}");
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div>",
                 "  1",
                 "  2",
                 "  3",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -169,15 +161,14 @@ namespace Tests
             sut.Content(line3);
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div>",
                 "  line1",
                 "  line2",
                 "  ",
                 "  line3",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -190,15 +181,14 @@ namespace Tests
             sut.EndElement("div");
             sut.Plain("after");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "before",
                 "<div>",
                 "1",
                 "2",
                 "</div>",
                 "after"
-            });
+           );
         }
 
         [Fact]
@@ -225,8 +215,7 @@ namespace Tests
 
             sut.EndElement("html");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<html>",
                 "  <head>",
                 "    head",
@@ -235,7 +224,7 @@ namespace Tests
                 "    body",
                 "  </body>",
                 "</html>"
-            });
+            );
         }
 
         [Fact]
@@ -246,11 +235,10 @@ namespace Tests
             sut.EndConditional("<-- close -->");
             sut.EndConditional("<-- close -->");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<-- open -->",
                 "<-- close -->"
-            });
+            );
         }
 
         [Fact]
@@ -261,11 +249,10 @@ namespace Tests
             sut.StartConditional("<-- open -->");
             sut.EndConditional("<-- close -->");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<-- open -->",
                 "<-- close -->"
-            });
+            );
         }
 
         [Fact]
@@ -277,13 +264,12 @@ namespace Tests
             sut.EndElement("div");
             sut.EndConditional("<-- close -->");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<-- open -->",
                 "<div>",
                 "</div>",
                 "<-- close -->"
-            });
+            );
         }
 
         [Fact]
@@ -297,15 +283,14 @@ namespace Tests
             sut.EndConditional("<-- close -->");
             sut.EndElement("div");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<div>",
                 "  <-- open -->",
                 "  <div>",
                 "  </div>",
                 "  <-- close -->",
                 "</div>"
-            });
+            );
         }
 
         [Fact]
@@ -319,13 +304,12 @@ namespace Tests
             sut.StartElement("div", true);
             sut.EndConditional("<-- close -->");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<-- open -->",
                 "<div/>",
                 "<div/>",
                 "<-- close -->"
-            });
+            );
         }
 
         [Fact]
@@ -335,12 +319,11 @@ namespace Tests
             sut.StartElement("div", true);
             sut.EndConditional("<-- close -->");
 
-            AssertText(new[]
-            {
+            AssertHelpers.MultilineText(sut,
                 "<-- open -->",
                 "<div/>",
                 "<-- close -->"
-            });
+            );
         }
 
         [Theory]
@@ -349,12 +332,11 @@ namespace Tests
         {
             TestHelper.TestWithCulture(culture, () =>
             {
-                sut.Content($"<div class=\"{0.3333}px\">");
+                sut.Content(@$"<div class=""{0.3333}px"">");
 
-                AssertText(new[]
-                {
-                    "<div class=\"0.3333px\">"
-                });
+                AssertHelpers.MultilineText(sut,
+                    @"<div class=""0.3333px"">"
+                );
             });
         }
 
@@ -367,10 +349,9 @@ namespace Tests
                 sut.StartElement("div")
                     .Class($"{0.3333}px");
 
-                AssertText(new[]
-                {
-                    "<div class=\"0.3333px\">"
-                });
+                AssertHelpers.MultilineText(sut,
+                    @"<div class=""0.3333px"">"
+                );
             });
         }
 
@@ -383,10 +364,9 @@ namespace Tests
                 sut.StartElement("div")
                     .Attr("width", $"{0.3333}px");
 
-                AssertText(new[]
-                {
-                    "<div width=\"0.3333px\">"
-                });
+                AssertHelpers.MultilineText(sut,
+                    @"<div width=""0.3333px"">"
+                );
             });
         }
 
@@ -399,25 +379,10 @@ namespace Tests
                 sut.StartElement("div")
                     .Style("width", $"{0.3333}px");
 
-                AssertText(new[]
-                {
-                    "<div style=\"width:0.3333px;\">"
-                });
+                AssertHelpers.MultilineText(sut,
+                    @"<div style=""width:0.3333px;"">"
+                );
             });
-        }
-
-        private void AssertText(params string[] lines)
-        {
-            var sb = new StringBuilder();
-
-            foreach (var line in lines)
-            {
-                sb.AppendLine(line.Replace('\'', '"'));
-            }
-
-            var actual = sut.EndBuffer()!.ToString();
-
-            Assert.Equal(sb.ToString(), actual);
         }
     }
 }
