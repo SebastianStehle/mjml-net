@@ -28,7 +28,19 @@ namespace Mjml.Net
             TagNames.Wbr
         };
 
-        public static string Process2(string mjml)
+        public static string Process(string mjml, MjmlOptions options)
+        {
+            if (options.XHtmlConverter == XHtmlConverterVersion.V2)
+            {
+                return ProcessV2(mjml);
+            }
+            else
+            {
+                return ProcessV1(mjml, options);
+            }
+        }
+
+        public static string ProcessV2(string mjml)
         {
             var sb = DefaultPools.StringBuilders.Get();
             try
@@ -39,7 +51,7 @@ namespace Mjml.Net
                 HtmlToken token;
                 while ((token = htmlReader.Get()) != null && token.Type != HtmlTokenType.EndOfFile)
                 {
-                    WriteToken(sb, token, htmlReader);
+                    WriteToken(sb, token);
                 }
 
                 return sb.ToString();
@@ -50,7 +62,7 @@ namespace Mjml.Net
             }
         }
 
-        private static void WriteToken(StringBuilder sb, HtmlToken token, HtmlTokenizer htmlReader)
+        private static void WriteToken(StringBuilder sb, HtmlToken token)
         {
             switch (token)
             {
@@ -70,7 +82,7 @@ namespace Mjml.Net
 
                         if (startTag.IsSelfClosing || VoidTags.Contains(startTag.Name))
                         {
-                            var nextToken = htmlReader.Get();
+                            sb.Append("/>");
                         }
                         else
                         {
@@ -79,7 +91,16 @@ namespace Mjml.Net
                     }
                     break;
                 case HtmlToken endTag when token.Type == HtmlTokenType.EndTag:
-                    sb.Append(CultureInfo.InvariantCulture, $"</{endTag.Name}>");
+                    {
+                        if (VoidTags.Contains(endTag.Name))
+                        {
+                            sb.Append(CultureInfo.InvariantCulture, $"<{endTag.Name}/>");
+                        }
+                        else
+                        {
+                            sb.Append(CultureInfo.InvariantCulture, $"</{endTag.Name}>");
+                        }
+                    }
                     break;
                 case HtmlToken character when token.Type == HtmlTokenType.Character:
                     sb.AppendEscaped(character.Data);
@@ -118,7 +139,7 @@ namespace Mjml.Net
             }
         }
 
-        public static string Process(string mjml, MjmlOptions options)
+        public static string ProcessV1(string mjml, MjmlOptions options)
         {
             var sb = DefaultPools.StringBuilders.Get();
 

@@ -17,7 +17,7 @@ namespace Tests
 
             var expected = @"
 <div>
-    <br />
+    <br/>
 </div>";
 
             TestHtml(expected, input);
@@ -33,7 +33,7 @@ namespace Tests
 
             var expected = @"
 <div>
-    <br></br>
+    <br/><br/>
 </div>";
 
             TestHtml(expected, input);
@@ -131,7 +131,7 @@ namespace Tests
         {
             input = input.Replace("\r\n", "\n").Trim();
 
-            var actual = XmlFixer.Process2(input);
+            var actual = XmlFixer.ProcessV2(input);
 
             expected = expected.Replace("\r\n", "\n").Trim();
 
