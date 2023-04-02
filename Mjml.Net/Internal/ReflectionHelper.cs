@@ -17,8 +17,8 @@ namespace Mjml.Net.Internal
             var constructorExpression = Expression.New(constructorInfo, parameters);
 
             return Expression.Lambda<Func<T1, T2, TReturn>>(constructorExpression, parameters).Compile();
-
         }
+
         public static Func<object, TReturn> CreateILDelegate<TReturn>(this MethodInfo methodInfo)
         {
             var parameterTypes = new Type[]
