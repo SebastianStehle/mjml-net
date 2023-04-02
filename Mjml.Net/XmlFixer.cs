@@ -1,9 +1,123 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
+using AngleSharp.Dom;
+using AngleSharp.Html;
+using AngleSharp.Html.Parser;
+using AngleSharp.Html.Parser.Tokens;
+using AngleSharp.Text;
 
 namespace Mjml.Net
 {
     public static partial class XmlFixer
     {
+        private static readonly HashSet<string> VoidTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            TagNames.Area,
+            TagNames.Base,
+            TagNames.Br,
+            TagNames.Col,
+            TagNames.Embed,
+            TagNames.Hr,
+            TagNames.Img,
+            TagNames.Input,
+            TagNames.Link,
+            TagNames.Meta,
+            TagNames.Param,
+            TagNames.Source,
+            TagNames.Track,
+            TagNames.Wbr
+        };
+
+        public static string Process2(string mjml)
+        {
+            var sb = DefaultPools.StringBuilders.Get();
+            try
+            {
+                using var htmlInput = new TextSource(mjml);
+                using var htmlReader = new HtmlTokenizer(htmlInput, HtmlEntityProvider.Resolver);
+
+                HtmlToken token;
+                while ((token = htmlReader.Get()) != null && token.Type != HtmlTokenType.EndOfFile)
+                {
+                    WriteToken(sb, token, htmlReader);
+                }
+
+                return sb.ToString();
+            }
+            finally
+            {
+                DefaultPools.StringBuilders.Return(sb);
+            }
+        }
+
+        private static void WriteToken(StringBuilder sb, HtmlToken token, HtmlTokenizer htmlReader)
+        {
+            switch (token)
+            {
+                case HtmlTagToken startTag when token.Type == HtmlTokenType.StartTag:
+                    {
+                        sb.Append(CultureInfo.InvariantCulture, $"<{startTag.Name}");
+
+                        foreach (var attribute in startTag.Attributes)
+                        {
+                            sb.Append(' ');
+                            sb.Append(attribute.Name);
+                            sb.Append('=');
+                            sb.Append('"');
+                            sb.AppendEscaped(attribute.Value);
+                            sb.Append('"');
+                        }
+
+                        if (startTag.IsSelfClosing || VoidTags.Contains(startTag.Name))
+                        {
+                            var nextToken = htmlReader.Get();
+                        }
+                        else
+                        {
+                            sb.Append('>');
+                        }
+                    }
+                    break;
+                case HtmlToken endTag when token.Type == HtmlTokenType.EndTag:
+                    sb.Append(CultureInfo.InvariantCulture, $"</{endTag.Name}>");
+                    break;
+                case HtmlToken character when token.Type == HtmlTokenType.Character:
+                    sb.AppendEscaped(character.Data);
+                    break;
+            }
+        }
+
+        private static void AppendEscaped(this StringBuilder sb, string text)
+        {
+            foreach (var c in text)
+            {
+                if (c == Symbols.LessThan)
+                {
+                    sb.Append("&lt;");
+                }
+                else if (c == Symbols.GreaterThan)
+                {
+                    sb.Append("&gt;");
+                }
+                else if (c == Symbols.DoubleQuote)
+                {
+                    sb.Append("&#34;");
+                }
+                else if (c == Symbols.SingleQuote)
+                {
+                    sb.Append("&#39;");
+                }
+                else if (c == Symbols.Ampersand)
+                {
+                    sb.Append("&amp;");
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+        }
+
         public static string Process(string mjml, MjmlOptions options)
         {
             var sb = DefaultPools.StringBuilders.Get();
