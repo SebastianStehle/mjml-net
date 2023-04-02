@@ -5,6 +5,7 @@ using AngleSharp.Html;
 using AngleSharp.Html.Parser;
 using AngleSharp.Html.Parser.Tokens;
 using AngleSharp.Text;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
@@ -28,6 +29,19 @@ namespace Mjml.Net
             TagNames.Wbr
         };
 
+        private static readonly Func<TextSource, IEntityProvider, IDisposable> HtmlTokenizerFactory;
+        private static readonly Func<object, HtmlToken> GetMethod;
+
+        static XmlFixer()
+        {
+            var tokenizerClassType = typeof(HtmlEntityProvider).Assembly.GetType("AngleSharp.Html.Parser.HtmlTokenizer")!;
+            var tokenizerConstructor = tokenizerClassType.GetConstructors()[0];
+
+            HtmlTokenizerFactory = tokenizerConstructor.CreateFactory<TextSource, IEntityProvider, IDisposable>();
+
+            GetMethod = tokenizerClassType.GetMethod("Get")!.CreateILDelegate<HtmlToken>();
+        }
+
         public static string Process(string mjml, MjmlOptions options)
         {
             if (options.XHtmlConverter == XHtmlConverterVersion.V2)
@@ -46,10 +60,10 @@ namespace Mjml.Net
             try
             {
                 using var htmlInput = new TextSource(mjml);
-                using var htmlReader = new HtmlTokenizer(htmlInput, HtmlEntityProvider.Resolver);
+                using var htmlReader = HtmlTokenizerFactory(htmlInput, HtmlEntityProvider.Resolver);
 
                 HtmlToken token;
-                while ((token = htmlReader.Get()) != null && token.Type != HtmlTokenType.EndOfFile)
+                while ((token = GetMethod(htmlReader)) != null && token.Type != HtmlTokenType.EndOfFile)
                 {
                     WriteToken(sb, token);
                 }

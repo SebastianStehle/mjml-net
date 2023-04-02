@@ -1,6 +1,5 @@
-﻿using Mjml.Net;
-using System.Xml.Linq;
-using Tests.Internal;
+﻿using System.Xml.Linq;
+using Mjml.Net;
 using Xunit;
 
 namespace Tests
@@ -129,11 +128,11 @@ namespace Tests
 
         private static void TestHtml(string expected, string input)
         {
-            input = input.Replace("\r\n", "\n").Trim();
+            input = input.Replace("\r\n", "\n", StringComparison.Ordinal).Trim();
 
             var actual = XmlFixer.ProcessV2(input);
 
-            expected = expected.Replace("\r\n", "\n").Trim();
+            expected = expected.Replace("\r\n", "\n", StringComparison.Ordinal).Trim();
 
             Assert.Equal(expected, actual);
             AssertHtml(actual);
