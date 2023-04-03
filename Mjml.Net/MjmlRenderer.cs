@@ -120,6 +120,7 @@ namespace Mjml.Net
             return components.GetValueOrDefault(name)?.Invoke();
         }
 
+        /// <inheritdoc />
         public string FixXML(string mjml, MjmlOptions? options = null)
         {
             return XmlFixer.Process(mjml, options ?? new MjmlOptions());

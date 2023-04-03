@@ -1,10 +1,195 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
+using AngleSharp.Dom;
+using AngleSharp.Html;
+using AngleSharp.Html.Parser;
+using AngleSharp.Html.Parser.Tokens;
+using AngleSharp.Text;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
     public static partial class XmlFixer
     {
+        private static readonly HashSet<string> VoidTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            TagNames.Area,
+            TagNames.Base,
+            TagNames.Br,
+            TagNames.Col,
+            TagNames.Embed,
+            TagNames.Hr,
+            TagNames.Img,
+            TagNames.Input,
+            TagNames.Link,
+            TagNames.Meta,
+            TagNames.Param,
+            TagNames.Source,
+            TagNames.Track,
+            TagNames.Wbr
+        };
+
+        private static readonly Func<TextSource, IEntityProvider, IDisposable> HtmlTokenizerFactory;
+        private static readonly Func<object, HtmlToken> GetMethod;
+
+        static XmlFixer()
+        {
+            var tokenizerClassType = typeof(HtmlEntityProvider).Assembly.GetType("AngleSharp.Html.Parser.HtmlTokenizer")!;
+            var tokenizerConstructor = tokenizerClassType.GetConstructors()[0];
+
+            HtmlTokenizerFactory = tokenizerConstructor.CreateFactory<TextSource, IEntityProvider, IDisposable>();
+
+            GetMethod = tokenizerClassType.GetMethod("Get")!.CreateILDelegate<HtmlToken>();
+        }
+
         public static string Process(string mjml, MjmlOptions options)
+        {
+            if (options.XHtmlConverter == XHtmlConverterVersion.V2)
+            {
+                return ProcessV2(mjml);
+            }
+            else
+            {
+                return ProcessV1(mjml, options);
+            }
+        }
+
+        public static string ProcessV2(string mjml)
+        {
+            var sb = DefaultPools.StringBuilders.Get();
+            try
+            {
+                using var htmlInput = new TextSource(mjml);
+                using var htmlReader = HtmlTokenizerFactory(htmlInput, HtmlEntityProvider.Resolver);
+
+                HtmlToken token;
+                while ((token = GetMethod(htmlReader)) != null && token.Type != HtmlTokenType.EndOfFile)
+                {
+                    WriteToken(sb, token, htmlReader);
+                }
+
+                return sb.ToString();
+            }
+            finally
+            {
+                DefaultPools.StringBuilders.Return(sb);
+            }
+        }
+
+        private static void WriteToken(StringBuilder sb, HtmlToken token, object htmlReader)
+        {
+            switch (token)
+            {
+                case HtmlTagToken startTag when token.Type == HtmlTokenType.StartTag:
+                    {
+                        sb.Append(CultureInfo.InvariantCulture, $"<{startTag.Name}");
+
+                        foreach (var attribute in startTag.Attributes)
+                        {
+                            sb.Append(' ');
+                            sb.Append(attribute.Name);
+                            sb.Append('=');
+                            sb.Append('"');
+                            sb.AppendEscaped(attribute.Value);
+                            sb.Append('"');
+                        }
+
+                        if (startTag.IsSelfClosing)
+                        {
+                            sb.Append("/>");
+                        }
+                        else if (VoidTags.Contains(startTag.Name))
+                        {
+                            // Void tags cannot have content and are self clsoed automatically.
+                            // But we are handling invalid use cases here as well.
+                            var next1 = GetMethod(htmlReader);
+                            var next2 = GetMethod(htmlReader);
+
+                            // <br></br>
+                            if (IsMatchingToken(startTag, next1))
+                            {
+                                // Just ignore the next token, because it is the matching end token.
+                                sb.Append("/>");
+                                WriteToken(sb, next2, htmlReader);
+                            }
+                            // <br> </br>
+                            else if (IsMatchingToken(startTag, next2) && next1.Type == HtmlTokenType.Character)
+                            {
+                                // If there is some text between the tokens we have to fix the name.
+                                sb.Append('>');
+                                WriteToken(sb, next1, htmlReader);
+                                sb.Append(CultureInfo.InvariantCulture, $"</{startTag.Name}>");
+                            }
+                            // <br>...
+                            else
+                            {
+                                // We have to write the tokens that we have read forwarded here.
+                                sb.Append("/>");
+                                WriteToken(sb, next1, htmlReader);
+                                WriteToken(sb, next2, htmlReader);
+                            }
+                        }
+                        else
+                        {
+                            sb.Append('>');
+                        }
+                    }
+                    break;
+                case HtmlToken endTag when token.Type == HtmlTokenType.EndTag:
+                    {
+                        if (VoidTags.Contains(endTag.Name))
+                        {
+                            sb.Append(CultureInfo.InvariantCulture, $"<{endTag.Name}/>");
+                        }
+                        else
+                        {
+                            sb.Append(CultureInfo.InvariantCulture, $"</{endTag.Name}>");
+                        }
+                    }
+                    break;
+                case HtmlToken character when token.Type == HtmlTokenType.Character:
+                    sb.AppendEscaped(character.Data);
+                    break;
+            }
+        }
+
+        private static bool IsMatchingToken(HtmlTagToken startTag, HtmlToken next1)
+        {
+            return next1.Type == HtmlTokenType.EndTag && string.Equals(startTag.Name, next1.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static void AppendEscaped(this StringBuilder sb, string text)
+        {
+            foreach (var c in text)
+            {
+                if (c == Symbols.LessThan)
+                {
+                    sb.Append("&lt;");
+                }
+                else if (c == Symbols.GreaterThan)
+                {
+                    sb.Append("&gt;");
+                }
+                else if (c == Symbols.DoubleQuote)
+                {
+                    sb.Append("&#34;");
+                }
+                else if (c == Symbols.SingleQuote)
+                {
+                    sb.Append("&#39;");
+                }
+                else if (c == Symbols.Ampersand)
+                {
+                    sb.Append("&amp;");
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+        }
+
+        public static string ProcessV1(string mjml, MjmlOptions options)
         {
             var sb = DefaultPools.StringBuilders.Get();
 

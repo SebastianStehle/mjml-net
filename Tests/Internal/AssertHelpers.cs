@@ -1,11 +1,10 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
 using AngleSharp.Diffing.Strategies.AttributeStrategies;
-using AngleSharp.Diffing.Strategies.ElementStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
-using AngleSharp.Dom;
 using Mjml.Net;
 using Xunit;
 

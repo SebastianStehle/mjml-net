@@ -5,7 +5,7 @@ namespace Mjml.Net
     /// <summary>
     /// Provides options to configure the MJML rendering process.
     /// </summary>
-    public sealed record MjmlOptions
+    public sealed partial record MjmlOptions
     {
         /// <summary>
         /// Gets the default font.
@@ -56,6 +56,11 @@ namespace Mjml.Net
         /// Do not turn this on in production, because it can hurt performance.
         /// </remarks>
         public bool Lax { get; set; }
+
+        /// <summary>
+        /// Defines which xhtml converter is used.
+        /// </summary>
+        public XHtmlConverterVersion XHtmlConverter { get; set; }
 
         /// <summary>
         /// The ID generator to create random values for attributes like Ids. The default is: <see cref="DefaultIDGenerator.Instance"/>.
