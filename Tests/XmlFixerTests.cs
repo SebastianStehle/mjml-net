@@ -32,7 +32,39 @@ namespace Tests
 
             var expected = @"
 <div>
-    <br/><br/>
+    <br/>
+</div>";
+
+            TestHtml(expected, input);
+        }
+
+        [Fact]
+        public void Should_convert_self_closing_tag3()
+        {
+            var input = @"
+<div>
+    <br> </br>
+</div>";
+
+            var expected = @"
+<div>
+    <br> </br>
+</div>";
+
+            TestHtml(expected, input);
+        }
+
+        [Fact]
+        public void Should_convert_self_closing_tag4()
+        {
+            var input = @"
+<div>
+    <br><div /></br>
+</div>";
+
+            var expected = @"
+<div>
+    <br/><div/><br/>
 </div>";
 
             TestHtml(expected, input);

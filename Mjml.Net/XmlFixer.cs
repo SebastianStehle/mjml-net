@@ -65,7 +65,7 @@ namespace Mjml.Net
                 HtmlToken token;
                 while ((token = GetMethod(htmlReader)) != null && token.Type != HtmlTokenType.EndOfFile)
                 {
-                    WriteToken(sb, token);
+                    WriteToken(sb, token, htmlReader);
                 }
 
                 return sb.ToString();
@@ -76,7 +76,7 @@ namespace Mjml.Net
             }
         }
 
-        private static void WriteToken(StringBuilder sb, HtmlToken token)
+        private static void WriteToken(StringBuilder sb, HtmlToken token, object htmlReader)
         {
             switch (token)
             {
@@ -94,9 +94,40 @@ namespace Mjml.Net
                             sb.Append('"');
                         }
 
-                        if (startTag.IsSelfClosing || VoidTags.Contains(startTag.Name))
+                        if (startTag.IsSelfClosing)
                         {
                             sb.Append("/>");
+                        }
+                        else if (VoidTags.Contains(startTag.Name))
+                        {
+                            // Void tags cannot have a content and are self clsoed automatically.
+                            // But we are handling invalid use cases lhere as well.
+                            var next1 = GetMethod(htmlReader);
+                            var next2 = GetMethod(htmlReader);
+
+                            // <br></br>
+                            if (IsMatchingToken(startTag, next1))
+                            {
+                                // Just ignore the next token, because it is the matching end token.
+                                sb.Append("/>");
+                                WriteToken(sb, next2, htmlReader);
+                            }
+                            // <br> </br>
+                            else if (IsMatchingToken(startTag, next2) && next1.Type == HtmlTokenType.Character)
+                            {
+                                // If there is some text between the tokens we have to fix the name.
+                                sb.Append('>');
+                                WriteToken(sb, next1, htmlReader);
+                                sb.Append(CultureInfo.InvariantCulture, $"</{startTag.Name}>");
+                            }
+                            // <br>...
+                            else
+                            {
+                                // We have to write the tokens that we have read forwarded here.
+                                sb.Append("/>");
+                                WriteToken(sb, next1, htmlReader);
+                                WriteToken(sb, next2, htmlReader);
+                            }
                         }
                         else
                         {
@@ -120,6 +151,11 @@ namespace Mjml.Net
                     sb.AppendEscaped(character.Data);
                     break;
             }
+        }
+
+        private static bool IsMatchingToken(HtmlTagToken startTag, HtmlToken next1)
+        {
+            return next1.Type == HtmlTokenType.EndTag && string.Equals(startTag.Name, next1.Name, StringComparison.OrdinalIgnoreCase);
         }
 
         private static void AppendEscaped(this StringBuilder sb, string text)
