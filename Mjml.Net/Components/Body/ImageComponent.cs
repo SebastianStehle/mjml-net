@@ -206,7 +206,7 @@ namespace Mjml.Net.Components.Body
 
         private static void HeadStyle(IHtmlRenderer renderer, GlobalContext context)
         {
-            renderer.Content($"@media only screen and (max-width:{context.Options.Breakpoint}) {{");
+            renderer.Content($"@media only screen and (max-width:{BindingHelper.MakeLowerEndpoint(context.Options.Breakpoint)}) {{");
             renderer.Content("  table.mj-full-width-mobile {");
             renderer.Content("    width: 100% !important;");
             renderer.Content("  }");
