@@ -3,8 +3,10 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
+using AngleSharp.Diffing.Core.Diffs;
 using AngleSharp.Diffing.Strategies.AttributeStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
+using AngleSharp.Dom;
 using Mjml.Net;
 using Xunit;
 
@@ -106,13 +108,78 @@ namespace Tests.Internal
         {
             var sb = new StringBuilder();
 
+            var i = 1;
             foreach (var diff in diffs)
             {
-                sb.Append(" - ");
-                sb.AppendLine(diff.ToString()!);
+                sb.Append(i);
+                sb.Append(' ');
+
+                FormatDiff(diff, sb);
+
+                i++;
             }
 
             return sb.ToString();
+        }
+
+        private static void FormatDiff(IDiff diff, StringBuilder sb)
+        {
+            switch (diff)
+            {
+                case ElementDiff d when d.Kind == ElementDiffKind.ClosingStyle:
+                    sb.AppendDiff($"Different closing style at {d.Control.Path}.");
+                    break;
+                case ElementDiff d when d.Kind == ElementDiffKind.Name:
+                    sb.AppendDiff($"Different element names at {d.Control.Path}.", Name(d.Test), Name(d.Control));
+                    break;
+                case CommentDiff d:
+                    sb.AppendDiff($"Different comments at {d.Control.Path}.", d.Test.Node.Text(), d.Control.Node.Text());
+                    break;
+                case TextDiff d:
+                    sb.AppendDiff($"Different texts at {d.Control.Path}.", d.Test.Node.Text(), d.Control.Node.Text());
+                    break;
+                case AttrDiff d when d.Kind == AttrDiffKind.Name:
+                    sb.AppendDiff($"Different attribute names at {d.Control.Path}.", d.Test.Attribute.Name, d.Control.Attribute.Name);
+                    break;
+                case AttrDiff d when d.Kind == AttrDiffKind.Value:
+                    sb.AppendDiff($"Different attribute values at {d.Control.Path}.", d.Test.Attribute.Value, d.Control.Attribute.Value);
+                    break;
+                case MissingNodeDiff d:
+                    sb.AppendDiff($"Missing node {Name(d.Control)} at {d.Control.Path}.");
+                    break;
+                case MissingAttrDiff d:
+                    sb.AppendDiff($"Missing attribute {d.Control.Attribute.Name} at {d.Control.Path}.");
+                    break;
+                case UnexpectedNodeDiff d:
+                    sb.AppendDiff($"Unespected node at {d.Test.Path}.");
+                    break;
+                case UnexpectedAttrDiff d:
+                    sb.AppendDiff($"Unespected attribute at {d.Test.Path}.");
+                    break;
+                default:
+                    sb.AppendDiff("Other error");
+                    break;
+            }
+        }
+
+        private static string Name(this ComparisonSource source)
+        {
+            return source.Node.NodeType.ToString().ToLowerInvariant();
+        }
+
+        private static void AppendDiff(this StringBuilder sb, string message, string? actual = null, string? expected = null)
+        {
+            sb.AppendLine(message);
+
+            if (actual != null)
+            {
+                sb.AppendLine($" * Actual: '{actual}'.");
+            }
+
+            if (expected != null)
+            {
+                sb.AppendLine($" * Should: '{expected}'.");
+            }
         }
 
         private static string ConvertNegatedConditionalComment(this string source)

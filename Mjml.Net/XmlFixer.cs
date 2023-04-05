@@ -100,8 +100,8 @@ namespace Mjml.Net
                         }
                         else if (VoidTags.Contains(startTag.Name))
                         {
-                            // Void tags cannot have a content and are self clsoed automatically.
-                            // But we are handling invalid use cases lhere as well.
+                            // Void tags cannot have content and are self clsoed automatically.
+                            // But we are handling invalid use cases here as well.
                             var next1 = GetMethod(htmlReader);
                             var next2 = GetMethod(htmlReader);
 
