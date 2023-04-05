@@ -2,6 +2,18 @@
 {
     public static class BindingHelper
     {
+        public static string MakeLowerEndpoint(string breakpoint)
+        {
+            var (value, unit) = UnitParser.Parse(breakpoint);
+
+            if (unit == Unit.Pixels)
+            {
+                return $"{value - 1}px";
+            }
+
+            return breakpoint;
+        }
+
         public static (string?, string?, string?, string?) ParseShorthandBorder(string value)
         {
             if (string.IsNullOrEmpty(value))

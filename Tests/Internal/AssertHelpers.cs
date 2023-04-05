@@ -115,11 +115,6 @@ namespace Tests.Internal
             return sb.ToString();
         }
 
-        private static string Name(this ComparisonSource source)
-        {
-            return source.Node.NodeType.ToString().ToLowerInvariant();
-        }
-
         private static string ConvertNegatedConditionalComment(this string source)
         {
             source = source.Replace("<!--<![endif]-->", "<!-- [endif] -->", StringComparison.OrdinalIgnoreCase);

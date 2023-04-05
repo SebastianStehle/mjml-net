@@ -189,7 +189,7 @@ namespace Mjml.Net.Components.Body
         {
             renderer.Content("noinput.mj-menu-checkbox { display:block!important; max-height:none!important; visibility:visible!important; }");
             renderer.Content(" ");
-            renderer.Content($"@media only screen and (max-width:{context.Options.Breakpoint}) {{");
+            renderer.Content($"@media only screen and (max-width:{BindingHelper.MakeLowerEndpoint(context.Options.Breakpoint)}) {{");
             renderer.Content("  .mj-menu-checkbox[type=\"checkbox\"] ~ .mj-inline-links { display:none!important; }");
             renderer.Content("  .mj-menu-checkbox[type=\"checkbox\"]:checked ~ .mj-inline-links,");
             renderer.Content("  .mj-menu-checkbox[type=\"checkbox\"] ~ .mj-menu-trigger { display:block!important; max-width:none!important; max-height:none!important; font-size:inherit!important; }");
