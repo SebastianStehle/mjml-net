@@ -74,7 +74,7 @@ namespace Mjml.Net.Components.Body
         [Bind("padding-top", BindType.PixelsOrPercent)]
         public string? PaddingTop;
 
-        [Bind("text-align", BindType.Align)]
+        [Bind("text-align", BindType.TextAlign)]
         public string TextAlign = "center";
 
         [Bind("text-padding", BindType.FourPixelsOrPercent)]

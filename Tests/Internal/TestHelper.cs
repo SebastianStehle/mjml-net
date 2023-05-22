@@ -7,7 +7,7 @@ namespace Tests.Internal
     {
         public static string Render(string source, MjmlOptions? options = null)
         {
-            var renderer = new MjmlRenderer().Add<TestComponent>();
+            var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
 
             return renderer.Render(source, BuildOptions(options)).Html;
         }
