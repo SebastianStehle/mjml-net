@@ -37,6 +37,7 @@
     <None Remove="Components\Outputs\Comments.html" />
     <None Remove="Components\Outputs\DividerWithoutWidthUnit.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
+    <None Remove="Components\Outputs\List.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithHtml2.html" />
@@ -86,6 +87,7 @@
     <EmbeddedResource Include="Components\Outputs\CarouselThumbnailWidth.html" />
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
+    <EmbeddedResource Include="Components\Outputs\List.html" />
     <EmbeddedResource Include="Components\Outputs\Comments.html" />
     <EmbeddedResource Include="Components\Outputs\DividerWithoutWidthUnit.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />

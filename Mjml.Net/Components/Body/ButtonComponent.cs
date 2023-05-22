@@ -109,7 +109,7 @@ namespace Mjml.Net.Components.Body
         [Bind("target")]
         public string Target = "_blank";
 
-        [Bind("text-align")]
+        [Bind("text-align", BindType.TextAlign)]
         public string? TextAlign;
 
         [Bind("text-decoration")]
