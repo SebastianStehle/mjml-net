@@ -38,6 +38,6 @@ namespace Mjml.Net
 
         public static readonly IType SocialMode = new EnumType(false, "vertical", "horizontal");
 
-        public static readonly IType TextAlign = new EnumType(false, "left", "rght", "center", "justify");
+        public static readonly IType TextAlign = new EnumType(false, "left", "right", "center", "justify");
     }
 }
