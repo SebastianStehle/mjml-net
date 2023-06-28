@@ -2,7 +2,7 @@
 
 A blazingly-fast unofficial port of [MJML 4](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to [.NET 6](https://dotnet.microsoft.com/).
 
-![Nuget](https://img.shields.io/nuget/v/Mjml.Net)
+[![Nuget](https://img.shields.io/nuget/v/Mjml.Net)](https://www.nuget.org/packages/Mjml.Net)
 
 ## Introduction
 
