@@ -40,6 +40,7 @@
     <None Remove="Components\Outputs\List.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
+    <None Remove="Components\Outputs\TextWithEntity.html" />
     <None Remove="Components\Outputs\TextWithHtml2.html" />
     <None Remove="Components\Outputs\TextWithHtmlAndWhitespace.html" />
   </ItemGroup>
@@ -99,6 +100,7 @@
     <EmbeddedResource Include="Components\Outputs\Table.html" />
     <EmbeddedResource Include="Components\Outputs\TextRawWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWhitespace.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWithEntity.html" />
     <EmbeddedResource Include="Components\Outputs\TextWithHtmlAndWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWithHtml2.html" />
     <EmbeddedResource Include="Components\Outputs\FontUbuntu.html" />

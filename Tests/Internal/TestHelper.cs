@@ -5,11 +5,18 @@ namespace Tests.Internal
 {
     public static class TestHelper
     {
-        public static string Render(string source, MjmlOptions? options = null)
+        public static string Render(string source, MjmlOptions? options = null, bool fix = false)
         {
             var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
 
-            return renderer.Render(source, BuildOptions(options)).Html;
+            options = BuildOptions(options);
+
+            if (fix)
+            {
+                source = renderer.FixXML(source, options);
+            }
+
+            return renderer.Render(source, options).Html;
         }
 
         public static string Render(string source, params IHelper[] helpers)

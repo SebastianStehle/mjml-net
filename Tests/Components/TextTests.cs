@@ -47,6 +47,16 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_text_with_entity()
+        {
+            var source = @"<mj-text>Hello ’MJML’</mj-text>";
+
+            var result = TestHelper.Render(source, fix: true);
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithEntity.html", result);
+        }
+
+        [Fact]
         public void Should_render_raw_text_with_whitespace()
         {
             var source = @"
