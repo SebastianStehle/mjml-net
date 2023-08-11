@@ -136,5 +136,32 @@ namespace Mjml.Net.Internal
                 DefaultPools.StringBuilders.Return(stringBuilder);
             }
         }
+
+        public string ReadInnerText()
+        {
+            var stringBuilder = DefaultPools.StringBuilders.Get();
+            try
+            {
+                var subTree = ReadSubtree();
+
+                while (subTree.Read())
+                {
+                    switch (TokenKind)
+                    {
+                        case HtmlTokenKind.Text:
+                            stringBuilder.Append(subTree.Text);
+                            break;
+                    }
+                }
+
+                var result = stringBuilder.ToString();
+
+                return result;
+            }
+            finally
+            {
+                DefaultPools.StringBuilders.Return(stringBuilder);
+            }
+        }
     }
 }

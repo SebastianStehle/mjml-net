@@ -13,12 +13,11 @@ namespace Mjml.Net.Components.Head
 
             while (reader.Read())
             {
-                if (reader.TokenKind == HtmlTokenKind.Tag)
+                switch (reader.TokenKind)
                 {
-                    var type = reader.Name;
-
-                    if (type == "mj-class")
-                    {
+                    case HtmlTokenKind.EndTag:
+                        return;
+                    case HtmlTokenKind.Tag when reader.Name == "mj-class":
                         var className = reader.GetAttribute("name");
 
                         if (className != null)
@@ -34,17 +33,23 @@ namespace Mjml.Net.Components.Head
                                 }
                             }
                         }
-                    }
-                    else
-                    {
+
+                        reader.Read();
+                        break;
+
+                    case HtmlTokenKind.Tag:
+                        var tagName = reader.Name;
+
                         for (var i = 0; i < reader.AttributeCount; i++)
                         {
                             var attributeName = reader.GetAttributeName(i);
                             var attributeValue = reader.GetAttribute(i);
 
-                            context.SetTypeAttribute(attributeName, type, attributeValue);
+                            context.SetTypeAttribute(attributeName, tagName, attributeValue);
                         }
-                    }
+
+                        reader.Read();
+                        break;
                 }
             }
         }

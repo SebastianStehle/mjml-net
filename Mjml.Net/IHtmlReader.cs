@@ -28,6 +28,8 @@ namespace Mjml.Net
 
         string ReadInnerHtml();
 
+        string ReadInnerText();
+
         IHtmlReader ReadSubtree();
     }
 }

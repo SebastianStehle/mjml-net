@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Reflection.PortableExecutable;
+using System.Xml;
 using HtmlPerformanceKit;
 using Mjml.Net.Components;
 using Mjml.Net.Internal;
@@ -78,16 +79,18 @@ namespace Mjml.Net
                     case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
                         ReadComment(reader, parent);
                         break;
+                    case HtmlTokenKind.EndTag:
+                        return;
                 }
             }
         }
 
-        private void ReadElement(string name, IHtmlReader parentReader, IComponent? parent)
+        private void ReadElement(string name, IHtmlReader reader, IComponent? parent)
         {
             var component = mjmlRenderer.CreateComponent(name);
 
-            var currentLine = parentReader.LineNumber;
-            var currentColumn = parentReader.LinePosition;
+            var currentLine = reader.LineNumber;
+            var currentColumn = reader.LinePosition;
 
             if (component == null)
             {
@@ -98,62 +101,51 @@ namespace Mjml.Net
                 return;
             }
 
-            using (var reader = parentReader.ReadSubtree())
+            if (parent != null)
             {
-                if (parent != null)
-                {
-                    parent.AddChild(component);
-                }
-
-                binder.Clear(parent, component.ComponentName);
-
-                validationContext.LineNumber = currentLine;
-                validationContext.LinePosition = currentColumn;
-
-                validator?.BeforeComponent(component, ref validationContext);
-
-                for (var i = 0; i < reader.AttributeCount; i++)
-                {
-                    var attributeName = reader.GetAttributeName(i);
-                    var attributeValue = reader.GetAttribute(i);
-
-                    binder.SetAttribute(attributeName, attributeValue);
-
-                    validationContext.LineNumber = reader.LineNumber;
-                    validationContext.LinePosition = reader.LinePosition;
-
-                    validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
-                }
-
-                if (component.ContentType == ContentType.Text)
-                {
-                    while (reader.Read())
-                    {
-                        switch (reader.TokenKind)
-                        {
-                            case HtmlTokenKind.Text:
-                                binder.SetText(reader.Text);
-                                break;
-                        }
-                    }
-                }
-
-                component.Bind(binder, context, reader);
-
-                if (component.ContentType == ContentType.Raw)
-                {
-                    component.AddChild(reader.ReadInnerHtml());
-                }
-                else if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
-                {
-                    Read(reader, component);
-                }
-
-                // Assign the current component, in case we read fragments.
-                currentComponent = component;
-
-                component.AfterBind(context, reader, this);
+                parent.AddChild(component);
             }
+
+            binder.Clear(parent, component.ComponentName);
+
+            validationContext.LineNumber = currentLine;
+            validationContext.LinePosition = currentColumn;
+
+            validator?.BeforeComponent(component, ref validationContext);
+
+            for (var i = 0; i < reader.AttributeCount; i++)
+            {
+                var attributeName = reader.GetAttributeName(i);
+                var attributeValue = reader.GetAttribute(i);
+
+                binder.SetAttribute(attributeName, attributeValue);
+
+                validationContext.LineNumber = reader.LineNumber;
+                validationContext.LinePosition = reader.LinePosition;
+
+                validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
+            }
+
+            if (component.ContentType == ContentType.Text)
+            {
+                binder.SetText(reader.ReadInnerText());
+            }
+            else if (component.ContentType == ContentType.Raw)
+            {
+                component.AddChild(reader.ReadInnerHtml());
+            }
+
+            component.Bind(binder, context, reader);
+
+            if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
+            {
+                Read(reader, component);
+            }
+
+            // Assign the current component, in case we read fragments.
+            currentComponent = component;
+
+            component.AfterBind(context, reader, this);
 
             if (parent == null)
             {
