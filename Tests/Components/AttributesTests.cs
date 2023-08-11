@@ -28,6 +28,27 @@ namespace Tests.Components
         }
 
         [Fact]
+        public void Should_render_font_with_non_self_closing_attributes()
+        {
+            var source = @"
+<mjml-test body=""false"">
+    <mj-head>
+        <mj-attributes>
+            <mj-font name=""Raleway"" href=""https://fonts.googleapis.com/css?family=Raleway""></mj-font>
+        </mj-attributes>
+        <mj-font />
+    </mj-head>
+    <mj-body>
+    </mj-body>
+</mjml-test>
+";
+
+            var result = TestHelper.Render(source, new FontHelper());
+
+            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+        }
+
+        [Fact]
         public void Should_render_font_with_class_attribute()
         {
             var source = @"
