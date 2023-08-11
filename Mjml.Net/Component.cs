@@ -1,12 +1,11 @@
-﻿using System.Xml;
-using Mjml.Net.Extensions;
+﻿using Mjml.Net.Extensions;
 
 namespace Mjml.Net
 {
     public abstract class Component : IComponent
     {
         private List<IComponent>? childNodes;
-        private List<string>? childXml;
+        private List<string>? childInput;
 
         public IEnumerable<IComponent> ChildNodes
         {
@@ -42,14 +41,14 @@ namespace Mjml.Net
 
         protected virtual void RenderRaw(IHtmlRenderer renderer)
         {
-            if (childXml == null || childXml.Count == 0)
+            if (childInput == null || childInput.Count == 0)
             {
                 return;
             }
 
-            for (int i = 0; i < childXml.Count; i++)
+            for (int i = 0; i < childInput.Count; i++)
             {
-                var xml = childXml[i];
+                var xml = childInput[i];
 
                 if (string.IsNullOrEmpty(xml))
                 {
@@ -60,12 +59,12 @@ namespace Mjml.Net
 
                 if (i == 0)
                 {
-                    toRender = toRender.TrimXmlStart();
+                    toRender = toRender.TrimInputStart();
                 }
 
-                if (i == childXml.Count - 1)
+                if (i == childInput.Count - 1)
                 {
-                    toRender = toRender.TrimXmlEnd();
+                    toRender = toRender.TrimInputEnd();
                 }
 
                 renderer.Plain(toRender);
@@ -87,10 +86,10 @@ namespace Mjml.Net
             return null;
         }
 
-        public void AddChild(string rawXml)
+        public void AddChild(string rawInput)
         {
-            childXml ??= new List<string>(1);
-            childXml.Add(rawXml);
+            childInput ??= new List<string>(1);
+            childInput.Add(rawInput);
         }
 
         public void AddChild(IComponent child)
@@ -105,11 +104,11 @@ namespace Mjml.Net
             childNodes.Insert(index, child);
         }
 
-        public virtual void Bind(IBinder binder, GlobalContext context, XmlReader reader)
+        public virtual void Bind(IBinder binder, GlobalContext context, IHtmlReader reader)
         {
         }
 
-        public virtual void AfterBind(GlobalContext context, XmlReader reader, IMjmlReader mjmlReader)
+        public virtual void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader)
         {
         }
 

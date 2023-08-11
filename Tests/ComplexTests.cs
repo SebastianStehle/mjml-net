@@ -16,9 +16,6 @@ namespace Tests
             // Easier for debugging errors.
             Beautify = true,
 
-            // Cleanup XML, because some are broken.
-            Lax = true,
-
             // Use validation, so that we also catch errors here.
             ValidatorFactory = StrictValidatorFactory.Instance
         };

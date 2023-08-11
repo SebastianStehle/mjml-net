@@ -51,7 +51,7 @@ namespace Tests.Components
         {
             var source = @"<mj-text>Hello ’MJML’</mj-text>";
 
-            var result = TestHelper.Render(source, fix: true);
+            var result = TestHelper.Render(source);
 
             AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithEntity.html", result);
         }

@@ -71,19 +71,6 @@
         IMjmlRenderer ClearHelpers();
 
         /// <summary>
-        /// Provides a list of default fixes for invalid MJML.
-        /// </summary>
-        /// <param name="mjml">The MJML to fix.</param>
-        /// <param name="options">Optional options.</param>
-        /// <returns>
-        /// The fixed MJML.
-        /// </returns>
-        /// <remarks>
-        /// This method is thread safe.
-        /// </remarks>
-        string FixXML(string mjml, MjmlOptions? options = null);
-
-        /// <summary>
         /// Renders MJML from a string.
         /// </summary>
         /// <param name="mjml">The MJML as string.</param>

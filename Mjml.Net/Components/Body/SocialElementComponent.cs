@@ -163,7 +163,7 @@
             renderer.EndElement("table");
             renderer.EndElement("td");
 
-            if (Text != null)
+            if (!string.IsNullOrWhiteSpace(Text))
             {
                 renderer.StartElement("td") // Style tdText
                     .Style("padding", TextPadding)

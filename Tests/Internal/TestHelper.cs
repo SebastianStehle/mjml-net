@@ -5,16 +5,11 @@ namespace Tests.Internal
 {
     public static class TestHelper
     {
-        public static string Render(string source, MjmlOptions? options = null, bool fix = false)
+        public static string Render(string source, MjmlOptions? options = null)
         {
             var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
 
             options = BuildOptions(options);
-
-            if (fix)
-            {
-                source = renderer.FixXML(source, options);
-            }
 
             return renderer.Render(source, options).Html;
         }
@@ -38,13 +33,7 @@ namespace Tests.Internal
 
         private static MjmlOptions BuildOptions(MjmlOptions? options)
         {
-            if (options == null)
-            {
-                options = new MjmlOptions
-                {
-                    Lax = true
-                };
-            }
+            options ??= new MjmlOptions();
 
             return options with
             {

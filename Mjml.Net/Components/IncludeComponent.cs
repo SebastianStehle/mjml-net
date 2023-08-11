@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using Mjml.Net.Helpers;
+﻿using Mjml.Net.Helpers;
 using Mjml.Net.Types;
 
 namespace Mjml.Net.Components
@@ -32,7 +31,7 @@ namespace Mjml.Net.Components
 
         public IncludeType ActualType { get; private set; }
 
-        public override void AfterBind(GlobalContext context, XmlReader reader, IMjmlReader mjmlReader)
+        public override void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader)
         {
             switch (Type)
             {

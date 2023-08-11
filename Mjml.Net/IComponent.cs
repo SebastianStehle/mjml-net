@@ -1,6 +1,4 @@
-﻿using System.Xml;
-
-namespace Mjml.Net
+﻿namespace Mjml.Net
 {
     public interface IComponent
     {
@@ -24,13 +22,13 @@ namespace Mjml.Net
 
         double ActualWidth { get; }
 
-        void Bind(IBinder node, GlobalContext context, XmlReader reader);
+        void Bind(IBinder node, GlobalContext context, IHtmlReader reader);
 
         void AddChild(IComponent child);
 
         void AddChild(string rawXml);
 
-        void AfterBind(GlobalContext context, XmlReader reader, IMjmlReader mjmlReader);
+        void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader);
 
         void Render(IHtmlRenderer renderer, GlobalContext context);
 
