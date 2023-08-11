@@ -35,15 +35,15 @@
             {
                 errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.",
                     ValidationErrorType.UnknownAttribute,
-                    context.XmlLine,
-                    context.XmlColumn);
+                    context.LineNumber,
+                    context.LinePosition);
             }
             else if (validateAttributeValue && !attribute.Validate(value, ref context))
             {
                 errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.",
                     ValidationErrorType.InvalidAttribute,
-                    context.XmlLine,
-                    context.XmlColumn);
+                    context.LineNumber,
+                    context.LinePosition);
             }
         }
 
@@ -62,8 +62,8 @@
                 {
                     errors.Add($"'{name}' must be the root tag.",
                         ValidationErrorType.InvalidParent,
-                        context.XmlLine,
-                        context.XmlColumn);
+                        context.LineNumber,
+                        context.LinePosition);
                 }
             }
             else
@@ -72,8 +72,8 @@
                 {
                     errors.Add($"'{name}' cannot be the root tag.",
                         ValidationErrorType.InvalidParent,
-                        context.XmlLine,
-                        context.XmlColumn);
+                        context.LineNumber,
+                        context.LinePosition);
                 }
                 else if (component.AllowedParents != null)
                 {
@@ -81,8 +81,8 @@
                     {
                         errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
                             ValidationErrorType.InvalidParent,
-                            context.XmlLine,
-                            context.XmlColumn);
+                            context.LineNumber,
+                            context.LinePosition);
                     }
                 }
             }

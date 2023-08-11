@@ -264,10 +264,17 @@ Here are some of the common HTML Character Entities:
 | ®      | registered trademark               | `&reg;`     | `&#174;`      |
 | ™      | registered trademark               | `&trade;`   | `&#8482`      |
 
-### Non-encoded URL
+### Before Version 2.0.0**: Non-encoded URL
+
+Valid for **VERSION 1.X**
+
 We are aware of an issue with non-encoded URL's being recognized as character entities leading to an exception. This is because we use XmlReader as the main driver for parsing the MJML document. This solution is to URL encode all of the URLs in the template or turn on the lax mode with `options.Lax = true`.
 
 ### Html tag that is not XML.
+
+Valid for **VERSION 1.X**
+
+
 Some HTML tags are not valid HTML. Especially line break (`<br>`). Convert these tags to XHTML (`<br></br>` or `<br />`) or turn on the lax mode with `options.Lax = true`.
 
 ## Contribution

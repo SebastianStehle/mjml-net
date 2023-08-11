@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿
+using HtmlPerformanceKit;
 
 namespace Mjml.Net.Components.Head
 {
@@ -6,42 +7,49 @@ namespace Mjml.Net.Components.Head
     {
         public override string ComponentName => "mj-attributes";
 
-        public override void Bind(IBinder binder, GlobalContext context, XmlReader reader)
+        public override void Bind(IBinder binder, GlobalContext context, IHtmlReader reader)
         {
             base.Bind(binder, context, reader);
 
             while (reader.Read())
             {
-                if (reader.NodeType == XmlNodeType.Element)
+                switch (reader.TokenKind)
                 {
-                    var type = reader.Name;
+                    case HtmlTokenKind.EndTag:
+                        return;
+                    case HtmlTokenKind.Tag when reader.Name == "mj-class":
+                        var className = reader.GetAttribute("name");
 
-                    if (type == "mj-class")
-                    {
-                        if (reader.MoveToAttribute("name"))
+                        if (className != null)
                         {
-                            var className = reader.Value;
-
                             for (var i = 0; i < reader.AttributeCount; i++)
                             {
-                                reader.MoveToAttribute(i);
+                                var attributeName = reader.GetAttributeName(i);
+                                var attributeValue = reader.GetAttribute(i);
 
-                                if (reader.Name != "name")
+                                if (attributeName != "name")
                                 {
-                                    context.SetClassAttribute(reader.Name, className, reader.Value);
+                                    context.SetClassAttribute(attributeName, className, attributeValue);
                                 }
                             }
                         }
-                    }
-                    else
-                    {
+
+                        reader.Read();
+                        break;
+
+                    case HtmlTokenKind.Tag:
+                        var tagName = reader.Name;
+
                         for (var i = 0; i < reader.AttributeCount; i++)
                         {
-                            reader.MoveToAttribute(i);
+                            var attributeName = reader.GetAttributeName(i);
+                            var attributeValue = reader.GetAttribute(i);
 
-                            context.SetTypeAttribute(reader.Name, type, reader.Value);
+                            context.SetTypeAttribute(attributeName, tagName, attributeValue);
                         }
-                    }
+
+                        reader.Read();
+                        break;
                 }
             }
         }

@@ -122,7 +122,7 @@ namespace Mjml.Net.Generator
 
         private void GenerateBindMethod(Dictionary<string, FieldInfo> fieldsInfo, List<FieldInfo> fieldsNormal, SourceWriter source)
         {
-            source.AppendLine("public override void Bind(Mjml.Net.IBinder binder, Mjml.Net.GlobalContext context, System.Xml.XmlReader reader)");
+            source.AppendLine("public override void Bind(Mjml.Net.IBinder binder, Mjml.Net.GlobalContext context, Mjml.Net.IHtmlReader reader)");
             source.AppendLine("{").MoveIn();
             source.AppendLine("base.Bind(binder, context, reader);");
 

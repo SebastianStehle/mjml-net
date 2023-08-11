@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using System.Reflection.PortableExecutable;
+using System.Xml;
+using HtmlPerformanceKit;
 using Mjml.Net.Components;
 using Mjml.Net.Internal;
 
@@ -57,48 +59,38 @@ namespace Mjml.Net
 
         public void ReadFragment(string mjml)
         {
-            if (mjmlOptions.Lax)
-            {
-                mjml = XmlFixer.Process(mjml, mjmlOptions);
-            }
-
-            var fragmentReader = new XmlTextReader(mjml, XmlNodeType.Element, (XmlParserContext?)null)
-            {
-                // Disable dtd for security reasons.
-                DtdProcessing = DtdProcessing.Prohibit,
-
-                // Keep the entities.
-                EntityHandling = EntityHandling.ExpandCharEntities
-            };
+            var fragmentReader = new HtmlReaderWrapper(mjml);
 
             using (fragmentReader)
             {
-                ReadXml(fragmentReader, currentComponent);
+                Read(fragmentReader, currentComponent);
             }
         }
 
-        public void ReadXml(XmlReader reader, IComponent? parent)
+        public void Read(IHtmlReader reader, IComponent? parent)
         {
             while (reader.Read())
             {
-                switch (reader.NodeType)
+                switch (reader.TokenKind)
                 {
-                    case XmlNodeType.Element:
+                    case HtmlTokenKind.Tag:
                         ReadElement(reader.Name, reader, parent);
                         break;
-                    case XmlNodeType.Comment when mjmlOptions.KeepComments && parent != null:
+                    case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
                         ReadComment(reader, parent);
                         break;
+                    case HtmlTokenKind.EndTag:
+                        return;
                 }
             }
         }
 
-        private void ReadElement(string name, XmlReader parentReader, IComponent? parent)
+        private void ReadElement(string name, IHtmlReader reader, IComponent? parent)
         {
             var component = mjmlRenderer.CreateComponent(name);
 
-            var currentLine = CurrentLine(parentReader);
-            var currentColumn = CurrentColumn(parentReader);
+            var currentLine = reader.LineNumber;
+            var currentColumn = reader.LinePosition;
 
             if (component == null)
             {
@@ -109,8 +101,6 @@ namespace Mjml.Net
                 return;
             }
 
-            var reader = parentReader.ReadSubtree();
-
             if (parent != null)
             {
                 parent.AddChild(component);
@@ -118,88 +108,38 @@ namespace Mjml.Net
 
             binder.Clear(parent, component.ComponentName);
 
-            validationContext.XmlLine = currentLine;
-            validationContext.XmlColumn = currentColumn;
+            validationContext.LineNumber = currentLine;
+            validationContext.LinePosition = currentColumn;
 
             validator?.BeforeComponent(component, ref validationContext);
 
-            reader.Read();
-
             for (var i = 0; i < reader.AttributeCount; i++)
             {
-                reader.MoveToAttribute(i);
-
-                var attributeName = reader.Name;
-                var attributeValue = reader.Value;
+                var attributeName = reader.GetAttributeName(i);
+                var attributeValue = reader.GetAttribute(i);
 
                 binder.SetAttribute(attributeName, attributeValue);
 
-                validationContext.XmlLine = CurrentLine(reader);
-                validationContext.XmlColumn = CurrentColumn(reader);
+                validationContext.LineNumber = reader.LineNumber;
+                validationContext.LinePosition = reader.LinePosition;
 
                 validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
             }
 
             if (component.ContentType == ContentType.Text)
             {
-                while (reader.Read())
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Text:
-                            binder.SetText(reader.Value);
-                            break;
-                    }
-                }
+                binder.SetText(reader.ReadInnerText());
+            }
+            else if (component.ContentType == ContentType.Raw)
+            {
+                component.AddChild(reader.ReadInnerHtml());
             }
 
             component.Bind(binder, context, reader);
 
-            if (component.ContentType == ContentType.Raw)
+            if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
             {
-                void Read()
-                {
-                    switch (reader.NodeType)
-                    {
-                        case XmlNodeType.Comment:
-                            component.AddChild($"<!-- {reader.Value} -->");
-
-                            if (reader.NodeType != XmlNodeType.Comment)
-                            {
-                                Read();
-                            }
-                            break;
-
-                        case XmlNodeType.Text:
-                            component.AddChild(reader.Value);
-
-                            if (reader.NodeType != XmlNodeType.Text && reader.NodeType != XmlNodeType.EntityReference)
-                            {
-                                Read();
-                            }
-                            break;
-                        case XmlNodeType.Element:
-                            component.AddChild(reader.ReadOuterXml().Trim());
-                            Read();
-                            break;
-
-                        case XmlNodeType.EntityReference:
-                            component.AddChild($"&{reader.Name};");
-                            break;
-
-                        default:
-                            return;
-                    }
-                }
-
-                while (reader.Read())
-                {
-                    Read();
-                }
-            }
-            else
-            {
-                ReadXml(reader, component);
+                Read(reader, component);
             }
 
             // Assign the current component, in case we read fragments.
@@ -207,46 +147,24 @@ namespace Mjml.Net
 
             component.AfterBind(context, reader, this);
 
-            reader.Close();
-
             if (parent == null)
             {
                 component.Measure(600, 0, 0);
                 component.Render(this, context);
             }
 
-            validationContext.XmlLine = currentLine;
-            validationContext.XmlColumn = currentColumn;
+            validationContext.LineNumber = currentLine;
+            validationContext.LinePosition = currentColumn;
 
             validator?.AfterComponent(component, ref validationContext);
         }
 
-        private static void ReadComment(XmlReader reader, IComponent parent)
+        private static void ReadComment(IHtmlReader reader, IComponent parent)
         {
             parent.AddChild(new CommentComponent
             {
-                Text = reader.Value
+                Text = reader.Text
             });
-        }
-
-        private static int? CurrentLine(XmlReader reader)
-        {
-            if (reader is IXmlLineInfo lineInfo)
-            {
-                return lineInfo.LineNumber;
-            }
-
-            return null;
-        }
-
-        private static int? CurrentColumn(XmlReader reader)
-        {
-            if (reader is IXmlLineInfo lineInfo)
-            {
-                return lineInfo.LineNumber;
-            }
-
-            return null;
         }
     }
 }

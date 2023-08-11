@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using Mjml.Net.Internal;
+﻿using Mjml.Net.Internal;
 
 namespace Mjml.Net.Components.Body
 {
@@ -47,7 +46,7 @@ namespace Mjml.Net.Components.Body
         [Bind("icon-wrapped-url", BindType.String)]
         public string? IconWrappedUrl;
 
-        public override void AfterBind(GlobalContext context, XmlReader reader, IMjmlReader mjmlReader)
+        public override void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader)
         {
             Binder? binder = null;
 

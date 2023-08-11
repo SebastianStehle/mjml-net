@@ -50,19 +50,6 @@ namespace Mjml.Net
         public bool Minify { get; init; }
 
         /// <summary>
-        /// In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. The default is: <c>false</c>.
-        /// </summary>
-        /// <remarks>
-        /// Do not turn this on in production, because it can hurt performance.
-        /// </remarks>
-        public bool Lax { get; set; }
-
-        /// <summary>
-        /// Defines which xhtml converter is used.
-        /// </summary>
-        public XHtmlConverterVersion XHtmlConverter { get; set; }
-
-        /// <summary>
         /// The ID generator to create random values for attributes like Ids. The default is: <see cref="DefaultIDGenerator.Instance"/>.
         /// </summary>
         public IIdGenerator IdGenerator { get; init; } = DefaultIDGenerator.Instance;
@@ -81,11 +68,5 @@ namespace Mjml.Net
         /// The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. The default is: <c>null</c>.
         /// </summary>
         public IFileLoader? FileLoader { get; init; }
-
-        /// <summary>
-        /// A list of supported XML entities.
-        /// </summary>
-        [Obsolete("Not needed anymore.")]
-        public IReadOnlyDictionary<string, string>? XmlEntities { get; set; } = null!;
     }
 }

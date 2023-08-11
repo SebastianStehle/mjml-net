@@ -4,8 +4,8 @@
     {
         public MjmlOptions Options { get; set; }
 
-        public int? XmlColumn { get; set; }
+        public int? LinePosition { get; set; }
 
-        public int? XmlLine { get; set; }
+        public int? LineNumber { get; set; }
     }
 }

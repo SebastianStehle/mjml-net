@@ -16,12 +16,12 @@ namespace Mjml.Net.Extensions
             return value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static ReadOnlySpan<char> TrimXmlStart(this ReadOnlySpan<char> source)
+        public static ReadOnlySpan<char> TrimInputStart(this ReadOnlySpan<char> source)
         {
             return source.TrimStart(TrimChars);
         }
 
-        public static ReadOnlySpan<char> TrimXmlEnd(this ReadOnlySpan<char> source)
+        public static ReadOnlySpan<char> TrimInputEnd(this ReadOnlySpan<char> source)
         {
             return source.TrimEnd(TrimChars);
         }

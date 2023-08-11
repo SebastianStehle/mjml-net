@@ -1,10 +1,10 @@
 ﻿using System.Text;
-using System.Xml;
 using Microsoft.Extensions.ObjectPool;
 using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
 using Mjml.Net.Helpers;
+using Mjml.Net.Internal;
 
 namespace Mjml.Net
 {
@@ -121,12 +121,6 @@ namespace Mjml.Net
         }
 
         /// <inheritdoc />
-        public string FixXML(string mjml, MjmlOptions? options = null)
-        {
-            return XmlFixer.Process(mjml, options ?? new MjmlOptions());
-        }
-
-        /// <inheritdoc />
         public RenderResult Render(string mjml, MjmlOptions? options = null)
         {
             return RenderCore(mjml, options);
@@ -148,26 +142,14 @@ namespace Mjml.Net
         {
             options ??= new MjmlOptions();
 
-            if (options.Lax)
-            {
-                mjml = XmlFixer.Process(mjml, options);
-            }
-
-            var xml = new XmlTextReader(mjml, XmlNodeType.Document, null)
-            {
-                // Disable dtd for security reasons.
-                DtdProcessing = DtdProcessing.Prohibit,
-
-                // Keep the entities.
-                EntityHandling = EntityHandling.ExpandCharEntities
-            };
+            using var reader = new HtmlReaderWrapper(mjml);
 
             var context = contextPool.Get();
             try
             {
                 context.Setup(this, options);
                 context.StartBuffer();
-                context.ReadXml(xml, null);
+                context.Read(reader, null);
 
                 StringBuilder? buffer = null;
                 try
