@@ -9,6 +9,7 @@ namespace Mjml.Net.Internal
     {
         private readonly HtmlReaderImpl inner;
         private readonly byte[]? buffer;
+        private SubtreeReader? subtree;
 
         public int LineNumber => inner.LineNumber;
 
@@ -71,7 +72,10 @@ namespace Mjml.Net.Internal
 
         public IHtmlReader ReadSubtree()
         {
-            return new SubtreeReader(inner);
+            subtree ??= new SubtreeReader(inner);
+            subtree.Reset();
+
+            return subtree;
         }
 
         public string ReadOuterHtml()
