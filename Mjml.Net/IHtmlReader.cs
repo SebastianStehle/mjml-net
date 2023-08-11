@@ -26,7 +26,7 @@ namespace Mjml.Net
 
         string GetAttributeName(int index);
 
-        string ReadOuterHtml();
+        string ReadInnerHtml();
 
         IHtmlReader ReadSubtree();
     }

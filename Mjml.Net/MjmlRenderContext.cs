@@ -142,43 +142,9 @@ namespace Mjml.Net
 
                 if (component.ContentType == ContentType.Raw)
                 {
-                    void Read()
-                    {
-                        switch (reader.TokenKind)
-                        {
-                            case HtmlTokenKind.Comment:
-                                component.AddChild($"<!-- {reader.Text} -->");
-
-                                if (reader.TokenKind != HtmlTokenKind.Comment)
-                                {
-                                    Read();
-                                }
-                                break;
-
-                            case HtmlTokenKind.Text:
-                                component.AddChild(reader.Text);
-
-                                if (reader.TokenKind != HtmlTokenKind.Text)
-                                {
-                                    Read();
-                                }
-                                break;
-                            case HtmlTokenKind.Tag:
-                                component.AddChild(reader.ReadOuterHtml().Trim());
-                                Read();
-                                break;
-
-                            default:
-                                return;
-                        }
-                    }
-
-                    while (reader.Read())
-                    {
-                        Read();
-                    }
+                    component.AddChild(reader.ReadInnerHtml());
                 }
-                else if (!reader.SelfClosingElement)
+                else if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
                 {
                     Read(reader, component);
                 }

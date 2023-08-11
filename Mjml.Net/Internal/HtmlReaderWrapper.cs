@@ -9,7 +9,6 @@ namespace Mjml.Net.Internal
     {
         private readonly HtmlReaderImpl inner;
         private readonly byte[]? buffer;
-        private SubtreeReader? subtree;
 
         public int LineNumber => inner.LineNumber;
 
@@ -72,20 +71,17 @@ namespace Mjml.Net.Internal
 
         public IHtmlReader ReadSubtree()
         {
-            subtree ??= new SubtreeReader(inner);
-            subtree.Reset();
-
-            return subtree;
+            return new SubtreeReader(inner);
         }
 
-        public string ReadOuterHtml()
+        public string ReadInnerHtml()
         {
             var stringBuilder = DefaultPools.StringBuilders.Get();
             try
             {
                 var subTree = ReadSubtree();
 
-                do
+                while (subTree.Read())
                 {
                     switch (TokenKind)
                     {
@@ -130,9 +126,10 @@ namespace Mjml.Net.Internal
                             break;
                     }
                 }
-                while (subTree.Read());
 
-                return stringBuilder.ToString();
+                var result = stringBuilder.ToString();
+
+                return result;
             }
             finally
             {

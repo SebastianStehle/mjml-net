@@ -31,9 +31,8 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
         this.inner = inner;
     }
 
-    internal void Reset()
+    public override void Dispose()
     {
-        depth = 1;
     }
 
     public override bool Read()
@@ -57,6 +56,6 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
             }
         }
 
-        return hasRead;
+        return hasRead && depth > 0;
     }
 }

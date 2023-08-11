@@ -79,12 +79,12 @@ namespace Tests.Components
             var result = renderer.Render(source, new MjmlOptions()
             {
                 Minify = true,
-                Beautify = false
+                Beautify = false,
             }).Html;
 
             var expected = TestHelper.GetContent("Components.Outputs.TextWithHtmlAndWhitespace.html");
 
-            Assert.True(result.TrimEnd().Equals(expected.TrimEnd(), StringComparison.OrdinalIgnoreCase));
+            Assert.Equal(expected.Trim(), result.Trim());
         }
     }
 }
