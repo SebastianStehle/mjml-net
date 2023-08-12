@@ -35,20 +35,7 @@ public sealed class InnerTextOrHtml
 
     public bool IsEmpty()
     {
-        if (parts.Count == 0)
-        {
-            return true;
-        }
-
-        foreach (var part in parts)
-        {
-            if (part.AsSpan().IsWhiteSpace())
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return !parts.Any(x => x.AsSpan().IsWhiteSpace());
     }
 
     public void AppendTo(StringBuilder sb)
