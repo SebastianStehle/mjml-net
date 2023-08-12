@@ -1,11 +1,9 @@
-﻿using Mjml.Net.Extensions;
-
-namespace Mjml.Net;
+﻿namespace Mjml.Net;
 
 public abstract class Component : IComponent
 {
     private List<IComponent>? childNodes;
-    private List<string>? childInput;
+    private List<InnerTextOrHtml>? childInput;
 
     public IEnumerable<IComponent> ChildNodes
     {
@@ -41,33 +39,14 @@ public abstract class Component : IComponent
 
     protected virtual void RenderRaw(IHtmlRenderer renderer)
     {
-        if (childInput == null || childInput.Count == 0)
+        if (childInput == null)
         {
             return;
         }
 
-        for (int i = 0; i < childInput.Count; i++)
+        foreach (var child in childInput)
         {
-            var xml = childInput[i];
-
-            if (string.IsNullOrEmpty(xml))
-            {
-                continue;
-            }
-
-            var toRender = xml.AsSpan();
-
-            if (i == 0)
-            {
-                toRender = toRender.TrimInputStart();
-            }
-
-            if (i == childInput.Count - 1)
-            {
-                toRender = toRender.TrimInputEnd();
-            }
-
-            renderer.Plain(toRender);
+            renderer.Plain(child);
         }
     }
 
@@ -86,9 +65,9 @@ public abstract class Component : IComponent
         return null;
     }
 
-    public void AddChild(string rawInput)
+    public void AddChild(InnerTextOrHtml rawInput)
     {
-        childInput ??= new List<string>(1);
+        childInput ??= new List<InnerTextOrHtml>(1);
         childInput.Add(rawInput);
     }
 

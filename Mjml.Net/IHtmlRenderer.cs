@@ -47,21 +47,31 @@ public interface IHtmlRenderer
     /// Renders a text.
     /// </summary>
     /// <param name="value">The value to render.</param>
-    /// <param name="newLine">True to render a new line.</param>
-    void Plain(ReadOnlySpan<char> value, bool newLine = true);
+    void Plain(ReadOnlySpan<char> value);
 
     /// <summary>
     /// Renders a text.
     /// </summary>
     /// <param name="value">The value to render.</param>
-    /// <param name="newLine">True to render a new line.</param>
-    void Plain(StringBuilder value, bool newLine = true);
+    void Plain(InnerTextOrHtml value);
+
+    /// <summary>
+    /// Renders a text.
+    /// </summary>
+    /// <param name="value">The value to render.</param>
+    void Plain(StringBuilder value);
 
     /// <summary>
     /// Renders a text.
     /// </summary>
     /// <param name="value">The value to render.</param>
     void Content(string? value);
+
+    /// <summary>
+    /// Renders a text.
+    /// </summary>
+    /// <param name="value">The value to render.</param>
+    void Content(InnerTextOrHtml? value);
 
     /// <summary>
     /// Renders a text.

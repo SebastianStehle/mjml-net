@@ -12,15 +12,17 @@ public partial class StyleComponent : HeadComponentBase
     public string? Inline;
 
     [BindText]
-    public string? Text;
+    public InnerTextOrHtml? Text;
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
         // Just in case that validation is disabled.
         if (Text != null)
         {
+            var style = Style.Static(Text);
+
             // Allow multiple styles.
-            context.SetGlobalData(Text, Style.Static(Text));
+            context.SetGlobalData(style, style);
         }
     }
 }

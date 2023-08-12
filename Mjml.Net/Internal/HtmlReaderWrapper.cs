@@ -57,93 +57,77 @@ internal class HtmlReaderWrapper : IHtmlReader
         return new SubtreeReader(inner);
     }
 
-    public string ReadInnerHtml()
+    public InnerTextOrHtml ReadInnerHtml()
     {
-        var stringBuilder = DefaultPools.StringBuilders.Get();
-        try
-        {
-            var subTree = ReadSubtree();
+        var result = new InnerTextOrHtml();
 
-            while (subTree.Read())
+        var subTree = ReadSubtree();
+
+        while (subTree.Read())
+        {
+            switch (TokenKind)
             {
-                switch (TokenKind)
-                {
-                    case HtmlTokenKind.Text:
-                        stringBuilder.Append(subTree.Text);
-                        break;
-                    case HtmlTokenKind.Tag:
-                        stringBuilder.Append('<');
-                        stringBuilder.Append(subTree.Name);
+                case HtmlTokenKind.Text:
+                    result.Add(subTree.Text);
+                    break;
+                case HtmlTokenKind.Tag:
+                    result.Add("<");
+                    result.Add(subTree.Name);
 
-                        for (var i = 0; i < subTree.AttributeCount; i++)
-                        {
-                            var attributeName = subTree.GetAttributeName(i);
-                            var attributeValue = subTree.GetAttribute(i);
+                    for (var i = 0; i < subTree.AttributeCount; i++)
+                    {
+                        var attributeName = subTree.GetAttributeName(i);
+                        var attributeValue = subTree.GetAttribute(i);
 
-                            stringBuilder.Append(' ');
-                            stringBuilder.Append(attributeName);
-                            stringBuilder.Append('=');
-                            stringBuilder.Append('"');
-                            stringBuilder.Append(attributeValue);
-                            stringBuilder.Append('"');
-                        }
+                        result.Add(" ");
+                        result.Add(attributeName);
+                        result.Add("=");
+                        result.Add("\"");
+                        result.Add(attributeValue);
+                        result.Add("\"");
+                    }
 
-                        if (subTree.SelfClosingElement)
-                        {
-                            stringBuilder.Append("/>");
-                        }
-                        else
-                        {
-                            stringBuilder.Append('>');
-                        }
-                        break;
-                    case HtmlTokenKind.Comment:
-                        stringBuilder.Append("<!-- ");
-                        stringBuilder.Append(subTree.Text);
-                        stringBuilder.Append(" -->");
-                        break;
-                    case HtmlTokenKind.EndTag:
-                        stringBuilder.Append("</");
-                        stringBuilder.Append(subTree.Name);
-                        stringBuilder.Append('>');
-                        break;
-                }
+                    if (subTree.SelfClosingElement)
+                    {
+                        result.Add("/>");
+                    }
+                    else
+                    {
+                        result.Add(">");
+                    }
+                    break;
+                case HtmlTokenKind.Comment:
+                    result.Add("<!-- ");
+                    result.Add(subTree.Text);
+                    result.Add(" -->");
+                    break;
+                case HtmlTokenKind.EndTag:
+                    result.Add("</");
+                    result.Add(subTree.Name);
+                    result.Add(">");
+                    break;
             }
-
-            var result = stringBuilder.ToString();
-
-            return result;
         }
-        finally
-        {
-            DefaultPools.StringBuilders.Return(stringBuilder);
-        }
+
+        return result;
     }
 
-    public string ReadInnerText()
+    public InnerTextOrHtml ReadInnerText()
     {
-        var stringBuilder = DefaultPools.StringBuilders.Get();
-        try
-        {
-            var subTree = ReadSubtree();
+        var result = new InnerTextOrHtml();
 
-            while (subTree.Read())
+        var subTree = ReadSubtree();
+
+        while (subTree.Read())
+        {
+            switch (TokenKind)
             {
-                switch (TokenKind)
-                {
-                    case HtmlTokenKind.Text:
-                        stringBuilder.Append(subTree.Text);
-                        break;
-                }
+                case HtmlTokenKind.Text:
+                    result.Add(subTree.Text);
+                    break;
             }
-
-            var result = stringBuilder.ToString();
-
-            return result;
         }
-        finally
-        {
-            DefaultPools.StringBuilders.Return(stringBuilder);
-        }
+
+        return result;
     }
 }

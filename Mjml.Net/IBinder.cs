@@ -18,5 +18,5 @@ public interface IBinder
     /// Get the text content of the node.
     /// </summary>
     /// <returns>The content of the node or null if not found.</returns>
-    string? GetText();
+    InnerTextOrHtml? GetText();
 }

@@ -99,8 +99,10 @@ public sealed partial class IncludeComponent : Component
         }
         else if (ActualType == IncludeType.Css)
         {
+            var style = Style.Static(new InnerTextOrHtml(content));
+
             // Allow multiple styles and render them later.
-            context.SetGlobalData(content, Style.Static(content));
+            context.SetGlobalData(style, style);
         }
     }
 }

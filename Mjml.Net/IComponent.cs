@@ -26,7 +26,7 @@ public interface IComponent
 
     void AddChild(IComponent child);
 
-    void AddChild(string rawXml);
+    void AddChild(InnerTextOrHtml rawXml);
 
     void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader);
 

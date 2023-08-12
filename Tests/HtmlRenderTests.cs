@@ -137,7 +137,7 @@ public class HtmlRenderTests
         sut.StartElement("div");
         sut.Content("1");
         sut.Content("2");
-        sut.Content(null);
+        sut.Content((string?)null);
         sut.Content($"{3}");
         sut.EndElement("div");
 
@@ -210,8 +210,8 @@ public class HtmlRenderTests
 
         var body = sut.EndBuffer();
 
-        sut.Plain(head, false);
-        sut.Plain(body, false);
+        sut.Plain(head);
+        sut.Plain(body);
 
         sut.EndElement("html");
 

@@ -9,7 +9,7 @@ public partial class TitleComponent : HeadComponentBase
     public override string ComponentName => "mj-title";
 
     [BindText]
-    public string? Text;
+    public InnerTextOrHtml? Text;
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {

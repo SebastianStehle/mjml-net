@@ -2,12 +2,11 @@
 
 internal sealed class Binder : IBinder
 {
-    private static readonly char[] TrimChars = { ' ', '\n', '\r' };
     private readonly GlobalContext context;
     private readonly Dictionary<string, string> attributes = new Dictionary<string, string>();
     private IComponent? parent;
+    private InnerTextOrHtml? currentText;
     private string elementName;
-    private string? currentText;
     private string[]? currentClasses;
 
     public Binder(GlobalContext context)
@@ -31,9 +30,9 @@ internal sealed class Binder : IBinder
         attributes[name] = value;
     }
 
-    public void SetText(string text)
+    public void SetText(InnerTextOrHtml text)
     {
-        currentText = text.Trim(TrimChars);
+        currentText = text;
     }
 
     public string? GetAttribute(string name)
@@ -100,7 +99,7 @@ internal sealed class Binder : IBinder
         return null;
     }
 
-    public string? GetText()
+    public InnerTextOrHtml? GetText()
     {
         return currentText;
     }

@@ -8,6 +8,7 @@ indent_style = space
 indent_size = 4
 
 [*.cs]
+csharp_style_namespace_declarations = file_scoped:suggestion
 charset = utf-8-bom
 insert_final_newline = true
 indent_style = space

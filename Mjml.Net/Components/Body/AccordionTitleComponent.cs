@@ -68,7 +68,7 @@ public partial class AccordionTitleComponent : BodyComponentBase
     public string? PaddingTop;
 
     [BindText]
-    public string? Text;
+    public InnerTextOrHtml? Text;
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {

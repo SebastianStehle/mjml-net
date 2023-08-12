@@ -286,17 +286,45 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
         TextCore(value);
     }
 
+    public void Content(InnerTextOrHtml? value)
+    {
+        FlushElement();
+
+        if (value == null)
+        {
+            return;
+        }
+
+        TextCore(value);
+    }
+
     private void TextCore(string value)
     {
         WriteLineStart();
 
         if (mjmlOptions.Beautify)
         {
-            WriteIntended(value);
+            InnerTextOrHtml.AppendIntended(Buffer, value.AsSpan(), indent * 2);
         }
         else
         {
             Buffer.Append(value);
+        }
+
+        WriteLineEnd();
+    }
+
+    private void TextCore(InnerTextOrHtml value)
+    {
+        WriteLineStart();
+
+        if (mjmlOptions.Beautify)
+        {
+            value.AppendIntended(Buffer, indent * 2);
+        }
+        else
+        {
+            value.Append(Buffer);
         }
 
         WriteLineEnd();
@@ -311,7 +339,7 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
         WriteLineStart();
     }
 
-    public void Plain(StringBuilder? value, bool newLine = true)
+    public void Plain(StringBuilder? value)
     {
         FlushElement();
         FlushConditionalStart();
@@ -324,13 +352,26 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
 
         Buffer.Append(value);
 
-        if (newLine)
-        {
-            WriteLineEnd();
-        }
+        WriteLineEnd();
     }
 
-    public void Plain(ReadOnlySpan<char> value, bool newLine = true)
+    public void Plain(InnerTextOrHtml value)
+    {
+        FlushElement();
+        FlushConditionalStart();
+        FlushConditionalEnd();
+
+        if (value.IsEmpty())
+        {
+            return;
+        }
+
+        value.Append(Buffer);
+
+        WriteLineEnd();
+    }
+
+    public void Plain(ReadOnlySpan<char> value)
     {
         FlushElement();
         FlushConditionalStart();
@@ -343,34 +384,7 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
 
         Buffer.Append(value);
 
-        if (newLine)
-        {
-            WriteLineEnd();
-        }
-    }
-
-    private void WriteIntended(string value)
-    {
-        Buffer.EnsureCapacity(Buffer.Length + value.Length);
-
-        // We could go over the chars but it is much faster to write to the buffer in batches. Therefore we create a span from newline to newline.
-        var span = value.AsSpan();
-
-        for (int i = 0, j = 0; i < value.Length; i++, j++)
-        {
-            if (value[i] == '\n')
-            {
-                Buffer.Append(span[.. (j + 1)]);
-
-                WriteLineStart();
-
-                // Start the span after the newline.
-                span = span[(j + 1)..];
-                j = -1;
-            }
-        }
-
-        Buffer.Append(span);
+        WriteLineEnd();
     }
 
     private void WriteLineEnd()
