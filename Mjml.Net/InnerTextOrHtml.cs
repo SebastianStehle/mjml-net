@@ -40,23 +40,9 @@ public sealed class InnerTextOrHtml
             return true;
         }
 
-        var lastPart = parts.Count - 1;
-
-        for (var i = 0; i < parts.Count; i++)
+        foreach (var part in parts)
         {
-            var part = parts[i].AsSpan();
-
-            if (i == 0)
-            {
-                part = part.TrimStart(TrimChars);
-            }
-
-            if (i == lastPart)
-            {
-                part = part.TrimEnd(TrimChars);
-            }
-
-            if (part.Length > 0)
+            if (part.AsSpan().IsWhiteSpace())
             {
                 return false;
             }
