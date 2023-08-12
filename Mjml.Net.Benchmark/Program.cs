@@ -5,9 +5,9 @@ namespace Mjml.Net.Benchmarking
 {
     public static class Program
     {
-        class Options
+        private sealed class Options
         {
-            [Option('p', "profiler", Required = false, HelpText = "Runs the test runenr logic.")]
+            [Option('p', "profiler", Required = false, HelpText = "Runs the test runner logic.")]
             public bool TestRunner { get; set; }
 
             [Option('i', "interations", Required = false, HelpText = "The number of iterations when using profiler mode.", Default = 20)]
@@ -17,16 +17,16 @@ namespace Mjml.Net.Benchmarking
         public static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
-                     .WithParsed(o =>
-                     {
-                         if (o.TestRunner)
-                         {
-                             TestRunner.Run(o.TestRunnerIterations);
-                         } else
-                         {
-                             BenchmarkRunner.Run<TemplateBenchmarks>();
-                         }
-                     });
+                .WithParsed(o =>
+                {
+                    if (o.TestRunner)
+                    {
+                        TestRunner.Run(o.TestRunnerIterations);
+                    } else
+                    {
+                        BenchmarkRunner.Run<TemplateBenchmarks>();
+                    }
+                });
         }
     }
 }

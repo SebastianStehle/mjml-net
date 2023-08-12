@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Mjml.Net" Version="1.24.0" />
+    <PackageReference Include="Mjml.Net" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

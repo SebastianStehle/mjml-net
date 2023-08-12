@@ -4,20 +4,17 @@ namespace Mjml.Net.Benchmarking
 {
     public static class TestRunner
     {
+        private static readonly MjmlOptions Options = new MjmlOptions { Beautify = true };
+
         public static void Run(int numberOfIterations)
         {
             var mjmlRenderer = new MjmlRenderer();
-            var mjmlTemplatePaths = Directory.GetFiles("./Templates/", "*.mjml");
+            var mjmlTemplates = Directory.GetFiles("./Templates/", "*.mjml");
 
-            foreach (var mjmlTemplatePath in mjmlTemplatePaths)
+            foreach (var mjmlTemplatePath in mjmlTemplates)
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(mjmlTemplatePath))
-                    {
-                        continue;
-                    }    
-
                     var fileName = Path.GetFileName(mjmlTemplatePath);
 
                     Console.WriteLine($"\n=============================");
@@ -25,9 +22,11 @@ namespace Mjml.Net.Benchmarking
                     Console.WriteLine($" {mjmlTemplatePath}");
                     Console.WriteLine($"=============================");
 
+                    var input = File.ReadAllText(mjmlTemplatePath);
+
                     for (var i = 0; i < numberOfIterations; i++)
                     {
-                        Run(fileName, mjmlTemplatePath, mjmlRenderer);
+                        Run(input, mjmlRenderer);
                     }
                 }
                 catch (Exception ex)
@@ -37,20 +36,13 @@ namespace Mjml.Net.Benchmarking
             }
         }
 
-        private static void Run(string fileName, string filePath, MjmlRenderer mjmlRenderer)
+        private static void Run( string input, MjmlRenderer mjmlRenderer)
         {
-            var text = File.ReadAllText(filePath);
-
             var watch = Stopwatch.StartNew();
 
-            var html = mjmlRenderer.Render(text, new MjmlOptions
-            {
-                Beautify = false
-            }).Html;
+            var html = mjmlRenderer.Render(input, Options).Html;
 
             watch.Stop();
-
-            File.WriteAllText(fileName.Replace(".mjml", ".html"), html);
 
             Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
         }

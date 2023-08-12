@@ -2,9 +2,9 @@
 
 namespace Mjml.Net.Types
 {
-    public sealed class ColorType : IType
+    public sealed partial class ColorType : IType
     {
-        private static readonly HashSet<string> Colors = new HashSet<string>
+        private static readonly HashSet<ReadOnlyMemory<char>> Colors = new[]
         {
             "aliceblue",
             "antiquewhite",
@@ -156,23 +156,48 @@ namespace Mjml.Net.Types
             "whitesmoke",
             "yellow",
             "yellowgreen",
-        };
+        }.Select(x => x.AsMemory()).ToHashSet();
 
+#if NET7_0_OR_GREATER
+        private static readonly Regex Rgba = RgbaFactory();
+        private static readonly Regex Rgb = RgbFactory();
+        private static readonly Regex Hex = HexFactory();
+
+        [GeneratedRegex("^rgba\\(\\d{1,3},\\s?\\d{1,3},\\s?\\d{1,3},\\s?\\d(\\.\\d{1,3})?\\)?$", RegexOptions.ExplicitCapture | RegexOptions.Compiled)]
+        private static partial Regex RgbaFactory();
+
+        [GeneratedRegex("^rgb\\(\\d{1,3},\\s?\\d{1,3},\\s?\\d{1,3}\\)?$", RegexOptions.ExplicitCapture | RegexOptions.Compiled)]
+        private static partial Regex RgbFactory();
+
+        [GeneratedRegex("^#([0-9a-fA-F]{3}){1,2}?$", RegexOptions.ExplicitCapture | RegexOptions.Compiled)]
+        private static partial Regex HexFactory();
+#else
         private static readonly Regex Rgba = new Regex(@"^rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d(\.\d{1,3})?\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         private static readonly Regex Rgb = new Regex(@"^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         private static readonly Regex Hex = new Regex(@"^#([0-9a-fA-F]{3}){1,2}?$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+#endif
 
         public bool Validate(string value, ref ValidationContext context)
         {
-            // Unfortunately we cannot avoid the allocation here, but it is only necessary in strict validation mode.
-            var trimmed = value.Trim();
+#if NET7_0_OR_GREATER
+            var trimmed = value.AsMemory().Trim();
 
             if (Colors.Contains(trimmed))
             {
                 return true;
             }
 
+            return Rgba.IsMatch(trimmed.Span) || Rgb.IsMatch(trimmed.Span) || Hex.IsMatch(trimmed.Span);
+#else
+            var trimmed = value.Trim();
+
+            if (Colors.Contains(trimmed.AsMemory()))
+            {
+                return true;
+            }
+
             return Rgba.IsMatch(trimmed) || Rgb.IsMatch(trimmed) || Hex.IsMatch(trimmed);
+#endif
         }
     }
 }
