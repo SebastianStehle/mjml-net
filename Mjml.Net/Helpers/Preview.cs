@@ -1,7 +1,7 @@
 ﻿namespace Mjml.Net.Helpers;
 
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
-public sealed record Preview(string Value)
+public sealed record Preview(InnerTextOrHtml Value)
 #pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 {
 }

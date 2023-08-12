@@ -26,9 +26,9 @@ public interface IHtmlReader
 
     string GetAttributeName(int index);
 
-    string ReadInnerHtml();
+    InnerTextOrHtml ReadInnerHtml();
 
-    string ReadInnerText();
+    InnerTextOrHtml ReadInnerText();
 
     IHtmlReader ReadSubtree();
 }

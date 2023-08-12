@@ -73,7 +73,7 @@ public partial class NavbarLinkComponent : BodyComponentBase
     public string? NavbarBaseUrl;
 
     [BindText]
-    public string Text;
+    public InnerTextOrHtml Text;
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {

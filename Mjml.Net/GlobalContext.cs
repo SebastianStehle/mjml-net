@@ -7,7 +7,7 @@ public sealed class GlobalContext
     private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
     private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
 
-    public Dictionary<(Type Type, string Name), object> GlobalData { get; } = new Dictionary<(Type Type, string Name), object>();
+    public Dictionary<(Type Type, object Identifier), object> GlobalData { get; } = new Dictionary<(Type Type, object Identifier), object>();
 
     public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
 
@@ -30,14 +30,14 @@ public sealed class GlobalContext
         Options = null!;
     }
 
-    public void SetGlobalData(string name, object? value, bool doNotOverride = false)
+    public void SetGlobalData<T>(object identifier, T? value, bool doNotOverride = false) where T : class
     {
         if (value == null)
         {
             return;
         }
 
-        var key = (value.GetType(), name);
+        var key = (typeof(T), identifier);
 
         if (doNotOverride && GlobalData.ContainsKey(key))
         {
@@ -52,7 +52,6 @@ public sealed class GlobalContext
         if (!attributesByName.TryGetValue(name, out var attributes))
         {
             attributes = new Dictionary<string, string>();
-
             attributesByName[name] = attributes;
         }
 
@@ -64,7 +63,6 @@ public sealed class GlobalContext
         if (!attributesByClass.TryGetValue(className, out var attributes))
         {
             attributes = new Dictionary<string, string>();
-
             attributesByClass[className] = attributes;
         }
 

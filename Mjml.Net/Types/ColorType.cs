@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace Mjml.Net.Types;
 
@@ -156,7 +157,20 @@ public sealed partial class ColorType : IType
         "whitesmoke",
         "yellow",
         "yellowgreen",
-    }.Select(x => x.AsMemory()).ToHashSet();
+    }.Select(x => x.AsMemory()).ToHashSet(new Comparer());
+
+    private sealed class Comparer : IEqualityComparer<ReadOnlyMemory<char>>
+    {
+        public bool Equals(ReadOnlyMemory<char> lhs, ReadOnlyMemory<char> rhs)
+        {
+            return rhs.Span.Equals(rhs.Span, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public int GetHashCode([DisallowNull] ReadOnlyMemory<char> obj)
+        {
+            return string.GetHashCode(obj.Span, StringComparison.OrdinalIgnoreCase);
+        }
+    }
 
 #if NET7_0_OR_GREATER
     private static readonly Regex Rgba = RgbaFactory();

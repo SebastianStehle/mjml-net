@@ -101,7 +101,7 @@ public partial class SocialElementComponent : BodyComponentBase
     public string VerticalAlign = "middle";
 
     [BindText]
-    public string? Text;
+    public InnerTextOrHtml? Text;
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
@@ -163,7 +163,7 @@ public partial class SocialElementComponent : BodyComponentBase
         renderer.EndElement("table");
         renderer.EndElement("td");
 
-        if (!string.IsNullOrWhiteSpace(Text))
+        if (Text?.IsEmpty() == false)
         {
             renderer.StartElement("td") // Style tdText
                 .Style("padding", TextPadding)

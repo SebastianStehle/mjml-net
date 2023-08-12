@@ -49,7 +49,6 @@ public sealed class RootComponent : Component
         if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
         {
             renderer.Plain(sb);
-
             renderer.ReturnStringBuilder(sb);
         }
 
@@ -70,7 +69,6 @@ public sealed class RootComponent : Component
         if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
         {
             renderer.Plain(sb);
-
             renderer.ReturnStringBuilder(sb);
         }
 

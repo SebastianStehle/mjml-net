@@ -4,7 +4,7 @@ namespace Mjml.Net.Helpers;
 
 public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer)
 {
-    public static Style Static(string text)
+    public static Style Static(InnerTextOrHtml text)
     {
         return new Style((renderer, _) => renderer.Content(text));
     }

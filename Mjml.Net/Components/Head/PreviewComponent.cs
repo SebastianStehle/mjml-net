@@ -9,15 +9,17 @@ public partial class PreviewComponent : HeadComponentBase
     public override string ComponentName => "mj-preview";
 
     [BindText]
-    public string? Text;
+    public InnerTextOrHtml? Text;
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
         // Just in case that validation is disabled.
         if (Text != null)
         {
+            var preview = new Preview(Text);
+
             // Allow multiple previews.
-            context.SetGlobalData(Text, new Preview(Text));
+            context.SetGlobalData(preview, preview);
         }
     }
 }
