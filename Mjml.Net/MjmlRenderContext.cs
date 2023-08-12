@@ -59,12 +59,9 @@ namespace Mjml.Net
 
         public void ReadFragment(string mjml)
         {
-            var fragmentReader = new HtmlReaderWrapper(mjml);
+            var reader = new HtmlReaderWrapper(mjml);
 
-            using (fragmentReader)
-            {
-                Read(fragmentReader, currentComponent);
-            }
+            Read(reader, currentComponent);
         }
 
         public void Read(IHtmlReader reader, IComponent? parent)

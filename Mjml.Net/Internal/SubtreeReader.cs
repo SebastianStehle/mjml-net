@@ -31,10 +31,6 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
         this.inner = inner;
     }
 
-    public override void Dispose()
-    {
-    }
-
     public override bool Read()
     {
         if (depth == 0)

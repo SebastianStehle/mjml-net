@@ -1,20 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-	  <IsPackable>false</IsPackable>
+	<IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
+    <PackageReference Include="Mjml.Net" Version="1.24.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
-﻿
-using HtmlPerformanceKit;
+﻿using HtmlPerformanceKit;
 
 namespace Mjml.Net.Components.Head
 {

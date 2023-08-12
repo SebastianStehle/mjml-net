@@ -2,7 +2,7 @@
 
 namespace Mjml.Net
 {
-    public interface IHtmlReader : IDisposable
+    public interface IHtmlReader
     {
         int LineNumber { get; }
 

@@ -142,7 +142,7 @@ namespace Mjml.Net
         {
             options ??= new MjmlOptions();
 
-            using var reader = new HtmlReaderWrapper(mjml);
+            var reader = new HtmlReaderWrapper(mjml);
 
             var context = contextPool.Get();
             try

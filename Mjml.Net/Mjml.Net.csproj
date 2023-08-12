@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.0.1" />
-    <PackageReference Include="HtmlPerformanceKit" Version="0.7.0" />
+    <PackageReference Include="HtmlPerformanceKit" Version="0.8.0" />
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.3" />
     <PackageReference Include="Meziantou.Analyzer" Version="1.0.681">
       <PrivateAssets>all</PrivateAssets>

@@ -1,6 +1,4 @@
-﻿using System.Buffers;
-using System.Text;
-using HtmlPerformanceKit;
+﻿using HtmlPerformanceKit;
 using HtmlReaderImpl = HtmlPerformanceKit.HtmlReader;
 
 namespace Mjml.Net.Internal
@@ -8,7 +6,6 @@ namespace Mjml.Net.Internal
     internal class HtmlReaderWrapper : IHtmlReader
     {
         private readonly HtmlReaderImpl inner;
-        private readonly byte[]? buffer;
 
         public int LineNumber => inner.LineNumber;
 
@@ -31,22 +28,7 @@ namespace Mjml.Net.Internal
 
         public HtmlReaderWrapper(string input)
         {
-            var inputSize = Encoding.UTF8.GetByteCount(input);
-            var inputBuffer = ArrayPool<byte>.Shared.Rent(inputSize);
-
-            Encoding.UTF8.GetBytes(input.AsSpan(), inputBuffer.AsSpan());
-
-            inner = new HtmlReaderImpl(new MemoryStream(inputBuffer, 0, inputSize));
-
-            buffer = inputBuffer;
-        }
-
-        public virtual void Dispose()
-        {
-            if (buffer != null)
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
+            inner = new HtmlReaderImpl(new StringReader(input));
         }
 
         public string GetAttribute(string name)

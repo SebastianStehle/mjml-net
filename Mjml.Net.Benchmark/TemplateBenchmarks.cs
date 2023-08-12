@@ -1,13 +1,16 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Jobs;
 
 namespace Mjml.Net.Benchmarking
 {
+    [Config(typeof(Config))]
     [MemoryDiagnoser]
-    [MarkdownExporterAttribute.GitHub]
-    [RyuJitX64Job]
-    [IterationCount(20)]
     public class TemplateBenchmarks
     {
+        private static readonly MjmlOptions WithBeautify = new MjmlOptions { Beautify = true };
+        private static readonly MjmlOptions WithMinify = new MjmlOptions { Minify = true };
         private readonly MjmlRenderer MjmlRenderer;
      
         [ParamsSource(nameof(MjmlTemplates))]
@@ -16,6 +19,22 @@ namespace Mjml.Net.Benchmarking
         public static IEnumerable<string> MjmlTemplates => Directory.GetFiles("./Templates/", "*.mjml");
 
         public string MjmlTemplate { get; set; }
+
+        public class Config : ManualConfig
+        {
+            public Config()
+            {
+                var baseJob = Job.ShortRun;
+
+                AddJob(baseJob.WithNuGet("Mjml.Net", "1.24.0")
+                    .WithId("1.24.0").AsBaseline());
+
+                AddJob(baseJob.WithNuGet("Mjml.Net", "2.0.0")
+                    .WithId("2.0.0"));
+                
+                AddExporter(MarkdownExporter.GitHub);
+            }
+        }
 
         public TemplateBenchmarks()
         {
@@ -31,19 +50,13 @@ namespace Mjml.Net.Benchmarking
         [Benchmark()]
         public string Render_Template_Beautify()
         {
-            return MjmlRenderer.Render(MjmlTemplate, new MjmlOptions
-            {
-                Beautify = true
-            }).Html;
+            return MjmlRenderer.Render(MjmlTemplate, WithBeautify).Html;
         }
 
         [Benchmark]
         public string Render_Template_Minify()
         {
-            return MjmlRenderer.Render(MjmlTemplate, new MjmlOptions
-            {
-                Minify = true
-            }).Html;
+            return MjmlRenderer.Render(MjmlTemplate, WithMinify).Html;
         }
     }
 }
