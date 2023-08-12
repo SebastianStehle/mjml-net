@@ -35,7 +35,7 @@ public sealed class InnerTextOrHtml
 
     public bool IsEmpty()
     {
-        return !parts.Any(x => x.AsSpan().IsWhiteSpace());
+        return !parts.Any(x => !x.AsSpan().IsWhiteSpace());
     }
 
     public void AppendTo(StringBuilder sb)
