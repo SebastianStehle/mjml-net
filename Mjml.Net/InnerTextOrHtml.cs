@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Mjml.Net;
 
@@ -19,6 +20,16 @@ public sealed class InnerTextOrHtml
 
     public void Add(string part)
     {
+        parts.Add(part);
+    }
+
+    public void AddNonEmpty(string part)
+    {
+        if (part.AsSpan().IsWhiteSpace())
+        {
+            return;
+        }
+
         parts.Add(part);
     }
 
@@ -54,7 +65,7 @@ public sealed class InnerTextOrHtml
         return true;
     }
 
-    public void Append(StringBuilder sb)
+    public void AppendTo(StringBuilder sb)
     {
         if (parts.Count == 0)
         {
@@ -81,7 +92,7 @@ public sealed class InnerTextOrHtml
         }
     }
 
-    public void AppendIntended(StringBuilder sb, int indent)
+    public void AppendToIntended(StringBuilder sb, int indent)
     {
         if (parts.Count == 0)
         {
@@ -112,18 +123,18 @@ public sealed class InnerTextOrHtml
     {
         sb.EnsureCapacity(sb.Length + span.Length);
 
-        for (int i = 0, j = 0; i < span.Length; i++, j++)
+        for (int i = 0; i < span.Length; i++)
         {
             if (span[i] == '\n')
             {
-                sb.Append(span[.. (j + 1)]);
+                sb.Append(span[.. (i + 1)]);
 
                 // Add space characters before each line.
                 WriteLineStart(sb, indent);
 
                 // Start the span after the newline.
-                span = span[(j + 1)..];
-                j = -1;
+                span = span[(i + 1)..];
+                i = 0;
             }
         }
 

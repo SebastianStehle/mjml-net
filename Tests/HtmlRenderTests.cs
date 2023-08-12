@@ -2,6 +2,8 @@
 using Tests.Internal;
 using Xunit;
 
+#pragma warning disable SA1122 // Use string.Empty for empty strings
+
 namespace Tests;
 
 public class HtmlRenderTests
@@ -220,9 +222,11 @@ public class HtmlRenderTests
             "  <head>",
             "    head",
             "  </head>",
+            "",
             "  <body>",
             "    body",
             "  </body>",
+            "",
             "</html>"
         );
     }

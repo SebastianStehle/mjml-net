@@ -68,7 +68,7 @@ internal class HtmlReaderWrapper : IHtmlReader
             switch (TokenKind)
             {
                 case HtmlTokenKind.Text:
-                    result.Add(subTree.Text);
+                    result.AddNonEmpty(subTree.Text);
                     break;
                 case HtmlTokenKind.Tag:
                     result.Add("<");
@@ -123,7 +123,7 @@ internal class HtmlReaderWrapper : IHtmlReader
             switch (TokenKind)
             {
                 case HtmlTokenKind.Text:
-                    result.Add(subTree.Text);
+                    result.AddNonEmpty(subTree.Text);
                     break;
             }
         }

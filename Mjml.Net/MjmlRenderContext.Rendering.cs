@@ -320,11 +320,11 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
 
         if (mjmlOptions.Beautify)
         {
-            value.AppendIntended(Buffer, indent * 2);
+            value.AppendToIntended(Buffer, indent * 2);
         }
         else
         {
-            value.Append(Buffer);
+            value.AppendTo(Buffer);
         }
 
         WriteLineEnd();
@@ -366,7 +366,7 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
             return;
         }
 
-        value.Append(Buffer);
+        value.AppendTo(Buffer);
 
         WriteLineEnd();
     }
