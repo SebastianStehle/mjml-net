@@ -1,71 +1,70 @@
 ﻿using System.Globalization;
 using Mjml.Net;
 
-namespace Tests.Internal
+namespace Tests.Internal;
+
+public static class TestHelper
 {
-    public static class TestHelper
+    public static string Render(string source, MjmlOptions? options = null)
     {
-        public static string Render(string source, MjmlOptions? options = null)
+        var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
+
+        options = BuildOptions(options);
+
+        return renderer.Render(source, options).Html;
+    }
+
+    public static string Render(string source, params IHelper[] helpers)
+    {
+        return Render(source, null, helpers);
+    }
+
+    public static string Render(string source, MjmlOptions? options, params IHelper[] helpers)
+    {
+        var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
+
+        foreach (var helper in helpers)
         {
-            var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
-
-            options = BuildOptions(options);
-
-            return renderer.Render(source, options).Html;
+            renderer.Add(helper);
         }
 
-        public static string Render(string source, params IHelper[] helpers)
+        return renderer.Render(source, BuildOptions(options)).Html;
+    }
+
+    private static MjmlOptions BuildOptions(MjmlOptions? options)
+    {
+        options ??= new MjmlOptions();
+
+        return options with
         {
-            return Render(source, null, helpers);
+            Beautify = true
+        };
+    }
+
+    public static string GetContent(string content)
+    {
+        var stream = typeof(TestHelper).Assembly.GetManifestResourceStream($"Tests.{content}")!;
+
+        return new StreamReader(stream).ReadToEnd();
+    }
+
+    public static void TestWithCulture(string cultureCode, Action action)
+    {
+        var culture = CultureInfo.GetCultureInfo(cultureCode);
+
+        var currentCulture = CultureInfo.CurrentCulture;
+        var currentUICulture = CultureInfo.CurrentUICulture;
+        try
+        {
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
+
+            action();
         }
-
-        public static string Render(string source, MjmlOptions? options, params IHelper[] helpers)
+        finally
         {
-            var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
-
-            foreach (var helper in helpers)
-            {
-                renderer.Add(helper);
-            }
-
-            return renderer.Render(source, BuildOptions(options)).Html;
-        }
-
-        private static MjmlOptions BuildOptions(MjmlOptions? options)
-        {
-            options ??= new MjmlOptions();
-
-            return options with
-            {
-                Beautify = true
-            };
-        }
-
-        public static string GetContent(string content)
-        {
-            var stream = typeof(TestHelper).Assembly.GetManifestResourceStream($"Tests.{content}")!;
-
-            return new StreamReader(stream).ReadToEnd();
-        }
-
-        public static void TestWithCulture(string cultureCode, Action action)
-        {
-            var culture = CultureInfo.GetCultureInfo(cultureCode);
-
-            var currentCulture = CultureInfo.CurrentCulture;
-            var currentUICulture = CultureInfo.CurrentUICulture;
-            try
-            {
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-
-                action();
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = currentCulture;
-                CultureInfo.CurrentUICulture = currentUICulture;
-            }
+            CultureInfo.CurrentCulture = currentCulture;
+            CultureInfo.CurrentUICulture = currentUICulture;
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+public enum Unit
 {
-    public enum Unit
-    {
-        Unknown,
-        Em,
-        Pixels,
-        Percent,
-        Rem,
-        None
-    }
+    Unknown,
+    Em,
+    Pixels,
+    Percent,
+    Rem,
+    None
 }

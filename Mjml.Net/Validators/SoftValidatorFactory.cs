@@ -1,16 +1,15 @@
-﻿namespace Mjml.Net.Validators
+﻿namespace Mjml.Net.Validators;
+
+public sealed class SoftValidatorFactory : IValidatorFactory
 {
-    public sealed class SoftValidatorFactory : IValidatorFactory
+    public static readonly SoftValidatorFactory Instance = new SoftValidatorFactory();
+
+    private SoftValidatorFactory()
     {
-        public static readonly SoftValidatorFactory Instance = new SoftValidatorFactory();
+    }
 
-        private SoftValidatorFactory()
-        {
-        }
-
-        public IValidator Create()
-        {
-            return new SoftValidator();
-        }
+    public IValidator Create()
+    {
+        return new SoftValidator();
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+public sealed class AllowedAttributes : Dictionary<string, IType>
 {
-    public sealed class AllowedAttributes : Dictionary<string, IType>
-    {
-    }
 }

@@ -1,50 +1,49 @@
 ﻿using System.Diagnostics;
 
-namespace Mjml.Net.Benchmarking
+namespace Mjml.Net.Benchmarking;
+
+public static class TestRunner
 {
-    public static class TestRunner
+    private static readonly MjmlOptions Options = new MjmlOptions { Beautify = true };
+
+    public static void Run(int numberOfIterations)
     {
-        private static readonly MjmlOptions Options = new MjmlOptions { Beautify = true };
+        var mjmlRenderer = new MjmlRenderer();
+        var mjmlTemplates = Directory.GetFiles("./Templates/", "*.mjml");
 
-        public static void Run(int numberOfIterations)
+        foreach (var mjmlTemplatePath in mjmlTemplates)
         {
-            var mjmlRenderer = new MjmlRenderer();
-            var mjmlTemplates = Directory.GetFiles("./Templates/", "*.mjml");
-
-            foreach (var mjmlTemplatePath in mjmlTemplates)
+            try
             {
-                try
+                var fileName = Path.GetFileName(mjmlTemplatePath);
+
+                Console.WriteLine($"\n=============================");
+                Console.WriteLine($" {fileName}");
+                Console.WriteLine($" {mjmlTemplatePath}");
+                Console.WriteLine($"=============================");
+
+                var input = File.ReadAllText(mjmlTemplatePath);
+
+                for (var i = 0; i < numberOfIterations; i++)
                 {
-                    var fileName = Path.GetFileName(mjmlTemplatePath);
-
-                    Console.WriteLine($"\n=============================");
-                    Console.WriteLine($" {fileName}");
-                    Console.WriteLine($" {mjmlTemplatePath}");
-                    Console.WriteLine($"=============================");
-
-                    var input = File.ReadAllText(mjmlTemplatePath);
-
-                    for (var i = 0; i < numberOfIterations; i++)
-                    {
-                        Run(input, mjmlRenderer);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
+                    Run(input, mjmlRenderer);
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
+    }
 
-        private static void Run( string input, MjmlRenderer mjmlRenderer)
-        {
-            var watch = Stopwatch.StartNew();
+    private static void Run( string input, MjmlRenderer mjmlRenderer)
+    {
+        var watch = Stopwatch.StartNew();
 
-            var html = mjmlRenderer.Render(input, Options).Html;
+        var html = mjmlRenderer.Render(input, Options).Html;
 
-            watch.Stop();
+        watch.Stop();
 
-            Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
-        }
+        Console.WriteLine("* Elapsed after {0}ms. Length {1}", watch.Elapsed.TotalMilliseconds, html.Length);
     }
 }

@@ -1,14 +1,14 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class ListTests
 {
-    public class ListTests
+    [Fact]
+    public void Should_render_lists()
     {
-        [Fact]
-        public void Should_render_lists()
-        {
-            var source = @"
+        var source = @"
 <mj-list>
     <mj-li>List item one.</mj-li>
     <mj-li>List item two.</mj-li>
@@ -16,9 +16,8 @@ namespace Tests.Components
     <mj-li>List item four.</mj-li>
 </mj-list>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.List.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.List.html", result);
     }
 }

@@ -1,28 +1,27 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+/// <summary>
+/// Defines which parts is rendered.
+/// </summary>
+public enum HelperTarget
 {
     /// <summary>
-    /// Defines which parts is rendered.
+    /// The start of the head.
     /// </summary>
-    public enum HelperTarget
-    {
-        /// <summary>
-        /// The start of the head.
-        /// </summary>
-        HeadStart,
+    HeadStart,
 
-        /// <summary>
-        /// The end of the head.
-        /// </summary>
-        HeadEnd,
+    /// <summary>
+    /// The end of the head.
+    /// </summary>
+    HeadEnd,
 
-        /// <summary>
-        /// The start of the body.
-        /// </summary>
-        BodyStart,
+    /// <summary>
+    /// The start of the body.
+    /// </summary>
+    BodyStart,
 
-        /// <summary>
-        /// The end of the body
-        /// </summary>
-        BodyEnd
-    }
+    /// <summary>
+    /// The end of the body
+    /// </summary>
+    BodyEnd
 }

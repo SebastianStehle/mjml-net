@@ -1,27 +1,26 @@
 ﻿using Mjml.Net;
 
-namespace Tests.Internal
+namespace Tests.Internal;
+
+internal sealed class StaticIdGenerator : IIdGenerator
 {
-    internal sealed class StaticIdGenerator : IIdGenerator
+    private readonly string[] values;
+    private int position = -1;
+
+    public StaticIdGenerator(params string[] values)
     {
-        private readonly string[] values;
-        private int position = -1;
+        this.values = values;
+    }
 
-        public StaticIdGenerator(params string[] values)
+    public string Next()
+    {
+        position++;
+
+        if (position == values.Length)
         {
-            this.values = values;
+            position = 0;
         }
 
-        public string Next()
-        {
-            position++;
-
-            if (position == values.Length)
-            {
-                position = 0;
-            }
-
-            return values[position];
-        }
+        return values[position];
     }
 }

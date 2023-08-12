@@ -1,6 +1,5 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+public sealed class Attributes : Dictionary<string, string>
 {
-    public sealed class Attributes : Dictionary<string, string>
-    {
-    }
 }

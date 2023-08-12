@@ -5,96 +5,95 @@ using Mjml.Net.Validators;
 using Tests.Internal;
 using Xunit;
 
-namespace Tests
+namespace Tests;
+
+public class ComplexTests
 {
-    public class ComplexTests
+    private static readonly ConcurrentDictionary<string, string> Cache = new ConcurrentDictionary<string, string>();
+
+    private static readonly MjmlOptions Options = new MjmlOptions
     {
-        private static readonly ConcurrentDictionary<string, string> Cache = new ConcurrentDictionary<string, string>();
+        // Easier for debugging errors.
+        Beautify = true,
 
-        private static readonly MjmlOptions Options = new MjmlOptions
+        // Use validation, so that we also catch errors here.
+        ValidatorFactory = StrictValidatorFactory.Instance
+    };
+
+    public static IEnumerable<string> Cultures()
+    {
+        yield return "en-US";
+        yield return "de-DE";
+        yield return "es-ES";
+        yield return string.Empty;
+    }
+
+    public static IEnumerable<string> Templates()
+    {
+        foreach (var file in Directory.GetFiles("Templates", "*.mjml").Select(x => new FileInfo(x)))
         {
-            // Easier for debugging errors.
-            Beautify = true,
-
-            // Use validation, so that we also catch errors here.
-            ValidatorFactory = StrictValidatorFactory.Instance
-        };
-
-        public static IEnumerable<string> Cultures()
-        {
-            yield return "en-US";
-            yield return "de-DE";
-            yield return "es-ES";
-            yield return string.Empty;
+            yield return file.Name;
         }
+    }
 
-        public static IEnumerable<string> Templates()
+    public static IEnumerable<object[]> TestCases()
+    {
+        foreach (var file in Templates())
         {
-            foreach (var file in Directory.GetFiles("Templates", "*.mjml").Select(x => new FileInfo(x)))
+            foreach (var culture in Cultures())
             {
-                yield return file.Name;
+                yield return new object[] { file, culture };
             }
         }
+    }
 
-        public static IEnumerable<object[]> TestCases()
+    [Theory]
+    [MemberData(nameof(TestCases))]
+    public void Should_render_template(string template, string culture)
+    {
+        TestHelper.TestWithCulture(culture, () =>
         {
-            foreach (var file in Templates())
+            var expected = CompileWithNode(template);
+
+            var result = CompileWithNet(template);
+
+            AssertHelpers.HtmlAssert(template, result, expected, true);
+        });
+    }
+
+    private static string CompileWithNet(string template)
+    {
+        var source = File.ReadAllText($"Templates/{template}");
+
+        var (html, errors) = new MjmlRenderer().Render(source, Options);
+
+        Assert.Empty(errors.Where(x => x.Type != ValidationErrorType.UnknownAttribute));
+
+        return html;
+    }
+
+    private static string CompileWithNode(string template)
+    {
+        return Cache.GetOrAdd(template, fileName =>
+        {
+            var tempFile = Guid.NewGuid().ToString();
+
+            try
             {
-                foreach (var culture in Cultures())
-                {
-                    yield return new object[] { file, culture };
-                }
+                var process = new Process();
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.FileName = "npx";
+                process.StartInfo.Arguments = $"mjml Templates/{fileName} -o {tempFile}";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+                process.WaitForExit();
+
+                return File.ReadAllText(tempFile);
             }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestCases))]
-        public void Should_render_template(string template, string culture)
-        {
-            TestHelper.TestWithCulture(culture, () =>
+            finally
             {
-                var expected = CompileWithNode(template);
-
-                var result = CompileWithNet(template);
-
-                AssertHelpers.HtmlAssert(template, result, expected, true);
-            });
-        }
-
-        private static string CompileWithNet(string template)
-        {
-            var source = File.ReadAllText($"Templates/{template}");
-
-            var (html, errors) = new MjmlRenderer().Render(source, Options);
-
-            Assert.Empty(errors.Where(x => x.Type != ValidationErrorType.UnknownAttribute));
-
-            return html;
-        }
-
-        private static string CompileWithNode(string template)
-        {
-            return Cache.GetOrAdd(template, fileName =>
-            {
-                var tempFile = Guid.NewGuid().ToString();
-
-                try
-                {
-                    var process = new Process();
-                    process.StartInfo.UseShellExecute = true;
-                    process.StartInfo.FileName = "npx";
-                    process.StartInfo.Arguments = $"mjml Templates/{fileName} -o {tempFile}";
-                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    process.Start();
-                    process.WaitForExit();
-
-                    return File.ReadAllText(tempFile);
-                }
-                finally
-                {
-                    File.Delete(tempFile);
-                }
-            });
-        }
+                File.Delete(tempFile);
+            }
+        });
     }
 }

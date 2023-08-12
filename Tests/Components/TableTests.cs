@@ -1,14 +1,14 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class TableTests
 {
-    public class TableTests
+    [Fact]
+    public void Should_render_table()
     {
-        [Fact]
-        public void Should_render_table()
-        {
-            var source = @"
+        var source = @"
 <mj-table>
     <tr style=""border-bottom:1px solid #ecedee;text-align:left;padding:15px 0;"">
         <th style=""padding: 0 15px 0 0;"">Year</th>
@@ -27,15 +27,15 @@ namespace Tests.Components
     </tr>
 </mj-table>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Table.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Table.html", result);
+    }
 
-        [Fact]
-        public void Should_render_table_pixels()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_table_pixels()
+    {
+        var source = @"
 <mj-table width=""300px"">
     <tr style=""border-bottom:1px solid #ecedee;text-align:left;padding:15px 0;"">
         <th style=""padding: 0 15px 0 0;"">Year</th>
@@ -54,15 +54,15 @@ namespace Tests.Components
     </tr>
 </mj-table>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.TablePixels.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.TablePixels.html", result);
+    }
 
-        [Fact]
-        public void Should_render_table_percent()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_table_percent()
+    {
+        var source = @"
 <mj-table width=""50%"">
     <tr style=""border-bottom:1px solid #ecedee;text-align:left;padding:15px 0;"">
         <th style=""padding: 0 15px 0 0;"">Year</th>
@@ -81,9 +81,8 @@ namespace Tests.Components
     </tr>
 </mj-table>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.TablePercent.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.TablePercent.html", result);
     }
 }

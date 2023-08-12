@@ -1,27 +1,26 @@
-﻿namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types;
+
+public sealed class OneOfType : IType
 {
-    public sealed class OneOfType : IType
+    private readonly List<IType> units;
+
+    public IReadOnlyCollection<IType> Units => units;
+
+    public OneOfType(params IType[] units)
     {
-        private readonly List<IType> units;
+        this.units = units.ToList();
+    }
 
-        public IReadOnlyCollection<IType> Units => units;
-
-        public OneOfType(params IType[] units)
+    public bool Validate(string value, ref ValidationContext context)
+    {
+        foreach (var unit in units)
         {
-            this.units = units.ToList();
-        }
-
-        public bool Validate(string value, ref ValidationContext context)
-        {
-            foreach (var unit in units)
+            if (unit.Validate(value, ref context))
             {
-                if (unit.Validate(value, ref context))
-                {
-                    return true;
-                }
+                return true;
             }
-
-            return false;
         }
+
+        return false;
     }
 }

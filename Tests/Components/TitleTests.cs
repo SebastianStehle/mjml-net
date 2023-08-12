@@ -2,14 +2,14 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class TitleTests
 {
-    public class TitleTests
+    [Fact]
+    public void Should_render_title()
     {
-        [Fact]
-        public void Should_render_title()
-        {
-            var source = @"
+        var source = @"
 <mjml-test body=""false"">
     <mj-head>
         <mj-title>Hello MJML</mj-title>
@@ -19,9 +19,8 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new TitleHelper());
+        var result = TestHelper.Render(source, new TitleHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Title.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Title.html", result);
     }
 }

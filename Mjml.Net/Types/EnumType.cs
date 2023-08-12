@@ -1,29 +1,28 @@
-﻿namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types;
+
+public class EnumType : IType
 {
-    public class EnumType : IType
+    private readonly HashSet<string> allowedValues;
+    private readonly bool isOptional;
+
+    public bool IsOptional => isOptional;
+
+    public IReadOnlySet<string> AllowedValues => allowedValues;
+
+    public EnumType(bool isOptional, params string[] values)
     {
-        private readonly HashSet<string> allowedValues;
-        private readonly bool isOptional;
+        allowedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);
 
-        public bool IsOptional => isOptional;
+        this.isOptional = isOptional;
+    }
 
-        public IReadOnlySet<string> AllowedValues => allowedValues;
-
-        public EnumType(bool isOptional, params string[] values)
+    public bool Validate(string value, ref ValidationContext context)
+    {
+        if (string.IsNullOrWhiteSpace(value) && isOptional)
         {
-            allowedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);
-
-            this.isOptional = isOptional;
+            return true;
         }
 
-        public bool Validate(string value, ref ValidationContext context)
-        {
-            if (string.IsNullOrWhiteSpace(value) && isOptional)
-            {
-                return true;
-            }
-
-            return allowedValues.Contains(value);
-        }
+        return allowedValues.Contains(value);
     }
 }

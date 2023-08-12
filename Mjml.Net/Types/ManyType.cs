@@ -1,42 +1,41 @@
-﻿namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types;
+
+public sealed class ManyType : IType
 {
-    public sealed class ManyType : IType
+    private readonly IType unit;
+    private readonly int min;
+    private readonly int max;
+
+    public IType Unit => unit;
+
+    public int Min => min;
+
+    public int Max => max;
+
+    public ManyType(IType unit, int min, int max)
     {
-        private readonly IType unit;
-        private readonly int min;
-        private readonly int max;
+        this.unit = unit;
+        this.min = min;
+        this.max = max;
+    }
 
-        public IType Unit => unit;
+    public bool Validate(string value, ref ValidationContext context)
+    {
+        var parts = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-        public int Min => min;
-
-        public int Max => max;
-
-        public ManyType(IType unit, int min, int max)
+        if (parts.Length < min || parts.Length > max)
         {
-            this.unit = unit;
-            this.min = min;
-            this.max = max;
+            return false;
         }
 
-        public bool Validate(string value, ref ValidationContext context)
+        foreach (var part in parts)
         {
-            var parts = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            if (parts.Length < min || parts.Length > max)
+            if (!unit.Validate(part, ref context))
             {
                 return false;
             }
-
-            foreach (var part in parts)
-            {
-                if (!unit.Validate(part, ref context))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
+
+        return true;
     }
 }

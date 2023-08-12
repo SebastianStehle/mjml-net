@@ -1,16 +1,15 @@
-﻿namespace Mjml.Net.Validators
+﻿namespace Mjml.Net.Validators;
+
+public sealed class StrictValidatorFactory : IValidatorFactory
 {
-    public sealed class StrictValidatorFactory : IValidatorFactory
+    public static readonly StrictValidatorFactory Instance = new StrictValidatorFactory();
+
+    private StrictValidatorFactory()
     {
-        public static readonly StrictValidatorFactory Instance = new StrictValidatorFactory();
+    }
 
-        private StrictValidatorFactory()
-        {
-        }
-
-        public IValidator Create()
-        {
-            return new StrictValidator();
-        }
+    public IValidator Create()
+    {
+        return new StrictValidator();
     }
 }

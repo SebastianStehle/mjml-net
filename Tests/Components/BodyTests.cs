@@ -1,38 +1,37 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class BodyTests
 {
-    public class BodyTests
+    [Fact]
+    public void Should_render_body_only()
     {
-        [Fact]
-        public void Should_render_body_only()
-        {
-            var source = @"
+        var source = @"
 <mjml>
     <mj-body>
     </mj-body>
  </mjml>
 ";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            Assert.Contains("</body>", result, StringComparison.OrdinalIgnoreCase);
-        }
+        Assert.Contains("</body>", result, StringComparison.OrdinalIgnoreCase);
+    }
 
-        [Fact]
-        public void Should_add_background_to_body()
-        {
-            var source = @"
+    [Fact]
+    public void Should_add_background_to_body()
+    {
+        var source = @"
 <mjml>
     <mj-body background-color=""red"">
     </mj-body>
 </mjml>
 ";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            Assert.Contains(@"<body style=""background-color:red;word-spacing:normal;"">", result, StringComparison.OrdinalIgnoreCase);
-        }
+        Assert.Contains(@"<body style=""background-color:red;word-spacing:normal;"">", result, StringComparison.OrdinalIgnoreCase);
     }
 }

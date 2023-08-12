@@ -1,10 +1,9 @@
-﻿namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types;
+
+public sealed class StringType : IType
 {
-    public sealed class StringType : IType
+    public bool Validate(string value, ref ValidationContext context)
     {
-        public bool Validate(string value, ref ValidationContext context)
-        {
-            return true;
-        }
+        return true;
     }
 }

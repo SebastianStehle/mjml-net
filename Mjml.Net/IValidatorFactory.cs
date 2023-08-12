@@ -1,7 +1,6 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+public interface IValidatorFactory
 {
-    public interface IValidatorFactory
-    {
-        IValidator Create();
-    }
+    IValidator Create();
 }

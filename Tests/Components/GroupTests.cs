@@ -1,14 +1,14 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class GroupTests
 {
-    public class GroupTests
+    [Fact]
+    public void Should_render_groups()
     {
-        [Fact]
-        public void Should_render_groups()
-        {
-            var source = @"
+        var source = @"
 <mjml-test head=""false"">
     <mj-group>
         <mj-spacer />
@@ -19,15 +19,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
+    }
 
-        [Fact]
-        public void Should_render_group_with_columns()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_group_with_columns()
+    {
+        var source = @"
 <mjml-test head=""false"">
     <mj-group>
         <mj-column width=""100px""></mj-column>
@@ -36,9 +36,8 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.GroupWithColumns.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.GroupWithColumns.html", result);
     }
 }

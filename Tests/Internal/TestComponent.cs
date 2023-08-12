@@ -1,55 +1,54 @@
 ﻿using System.Text;
 using Mjml.Net;
 
-namespace Tests.Internal
+namespace Tests.Internal;
+
+public partial class TestComponent : Component
 {
-    public partial class TestComponent : Component
+    public override string ComponentName => "mjml-test";
+
+    [Bind("head")]
+    public string? Head;
+
+    [Bind("body")]
+    public string? Body;
+
+    public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
-        public override string ComponentName => "mjml-test";
+        RenderChildren(renderer, context);
 
-        [Bind("head")]
-        public string? Head;
-
-        [Bind("body")]
-        public string? Body;
-
-        public override void Render(IHtmlRenderer renderer, GlobalContext context)
+        if (Head != "false")
         {
-            RenderChildren(renderer, context);
-
-            if (Head != "false")
-            {
-                RenderHead(renderer, context);
-            }
-
-            if (Body != "false")
-            {
-                RenderBody(renderer, context);
-            }
+            RenderHead(renderer, context);
         }
 
-        private static void RenderHead(IHtmlRenderer renderer, GlobalContext context)
+        if (Body != "false")
         {
-            renderer.RenderHelpers(HelperTarget.HeadStart);
+            RenderBody(renderer, context);
+        }
+    }
 
-            if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
-            {
-                renderer.Plain(sb);
-            }
+    private static void RenderHead(IHtmlRenderer renderer, GlobalContext context)
+    {
+        renderer.RenderHelpers(HelperTarget.HeadStart);
 
-            renderer.RenderHelpers(HelperTarget.HeadEnd);
+        if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
+        {
+            renderer.Plain(sb);
         }
 
-        private static void RenderBody(IHtmlRenderer renderer, GlobalContext context)
+        renderer.RenderHelpers(HelperTarget.HeadEnd);
+    }
+
+    private static void RenderBody(IHtmlRenderer renderer, GlobalContext context)
+    {
+        renderer.RenderHelpers(HelperTarget.BodyStart);
+
+        if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
         {
-            renderer.RenderHelpers(HelperTarget.BodyStart);
-
-            if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
-            {
-                renderer.Plain(sb);
-            }
-
-            renderer.RenderHelpers(HelperTarget.BodyEnd);
+            renderer.Plain(sb);
         }
+
+        renderer.RenderHelpers(HelperTarget.BodyEnd);
     }
 }

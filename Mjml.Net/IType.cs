@@ -1,7 +1,6 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+public interface IType
 {
-    public interface IType
-    {
-        bool Validate(string value, ref ValidationContext context);
-    }
+    bool Validate(string value, ref ValidationContext context);
 }

@@ -1,12 +1,11 @@
-﻿namespace Tools
-{
-    public static class Program
-    {
-        public static void Main(string[] args)
-        {
-            MigrateCS.Run();
+﻿namespace Tools;
 
-            ConvertJS.Run();
-        }
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        MigrateCS.Run();
+
+        ConvertJS.Run();
     }
 }

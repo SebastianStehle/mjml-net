@@ -1,14 +1,13 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+/// <summary>
+/// Generates IDs for HTML tags.
+/// </summary>
+public interface IIdGenerator
 {
     /// <summary>
-    /// Generates IDs for HTML tags.
+    /// Generates a new ID and returns the result.
     /// </summary>
-    public interface IIdGenerator
-    {
-        /// <summary>
-        /// Generates a new ID and returns the result.
-        /// </summary>
-        /// <returns>The created ID.</returns>
-        string Next();
-    }
+    /// <returns>The created ID.</returns>
+    string Next();
 }

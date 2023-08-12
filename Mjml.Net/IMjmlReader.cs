@@ -1,14 +1,13 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+/// <summary>
+/// Reads MJML fragments.
+/// </summary>
+public interface IMjmlReader
 {
     /// <summary>
-    /// Reads MJML fragments.
+    /// Read a xml fragment from a string.
     /// </summary>
-    public interface IMjmlReader
-    {
-        /// <summary>
-        /// Read a xml fragment from a string.
-        /// </summary>
-        /// <param name="xml">The xml fragment reader.</param>
-        void ReadFragment(string xml);
-    }
+    /// <param name="xml">The xml fragment reader.</param>
+    void ReadFragment(string xml);
 }

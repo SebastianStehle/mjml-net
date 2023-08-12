@@ -3,22 +3,22 @@ using Mjml.Net.Helpers;
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class IncludeTests
 {
-    public class IncludeTests
+    [Fact]
+    public void Should_include_css()
     {
-        [Fact]
-        public void Should_include_css()
+        var files = new InMemoryFileLoader
         {
-            var files = new InMemoryFileLoader
-            {
-                ["./style.css"] = @"
+            ["./style.css"] = @"
 .red-text div {
   color: red !important;
 }"
-            };
+        };
 
-            var source = @"
+        var source = @"
 <mjml-test body=""false"">
   <mj-head>
     <mj-include path=""./style.css"" type=""css"" />
@@ -28,72 +28,71 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files }, new StyleHelper());
+        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files }, new StyleHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
+    }
 
-        [Fact]
-        public void Should_include_mjml_fragments()
+    [Fact]
+    public void Should_include_mjml_fragments()
+    {
+        var files = new InMemoryFileLoader
         {
-            var files = new InMemoryFileLoader
-            {
-                ["./text.mjml"] = @"
+            ["./text.mjml"] = @"
 <mj-group>
     <mj-spacer />
 </mj-group>
 <mj-group>
     <mj-spacer />
 </mj-group>"
-            };
+        };
 
-            var source = @"
+        var source = @"
 <mjml-test head=""false"">
     <mj-include path=""./text.mjml"" />
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
+    }
 
-        [Fact]
-        public void Should_include_mjml()
+    [Fact]
+    public void Should_include_mjml()
+    {
+        var files = new InMemoryFileLoader
         {
-            var files = new InMemoryFileLoader
-            {
-                ["./text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
-            };
+            ["./text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
+        };
 
-            var source = @"
+        var source = @"
 <mjml-test head=""false"">
     <mj-include path=""./text.mjml"" />
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
+    }
 
-        [Fact]
-        public void Should_include_html()
+    [Fact]
+    public void Should_include_html()
+    {
+        var files = new InMemoryFileLoader
         {
-            var files = new InMemoryFileLoader
-            {
-                ["./text.html"] = @"<strong>Hello</strong> <strong>MJML</strong"
-            };
+            ["./text.html"] = @"<strong>Hello</strong> <strong>MJML</strong"
+        };
 
-            var source = @"
+        var source = @"
 <mjml-test head=""false"">
     <mj-include path=""./text.html"" type=""html"" />
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
 
-            AssertHelpers.HtmlAssert(files["./text.html"]!, result);
-        }
+        AssertHelpers.HtmlAssert(files["./text.html"]!, result);
     }
 }

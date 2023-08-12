@@ -1,9 +1,8 @@
-﻿namespace Mjml.Net.Components
+﻿namespace Mjml.Net.Components;
+
+public enum IncludeType
 {
-    public enum IncludeType
-    {
-        Mjml,
-        Html,
-        Css
-    }
+    Mjml,
+    Html,
+    Css
 }

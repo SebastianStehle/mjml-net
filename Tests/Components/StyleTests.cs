@@ -2,14 +2,14 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class StyleTests
 {
-    public class StyleTests
+    [Fact]
+    public void Should_render_style()
     {
-        [Fact]
-        public void Should_render_style()
-        {
-            var source = @"
+        var source = @"
 <mjml-test body=""false"">
   <mj-head>
     <mj-style>
@@ -23,15 +23,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new StyleHelper());
+        var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
+    }
 
-        [Fact]
-        public void Should_render_inline_just_normal_as_fallback()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_inline_just_normal_as_fallback()
+    {
+        var source = @"
 <mjml-test body=""false"">
   <mj-head>
     <mj-style inline=""inline"">
@@ -45,9 +45,8 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new StyleHelper());
+        var result = TestHelper.Render(source, new StyleHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
     }
 }

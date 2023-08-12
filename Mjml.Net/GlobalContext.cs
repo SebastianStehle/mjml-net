@@ -1,106 +1,105 @@
 ﻿using Mjml.Net.Internal;
 
-namespace Mjml.Net
+namespace Mjml.Net;
+
+public sealed class GlobalContext
 {
-    public sealed class GlobalContext
+    private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
+    private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
+
+    public Dictionary<(Type Type, string Name), object> GlobalData { get; } = new Dictionary<(Type Type, string Name), object>();
+
+    public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
+
+    public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
+
+    public MjmlOptions Options { get; private set; }
+
+    public void SetOptions(MjmlOptions options)
     {
-        private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
-        private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
+        Options = options;
+    }
 
-        public Dictionary<(Type Type, string Name), object> GlobalData { get; } = new Dictionary<(Type Type, string Name), object>();
+    public void Clear()
+    {
+        GlobalData.Clear();
 
-        public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
+        attributesByClass.Clear();
+        attributesByName.Clear();
 
-        public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
+        Options = null!;
+    }
 
-        public MjmlOptions Options { get; private set; }
-
-        public void SetOptions(MjmlOptions options)
+    public void SetGlobalData(string name, object? value, bool doNotOverride = false)
+    {
+        if (value == null)
         {
-            Options = options;
+            return;
         }
 
-        public void Clear()
+        var key = (value.GetType(), name);
+
+        if (doNotOverride && GlobalData.ContainsKey(key))
         {
-            GlobalData.Clear();
-
-            attributesByClass.Clear();
-            attributesByName.Clear();
-
-            Options = null!;
+            return;
         }
 
-        public void SetGlobalData(string name, object? value, bool doNotOverride = false)
+        GlobalData[key] = value;
+    }
+
+    public void SetTypeAttribute(string name, string type, string value)
+    {
+        if (!attributesByName.TryGetValue(name, out var attributes))
         {
-            if (value == null)
+            attributes = new Dictionary<string, string>();
+
+            attributesByName[name] = attributes;
+        }
+
+        attributes[type] = value;
+    }
+
+    public void SetClassAttribute(string name, string className, string value)
+    {
+        if (!attributesByClass.TryGetValue(className, out var attributes))
+        {
+            attributes = new Dictionary<string, string>();
+
+            attributesByClass[className] = attributes;
+        }
+
+        attributes[name] = value;
+    }
+
+    public string? GetAttribute(string elementName, string[]? classes)
+    {
+        if (attributesByName.TryGetValue(elementName, out var byType))
+        {
+            if (byType.TryGetValue(elementName, out var attribute))
             {
-                return;
+                return attribute;
             }
 
-            var key = (value.GetType(), name);
-
-            if (doNotOverride && GlobalData.ContainsKey(key))
+            if (byType.TryGetValue(Constants.All, out attribute))
             {
-                return;
+                return attribute;
             }
-
-            GlobalData[key] = value;
         }
 
-        public void SetTypeAttribute(string name, string type, string value)
+        if (attributesByClass.Count > 0 && classes != null)
         {
-            if (!attributesByName.TryGetValue(name, out var attributes))
+            foreach (var className in classes)
             {
-                attributes = new Dictionary<string, string>();
-
-                attributesByName[name] = attributes;
-            }
-
-            attributes[type] = value;
-        }
-
-        public void SetClassAttribute(string name, string className, string value)
-        {
-            if (!attributesByClass.TryGetValue(className, out var attributes))
-            {
-                attributes = new Dictionary<string, string>();
-
-                attributesByClass[className] = attributes;
-            }
-
-            attributes[name] = value;
-        }
-
-        public string? GetAttribute(string elementName, string[]? classes)
-        {
-            if (attributesByName.TryGetValue(elementName, out var byType))
-            {
-                if (byType.TryGetValue(elementName, out var attribute))
+                if (attributesByClass.TryGetValue(className, out var byName))
                 {
-                    return attribute;
-                }
-
-                if (byType.TryGetValue(Constants.All, out attribute))
-                {
-                    return attribute;
-                }
-            }
-
-            if (attributesByClass.Count > 0 && classes != null)
-            {
-                foreach (var className in classes)
-                {
-                    if (attributesByClass.TryGetValue(className, out var byName))
+                    if (byName.TryGetValue(elementName, out var attribute))
                     {
-                        if (byName.TryGetValue(elementName, out var attribute))
-                        {
-                            return attribute;
-                        }
+                        return attribute;
                     }
                 }
             }
-
-            return null;
         }
+
+        return null;
     }
 }

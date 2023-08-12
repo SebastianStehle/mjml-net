@@ -1,30 +1,29 @@
 ﻿using Mjml.Net;
 
-namespace Tests.Internal
+namespace Tests.Internal;
+
+/// <summary>
+/// Provides the files from an in memory store.
+/// </summary>
+/// <remarks>
+/// Useful for preloading.
+/// </remarks>
+public sealed class InMemoryFileLoader : Dictionary<string, string?>, IFileLoader
 {
-    /// <summary>
-    /// Provides the files from an in memory store.
-    /// </summary>
-    /// <remarks>
-    /// Useful for preloading.
-    /// </remarks>
-    public sealed class InMemoryFileLoader : Dictionary<string, string?>, IFileLoader
+    /// <inheritdoc />
+    public bool ContainsFile(string path)
     {
-        /// <inheritdoc />
-        public bool ContainsFile(string path)
+        return ContainsKey(path);
+    }
+
+    /// <inheritdoc />
+    public string? LoadText(string path)
+    {
+        if (path == null)
         {
-            return ContainsKey(path);
+            throw new ArgumentNullException(nameof(path));
         }
 
-        /// <inheritdoc />
-        public string? LoadText(string path)
-        {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-
-            return this.GetValueOrDefault(path);
-        }
+        return this.GetValueOrDefault(path);
     }
 }

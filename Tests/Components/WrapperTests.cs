@@ -1,22 +1,21 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class WrapperTests
 {
-    public class WrapperTests
+    [Fact]
+    public void Should_render_wrapper()
     {
-        [Fact]
-        public void Should_render_wrapper()
-        {
-            var source = @"
+        var source = @"
 <mj-wrapper>
 	<mj-spacer css-class=""class1"" />
     <mj-spacer css-class=""class2"" />
 </mj-wrapper>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Wrapper.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Wrapper.html", result);
     }
 }

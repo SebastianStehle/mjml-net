@@ -1,7 +1,6 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+[AttributeUsage(AttributeTargets.Field)]
+public sealed class BindTextAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Field)]
-    public sealed class BindTextAttribute : Attribute
-    {
-    }
 }

@@ -1,8 +1,7 @@
-﻿namespace Mjml.Net.Components.Body
+﻿namespace Mjml.Net.Components.Body;
+
+public abstract partial class BodyComponentBase : Component
 {
-    public abstract partial class BodyComponentBase : Component
-    {
-        [Bind("css-class")]
-        public string? CssClass;
-    }
+    [Bind("css-class")]
+    public string? CssClass;
 }

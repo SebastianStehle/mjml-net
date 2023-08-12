@@ -1,111 +1,110 @@
 ﻿#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 
-namespace Mjml.Net.Helpers
+namespace Mjml.Net.Helpers;
+
+public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer)
 {
-    public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer)
+    public static Style Static(string text)
     {
-        public static Style Static(string text)
+        return new Style((renderer, _) => renderer.Content(text));
+    }
+}
+
+public sealed record MediaQuery(string ClassName, string Rule)
+{
+    public static MediaQuery Width(string className, string width)
+    {
+        return new MediaQuery(className, FormattableString.Invariant($"{{\r\nwidth:{width} !important;\r\nmax-width: {width};\r\n}}"));
+    }
+}
+
+public sealed class StyleHelper : IHelper
+{
+    public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
+    {
+        if (target != HelperTarget.HeadEnd)
         {
-            return new Style((renderer, _) => renderer.Content(text));
+            return;
         }
+
+        WriteMediaQueries(renderer, context);
+        WriteMediaQueriesThunderbird(renderer, context);
+        WriteMediaQueriesOWA(renderer, context);
+        WriteStyles(renderer, context);
+        WriteOptionStyles(renderer, context);
     }
 
-    public sealed record MediaQuery(string ClassName, string Rule)
+    private static void WriteMediaQueries(IHtmlRenderer renderer, GlobalContext context)
     {
-        public static MediaQuery Width(string className, string width)
+        renderer.StartElement("style")
+            .Attr("type", "text/css");
+
+        renderer.Content($"@media only screen and (min-width:{context.Options.Breakpoint}) {{");
+
+        foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
         {
-            return new MediaQuery(className, FormattableString.Invariant($"{{\r\nwidth:{width} !important;\r\nmax-width: {width};\r\n}}"));
+            renderer.Content($"  .{mediaQuery.ClassName} {mediaQuery.Rule}");
         }
+
+        renderer.Content("}");
+
+        renderer.EndElement("style");
     }
 
-    public sealed class StyleHelper : IHelper
+    private static void WriteMediaQueriesThunderbird(IHtmlRenderer renderer, GlobalContext context)
     {
-        public void Render(IHtmlRenderer renderer, HelperTarget target, GlobalContext context)
-        {
-            if (target != HelperTarget.HeadEnd)
-            {
-                return;
-            }
+        renderer.StartElement("style")
+            .Attr("media", $"screen and (min-width:{context.Options.Breakpoint})");
 
-            WriteMediaQueries(renderer, context);
-            WriteMediaQueriesThunderbird(renderer, context);
-            WriteMediaQueriesOWA(renderer, context);
-            WriteStyles(renderer, context);
-            WriteOptionStyles(renderer, context);
+        foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
+        {
+            renderer.Content($"  .moz-text-html .{mediaQuery.ClassName} {mediaQuery.Rule}");
         }
 
-        private static void WriteMediaQueries(IHtmlRenderer renderer, GlobalContext context)
+        renderer.EndElement("style");
+    }
+
+    private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
+    {
+        renderer.StartElement("style")
+            .Attr("type", "text/css");
+
+        foreach (var style in context.GlobalData.Values.OfType<Style>())
         {
-            renderer.StartElement("style")
-                .Attr("type", "text/css");
-
-            renderer.Content($"@media only screen and (min-width:{context.Options.Breakpoint}) {{");
-
-            foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
-            {
-                renderer.Content($"  .{mediaQuery.ClassName} {mediaQuery.Rule}");
-            }
-
-            renderer.Content("}");
-
-            renderer.EndElement("style");
+            style.Renderer(renderer, context);
         }
 
-        private static void WriteMediaQueriesThunderbird(IHtmlRenderer renderer, GlobalContext context)
+        renderer.EndElement("style");
+    }
+
+    private static void WriteOptionStyles(IHtmlRenderer renderer, GlobalContext context)
+    {
+        renderer.StartElement("style")
+            .Attr("type", "text/css");
+
+        foreach (var style in context.Options.Styles ?? Array.Empty<Style>())
         {
-            renderer.StartElement("style")
-                .Attr("media", $"screen and (min-width:{context.Options.Breakpoint})");
-
-            foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
-            {
-                renderer.Content($"  .moz-text-html .{mediaQuery.ClassName} {mediaQuery.Rule}");
-            }
-
-            renderer.EndElement("style");
+            style.Renderer(renderer, context);
         }
 
-        private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
+        renderer.EndElement("style");
+    }
+
+    private static void WriteMediaQueriesOWA(IHtmlRenderer renderer, GlobalContext context)
+    {
+        if (!context.Options.ForceOWAQueries)
         {
-            renderer.StartElement("style")
-                .Attr("type", "text/css");
-
-            foreach (var style in context.GlobalData.Values.OfType<Style>())
-            {
-                style.Renderer(renderer, context);
-            }
-
-            renderer.EndElement("style");
+            return;
         }
 
-        private static void WriteOptionStyles(IHtmlRenderer renderer, GlobalContext context)
+        renderer.StartElement("style")
+            .Attr("type", "text/css");
+
+        foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
         {
-            renderer.StartElement("style")
-                .Attr("type", "text/css");
-
-            foreach (var style in context.Options.Styles ?? Array.Empty<Style>())
-            {
-                style.Renderer(renderer, context);
-            }
-
-            renderer.EndElement("style");
+            renderer.Content($"  [owa] {mediaQuery.Rule}");
         }
 
-        private static void WriteMediaQueriesOWA(IHtmlRenderer renderer, GlobalContext context)
-        {
-            if (!context.Options.ForceOWAQueries)
-            {
-                return;
-            }
-
-            renderer.StartElement("style")
-                .Attr("type", "text/css");
-
-            foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
-            {
-                renderer.Content($"  [owa] {mediaQuery.Rule}");
-            }
-
-            renderer.EndElement("style");
-        }
+        renderer.EndElement("style");
     }
 }

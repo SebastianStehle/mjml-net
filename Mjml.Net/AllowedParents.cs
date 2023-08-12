@@ -1,6 +1,5 @@
-﻿namespace Mjml.Net
+﻿namespace Mjml.Net;
+
+public sealed class AllowedParents : List<string>
 {
-    public sealed class AllowedParents : List<string>
-    {
-    }
 }

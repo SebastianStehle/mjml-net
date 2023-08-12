@@ -1,35 +1,34 @@
 ﻿using HtmlPerformanceKit;
 
-namespace Mjml.Net
+namespace Mjml.Net;
+
+public interface IHtmlReader
 {
-    public interface IHtmlReader
-    {
-        int LineNumber { get; }
+    int LineNumber { get; }
 
-        int LinePosition { get; }
+    int LinePosition { get; }
 
-        int AttributeCount { get; }
+    int AttributeCount { get; }
 
-        string Name { get; }
+    string Name { get; }
 
-        string Text { get; }
+    string Text { get; }
 
-        bool SelfClosingElement { get; }
+    bool SelfClosingElement { get; }
 
-        HtmlTokenKind TokenKind { get; }
+    HtmlTokenKind TokenKind { get; }
 
-        bool Read();
+    bool Read();
 
-        string GetAttribute(string name);
+    string GetAttribute(string name);
 
-        string GetAttribute(int index);
+    string GetAttribute(int index);
 
-        string GetAttributeName(int index);
+    string GetAttributeName(int index);
 
-        string ReadInnerHtml();
+    string ReadInnerHtml();
 
-        string ReadInnerText();
+    string ReadInnerText();
 
-        IHtmlReader ReadSubtree();
-    }
+    IHtmlReader ReadSubtree();
 }

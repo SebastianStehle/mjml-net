@@ -1,28 +1,27 @@
-﻿namespace Mjml.Net.Types
+﻿namespace Mjml.Net.Types;
+
+public sealed class NumberType : IType
 {
-    public sealed class NumberType : IType
+    private readonly Unit[] units;
+
+    public IReadOnlyCollection<Unit> Units => units;
+
+    public NumberType(params Unit[] units)
     {
-        private readonly Unit[] units;
+        this.units = units;
+    }
 
-        public IReadOnlyCollection<Unit> Units => units;
+    public bool Validate(string value, ref ValidationContext context)
+    {
+        var trimmed = value.AsSpan().Trim();
 
-        public NumberType(params Unit[] units)
+        if (trimmed.Length == 1 && trimmed[0] == '0')
         {
-            this.units = units;
+            return true;
         }
 
-        public bool Validate(string value, ref ValidationContext context)
-        {
-            var trimmed = value.AsSpan().Trim();
+        var (_, unit) = UnitParser.Parse(value);
 
-            if (trimmed.Length == 1 && trimmed[0] == '0')
-            {
-                return true;
-            }
-
-            var (_, unit) = UnitParser.Parse(value);
-
-            return units.Contains(unit);
-        }
+        return units.Contains(unit);
     }
 }

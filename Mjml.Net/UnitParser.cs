@@ -1,87 +1,86 @@
 ﻿using System.Globalization;
 
-namespace Mjml.Net
+namespace Mjml.Net;
+
+public static class UnitParser
 {
-    public static class UnitParser
+    public static (double Value, Unit Unit) Parse(string? rawValue, Unit defaultUnit = Unit.None)
     {
-        public static (double Value, Unit Unit) Parse(string? rawValue, Unit defaultUnit = Unit.None)
+        if (string.IsNullOrWhiteSpace(rawValue))
         {
-            if (string.IsNullOrWhiteSpace(rawValue))
+            return (0, Unit.Unknown);
+        }
+
+        var span = rawValue.AsSpan().Trim();
+
+        var hasSeparator = false;
+
+        var i = 0;
+        for (i = 0; i < span.Length; i++)
+        {
+            var c = span[i];
+
+            if (c == '.' || c == ',')
             {
-                return (0, Unit.Unknown);
+                hasSeparator = true;
+                continue;
             }
 
-            var span = rawValue.AsSpan().Trim();
-
-            var hasSeparator = false;
-
-            var i = 0;
-            for (i = 0; i < span.Length; i++)
+            if (!char.IsNumber(c))
             {
-                var c = span[i];
+                break;
+            }
+        }
 
-                if (c == '.' || c == ',')
-                {
-                    hasSeparator = true;
-                    continue;
-                }
+        var unitSpan = span[i..];
+        var unitType = Unit.Unknown;
 
-                if (!char.IsNumber(c))
-                {
-                    break;
-                }
+        var f = new string(unitSpan);
+
+        if (unitSpan.StartsWith("px", StringComparison.OrdinalIgnoreCase))
+        {
+            unitType = Unit.Pixels;
+        }
+        else if (unitSpan.StartsWith("%", StringComparison.OrdinalIgnoreCase))
+        {
+            unitType = Unit.Percent;
+        }
+        else if (unitSpan.StartsWith("em", StringComparison.OrdinalIgnoreCase))
+        {
+            unitType = Unit.Em;
+        }
+        else if (unitSpan.StartsWith("rem", StringComparison.OrdinalIgnoreCase))
+        {
+            unitType = Unit.Rem;
+        }
+        else if (unitSpan.Length == 0)
+        {
+            unitType = defaultUnit;
+        }
+
+        var valueSpan = span[..i];
+
+        if (valueSpan.Length == 0)
+        {
+            return (0, unitType);
+        }
+
+        if (hasSeparator)
+        {
+            double.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
+
+            if (unitType == Unit.Pixels)
+            {
+                return ((int)temp, unitType);
             }
 
-            var unitSpan = span[i..];
-            var unitType = Unit.Unknown;
+            return (temp, unitType);
+        }
+        else
+        {
+            int.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
 
-            var f = new string(unitSpan);
-
-            if (unitSpan.StartsWith("px", StringComparison.OrdinalIgnoreCase))
-            {
-                unitType = Unit.Pixels;
-            }
-            else if (unitSpan.StartsWith("%", StringComparison.OrdinalIgnoreCase))
-            {
-                unitType = Unit.Percent;
-            }
-            else if (unitSpan.StartsWith("em", StringComparison.OrdinalIgnoreCase))
-            {
-                unitType = Unit.Em;
-            }
-            else if (unitSpan.StartsWith("rem", StringComparison.OrdinalIgnoreCase))
-            {
-                unitType = Unit.Rem;
-            }
-            else if (unitSpan.Length == 0)
-            {
-                unitType = defaultUnit;
-            }
-
-            var valueSpan = span[..i];
-
-            if (valueSpan.Length == 0)
-            {
-                return (0, unitType);
-            }
-
-            if (hasSeparator)
-            {
-                double.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
-
-                if (unitType == Unit.Pixels)
-                {
-                    return ((int)temp, unitType);
-                }
-
-                return (temp, unitType);
-            }
-            else
-            {
-                int.TryParse(valueSpan, NumberStyles.Any, CultureInfo.InvariantCulture, out var temp);
-
-                return (temp, unitType);
-            }
+            return (temp, unitType);
         }
     }
 }

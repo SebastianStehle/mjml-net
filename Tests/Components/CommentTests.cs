@@ -2,14 +2,14 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class CommentTests
 {
-    public class CommentTests
+    [Fact]
+    public void Should_keep_comments()
     {
-        [Fact]
-        public void Should_keep_comments()
-        {
-            var source = @"
+        var source = @"
 <mjml-test head=""false"">
     <!-- COMMENT 1 -->
     <mj-spacer />
@@ -19,12 +19,11 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new MjmlOptions
-            {
-                KeepComments = true
-            });
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            KeepComments = true
+        });
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Comments.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Comments.html", result);
     }
 }

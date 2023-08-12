@@ -1,10 +1,9 @@
-﻿namespace Mjml.Net.Validators
+﻿namespace Mjml.Net.Validators;
+
+public sealed class SoftValidator : ValidatorBase
 {
-    public sealed class SoftValidator : ValidatorBase
+    public SoftValidator()
+        : base(false)
     {
-        public SoftValidator()
-            : base(false)
-        {
-        }
     }
 }

@@ -2,14 +2,14 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class PreviewTests
 {
-    public class PreviewTests
+    [Fact]
+    public void Should_render_preview()
     {
-        [Fact]
-        public void Should_render_preview()
-        {
-            var source = @"
+        var source = @"
 <mjml-test>
     <mj-head>
         <mj-preview>Hello MJML</mj-preview>
@@ -19,9 +19,8 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new PreviewHelper());
+        var result = TestHelper.Render(source, new PreviewHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Preview.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Preview.html", result);
     }
 }

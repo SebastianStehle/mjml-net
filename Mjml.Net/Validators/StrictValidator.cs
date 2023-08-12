@@ -1,10 +1,9 @@
-﻿namespace Mjml.Net.Validators
+﻿namespace Mjml.Net.Validators;
+
+public sealed class StrictValidator : ValidatorBase
 {
-    public sealed class StrictValidator : ValidatorBase
+    public StrictValidator()
+        : base(true)
     {
-        public StrictValidator()
-            : base(true)
-        {
-        }
     }
 }

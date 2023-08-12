@@ -1,14 +1,14 @@
 ﻿using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class AccordionTests
 {
-    public class AccordionTests
+    [Fact]
+    public void Should_render_accordion()
     {
-        [Fact]
-        public void Should_render_accordion()
-        {
-            var source = @"
+        var source = @"
 <mj-accordion>
 	<mj-accordion-element>
 		<mj-accordion-title>Why use an accordion?</mj-accordion-title>
@@ -28,15 +28,15 @@ namespace Tests.Components
 	</mj-accordion-element>
 </mj-accordion>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Accordion.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Accordion.html", result);
+    }
 
-        [Fact]
-        public void Should_render_accordion_with_empty_elements()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_accordion_with_empty_elements()
+    {
+        var source = @"
 <mj-accordion>
     <mj-accordion-element>
     </mj-accordion-element>
@@ -44,9 +44,8 @@ namespace Tests.Components
     </mj-accordion-element>
 </mj-accordion>";
 
-            var result = TestHelper.Render(source);
+        var result = TestHelper.Render(source);
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.AccordionEmptyElements.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.AccordionEmptyElements.html", result);
     }
 }

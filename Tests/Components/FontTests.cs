@@ -2,14 +2,14 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class FontTests
 {
-    public class FontTests
+    [Fact]
+    public void Should_render_font()
     {
-        [Fact]
-        public void Should_render_font()
-        {
-            var source = @"
+        var source = @"
 <mjml-test body=""false"">
     <mj-head>
         <mj-font name=""Raleway"" href=""https://fonts.googleapis.com/css?family=Raleway"" />
@@ -19,15 +19,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+    }
 
-        [Fact]
-        public void Should_add_font_implicitely()
-        {
-            var source = @"
+    [Fact]
+    public void Should_add_font_implicitely()
+    {
+        var source = @"
 <mjml-test body=""false"">
     <mj-body>
         <mj-text font-family=""Ubuntu""></mj-text>
@@ -35,15 +35,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.FontUbuntu.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.FontUbuntu.html", result);
+    }
 
-        [Fact]
-        public void Should_add_font_implicitely_but_not_override_custom()
-        {
-            var source = @"
+    [Fact]
+    public void Should_add_font_implicitely_but_not_override_custom()
+    {
+        var source = @"
 <mjml-test body=""false"">
     <mj-head>
         <mj-font name=""Ubuntu"" href=""https://fonts.googleapis.com/css?family=Ubuntu:300,400"" />
@@ -54,9 +54,8 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.FontUbuntu2.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.FontUbuntu2.html", result);
     }
 }

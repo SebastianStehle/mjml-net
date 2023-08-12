@@ -2,14 +2,14 @@
 using Tests.Internal;
 using Xunit;
 
-namespace Tests.Components
+namespace Tests.Components;
+
+public class AttributesTests
 {
-    public class AttributesTests
+    [Fact]
+    public void Should_render_font_with_attributes()
     {
-        [Fact]
-        public void Should_render_font_with_attributes()
-        {
-            var source = @"
+        var source = @"
 <mjml-test body=""false"">
     <mj-head>
         <mj-attributes>
@@ -22,15 +22,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+    }
 
-        [Fact]
-        public void Should_render_font_with_non_self_closing_attributes()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_font_with_non_self_closing_attributes()
+    {
+        var source = @"
 <mjml-test body=""false"">
     <mj-head>
         <mj-attributes>
@@ -43,15 +43,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+    }
 
-        [Fact]
-        public void Should_render_font_with_class_attribute()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_font_with_class_attribute()
+    {
+        var source = @"
 <mjml-test body=""false"">
   <mj-head>
     <mj-attributes>
@@ -64,15 +64,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+    }
 
-        [Fact]
-        public void Should_render_font_with_last_class_attribute()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_font_with_last_class_attribute()
+    {
+        var source = @"
 <mjml-test body=""false"">
   <mj-head>
     <mj-attributes>
@@ -86,15 +86,15 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
+    }
 
-        [Fact]
-        public void Should_render_font_with_multiple_attributes()
-        {
-            var source = @"
+    [Fact]
+    public void Should_render_font_with_multiple_attributes()
+    {
+        var source = @"
 <mjml-test body=""false"">
   <mj-head>
     <mj-attributes>
@@ -113,9 +113,8 @@ namespace Tests.Components
 </mjml-test>
 ";
 
-            var result = TestHelper.Render(source, new FontHelper());
+        var result = TestHelper.Render(source, new FontHelper());
 
-            AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
-        }
+        AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }
 }
