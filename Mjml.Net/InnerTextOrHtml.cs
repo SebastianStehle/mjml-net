@@ -1,10 +1,10 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Mjml.Net;
 
 public sealed class InnerTextOrHtml
 {
+    private delegate void Formatter<T>(ReadOnlySpan<char> span, T args);
     private static readonly char[] TrimChars = { ' ', '\n', '\r' };
     private readonly List<string> parts;
 
@@ -23,16 +23,6 @@ public sealed class InnerTextOrHtml
         parts.Add(part);
     }
 
-    public void AddNonEmpty(string part)
-    {
-        if (part.AsSpan().IsWhiteSpace())
-        {
-            return;
-        }
-
-        parts.Add(part);
-    }
-
     public bool IsEmpty()
     {
         return !parts.Any(x => !x.AsSpan().IsWhiteSpace());
@@ -45,24 +35,7 @@ public sealed class InnerTextOrHtml
             return;
         }
 
-        var lastPart = parts.Count - 1;
-
-        for (var i = 0; i < parts.Count; i++)
-        {
-            var part = parts[i].AsSpan();
-
-            if (i == 0)
-            {
-                part = part.TrimStart(TrimChars);
-            }
-
-            if (i == lastPart)
-            {
-                part = part.TrimEnd(TrimChars);
-            }
-
-            sb.Append(part);
-        }
+        AppendCore(sb, (span, sb) => sb.Append(span));
     }
 
     public void AppendToIntended(StringBuilder sb, int indent)
@@ -72,23 +45,54 @@ public sealed class InnerTextOrHtml
             return;
         }
 
-        var lastPart = parts.Count - 1;
+        AppendCore((sb, indent), (span, args) => AppendIntended(args.sb, span, args.indent));
+    }
 
-        for (var i = 0; i < parts.Count; i++)
+    private void AppendCore<T>(T args, Formatter<T> formatter)
+    {
+        if (parts.Count == 0)
+        {
+            return;
+        }
+
+        var sliceStart = 0;
+        var sliceEnd = parts.Count - 1;
+
+        // Skip over all strings at the end that contain only whitespaces, because we cannot do that in the loop.
+        while (sliceEnd > sliceStart)
+        {
+            if (parts[sliceEnd].AsSpan().IsWhiteSpace())
+            {
+                sliceEnd--;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        for (var i = sliceStart; i <= sliceEnd; i++)
         {
             var part = parts[i].AsSpan();
 
-            if (i == 0)
+            // Trim only the first and last element, because they do not contain whitespaces.
+            if (i == sliceStart)
             {
                 part = part.TrimStart(TrimChars);
+
+                if (part.Length == 0)
+                {
+                    sliceStart++;
+                    continue;
+                }
             }
 
-            if (i == lastPart)
+            if (i == sliceEnd)
             {
                 part = part.TrimEnd(TrimChars);
             }
 
-            AppendIntended(sb, part, indent);
+            formatter(part, args);
         }
     }
 
