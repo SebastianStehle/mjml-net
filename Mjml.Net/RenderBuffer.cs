@@ -13,7 +13,6 @@ internal sealed class RenderBuffer
     private int indent;
     private string? pendingConditionalStart;
     private string? pendingConditionalEnd;
-    private int conditionalDepth;
 
     public RenderBuffer(StringBuilder sb, bool beautify)
     {
@@ -336,53 +335,38 @@ internal sealed class RenderBuffer
     {
         FlushElement();
 
-        conditionalDepth++;
-
-        if (pendingConditionalStart != null || pendingConditionalEnd != null || conditionalDepth > 1)
+        if (pendingConditionalEnd != null)
         {
             pendingConditionalEnd = null;
-            return;
         }
-
-        pendingConditionalStart = content;
+        else
+        {
+            pendingConditionalStart = content;
+        }
     }
 
     public void EndConditional(string content)
     {
         FlushElement();
 
-        conditionalDepth--;
-
-        if (pendingConditionalStart != null || conditionalDepth > 0)
-        {
-            pendingConditionalEnd = content;
-            return;
-        }
-
         pendingConditionalEnd = content;
     }
 
     private void FlushConditionalEnd()
     {
-        if (pendingConditionalEnd == null)
+        if (pendingConditionalEnd != null)
         {
-            return;
+            TextCore(pendingConditionalEnd);
+            pendingConditionalEnd = null;
         }
-
-        TextCore(pendingConditionalEnd);
-
-        pendingConditionalEnd = null;
     }
 
     private void FlushConditionalStart()
     {
-        if (pendingConditionalStart == null)
+        if (pendingConditionalStart != null)
         {
-            return;
+            TextCore(pendingConditionalStart);
+            pendingConditionalStart = null;
         }
-
-        TextCore(pendingConditionalStart);
-
-        pendingConditionalStart = null;
     }
 }
