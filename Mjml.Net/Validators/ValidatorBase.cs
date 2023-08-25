@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net.Validators;
+﻿using Mjml.Net.Components;
+
+namespace Mjml.Net.Validators;
 
 public abstract class ValidatorBase : IValidator
 {
@@ -36,14 +38,16 @@ public abstract class ValidatorBase : IValidator
             errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.",
                 ValidationErrorType.UnknownAttribute,
                 context.LineNumber,
-                context.LinePosition);
+                context.LinePosition,
+                context.File);
         }
         else if (validateAttributeValue && !attribute.Validate(value, ref context))
         {
             errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.",
                 ValidationErrorType.InvalidAttribute,
                 context.LineNumber,
-                context.LinePosition);
+                context.LinePosition,
+                context.File);
         }
     }
 
@@ -56,42 +60,51 @@ public abstract class ValidatorBase : IValidator
             hasBody = true;
         }
 
-        if (component.AllowedParents == null || component.AllowedParents.Count == 0)
+        if (component.AllowedParents != null)
         {
-            if (componentStack.Count > 0)
+            if (component.AllowedParents.Count == 0)
             {
-                errors.Add($"'{name}' must be the root tag.",
-                    ValidationErrorType.InvalidParent,
-                    context.LineNumber,
-                    context.LinePosition);
+                if (componentStack.Count > 0)
+                {
+                    errors.Add($"'{name}' must be the root tag.",
+                        ValidationErrorType.InvalidParent,
+                        context.LineNumber,
+                        context.LinePosition,
+                        context.File);
+                }
             }
-        }
-        else
-        {
-            if (!componentStack.TryPeek(out var previous))
+            else
             {
-                errors.Add($"'{name}' cannot be the root tag.",
-                    ValidationErrorType.InvalidParent,
-                    context.LineNumber,
-                    context.LinePosition);
-            }
-            else if (component.AllowedParents != null)
-            {
-                if (!component.AllowedParents.Contains(previous))
+                if (!componentStack.TryPeek(out var previous))
+                {
+                    errors.Add($"'{name}' cannot be the root tag.",
+                        ValidationErrorType.InvalidParent,
+                        context.LineNumber,
+                        context.LinePosition,
+                        context.File);
+                }
+                else if (!component.AllowedParents.Contains(previous))
                 {
                     errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
                         ValidationErrorType.InvalidParent,
                         context.LineNumber,
-                        context.LinePosition);
+                        context.LinePosition,
+                        context.File);
                 }
             }
         }
 
-        componentStack.Push(component.ComponentName);
+        if (component is not IncludeComponent)
+        {
+            componentStack.Push(component.ComponentName);
+        }
     }
 
     public void AfterComponent(IComponent component, ref ValidationContext context)
     {
-        componentStack.TryPop(out var _);
+        if (component is not IncludeComponent)
+        {
+            componentStack.TryPop(out var _);
+        }
     }
 }

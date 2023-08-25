@@ -24,6 +24,24 @@ public static class CustomFilters
         });
     }
 
+    public static void IgnoreEmptyStyles(this IDiffingStrategyCollection builder)
+    {
+        builder.AddFilter((in ComparisonSource source, FilterDecision currentDecision) =>
+        {
+            if (currentDecision == FilterDecision.Exclude)
+            {
+                return currentDecision;
+            }
+
+            if (source.Node is IElement element && element.NodeName.Equals("style", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(element.TextContent))
+            {
+                return FilterDecision.Exclude;
+            }
+
+            return currentDecision;
+        });
+    }
+
     public static void IgnoreAttribute(this IDiffingStrategyCollection builder, string name)
     {
         builder.AddFilter((in AttributeComparisonSource source, FilterDecision currentDecision) =>

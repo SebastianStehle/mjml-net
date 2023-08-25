@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Microsoft.Extensions.ObjectPool;
 using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
@@ -13,24 +12,8 @@ namespace Mjml.Net;
 /// </summary>
 public sealed partial class MjmlRenderer : IMjmlRenderer
 {
-    private readonly ObjectPool<MjmlRenderContext> contextPool = new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
     private readonly Dictionary<string, Func<IComponent>> components = new Dictionary<string, Func<IComponent>>();
     private readonly List<IHelper> helpers = new List<IHelper>();
-
-    private sealed class MjmlRenderContextPolicy : PooledObjectPolicy<MjmlRenderContext>
-    {
-        public override MjmlRenderContext Create()
-        {
-            return new MjmlRenderContext();
-        }
-
-        public override bool Return(MjmlRenderContext obj)
-        {
-            obj.Clear();
-
-            return true;
-        }
-    }
 
     /// <inheritdoc />
     public IReadOnlyCollection<Func<IComponent>> Components => components.Values;
@@ -144,12 +127,12 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
 
         var reader = new HtmlReaderWrapper(mjml);
 
-        var context = contextPool.Get();
+        var context = DefaultPools.RenderContexts.Get();
         try
         {
             context.Setup(this, options);
             context.StartBuffer();
-            context.Read(reader, null);
+            context.Read(reader, null, null);
 
             StringBuilder? buffer = null;
             try
@@ -165,7 +148,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         }
         finally
         {
-            contextPool.Return(context);
+            DefaultPools.RenderContexts.Return(context);
         }
     }
 }

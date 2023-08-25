@@ -30,7 +30,7 @@ public class ComplexTests
 
     public static IEnumerable<string> Templates()
     {
-        foreach (var file in Directory.GetFiles("Templates", "*.mjml").Select(x => new FileInfo(x)))
+        foreach (var file in Directory.GetFiles("Templates", "*.mjml", SearchOption.TopDirectoryOnly).Select(x => new FileInfo(x)))
         {
             yield return file.Name;
         }
@@ -53,11 +53,10 @@ public class ComplexTests
     {
         TestHelper.TestWithCulture(culture, () =>
         {
-            var expected = CompileWithNode(template);
+            var renderedNode = CompileWithNode(template);
+            var renderedNet = CompileWithNet(template);
 
-            var result = CompileWithNet(template);
-
-            AssertHelpers.HtmlAssert(template, result, expected, true);
+            AssertHelpers.HtmlAssert(template, renderedNet, renderedNode, true);
         });
     }
 
@@ -83,7 +82,7 @@ public class ComplexTests
                 var process = new Process();
                 process.StartInfo.UseShellExecute = true;
                 process.StartInfo.FileName = "npx";
-                process.StartInfo.Arguments = $"mjml Templates/{fileName} -o {tempFile}";
+                process.StartInfo.Arguments = $"mjml Templates/{fileName} --o {tempFile}";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.Start();
                 process.WaitForExit();

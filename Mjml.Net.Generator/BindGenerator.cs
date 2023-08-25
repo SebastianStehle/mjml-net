@@ -115,15 +115,14 @@ public class BindGenerator : ISourceGenerator
         }
 
         source.MoveOut().AppendLine("}");
-        source.AppendLine("return base.GetAttribute(name);");
+        source.AppendLine("return Binder.GetAttribute(name);");
         source.MoveOut().AppendLine("}");
     }
 
     private void GenerateBindMethod(Dictionary<string, FieldInfo> fieldsInfo, List<FieldInfo> fieldsNormal, SourceWriter source)
     {
-        source.AppendLine("public override void Bind(Mjml.Net.IBinder binder, Mjml.Net.GlobalContext context, Mjml.Net.IHtmlReader reader)");
+        source.AppendLine("public override void Bind(Mjml.Net.GlobalContext context)");
         source.AppendLine("{").MoveIn();
-        source.AppendLine("base.Bind(binder, context, reader);");
 
         foreach (var field in fieldsNormal)
         {
@@ -142,12 +141,14 @@ public class BindGenerator : ISourceGenerator
             ProcessFieldText(source, textField);
         }
 
+        source.AppendLine();
+        source.AppendLine("base.Bind(context);");
         source.MoveOut().AppendLine("}");
     }
 
     private void ProcessFieldText(SourceWriter source, FieldInfo field)
     {
-        source.AppendLine($"{field.Name} = binder.GetText();");
+        source.AppendLine($"{field.Name} = Binder.GetText();");
     }
 
     private void ProcessFieldType(SourceWriter source, FieldInfo field)
@@ -177,7 +178,7 @@ public class BindGenerator : ISourceGenerator
             assignment = $"BindingHelper.CoerceColor(source{field.Name})";
         }
 
-        source.AppendLine($"var source{field.Name} = binder.GetAttribute(\"{field.Attribute}\");");
+        source.AppendLine($"var source{field.Name} = Binder.GetAttribute(\"{field.Attribute}\");");
         source.AppendLine($"if (source{field.Name} != null)");
         source.AppendLine("{").MoveIn();
         source.AppendLine($"this.{field.Name} = {assignment};");

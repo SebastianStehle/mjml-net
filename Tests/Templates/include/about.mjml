@@ -1,0 +1,16 @@
+<mjml>
+  <mj-body>
+    <mj-include path="styling.mjml" />
+    <mj-include path="header.mjml" />
+
+    <mj-section css-class="bg-white">
+      <mj-column>
+        <mj-text padding="48px 48px 0 48px">
+          <p>This is the About!</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    
+    <mj-include path="footer.mjml" />
+  </mj-body>
+</mjml>

@@ -1,9 +1,12 @@
-﻿namespace Mjml.Net;
+﻿using Mjml.Net.Internal;
+
+namespace Mjml.Net;
 
 public abstract class Component : IComponent
 {
     private List<IComponent>? childNodes;
     private List<InnerTextOrHtml>? childInput;
+    private IBinder binder;
 
     public IEnumerable<IComponent> ChildNodes
     {
@@ -11,6 +14,10 @@ public abstract class Component : IComponent
     }
 
     public double ActualWidth { get; protected set; }
+
+    public IComponent? Parent { get; set; }
+
+    public IBinder Binder => binder;
 
     public virtual bool Raw => false;
 
@@ -73,39 +80,61 @@ public abstract class Component : IComponent
 
     public void AddChild(IComponent child)
     {
+        child.Parent = this;
+
         childNodes ??= new List<IComponent>(1);
         childNodes.Add(child);
     }
 
     public void InsertChild(IComponent child, int index)
     {
+        child.Parent = this;
+
         childNodes ??= new List<IComponent>(1);
         childNodes.Insert(index, child);
     }
 
-    public virtual void Bind(IBinder binder, GlobalContext context, IHtmlReader reader)
+    public virtual void Read(IHtmlReader htmlReader, IMjmlReader mjmlReader, GlobalContext context)
     {
     }
 
-    public virtual void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader)
+    protected virtual void AfterBind(GlobalContext context)
     {
     }
 
-    public virtual void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
+    public virtual void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         ActualWidth = parentWidth;
 
-        MeasureChildren(ActualWidth);
+        MeasureChildren(context, ActualWidth);
     }
 
-    protected void MeasureChildren(double width)
+    public void SetBinder(IBinder binder)
+    {
+        this.binder = binder;
+    }
+
+    protected void MeasureChildren(GlobalContext context, double width)
     {
         if (childNodes != null)
         {
             foreach (var child in childNodes)
             {
-                child.Measure(width, childNodes.Count, childNodes.Count(x => !x.Raw));
+                child.Measure(context, width, childNodes.Count, childNodes.Count(x => !x.Raw));
             }
         }
+    }
+
+    public virtual void Bind(GlobalContext context)
+    {
+        if (childNodes != null)
+        {
+            foreach (var child in childNodes)
+            {
+                child.Bind(context);
+            }
+        }
+
+        AfterBind(context);
     }
 }

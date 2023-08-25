@@ -88,7 +88,7 @@ public partial class ColumnComponent : BodyComponentBase
 
     public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
 
-    public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
+    public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         var widthValue = 0d;
         var widthUnit = Unit.Pixels;
@@ -128,7 +128,7 @@ public partial class ColumnComponent : BodyComponentBase
 
         CurrentWidth = (widthValue, widthUnit, widthString, ActualWidth - allPaddings);
 
-        MeasureChildren(innerWidth);
+        MeasureChildren(context, innerWidth);
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)

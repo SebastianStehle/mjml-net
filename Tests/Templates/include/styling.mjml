@@ -1,0 +1,24 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Open Sans" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+    <mj-style>
+      .bg-dark {
+      	background: #2F5854 !important;
+      }
+      .bg-white {
+      	background: #FFFFFF !important;
+      }
+      p {
+      	font-size: 16px !important;
+      	font-weight: 400 !important;
+      	line-height: 24px !important;
+      	margin: 0;
+      }
+    </mj-style>
+    <mj-attributes>
+      <mj-body background-color="#EAEEEE" width="636px" />
+      <mj-divider border-width="1px" border-style="solid" border-color="#2F5854" padding="0 16px" />
+      <mj-all font-family="Open Sans" font-size="16px" font-weight="400" color="#1E3432" padding="0" align="left" />
+    </mj-attributes>
+  </mj-head>
+</mjml>

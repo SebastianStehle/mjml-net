@@ -19,7 +19,7 @@ public partial class PreviewComponent : HeadComponentBase
             var preview = new Preview(Text);
 
             // Allow multiple previews.
-            context.SetGlobalData(preview, preview);
+            context.AddGlobalData(preview);
         }
     }
 }

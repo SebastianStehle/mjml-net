@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
 using AngleSharp.Diffing.Core.Diffs;
@@ -91,6 +90,7 @@ public static partial class AssertHelpers
                     options.IgnoreDiffAttributes();
                     options.IgnoreCommentContent();
                     options.IgnoreEmptyAttributes();
+                    options.IgnoreEmptyStyles();
                     options.IgnoreElement("br");
 
                     if (ignoreIds)

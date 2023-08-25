@@ -6,25 +6,23 @@ public partial class AttributesComponent : HeadComponentBase
 {
     public override string ComponentName => "mj-attributes";
 
-    public override void Bind(IBinder binder, GlobalContext context, IHtmlReader reader)
+    public override void Read(IHtmlReader htmlReader, IMjmlReader mjmlReader, GlobalContext context)
     {
-        base.Bind(binder, context, reader);
-
-        while (reader.Read())
+        while (htmlReader.Read())
         {
-            switch (reader.TokenKind)
+            switch (htmlReader.TokenKind)
             {
                 case HtmlTokenKind.EndTag:
                     return;
-                case HtmlTokenKind.Tag when reader.Name == "mj-class":
-                    var className = reader.GetAttribute("name");
+                case HtmlTokenKind.Tag when htmlReader.Name == "mj-class":
+                    var className = htmlReader.GetAttribute("name");
 
                     if (className != null)
                     {
-                        for (var i = 0; i < reader.AttributeCount; i++)
+                        for (var i = 0; i < htmlReader.AttributeCount; i++)
                         {
-                            var attributeName = reader.GetAttributeName(i);
-                            var attributeValue = reader.GetAttribute(i);
+                            var attributeName = htmlReader.GetAttributeName(i);
+                            var attributeValue = htmlReader.GetAttribute(i);
 
                             if (attributeName != "name")
                             {
@@ -33,21 +31,21 @@ public partial class AttributesComponent : HeadComponentBase
                         }
                     }
 
-                    reader.Read();
+                    htmlReader.Read();
                     break;
 
                 case HtmlTokenKind.Tag:
-                    var tagName = reader.Name;
+                    var tagName = htmlReader.Name;
 
-                    for (var i = 0; i < reader.AttributeCount; i++)
+                    for (var i = 0; i < htmlReader.AttributeCount; i++)
                     {
-                        var attributeName = reader.GetAttributeName(i);
-                        var attributeValue = reader.GetAttribute(i);
+                        var attributeName = htmlReader.GetAttributeName(i);
+                        var attributeValue = htmlReader.GetAttribute(i);
 
                         context.SetTypeAttribute(attributeName, tagName, attributeValue);
                     }
 
-                    reader.Read();
+                    htmlReader.Read();
                     break;
             }
         }

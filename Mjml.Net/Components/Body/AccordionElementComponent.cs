@@ -46,30 +46,22 @@ public partial class AccordionElementComponent : BodyComponentBase
     [Bind("icon-wrapped-url", BindType.String)]
     public string? IconWrappedUrl;
 
-    public override void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader)
+    protected override void AfterBind(GlobalContext context)
     {
-        Binder? binder = null;
-
         if (!ChildNodes.Any(x => x is AccordionTitleComponent))
         {
-            binder ??= new Binder(context);
-            binder.Clear(this, "mj-accordion-title");
-
             var child = new AccordionTitleComponent();
 
-            child.Bind(binder, context, reader);
+            child.SetBinder(new Binder().Setup(context, this, "mj-accordion-title"));
 
             InsertChild(child, 0);
         }
 
         if (!ChildNodes.Any(x => x is AccordionTextComponent))
         {
-            binder ??= new Binder(context);
-            binder.Clear(this, "mj-accordion-text");
-
             var child = new AccordionTextComponent();
 
-            child.Bind(binder, context, reader);
+            child.SetBinder(new Binder().Setup(context, this, "mj-accordion-text"));
 
             AddChild(child);
         }

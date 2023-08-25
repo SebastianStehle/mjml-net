@@ -81,7 +81,7 @@ public partial class HeroComponent : BodyComponentBase
     [Bind("width", BindType.Pixels)]
     public string? Width;
 
-    public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
+    public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         ActualWidth = parentWidth;
 
@@ -90,7 +90,7 @@ public partial class HeroComponent : BodyComponentBase
             UnitParser.Parse(PaddingTop).Value -
             UnitParser.Parse(PaddingBottom).Value;
 
-        MeasureChildren(innerWidth);
+        MeasureChildren(context, innerWidth);
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)

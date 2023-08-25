@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Mjml.Net;
+﻿using Mjml.Net;
+using Mjml.Net.Components;
 
 namespace Tests.Internal;
 
@@ -32,9 +32,14 @@ public partial class TestComponent : Component
     {
         renderer.RenderHelpers(HelperTarget.HeadStart);
 
-        if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
+        foreach (var (_, value) in context.GlobalData)
         {
-            renderer.Plain(sb);
+            if (value is HeadBuffer head && head.Buffer != null)
+            {
+                // Already formatted properly.
+                renderer.Plain(head.Buffer);
+                renderer.ReturnStringBuilder(head.Buffer);
+            }
         }
 
         renderer.RenderHelpers(HelperTarget.HeadEnd);
@@ -44,9 +49,14 @@ public partial class TestComponent : Component
     {
         renderer.RenderHelpers(HelperTarget.BodyStart);
 
-        if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
+        foreach (var (_, value) in context.GlobalData)
         {
-            renderer.Plain(sb);
+            if (value is BodyBuffer body && body.Buffer != null)
+            {
+                // Already formatted properly.
+                renderer.Plain(body.Buffer);
+                renderer.ReturnStringBuilder(body.Buffer);
+            }
         }
 
         renderer.RenderHelpers(HelperTarget.BodyEnd);

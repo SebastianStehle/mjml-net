@@ -7,4 +7,6 @@ public struct ValidationContext
     public int? LinePosition { get; set; }
 
     public int? LineNumber { get; set; }
+
+    public string? File { get; set; }
 }

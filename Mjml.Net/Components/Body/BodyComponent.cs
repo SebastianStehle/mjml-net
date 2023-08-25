@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Helpers;
-
-namespace Mjml.Net.Components.Body;
+﻿namespace Mjml.Net.Components.Body;
 
 public partial class BodyComponent : Component
 {
@@ -22,11 +20,11 @@ public partial class BodyComponent : Component
     [Bind("width", BindType.Pixels)]
     public string Width = "600px";
 
-    public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
+    public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         ActualWidth = (int)UnitParser.Parse(Width).Value;
 
-        MeasureChildren(ActualWidth);
+        MeasureChildren(context, ActualWidth);
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
@@ -46,6 +44,6 @@ public partial class BodyComponent : Component
 
         renderer.EndElement("div");
 
-        context.SetGlobalData("body", renderer.EndBuffer());
+        context.AddGlobalData(new BodyBuffer(renderer.EndBuffer()));
     }
 }

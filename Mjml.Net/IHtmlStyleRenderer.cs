@@ -24,7 +24,7 @@ public interface IHtmlStyleRenderer
 
     internal StringBuilder StringBuilder { get; }
 
-    internal void StartStyle(string name);
+    internal IHtmlStyleRenderer StartStyle(string name);
 }
 
 [InterpolatedStringHandler]

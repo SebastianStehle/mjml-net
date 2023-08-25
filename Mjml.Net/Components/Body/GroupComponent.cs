@@ -29,7 +29,7 @@ public partial class GroupComponent : BodyComponentBase
 
     public (double Value, Unit Unit, string WidthString, double InnerWidth) CurrentWidth;
 
-    public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
+    public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         var widthValue = 0d;
         var widthUnit = Unit.Pixels;
@@ -59,7 +59,7 @@ public partial class GroupComponent : BodyComponentBase
 
         CurrentWidth = (widthValue, widthUnit, widthString, ActualWidth);
 
-        MeasureChildren(ActualWidth);
+        MeasureChildren(context, ActualWidth);
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)

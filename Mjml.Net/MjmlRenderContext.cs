@@ -1,6 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using System.Xml;
-using HtmlPerformanceKit;
+﻿using HtmlPerformanceKit;
 using Mjml.Net.Components;
 using Mjml.Net.Internal;
 
@@ -10,23 +8,11 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 {
     private readonly GlobalContext context = new GlobalContext();
     private readonly ValidationErrors errors = new ValidationErrors();
-    private readonly Binder binder;
+    private readonly List<Binder> allBinders = new List<Binder>();
     private ValidationContext validationContext;
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
     private IValidator? validator;
-    private IComponent? currentComponent;
-
-    public MjmlRenderContext()
-    {
-        binder = new Binder(context);
-    }
-
-    public MjmlRenderContext(MjmlRenderer renderer, MjmlOptions? mjmlOptions = null)
-        : this()
-    {
-        Setup(renderer,  mjmlOptions);
-    }
 
     public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
     {
@@ -44,6 +30,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
     internal void Clear()
     {
+        allBinders.Clear();
         context.Clear();
         mjmlOptions = null!;
         mjmlRenderer = null!;
@@ -57,21 +44,21 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         return validator?.Complete() ?? new ValidationErrors();
     }
 
-    public void ReadFragment(string mjml)
+    public void ReadFragment(string mjml, string? file, IComponent parent)
     {
         var reader = new HtmlReaderWrapper(mjml);
 
-        Read(reader, currentComponent);
+        Read(reader, parent, file);
     }
 
-    public void Read(IHtmlReader reader, IComponent? parent)
+    public void Read(IHtmlReader reader, IComponent? parent, string? file)
     {
         while (reader.Read())
         {
             switch (reader.TokenKind)
             {
                 case HtmlTokenKind.Tag:
-                    ReadElement(reader.Name, reader, parent);
+                    ReadElement(reader.Name, reader, parent, file);
                     break;
                 case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
                     ReadComment(reader, parent);
@@ -82,7 +69,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         }
     }
 
-    private void ReadElement(string name, IHtmlReader reader, IComponent? parent)
+    private void ReadElement(string name, IHtmlReader reader, IComponent? parent, string? file)
     {
         var component = mjmlRenderer.CreateComponent(name);
 
@@ -98,15 +85,15 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             return;
         }
 
-        if (parent != null)
-        {
-            parent.AddChild(component);
-        }
+        parent?.AddChild(component);
 
-        binder.Clear(parent, component.ComponentName);
+        var binder = DefaultPools.Binders.Get().Setup(context, parent, component.ComponentName);
+
+        allBinders.Add(binder);
 
         validationContext.LineNumber = currentLine;
         validationContext.LinePosition = currentColumn;
+        validationContext.File = file;
 
         validator?.BeforeComponent(component, ref validationContext);
 
@@ -119,6 +106,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
             validationContext.LineNumber = reader.LineNumber;
             validationContext.LinePosition = reader.LinePosition;
+            validationContext.File = file;
 
             validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
         }
@@ -132,26 +120,29 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             component.AddChild(reader.ReadInnerHtml());
         }
 
-        component.Bind(binder, context, reader);
+        component.SetBinder(binder);
+        component.Read(reader, this, context);
 
         if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
         {
-            Read(reader, component);
+            Read(reader, component, file);
         }
-
-        // Assign the current component, in case we read fragments.
-        currentComponent = component;
-
-        component.AfterBind(context, reader, this);
 
         if (parent == null)
         {
-            component.Measure(600, 0, 0);
+            component.Bind(context);
+            component.Measure(context, 600, 0, 0);
             component.Render(this, context);
+
+            foreach (var usedBinder in allBinders)
+            {
+                DefaultPools.Binders.Return(usedBinder);
+            }
         }
 
         validationContext.LineNumber = currentLine;
         validationContext.LinePosition = currentColumn;
+        validationContext.File = file;
 
         validator?.AfterComponent(component, ref validationContext);
     }

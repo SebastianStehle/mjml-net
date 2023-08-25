@@ -20,7 +20,7 @@ public interface IHtmlClassRenderer : IHtmlStyleRenderer
     /// <returns>The current instance to set more class names.</returns>
     IHtmlClassRenderer Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value);
 
-    internal void StartClass();
+    internal IHtmlClassRenderer StartClass();
 }
 
 [InterpolatedStringHandler]

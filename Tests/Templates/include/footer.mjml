@@ -1,0 +1,22 @@
+<mj-include path="styling.mjml" />
+
+<mj-section css-class="bg-white">
+  <mj-column padding="32px 48px">
+    <mj-text>
+      <p>Cheers,</p>
+      <p>Me!</p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section css-class="bg-white">
+  <mj-column>
+    <mj-divider />
+  </mj-column>
+</mj-section>
+<mj-section css-class="bg-white">
+  <mj-column>
+    <mj-text color="#2F5854" align="center" padding="8px 0">
+      <p>Something.com ©️ 2023</p>
+    </mj-text>
+  </mj-column>
+</mj-section>
