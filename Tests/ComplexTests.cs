@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using Castle.Components.DictionaryAdapter;
 using Mjml.Net;
 using Mjml.Net.Validators;
 using Tests.Internal;
@@ -17,7 +18,7 @@ public class ComplexTests
         Beautify = true,
 
         // Use validation, so that we also catch errors here.
-        ValidatorFactory = StrictValidatorFactory.Instance
+        Validator = StrictValidator.Instance
     };
 
     public static IEnumerable<string> Cultures()

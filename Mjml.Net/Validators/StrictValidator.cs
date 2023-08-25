@@ -2,7 +2,9 @@
 
 public sealed class StrictValidator : ValidatorBase
 {
-    public StrictValidator()
+    public static readonly StrictValidator Instance = new StrictValidator();
+
+    private StrictValidator()
         : base(true)
     {
     }

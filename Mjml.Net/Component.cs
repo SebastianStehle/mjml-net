@@ -19,6 +19,8 @@ public abstract class Component : IComponent
 
     public IBinder Binder => binder;
 
+    public SourcePosition Position { get; set; }
+
     public virtual bool Raw => false;
 
     public virtual AllowedParents? AllowedParents => null;

@@ -36,7 +36,7 @@ public class IncludeTests
             Beautify = true,
 
             // Use validation, so that we also catch errors here.
-            ValidatorFactory = StrictValidatorFactory.Instance,
+            Validator = StrictValidator.Instance
         };
 
         var (html, errors) = new MjmlRenderer().Render(source, options);

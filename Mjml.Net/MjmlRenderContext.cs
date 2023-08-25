@@ -12,15 +12,16 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     private ValidationContext validationContext;
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
-    private IValidator? validator;
+
+    public ValidationErrors Validate()
+    {
+        return new ValidationErrors(errors);
+    }
 
     public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
     {
         this.mjmlRenderer = mjmlRenderer;
         this.mjmlOptions = mjmlOptions ??= new MjmlOptions();
-
-        // We have to create a new instance each time, because it could another factory.
-        validator = mjmlOptions.ValidatorFactory?.Create();
 
         // Reuse the context and therefore do not set them over the constructor.
         context.SetOptions(mjmlOptions);
@@ -37,11 +38,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         errors.Clear();
 
         ClearRenderData();
-    }
-
-    public ValidationErrors Validate()
-    {
-        return validator?.Complete() ?? new ValidationErrors();
     }
 
     public void ReadFragment(string mjml, string? file, IComponent parent)
@@ -73,15 +69,16 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     {
         var component = mjmlRenderer.CreateComponent(name);
 
-        var currentLine = reader.LineNumber;
-        var currentColumn = reader.LinePosition;
+        var position = new SourcePosition(
+            reader.LineNumber,
+            reader.LinePosition,
+            file);
 
         if (component == null)
         {
             errors.Add($"Invalid element '{name}'.",
                 ValidationErrorType.UnknownElement,
-                currentLine,
-                currentColumn);
+                position);
             return;
         }
 
@@ -91,12 +88,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         allBinders.Add(binder);
 
-        validationContext.LineNumber = currentLine;
-        validationContext.LinePosition = currentColumn;
-        validationContext.File = file;
-
-        validator?.BeforeComponent(component, ref validationContext);
-
         for (var i = 0; i < reader.AttributeCount; i++)
         {
             var attributeName = reader.GetAttributeName(i);
@@ -104,11 +95,12 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
             binder.SetAttribute(attributeName, attributeValue);
 
-            validationContext.LineNumber = reader.LineNumber;
-            validationContext.LinePosition = reader.LinePosition;
-            validationContext.File = file;
+            validationContext.Position = new SourcePosition(
+                reader.LineNumber,
+                reader.LinePosition,
+                file);
 
-            validator?.Attribute(attributeName, attributeValue, component, ref validationContext);
+            mjmlOptions.Validator?.Attribute(attributeName, attributeValue, component, errors, ref validationContext);
         }
 
         if (component.ContentType == ContentType.Text)
@@ -122,6 +114,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         component.SetBinder(binder);
         component.Read(reader, this, context);
+        component.Position = position;
 
         if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
         {
@@ -134,17 +127,18 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             component.Measure(context, 600, 0, 0);
             component.Render(this, context);
 
-            foreach (var usedBinder in allBinders)
-            {
-                DefaultPools.Binders.Return(usedBinder);
-            }
+            mjmlOptions.Validator?.Components(component, errors, ref validationContext);
+
+            Cleanup();
         }
+    }
 
-        validationContext.LineNumber = currentLine;
-        validationContext.LinePosition = currentColumn;
-        validationContext.File = file;
-
-        validator?.AfterComponent(component, ref validationContext);
+    private void Cleanup()
+    {
+        foreach (var usedBinder in allBinders)
+        {
+            DefaultPools.Binders.Return(usedBinder);
+        }
     }
 
     private static void ReadComment(IHtmlReader reader, IComponent parent)

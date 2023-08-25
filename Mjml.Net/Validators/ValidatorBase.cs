@@ -1,30 +1,18 @@
 ﻿using Mjml.Net.Components;
+using Mjml.Net.Components.Body;
 
 namespace Mjml.Net.Validators;
 
 public abstract class ValidatorBase : IValidator
 {
     private readonly bool validateAttributeValue;
-    private readonly Stack<string> componentStack = new Stack<string>();
-    private readonly ValidationErrors errors = new ValidationErrors();
-    private bool hasBody;
 
     protected ValidatorBase(bool validateAttributeValue)
     {
         this.validateAttributeValue = validateAttributeValue;
     }
 
-    public ValidationErrors Complete()
-    {
-        if (!hasBody)
-        {
-            errors.Add("Document must have 'mj-body' tag.", ValidationErrorType.Other);
-        }
-
-        return errors;
-    }
-
-    public void Attribute(string name, string value, IComponent component, ref ValidationContext context)
+    public void Attribute(string name, string value, IComponent component, ValidationErrors errors, ref ValidationContext context)
     {
         var allowedAttributes = component.AllowedFields;
 
@@ -37,74 +25,47 @@ public abstract class ValidatorBase : IValidator
         {
             errors.Add($"'{name}' is not a valid attribute of '{component.ComponentName}'.",
                 ValidationErrorType.UnknownAttribute,
-                context.LineNumber,
-                context.LinePosition,
-                context.File);
+                context.Position);
         }
         else if (validateAttributeValue && !attribute.Validate(value, ref context))
         {
             errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.",
                 ValidationErrorType.InvalidAttribute,
-                context.LineNumber,
-                context.LinePosition,
-                context.File);
+                context.Position);
         }
     }
 
-    public void BeforeComponent(IComponent component, ref ValidationContext context)
+    public void Components(IComponent root, ValidationErrors errors, ref ValidationContext context)
     {
-        var name = component.ComponentName;
-
-        if (name == "mj-body")
+        if (root is RootComponent rootComponent)
         {
-            hasBody = true;
+            if (!rootComponent.ChildNodes.Any(x => x is BodyComponent))
+            {
+                errors.Add("Document must have 'mj-body' tag.", ValidationErrorType.Other);
+            }
+        }
+        else
+        {
+            errors.Add("'mjml' must be the root tag.",
+                ValidationErrorType.InvalidParent,
+                root.Position);
         }
 
-        if (component.AllowedParents != null)
+        void Validate(IComponent component, IComponent? parent)
         {
-            if (component.AllowedParents.Count == 0)
+            if (parent != null && component.AllowedParents?.Contains(parent.ComponentName) == false)
             {
-                if (componentStack.Count > 0)
-                {
-                    errors.Add($"'{name}' must be the root tag.",
-                        ValidationErrorType.InvalidParent,
-                        context.LineNumber,
-                        context.LinePosition,
-                        context.File);
-                }
+                errors.Add($"'{parent.ComponentName}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
+                    ValidationErrorType.InvalidParent,
+                    component.Position);
             }
-            else
+
+            foreach (var child in component.ChildNodes)
             {
-                if (!componentStack.TryPeek(out var previous))
-                {
-                    errors.Add($"'{name}' cannot be the root tag.",
-                        ValidationErrorType.InvalidParent,
-                        context.LineNumber,
-                        context.LinePosition,
-                        context.File);
-                }
-                else if (!component.AllowedParents.Contains(previous))
-                {
-                    errors.Add($"'{name}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
-                        ValidationErrorType.InvalidParent,
-                        context.LineNumber,
-                        context.LinePosition,
-                        context.File);
-                }
+                Validate(child, component);
             }
         }
 
-        if (component is not IncludeComponent)
-        {
-            componentStack.Push(component.ComponentName);
-        }
-    }
-
-    public void AfterComponent(IComponent component, ref ValidationContext context)
-    {
-        if (component is not IncludeComponent)
-        {
-            componentStack.TryPop(out var _);
-        }
+        Validate(root, null);
     }
 }

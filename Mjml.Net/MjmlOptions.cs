@@ -62,7 +62,7 @@ public sealed partial record MjmlOptions
     /// <summary>
     /// The current validator. The default is: The default is: <c>null</c>.The default is: <c>null</c>.
     /// </summary>
-    public IValidatorFactory? ValidatorFactory { get; init; }
+    public IValidator? Validator { get; init; }
 
     /// <summary>
     /// The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. The default is: <c>null</c>.

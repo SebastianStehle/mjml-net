@@ -10,6 +10,8 @@ public interface IComponent
 
     IComponent? Parent { get; set; }
 
+    SourcePosition Position { get; set; }
+
     ContentType ContentType { get; }
 
     bool Raw { get; }
