@@ -48,11 +48,16 @@ public partial class AccordionElementComponent : BodyComponentBase
 
     protected override void BeforeBind(GlobalContext context)
     {
+        Binder binder;
+
         if (!ChildNodes.Any(x => x is AccordionTitleComponent))
         {
             var child = new AccordionTitleComponent();
 
-            child.SetBinder(new Binder().Setup(context, this, "mj-accordion-title"));
+            binder = DefaultPools.Binders.Get();
+            binder.Setup(context, this, child.ComponentName);
+
+            child.SetBinder(binder);
 
             InsertChild(child, 0);
         }
@@ -61,7 +66,10 @@ public partial class AccordionElementComponent : BodyComponentBase
         {
             var child = new AccordionTextComponent();
 
-            child.SetBinder(new Binder().Setup(context, this, "mj-accordion-text"));
+            binder = DefaultPools.Binders.Get();
+            binder.Setup(context, this, child.ComponentName);
+
+            child.SetBinder(binder);
 
             AddChild(child);
         }
