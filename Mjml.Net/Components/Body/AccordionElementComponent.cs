@@ -46,7 +46,7 @@ public partial class AccordionElementComponent : BodyComponentBase
     [Bind("icon-wrapped-url", BindType.String)]
     public string? IconWrappedUrl;
 
-    protected override void AfterBind(GlobalContext context)
+    protected override void BeforeBind(GlobalContext context)
     {
         if (!ChildNodes.Any(x => x is AccordionTitleComponent))
         {

@@ -46,7 +46,7 @@ public abstract class ValidatorBase : IValidator
         }
         else
         {
-            errors.Add("'mjml' must be the root tag.",
+            errors.Add($"'{root.ComponentName}' cannot be the root tag.",
                 ValidationErrorType.InvalidParent,
                 root.Position);
         }
@@ -55,7 +55,7 @@ public abstract class ValidatorBase : IValidator
         {
             if (parent != null && component.AllowedParents?.Contains(parent.ComponentName) == false)
             {
-                errors.Add($"'{parent.ComponentName}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
+                errors.Add($"'{component.ComponentName}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
                     ValidationErrorType.InvalidParent,
                     component.Position);
             }

@@ -100,6 +100,10 @@ public abstract class Component : IComponent
     {
     }
 
+    protected virtual void BeforeBind(GlobalContext context)
+    {
+    }
+
     protected virtual void AfterBind(GlobalContext context)
     {
     }
@@ -129,6 +133,8 @@ public abstract class Component : IComponent
 
     public virtual void Bind(GlobalContext context)
     {
+        BeforeBind(context);
+
         if (childNodes != null)
         {
             foreach (var child in childNodes)
