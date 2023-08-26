@@ -22,7 +22,7 @@ public partial class StyleComponent : HeadComponentBase
             var style = Style.Static(Text);
 
             // Allow multiple styles.
-            context.SetGlobalData(style, style);
+            context.AddGlobalData(style);
         }
     }
 }

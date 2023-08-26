@@ -105,7 +105,7 @@ public class ValidationTests
 </mjml>
 ";
 
-        var errors = Render(source, SoftValidatorFactory.Instance);
+        var errors = Render(source, SoftValidator.Instance);
 
         Assert.Empty(errors);
     }
@@ -130,11 +130,11 @@ public class ValidationTests
         Assert.Empty(errors);
     }
 
-    private string[] Render(string source, IValidatorFactory? validator = null)
+    private string[] Render(string source, IValidator? validator = null)
     {
         return sut.Render(source, new MjmlOptions
         {
-            ValidatorFactory = validator ?? StrictValidatorFactory.Instance
+            Validator = validator ?? StrictValidator.Instance
         }).Errors.Select(x => x.Error).ToArray();
     }
 }

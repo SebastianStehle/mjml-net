@@ -1,0 +1,7 @@
+<mj-include path="styling.mjml" />
+
+<mj-section css-class="bg-dark" padding="16px">
+  <mj-column>
+    <mj-spacer height="32px" />
+  </mj-column>
+</mj-section>

@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Helpers;
 
-public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer)
+public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer) : GlobalData
 {
     public static Style Static(InnerTextOrHtml text)
     {
@@ -10,7 +10,7 @@ public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer)
     }
 }
 
-public sealed record MediaQuery(string ClassName, string Rule)
+public sealed record MediaQuery(string ClassName, string Rule) : GlobalData
 {
     public static MediaQuery Width(string className, string width)
     {
@@ -30,8 +30,8 @@ public sealed class StyleHelper : IHelper
         WriteMediaQueries(renderer, context);
         WriteMediaQueriesThunderbird(renderer, context);
         WriteMediaQueriesOWA(renderer, context);
-        WriteStyles(renderer, context);
         WriteOptionStyles(renderer, context);
+        WriteStyles(renderer, context);
     }
 
     private static void WriteMediaQueries(IHtmlRenderer renderer, GlobalContext context)

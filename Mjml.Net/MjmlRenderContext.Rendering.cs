@@ -6,34 +6,24 @@ namespace Mjml.Net;
 
 public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
 {
-    private readonly RenderStack<StringBuilder> buffers = new RenderStack<StringBuilder>();
+    private readonly RenderStack<RenderBuffer> buffers = new RenderStack<RenderBuffer>();
     private readonly HashSet<string> analyzedFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-    private bool elementSelfClosed;
-    private bool elementStarted;
-    private int numClasses;
-    private int numStyles;
-    private int indent;
-    private string? pendingConditionalStart;
-    private string? pendingConditionalEnd;
-    private int conditionalDepth;
 
-    public StringBuilder Buffer
+    internal RenderBuffer Buffer
     {
         get => buffers.Current!;
     }
 
     public StringBuilder StringBuilder
     {
-        get => buffers.Current!;
+        get => Buffer.StringBuilder!;
     }
 
     private void ClearRenderData()
     {
         analyzedFonts.Clear();
+
         buffers.Clear();
-        elementStarted = false;
-        elementSelfClosed = false;
-        indent = 0;
     }
 
     public void ReturnStringBuilder(StringBuilder stringBuilder)
@@ -43,18 +33,14 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
 
     public void StartBuffer()
     {
-        buffers.Push(DefaultPools.StringBuilders.Get());
+        buffers.Push(new RenderBuffer(DefaultPools.StringBuilders.Get(), mjmlOptions.Beautify));
     }
 
     public StringBuilder? EndBuffer()
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
+        Buffer.FlushAll();
 
-        var currentBuffer = buffers.Pop();
-
-        return currentBuffer;
+        return buffers.Pop()?.StringBuilder;
     }
 
     public void RenderHelpers(HelperTarget target)
@@ -67,402 +53,123 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
 
     public IHtmlAttrRenderer StartElement(string elementName, bool close = false)
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
-
-        if (string.IsNullOrEmpty(elementName))
-        {
-            return this;
-        }
-
-        WriteLineStart();
-
-        Buffer.Append('<');
-        Buffer.Append(elementName);
-
-        elementSelfClosed = close;
-        elementStarted = true;
-        numClasses = 0;
-        numStyles = 0;
-
+        Buffer.StartElement(elementName, close);
         return this;
     }
 
     public IHtmlAttrRenderer Attr(string name, string? value)
     {
-        if (string.IsNullOrEmpty(value))
-        {
-            return this;
-        }
-
         DetectFontFamily(name, value);
 
-        StartAttr(name);
-
-        Buffer.Append(value);
-
-        EndAttr();
-
+        Buffer.Attr(name, value);
         return this;
     }
 
     public IHtmlAttrRenderer Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value)
     {
-        // Starting the attribute is done by the interpolation handler.
-        EndAttr();
-
+        Buffer.EndAttr();
         return this;
     }
 
-    public void StartAttr(string name)
+    public IHtmlAttrRenderer StartAttr(string name)
     {
-        Buffer.Append(' ');
-        Buffer.Append(name);
-        Buffer.Append("=\"");
-    }
-
-    private void EndAttr()
-    {
-        Buffer.Append('"');
+        Buffer.StartAttr(name);
+        return this;
     }
 
     public IHtmlClassRenderer Class(string? value)
     {
-        if (string.IsNullOrEmpty(value))
-        {
-            return this;
-        }
-
-        StartClass();
-
-        Buffer.Append(value);
-
-        EndClass();
-
+        Buffer.Class(value);
         return this;
     }
 
     public IHtmlClassRenderer Class([InterpolatedStringHandlerArgument("")] ref ClassNameInterpolatedStringHandler value)
     {
         // Starting the class is done by the interpolation handler.
-        EndClass();
-
+        Buffer.EndClass();
         return this;
     }
 
-    public void StartClass()
+    public IHtmlClassRenderer StartClass()
     {
-        if (numClasses == 0)
-        {
-            // Open the class attribute.
-            Buffer.Append(" class=\"");
-        }
-        else
-        {
-            Buffer.Append(' ');
-        }
-    }
-
-    private void EndClass()
-    {
-        numClasses++;
+        Buffer.StartClass();
+        return this;
     }
 
     public IHtmlStyleRenderer Style(string name, string? value)
     {
-        if (string.IsNullOrEmpty(value))
-        {
-            return this;
-        }
-
         DetectFontFamily(name, value);
 
-        StartStyle(name);
-
-        Buffer.Append(value);
-
-        EndStyle();
-
+        Buffer.Style(name, value);
         return this;
     }
 
     public IHtmlStyleRenderer Style(string name, [InterpolatedStringHandlerArgument("", "name")] ref StyleInterpolatedStringHandler value)
     {
         // Ending the style is done by the interpolation handler.
-        EndStyle();
-
+        Buffer.EndStyle();
         return this;
     }
 
-    public void StartStyle(string name)
+    public IHtmlStyleRenderer StartStyle(string name)
     {
-        if (numClasses > 0)
-        {
-            // Close the open class attribute.
-            Buffer.Append("\" ");
-
-            // Reset the number of classes so we do not close it again in the flush.
-            numClasses = 0;
-        }
-
-        if (numStyles == 0)
-        {
-            // Open the styles attribute.
-            Buffer.Append(" style=\"");
-        }
-
-        Buffer.Append(name);
-        Buffer.Append(':');
-    }
-
-    private void EndStyle()
-    {
-        Buffer.Append(';');
-
-        numStyles++;
+        Buffer.StartStyle(name);
+        return this;
     }
 
     public void EndElement(string elementName)
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
-
-        indent--;
-
-        WriteLineStart();
-
-        Buffer.Append("</");
-        Buffer.Append(elementName);
-        Buffer.Append('>');
-
-        WriteLineEnd();
-    }
-
-    private void FlushElement()
-    {
-        if (!elementStarted)
-        {
-            return;
-        }
-
-        if (numClasses > 0 || numStyles > 0)
-        {
-            // Close the open class or style attribute.
-            Buffer.Append('\"');
-        }
-
-        if (elementSelfClosed)
-        {
-            Buffer.Append("/>");
-        }
-        else
-        {
-            indent++;
-            Buffer.Append('>');
-        }
-
-        WriteLineEnd();
-
-        elementStarted = false;
-        elementSelfClosed = false;
+        Buffer.EndElement(elementName);
     }
 
     public void Content([InterpolatedStringHandlerArgument("")] ref TextInterpolatedStringHandler value)
     {
-        WriteLineEnd();
+        Buffer.WriteLineEnd();
     }
 
     public void Content(string? value)
     {
-        FlushElement();
-
-        if (value == null)
-        {
-            return;
-        }
-
-        TextCore(value);
+        Buffer.Content(value);
     }
 
     public void Content(InnerTextOrHtml? value)
     {
-        FlushElement();
-
-        if (value == null)
-        {
-            return;
-        }
-
-        TextCore(value);
-    }
-
-    private void TextCore(string value)
-    {
-        WriteLineStart();
-
-        if (mjmlOptions.Beautify)
-        {
-            InnerTextOrHtml.AppendIntended(Buffer, value.AsSpan(), indent * 2);
-        }
-        else
-        {
-            Buffer.Append(value);
-        }
-
-        WriteLineEnd();
-    }
-
-    private void TextCore(InnerTextOrHtml value)
-    {
-        WriteLineStart();
-
-        if (mjmlOptions.Beautify)
-        {
-            value.AppendToIntended(Buffer, indent * 2);
-        }
-        else
-        {
-            value.AppendTo(Buffer);
-        }
-
-        WriteLineEnd();
+        Buffer.Content(value);
     }
 
     public void StartText()
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
-
-        WriteLineStart();
+        Buffer.StartText();
     }
 
     public void Plain(StringBuilder? value)
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
-
-        if (value?.Length == 0)
-        {
-            return;
-        }
-
-        Buffer.Append(value);
-
-        WriteLineEnd();
+        Buffer.Plain(value);
     }
 
     public void Plain(InnerTextOrHtml value)
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
-
-        if (value.IsEmpty())
-        {
-            return;
-        }
-
-        value.AppendTo(Buffer);
-
-        WriteLineEnd();
+        Buffer.Plain(value);
     }
 
     public void Plain(ReadOnlySpan<char> value)
     {
-        FlushElement();
-        FlushConditionalStart();
-        FlushConditionalEnd();
-
-        if (value.Length == 0)
-        {
-            return;
-        }
-
-        Buffer.Append(value);
-
-        WriteLineEnd();
-    }
-
-    private void WriteLineEnd()
-    {
-        if (mjmlOptions.Beautify)
-        {
-            Buffer.AppendLine();
-        }
-    }
-
-    private void WriteLineStart()
-    {
-        if (mjmlOptions.Beautify)
-        {
-            for (var i = 0; i < indent; i++)
-            {
-                Buffer.Append("  ");
-            }
-        }
+        Buffer.Plain(value);
     }
 
     public void StartConditional(string content)
     {
-        FlushElement();
-
-        conditionalDepth++;
-
-        if (pendingConditionalStart != null || pendingConditionalEnd != null || conditionalDepth > 1)
-        {
-            pendingConditionalEnd = null;
-            return;
-        }
-
-        pendingConditionalStart = content;
+        Buffer.StartConditional(content);
     }
 
     public void EndConditional(string content)
     {
-        FlushElement();
-
-        conditionalDepth--;
-
-        if (pendingConditionalStart != null || conditionalDepth > 0)
-        {
-            pendingConditionalEnd = content;
-            return;
-        }
-
-        pendingConditionalEnd = content;
+        Buffer.EndConditional(content);
     }
 
-    private void FlushConditionalEnd()
+    private void DetectFontFamily(string name, string? value)
     {
-        if (pendingConditionalEnd == null)
-        {
-            return;
-        }
-
-        TextCore(pendingConditionalEnd);
-
-        pendingConditionalEnd = null;
-    }
-
-    private void FlushConditionalStart()
-    {
-        if (pendingConditionalStart == null)
-        {
-            return;
-        }
-
-        TextCore(pendingConditionalStart);
-
-        pendingConditionalStart = null;
-    }
-
-    private void DetectFontFamily(string name, string value)
-    {
-        if (name != "font-family")
+        if (name != "font-family" || string.IsNullOrWhiteSpace(value))
         {
             return;
         }

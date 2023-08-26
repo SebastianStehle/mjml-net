@@ -1,7 +1,7 @@
 ﻿namespace Mjml.Net.Helpers;
 
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
-public sealed record Font(string Href);
+public sealed record Font(string Href) : GlobalData;
 #pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 
 public sealed class FontHelper : IHelper
@@ -22,20 +22,26 @@ public sealed class FontHelper : IHelper
 
         renderer.Content("<!--[if !mso]><!-->");
 
-        foreach (var font in context.GlobalData.Values.OfType<Font>())
+        foreach (var (_, value) in context.GlobalData)
         {
-            renderer.StartElement("link")
-                .Attr("href", font.Href)
-                .Attr("rel", "stylesheet")
-                .Attr("type", "text/css");
+            if (value is Font font)
+            {
+                renderer.StartElement("link")
+                    .Attr("href", font.Href)
+                    .Attr("rel", "stylesheet")
+                    .Attr("type", "text/css");
+            }
         }
 
         renderer.StartElement("style")
             .Attr("type", "text/css");
 
-        foreach (var font in context.GlobalData.Values.OfType<Font>())
+        foreach (var (_, value) in context.GlobalData)
         {
-            renderer.Content($"@import url({font.Href});");
+            if (value is Font font)
+            {
+                renderer.Content($"@import url({font.Href});");
+            }
         }
 
         renderer.EndElement("style");

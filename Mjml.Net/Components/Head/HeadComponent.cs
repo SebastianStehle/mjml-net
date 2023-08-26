@@ -17,6 +17,6 @@ public sealed class HeadComponent : Component
 
         RenderChildren(renderer, context);
 
-        context.SetGlobalData("head", renderer.EndBuffer());
+        context.AddGlobalData(new HeadBuffer(renderer.EndBuffer()));
     }
 }

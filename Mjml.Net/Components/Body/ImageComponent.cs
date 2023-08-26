@@ -102,7 +102,7 @@ public partial class ImageComponent : BodyComponentBase
     [Bind("width", BindType.Pixels)]
     public string? Width;
 
-    public override void Measure(double parentWidth, int numSiblings, int numNonRawSiblings)
+    public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         var width =
             parentWidth -
@@ -128,7 +128,7 @@ public partial class ImageComponent : BodyComponentBase
     {
         context.SetGlobalData(ComponentName, new Style(HeadStyle));
 
-        var isFluid = FluidOnMobile == "true";
+        var isFluidWidth = FluidOnMobile == "true";
         var isFullWidth = FullWidth == "full-width";
 
         var href = Href;
@@ -138,7 +138,7 @@ public partial class ImageComponent : BodyComponentBase
             .Attr("cellpadding", "0")
             .Attr("cellspacing", "0")
             .Attr("role", "presentation")
-            .Class(isFluid ? "mj-full-width-mobile" : null)
+            .Class(isFluidWidth ? "mj-full-width-mobile" : null)
             .Style("border-collapse", "collapse")
             .Style("border-spacing", "0px")
             .StyleIf("max-width", isFullWidth, "100%")
@@ -149,7 +149,7 @@ public partial class ImageComponent : BodyComponentBase
         renderer.StartElement("tr");
 
         renderer.StartElement("td")
-            .Class(isFluid ? "mj-full-width-mobile" : null)
+            .Class(isFluidWidth ? "mj-full-width-mobile" : null)
             .StyleIf("width", !isFullWidth, ActualWidth, "px");
 
         if (!string.IsNullOrEmpty(href))

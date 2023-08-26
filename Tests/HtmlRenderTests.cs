@@ -8,13 +8,16 @@ namespace Tests;
 
 public class HtmlRenderTests
 {
-    private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
-    {
-        Beautify = true
-    });
+    private readonly MjmlRenderContext sut = new MjmlRenderContext();
 
     public HtmlRenderTests()
     {
+        var options = new MjmlOptions
+        {
+            Beautify = true
+        };
+
+        sut.Setup(new MjmlRenderer(), options);
         sut.StartBuffer();
     }
 
@@ -219,13 +222,13 @@ public class HtmlRenderTests
 
         AssertHelpers.MultilineText(sut,
             "<html>",
-            "  <head>",
-            "    head",
-            "  </head>",
+            "<head>",
+            "  head",
+            "</head>",
             "",
-            "  <body>",
-            "    body",
-            "  </body>",
+            "<body>",
+            "  body",
+            "</body>",
             "",
             "</html>"
         );

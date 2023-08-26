@@ -7,21 +7,7 @@ public sealed partial class IncludeComponent : Component
 {
     public override string ComponentName => "mj-include";
 
-    public sealed class PathValidator : IType
-    {
-        public bool Validate(string value, ref ValidationContext context)
-        {
-            return !string.IsNullOrWhiteSpace(value) && context.Options?.FileLoader?.ContainsFile(value) == true;
-        }
-    }
-
-    internal sealed class TypeValidator : EnumType
-    {
-        public TypeValidator()
-            : base(false, "mjml", "html", "css")
-        {
-        }
-    }
+    public override bool Raw => true;
 
     [Bind("path", typeof(PathValidator))]
     public string Path;
@@ -31,9 +17,12 @@ public sealed partial class IncludeComponent : Component
 
     public IncludeType ActualType { get; private set; }
 
-    public override void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader)
+    public override void Read(IHtmlReader htmlReader, IMjmlReader mjmlReader, GlobalContext context)
     {
-        switch (Type)
+        var actualPath = Binder.GetAttribute("path");
+        var actualType = Binder.GetAttribute("type");
+
+        switch (actualType)
         {
             case "html":
                 ActualType = IncludeType.Html;
@@ -45,11 +34,11 @@ public sealed partial class IncludeComponent : Component
                 ActualType = IncludeType.Mjml;
                 break;
             default:
-                if (Path?.EndsWith(".html", StringComparison.OrdinalIgnoreCase) == true)
+                if (actualPath?.EndsWith(".html", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     ActualType = IncludeType.Html;
                 }
-                else if (Path?.EndsWith(".css", StringComparison.OrdinalIgnoreCase) == true)
+                else if (actualPath?.EndsWith(".css", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     ActualType = IncludeType.Css;
                 }
@@ -61,26 +50,26 @@ public sealed partial class IncludeComponent : Component
                 break;
         }
 
-        if (ActualType != IncludeType.Mjml || string.IsNullOrWhiteSpace(Path))
+        if (ActualType != IncludeType.Mjml || string.IsNullOrWhiteSpace(actualPath))
         {
             return;
         }
 
-        var content = context.Options.FileLoader?.LoadText(Path);
+        var content = context.Options.FileLoader?.LoadText(actualPath);
 
         if (content == null)
         {
             return;
         }
 
-        mjmlReader.ReadFragment(content);
+        mjmlReader.ReadFragment(content, actualPath, Parent!);
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
         if (ActualType == IncludeType.Mjml || string.IsNullOrWhiteSpace(Path))
         {
-            // Render the children that have been added in the bin method.
+            // Render the children that have been added in the bind method.
             RenderChildren(renderer, context);
             return;
         }
@@ -102,7 +91,23 @@ public sealed partial class IncludeComponent : Component
             var style = Style.Static(new InnerTextOrHtml(content));
 
             // Allow multiple styles and render them later.
-            context.SetGlobalData(style, style);
+            context.AddGlobalData(style);
+        }
+    }
+
+    public sealed class PathValidator : IType
+    {
+        public bool Validate(string value, ref ValidationContext context)
+        {
+            return !string.IsNullOrWhiteSpace(value) && context.Options?.FileLoader?.ContainsFile(value) == true;
+        }
+    }
+
+    internal sealed class TypeValidator : EnumType
+    {
+        public TypeValidator()
+            : base(false, "mjml", "html", "css")
+        {
         }
     }
 }

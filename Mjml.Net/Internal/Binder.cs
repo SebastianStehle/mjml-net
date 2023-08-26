@@ -2,27 +2,30 @@
 
 internal sealed class Binder : IBinder
 {
-    private readonly GlobalContext context;
     private readonly Dictionary<string, string> attributes = new Dictionary<string, string>();
-    private IComponent? parent;
+    private GlobalContext context;
+    private IComponent? elementParent;
     private InnerTextOrHtml? currentText;
     private string elementName;
     private string[]? currentClasses;
 
-    public Binder(GlobalContext context)
+    public Binder Setup(GlobalContext newContext, IComponent? newParent, string? newElementName = null)
     {
-        this.context = context;
-    }
-
-    public Binder Clear(IComponent? newParent, string? newElementName = null)
-    {
-        attributes.Clear();
-        currentClasses = null;
-        currentText = null;
+        context = newContext;
         elementName = newElementName!;
-        parent = newParent;
+        elementParent = newParent;
 
         return this;
+    }
+
+    public void Clear()
+    {
+        attributes.Clear();
+        context = null!;
+        currentClasses = null;
+        currentText = null;
+        elementName = null!;
+        elementParent = null!;
     }
 
     public void SetAttribute(string name, string value)
@@ -42,7 +45,7 @@ internal sealed class Binder : IBinder
             return attribute;
         }
 
-        var inherited = parent?.GetInheritingAttribute(name);
+        var inherited = elementParent?.GetInheritingAttribute(name);
 
         if (inherited != null)
         {

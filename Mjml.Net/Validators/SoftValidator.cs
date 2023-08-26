@@ -2,7 +2,9 @@
 
 public sealed class SoftValidator : ValidatorBase
 {
-    public SoftValidator()
+    public static readonly SoftValidator Instance = new SoftValidator();
+
+    private SoftValidator()
         : base(false)
     {
     }

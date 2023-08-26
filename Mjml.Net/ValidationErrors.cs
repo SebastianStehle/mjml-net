@@ -1,7 +1,7 @@
 ﻿namespace Mjml.Net;
 
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
-public sealed record ValidationError(string Error, ValidationErrorType Type, int? Line, int? Column);
+public sealed record ValidationError(string Error, ValidationErrorType Type, SourcePosition Position);
 #pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 
 public enum ValidationErrorType
@@ -15,8 +15,17 @@ public enum ValidationErrorType
 
 public sealed class ValidationErrors : List<ValidationError>
 {
-    public void Add(string error, ValidationErrorType type, int? line = null, int? column = null)
+    public ValidationErrors()
     {
-        Add(new ValidationError(error, type, line, column));
+    }
+
+    public ValidationErrors(IEnumerable<ValidationError> source)
+        : base(source)
+    {
+    }
+
+    public void Add(string error, ValidationErrorType type, SourcePosition position = default)
+    {
+        Add(new ValidationError(error, type, position));
     }
 }

@@ -7,13 +7,16 @@ namespace Tests;
 
 public class HtmlExtensionsTests
 {
-    private readonly MjmlRenderContext sut = new MjmlRenderContext(new MjmlRenderer(), new MjmlOptions
-    {
-        Beautify = true
-    });
+    private readonly MjmlRenderContext sut = new MjmlRenderContext();
 
     public HtmlExtensionsTests()
     {
+        var options = new MjmlOptions
+        {
+            Beautify = true
+        };
+
+        sut.Setup(new MjmlRenderer(), options);
         sut.StartBuffer();
     }
 

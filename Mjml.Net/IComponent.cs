@@ -8,6 +8,10 @@ public interface IComponent
 
     IEnumerable<IComponent> ChildNodes { get; }
 
+    IComponent? Parent { get; set; }
+
+    SourcePosition Position { get; set; }
+
     ContentType ContentType { get; }
 
     bool Raw { get; }
@@ -22,15 +26,17 @@ public interface IComponent
 
     double ActualWidth { get; }
 
-    void Bind(IBinder node, GlobalContext context, IHtmlReader reader);
+    void SetBinder(IBinder binder);
+
+    void Read(IHtmlReader htmlReader, IMjmlReader mjmlReader, GlobalContext context);
+
+    void Bind(GlobalContext context);
 
     void AddChild(IComponent child);
 
     void AddChild(InnerTextOrHtml rawXml);
 
-    void AfterBind(GlobalContext context, IHtmlReader reader, IMjmlReader mjmlReader);
-
     void Render(IHtmlRenderer renderer, GlobalContext context);
 
-    void Measure(double parentWidth, int numSiblings, int numNonRawSiblings);
+    void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings);
 }

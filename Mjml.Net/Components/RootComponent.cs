@@ -1,6 +1,4 @@
-﻿using System.Text;
-using Mjml.Net.Helpers;
-using Mjml.Net.Properties;
+﻿using Mjml.Net.Properties;
 
 namespace Mjml.Net.Components;
 
@@ -15,6 +13,11 @@ public sealed class RootComponent : Component
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
         RenderChildren(renderer, context);
+
+        if (Parent != null)
+        {
+            return;
+        }
 
         renderer.Content("<!doctype html>");
         renderer.Content("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
@@ -45,11 +48,14 @@ public sealed class RootComponent : Component
 
         renderer.Content(DefaultComments);
 
-        // Already formatted properly.
-        if (context.GlobalData.TryGetValue((typeof(StringBuilder), "head"), out var head) && head is StringBuilder sb)
+        foreach (var (_, value) in context.GlobalData)
         {
-            renderer.Plain(sb);
-            renderer.ReturnStringBuilder(sb);
+            if (value is HeadBuffer head && head.Buffer != null)
+            {
+                // Already formatted properly.
+                renderer.Plain(head.Buffer);
+                renderer.ReturnStringBuilder(head.Buffer);
+            }
         }
 
         renderer.RenderHelpers(HelperTarget.HeadEnd);
@@ -65,11 +71,14 @@ public sealed class RootComponent : Component
 
         renderer.RenderHelpers(HelperTarget.BodyStart);
 
-        // Already formatted properly.
-        if (context.GlobalData.TryGetValue((typeof(StringBuilder), "body"), out var body) && body is StringBuilder sb)
+        foreach (var (_, value) in context.GlobalData)
         {
-            renderer.Plain(sb);
-            renderer.ReturnStringBuilder(sb);
+            if (value is BodyBuffer body && body.Buffer != null)
+            {
+                // Already formatted properly.
+                renderer.Plain(body.Buffer);
+                renderer.ReturnStringBuilder(body.Buffer);
+            }
         }
 
         renderer.RenderHelpers(HelperTarget.BodyEnd);

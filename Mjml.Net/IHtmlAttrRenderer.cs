@@ -22,7 +22,7 @@ public interface IHtmlAttrRenderer : IHtmlClassRenderer
     /// <returns>The current instance to set more attributes.</returns>
     IHtmlAttrRenderer Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value);
 
-    internal void StartAttr(string name);
+    internal IHtmlAttrRenderer StartAttr(string name);
 }
 
 [InterpolatedStringHandler]
