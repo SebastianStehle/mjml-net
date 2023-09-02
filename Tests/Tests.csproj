@@ -11,6 +11,10 @@
     <NoWarn>1701;1702;NU1608;SA0001</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V1_24|AnyCPU'">
+    <NoWarn>1701;1702;NU1608;SA0001</NoWarn>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;NU1608;SA0001</NoWarn>
   </PropertyGroup>

@@ -26,12 +26,18 @@ public class TemplateBenchmarks
         {
             var baseJob = Job.ShortRun;
 
-            AddJob(baseJob.WithNuGet("Mjml.Net", "1.24.0")
-                .WithId("1.24.0").AsBaseline());
+            AddJob(baseJob
+                .WithId("Dev").WithBaseline(true));
 
-            AddJob(baseJob.WithNuGet("Mjml.Net", "2.0.0")
+            AddJob(baseJob.WithCustomBuildConfiguration("V1_24")
+                .WithId("1.24.0"));
+
+            AddJob(baseJob.WithCustomBuildConfiguration("V2_0")
                 .WithId("2.0.0"));
-            
+
+            AddJob(baseJob.WithCustomBuildConfiguration("V2_1")
+                .WithId("2.1.0"));
+
             AddExporter(MarkdownExporter.GitHub);
         }
     }

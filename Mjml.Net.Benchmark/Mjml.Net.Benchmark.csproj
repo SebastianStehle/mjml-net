@@ -4,14 +4,34 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-	<IsPackable>false</IsPackable>
+    <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;V1_24;v2_0;V2_1</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Mjml.Net" Version="2.0.0" />
+  </ItemGroup>
+	
+  <ItemGroup Condition="'$(Configuration)'=='V1_24'">
+	<PackageReference Include="Mjml.Net" Version="1.24.0" />
+  </ItemGroup>
+	
+  <ItemGroup Condition="'$(Configuration)'=='V2_0'">
+	<PackageReference Include="Mjml.Net" Version="2.0.0" />
+  </ItemGroup>
+	
+  <ItemGroup Condition="'$(Configuration)'=='V2_1'">
+	<PackageReference Include="Mjml.Net" Version="2.1.0-beta1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Debug'">
+    <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>
