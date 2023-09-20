@@ -15,6 +15,7 @@ public enum BindType
     PixelsOrEm,
     PixelsOrPercent,
     PixelsOrPercentOrNone,
+    RequiredString,
     SocialMode,
     SocialTableLayout,
     String,
