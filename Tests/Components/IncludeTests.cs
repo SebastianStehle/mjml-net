@@ -78,6 +78,26 @@ public class IncludeTests
     }
 
     [Fact]
+    public void Should_include_mjml_nested()
+    {
+        var files = new InMemoryFileLoader
+        {
+            ["./headers/header.mjml"] = @"<mj-include path=""text.mjml"" />",
+            ["./headers/text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
+        };
+
+        var source = @"
+<mjml-test head=""false"">
+    <mj-include path=""./headers/header.mjml"" />
+</mjml-test>
+";
+
+        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
+    }
+
+    [Fact]
     public void Should_include_html()
     {
         var files = new InMemoryFileLoader

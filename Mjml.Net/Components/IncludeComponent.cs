@@ -1,15 +1,19 @@
 ﻿using Mjml.Net.Helpers;
 using Mjml.Net.Types;
 
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
 namespace Mjml.Net.Components;
 
 public sealed partial class IncludeComponent : Component
 {
+    private static readonly (Type, string) ContextKey = (typeof(object), "FileContext");
+
     public override string ComponentName => "mj-include";
 
     public override bool Raw => true;
 
-    [Bind("path", typeof(PathValidator))]
+    [Bind("path", BindType.RequiredString)]
     public string Path;
 
     [Bind("type", typeof(TypeValidator))]
@@ -55,14 +59,31 @@ public sealed partial class IncludeComponent : Component
             return;
         }
 
-        var content = context.Options.FileLoader?.LoadText(actualPath);
-
-        if (content == null)
+        if (context.Options.FileLoader == null)
         {
             return;
         }
 
-        mjmlReader.ReadFragment(content, actualPath, Parent!);
+        context.GlobalData.TryGetValue(ContextKey, out var parentContext);
+
+        var (content, loaderContext) = context.Options.FileLoader.LoadText(actualPath, (parentContext as FileContext)?.Context);
+
+        if (!string.IsNullOrWhiteSpace(content))
+        {
+            context.GlobalData[ContextKey] = new FileContext(loaderContext);
+
+            mjmlReader.ReadFragment(content, actualPath, Parent!);
+
+            // Restore the previous context.
+            if (parentContext != null)
+            {
+                context.GlobalData[ContextKey] = parentContext;
+            }
+            else
+            {
+                context.GlobalData.Remove(ContextKey);
+            }
+        }
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
@@ -74,7 +95,15 @@ public sealed partial class IncludeComponent : Component
             return;
         }
 
-        var content = context.Options.FileLoader?.LoadText(Path);
+        if (context.Options.FileLoader == null)
+        {
+            return;
+        }
+
+        context.GlobalData.TryGetValue(ContextKey, out var parentContext);
+
+        // The file context is not needed here, because we have no inner rendering.
+        var (content, _) = context.Options.FileLoader.LoadText(Path, (parentContext as FileContext)?.Context);
 
         if (content == null)
         {
@@ -88,18 +117,8 @@ public sealed partial class IncludeComponent : Component
         }
         else if (ActualType == IncludeType.Css)
         {
-            var style = Style.Static(new InnerTextOrHtml(content));
-
             // Allow multiple styles and render them later.
-            context.AddGlobalData(style);
-        }
-    }
-
-    public sealed class PathValidator : IType
-    {
-        public bool Validate(string value, ref ValidationContext context)
-        {
-            return !string.IsNullOrWhiteSpace(value) && context.Options?.FileLoader?.ContainsFile(value) == true;
+            context.AddGlobalData(Style.Static(new InnerTextOrHtml(content)));
         }
     }
 
@@ -110,4 +129,6 @@ public sealed partial class IncludeComponent : Component
         {
         }
     }
+
+    public sealed record FileContext(object? Context) : GlobalData;
 }

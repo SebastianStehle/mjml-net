@@ -30,7 +30,9 @@ public static class AttributeTypes
 
     public static readonly IType FourPixelsOrPercent = new ManyType(PixelsOrPercent, 1, 4);
 
-    public static readonly IType String = new StringType();
+    public static readonly IType String = new StringType(false);
+
+    public static readonly IType RequiredString = new StringType(true);
 
     public static readonly IType VerticalAlign = new EnumType(false, "top", "middle", "bottom");
 
