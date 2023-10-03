@@ -35,7 +35,7 @@ public class FilesystemFileLoader : IFileLoader
     /// </summary>
     public ConcurrentDictionary<string, string> CachedFiles { get; } = new (new FilePathEqualityComparer());
 
-    public virtual string LoadText(IncludeComponent.FileContext context)
+    public virtual string LoadText(IncludedFileInfo context)
     {
         var fileFullPath = Path.Combine(baseFolder, context.FilePath);
 

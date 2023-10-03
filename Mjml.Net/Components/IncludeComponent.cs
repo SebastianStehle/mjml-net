@@ -65,13 +65,13 @@ public sealed partial class IncludeComponent : Component
         }
 
         context.GlobalData.TryGetValue(ContextKey, out var parentContext);
-        var currentContext = new FileContext(actualPath, parentContext as FileContext);
+        var includedFileInfo = new IncludedFileInfo(actualPath, (parentContext as FileContext)?.FileInfo);
 
-        var content = context.Options.FileLoader.LoadText(currentContext);
+        var content = context.Options.FileLoader.LoadText(includedFileInfo);
 
         if (!string.IsNullOrWhiteSpace(content))
         {
-            context.GlobalData[ContextKey] = currentContext;
+            context.GlobalData[ContextKey] = new FileContext(includedFileInfo);
 
             mjmlReader.ReadFragment(content, actualPath, Parent!);
 
@@ -102,8 +102,8 @@ public sealed partial class IncludeComponent : Component
         }
 
         context.GlobalData.TryGetValue(ContextKey, out var parentContext);
-
-        var content = context.Options.FileLoader.LoadText(new FileContext(Path, parentContext as FileContext));
+        var includedFileInfo = new IncludedFileInfo(Path, (parentContext as FileContext)?.FileInfo);
+        var content = context.Options.FileLoader.LoadText(includedFileInfo);
 
         if (content == null)
         {
@@ -133,43 +133,5 @@ public sealed partial class IncludeComponent : Component
     /// <summary>
     /// Represents information about included file.
     /// </summary>
-    /// <param name="MjIncludeValue">The value that is indicated in path attribute of mj-include tag.</param>
-    /// <param name="ParentFileContext">The context of the file that included current file.</param>
-    public sealed record FileContext(string MjIncludeValue, FileContext? ParentFileContext = null) : GlobalData
-    {
-        private string? filePath;
-        private string? directory;
-
-        /// <summary>
-        /// Returns a file name to read. This field is calculated based on all previously included files.
-        /// </summary>
-        public string FilePath => filePath ??= GetContextFilePath();
-
-        /// <summary>
-        /// Returns a directory for a file. This field is calculated based on all previously included files.
-        /// </summary>
-        public string Directory => directory ??= GetContextDirectory();
-
-        /// <summary>
-        /// This field can be used to store any useful information related to included file.
-        /// </summary>
-        public dynamic Extras { get; set; }
-
-        private string GetContextDirectory()
-        {
-            // If the path of MjIncludeValue is absolute - it will be returned without joining.
-            return System.IO.Path.Combine(ParentFileContext?.Directory ?? string.Empty,
-                System.IO.Path.GetDirectoryName(MjIncludeValue) ?? string.Empty);
-        }
-
-        private string GetContextFilePath()
-        {
-            if (ParentFileContext is null)
-            {
-                return MjIncludeValue;
-            }
-
-            return System.IO.Path.Combine(Directory, System.IO.Path.GetFileName(MjIncludeValue));
-        }
-    }
+    public sealed record FileContext(IncludedFileInfo FileInfo) : GlobalData;
 }

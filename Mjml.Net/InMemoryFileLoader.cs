@@ -17,7 +17,7 @@ public sealed class InMemoryFileLoader : Dictionary<string, string?>, IFileLoade
     }
 
     /// <inheritdoc />
-    public string? LoadText(IncludeComponent.FileContext context)
+    public string? LoadText(IncludedFileInfo context)
     {
         return this.GetValueOrDefault(context.FilePath);
     }

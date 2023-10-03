@@ -8,11 +8,11 @@ namespace Mjml.Net;
 public interface IFileLoader
 {
     /// <summary>
-    /// Loads the file as text from the specified path. context.FilePath should be used in case of nested includes since it combines all parent files paths.
+    /// Loads the file as text from the specified path. fileInfo.FilePath should be used in case of nested includes since it combines all parent files paths.
     /// </summary>
-    /// <param name="context">The context for resolving current file.</param>
+    /// <param name="fileInfo">The information about the current file path for resolving.</param>
     /// <returns>
-    /// The text of the file or null, if not found and an optional context.
+    /// The text of the file or null, if not found and an optional fileInfo.
     /// </returns>
-    string? LoadText(IncludeComponent.FileContext context);
+    string? LoadText(IncludedFileInfo fileInfo);
 }
