@@ -11,6 +11,11 @@ namespace Tests.Internal;
 /// </remarks>
 public sealed class InMemoryFileLoader : Dictionary<string, string?>, IFileLoader
 {
+    public InMemoryFileLoader()
+        : base(new FilePathEqualityComparer())
+    {
+    }
+
     /// <inheritdoc />
     public string? LoadText(IncludeComponent.FileContext context)
     {
