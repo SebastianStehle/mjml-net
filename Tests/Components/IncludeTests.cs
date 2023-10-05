@@ -1,5 +1,7 @@
 ﻿using Mjml.Net;
 using Mjml.Net.Helpers;
+using Mjml.Net.Includes.Filesystem;
+using Mjml.Net.Includes.InMemory;
 using Tests.Internal;
 using Xunit;
 
@@ -80,9 +82,10 @@ public class IncludeTests
     [Fact]
     public void Should_include_mjml_nested()
     {
-        var files = new InMemoryFileLoader
+        var files = new InMemoryFileLoader(new FilesystemPathResolver(), new FilePathEqualityComparer())
         {
-            ["./headers/header.mjml"] = @"<mj-include path=""text.mjml"" />",
+            ["./headers/header.mjml"] = @"<mj-include path=""../level2inRoot.mjml"" />",
+            ["./level2inRoot.mjml"] = @"<mj-include path=""./headers/text.mjml"" />",
             ["./headers/text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
         };
 

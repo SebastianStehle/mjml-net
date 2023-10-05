@@ -9,38 +9,28 @@ namespace Mjml.Net.Components;
 /// <param name="ParentFileContext">The context of the file that included current file.</param>
 public sealed record IncludedFileInfo(string MjIncludeValue, IncludedFileInfo? ParentFileContext = null)
 {
-    private string? filePath;
-    private string? directory;
-
-    /// <summary>
-    /// Returns a file name to read. This field is calculated based on all previously included files.
-    /// </summary>
-    public string FilePath => filePath ??= GetContextFilePath();
-
-    /// <summary>
-    /// Returns a directory for a file. This field is calculated based on all previously included files.
-    /// </summary>
-    public string Directory => directory ??= GetContextDirectory();
-
     /// <summary>
     /// This field can be used to store any useful information related to included file.
     /// </summary>
     public dynamic Extras { get; set; }
 
-    private string GetContextDirectory()
+    /// <summary>
+    /// Returns whole chain of includes. Operates via <see cref="ParentFileContext"/>.
+    /// </summary>
+    /// <returns>A chain of previously included files.</returns>
+    public IEnumerable<IncludedFileInfo> Flatten()
     {
-        // If the path of MjIncludeValue is absolute - it will be returned without joining.
-        return Path.Combine(ParentFileContext?.Directory ?? string.Empty,
-            Path.GetDirectoryName(MjIncludeValue) ?? string.Empty);
-    }
+        // Stack enumerates elements in reversed order.
+        var result = new Stack<IncludedFileInfo>();
+        var currentFileInfo = this;
 
-    private string GetContextFilePath()
-    {
-        if (ParentFileContext is null)
+        do
         {
-            return MjIncludeValue;
+            result.Push(currentFileInfo);
+            currentFileInfo = currentFileInfo.ParentFileContext;
         }
+        while (currentFileInfo != null);
 
-        return Path.Combine(Directory, Path.GetFileName(MjIncludeValue));
+        return result;
     }
 }

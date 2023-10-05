@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Mjml.Net;
+using Mjml.Net.Includes.InMemory;
 using Mjml.Net.Validators;
 using Tests.Internal;
 using Xunit;
@@ -19,7 +20,7 @@ public class IncludeTests
 
     private static string CompileWithNet()
     {
-        var source = File.ReadAllText($"Templates/include/about.mjml");
+        var source = File.ReadAllText("Templates/include/about.mjml");
 
         var fileStore = new InMemoryFileLoader();
 
