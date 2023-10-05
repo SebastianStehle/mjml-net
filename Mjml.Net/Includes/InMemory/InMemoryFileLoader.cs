@@ -20,6 +20,7 @@ public sealed class InMemoryFileLoader : CacheableFileLoader
 
     protected override string? LoadText(string resolvedPath, IncludedFileInfo context)
     {
-        return this.GetValueOrDefault(resolvedPath);
+        // This code is reachable only if the file was not found in cache, so it makes no sense to do anything.
+        return null;
     }
 }
