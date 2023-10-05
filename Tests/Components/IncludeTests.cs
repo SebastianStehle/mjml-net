@@ -10,7 +10,7 @@ public class IncludeTests
     [Fact]
     public void Should_include_css()
     {
-        var files = new InMemoryFileLoader
+        var files = new Dictionary<string, string>
         {
             ["./style.css"] = @"
 .red-text div {
@@ -28,7 +28,10 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files }, new StyleHelper());
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            FileLoader = () => new InMemoryFileLoader(files)
+        });
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
     }
@@ -36,7 +39,7 @@ public class IncludeTests
     [Fact]
     public void Should_include_mjml_fragments()
     {
-        var files = new InMemoryFileLoader
+        var files = new Dictionary<string, string>
         {
             ["./text.mjml"] = @"
 <mj-group>
@@ -53,7 +56,10 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            FileLoader = () => new InMemoryFileLoader(files)
+        });
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
     }
@@ -61,7 +67,7 @@ public class IncludeTests
     [Fact]
     public void Should_include_mjml()
     {
-        var files = new InMemoryFileLoader
+        var files = new Dictionary<string, string>
         {
             ["./text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
         };
@@ -72,7 +78,10 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            FileLoader = () => new InMemoryFileLoader(files)
+        });
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
     }
@@ -80,7 +89,7 @@ public class IncludeTests
     [Fact]
     public void Should_include_mjml_nested()
     {
-        var files = new InMemoryFileLoader
+        var files = new Dictionary<string, string>
         {
             ["./headers/header.mjml"] = @"<mj-include path=""text.mjml"" />",
             ["./headers/text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
@@ -92,7 +101,10 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            FileLoader = () => new InMemoryFileLoader(files)
+        });
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
     }
@@ -100,7 +112,7 @@ public class IncludeTests
     [Fact]
     public void Should_include_html()
     {
-        var files = new InMemoryFileLoader
+        var files = new Dictionary<string, string>
         {
             ["./text.html"] = @"<strong>Hello</strong> <strong>MJML</strong"
         };
@@ -111,7 +123,10 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions { FileLoader = files });
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            FileLoader = () => new InMemoryFileLoader(files)
+        });
 
         AssertHelpers.HtmlAssert(files["./text.html"]!, result);
     }

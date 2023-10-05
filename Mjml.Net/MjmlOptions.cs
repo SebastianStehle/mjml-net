@@ -65,7 +65,7 @@ public sealed partial record MjmlOptions
     public IValidator? Validator { get; init; }
 
     /// <summary>
-    /// The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. The default is: <c>null</c>.
+    /// The file loader for include components which handles loading the files from the specified path attribute. The default is: <c>null</c>.
     /// </summary>
-    public IFileLoader? FileLoader { get; init; }
+    public Func<IFileLoader>? FileLoader { get; init; }
 }

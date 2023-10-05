@@ -6,6 +6,7 @@ public sealed class GlobalContext
 {
     private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
     private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
+    private IFileLoader? fileLoader;
 
     public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = new Dictionary<(Type Type, object Identifier), GlobalData>();
 
@@ -14,6 +15,11 @@ public sealed class GlobalContext
     public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
 
     public MjmlOptions Options { get; private set; }
+
+    public IFileLoader? FileLoader
+    {
+        get => fileLoader ??= Options?.FileLoader?.Invoke();
+    }
 
     public void SetOptions(MjmlOptions options)
     {
@@ -24,6 +30,7 @@ public sealed class GlobalContext
     {
         GlobalData.Clear();
 
+        fileLoader = null;
         attributesByClass.Clear();
         attributesByName.Clear();
 

@@ -21,16 +21,16 @@ public class IncludeTests
     {
         var source = File.ReadAllText($"Templates/include/about.mjml");
 
-        var fileStore = new InMemoryFileLoader();
+        var files = new Dictionary<string, string>();
 
         foreach (var file in Directory.GetFiles("Templates/include", "*.mjml", SearchOption.TopDirectoryOnly).Select(x => new FileInfo(x)))
         {
-            fileStore.Add(file.Name, File.ReadAllText(file.FullName));
+            files.Add(file.Name, File.ReadAllText(file.FullName));
         }
 
         var options = new MjmlOptions
         {
-            FileLoader = fileStore,
+            FileLoader = () => new InMemoryFileLoader(files),
 
             // Easier for debugging errors.
             Beautify = true,

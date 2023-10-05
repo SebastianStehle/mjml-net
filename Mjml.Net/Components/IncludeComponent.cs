@@ -1,8 +1,6 @@
 ﻿using Mjml.Net.Helpers;
 using Mjml.Net.Types;
 
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
-
 namespace Mjml.Net.Components;
 
 public sealed partial class IncludeComponent : Component
@@ -59,30 +57,16 @@ public sealed partial class IncludeComponent : Component
             return;
         }
 
-        if (context.Options.FileLoader == null)
+        if (context.FileLoader == null)
         {
             return;
         }
 
-        context.GlobalData.TryGetValue(ContextKey, out var parentContext);
-
-        var (content, loaderContext) = context.Options.FileLoader.LoadText(actualPath, (parentContext as FileContext)?.Context);
+        var content = context.FileLoader.LoadText(actualPath);
 
         if (!string.IsNullOrWhiteSpace(content))
         {
-            context.GlobalData[ContextKey] = new FileContext(loaderContext);
-
             mjmlReader.ReadFragment(content, actualPath, Parent!);
-
-            // Restore the previous context.
-            if (parentContext != null)
-            {
-                context.GlobalData[ContextKey] = parentContext;
-            }
-            else
-            {
-                context.GlobalData.Remove(ContextKey);
-            }
         }
     }
 
@@ -95,15 +79,13 @@ public sealed partial class IncludeComponent : Component
             return;
         }
 
-        if (context.Options.FileLoader == null)
+        if (context.FileLoader == null)
         {
             return;
         }
 
-        context.GlobalData.TryGetValue(ContextKey, out var parentContext);
-
         // The file context is not needed here, because we have no inner rendering.
-        var (content, _) = context.Options.FileLoader.LoadText(Path, (parentContext as FileContext)?.Context);
+        var content = context.FileLoader.LoadText(Path);
 
         if (content == null)
         {
@@ -129,6 +111,4 @@ public sealed partial class IncludeComponent : Component
         {
         }
     }
-
-    public sealed record FileContext(object? Context) : GlobalData;
 }
