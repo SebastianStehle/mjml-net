@@ -79,6 +79,9 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             errors.Add($"Invalid element '{name}'.",
                 ValidationErrorType.UnknownElement,
                 position);
+
+            // Just skip unknown elements.
+            reader.ReadInnerHtml();
             return;
         }
 
