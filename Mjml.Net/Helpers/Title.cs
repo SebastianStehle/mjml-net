@@ -15,11 +15,6 @@ public sealed class TitleHelper : IHelper
 
         var title = context.GlobalData.Values.OfType<Title>().FirstOrDefault()?.Value;
 
-        if (title == null)
-        {
-            return;
-        }
-
         renderer.StartElement("title");
         renderer.Content(title);
         renderer.EndElement("title");
