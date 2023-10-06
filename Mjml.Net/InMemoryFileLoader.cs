@@ -8,29 +8,41 @@ namespace Tests.Internal;
 /// <remarks>
 /// Useful for preloading.
 /// </remarks>
-public sealed class InMemoryFileLoader : Dictionary<string, string?>, IFileLoader
+public sealed class InMemoryFileLoader : IFileLoader
 {
+    private readonly Stack<string> pathStack = new Stack<string>();
+    private readonly IReadOnlyDictionary<string, string> content;
+
+    public InMemoryFileLoader(IReadOnlyDictionary<string, string> content)
+    {
+        this.content = content;
+    }
+
     /// <inheritdoc />
-    public (string? Content, object? Context) LoadText(string path, object? parentContext)
+    public string? LoadText(string path)
     {
         if (path == null)
         {
             throw new ArgumentNullException(nameof(path));
         }
 
-        path = BuildPath(path, parentContext);
+        pathStack.TryPeek(out var parentPath);
 
-        return (this.GetValueOrDefault(path), path);
+        path = BuildPath(path, parentPath);
+
+        pathStack.Push(path);
+
+        return content.GetValueOrDefault(path);
     }
 
-    private static string BuildPath(string path, object? parentContext)
+    private static string BuildPath(string path, string? parentPath)
     {
         if (path.StartsWith('/') || path.StartsWith('\\'))
         {
             return path;
         }
 
-        if (parentContext is not string parentPath)
+        if (parentPath == null)
         {
             return path;
         }

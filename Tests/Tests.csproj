@@ -42,6 +42,7 @@
     <None Remove="Components\Outputs\DividerWithoutWidthUnit.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\List.html" />
+    <None Remove="Components\Outputs\StyleInclude.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithEntity.html" />
@@ -99,6 +100,7 @@
     <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
     <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
     <EmbeddedResource Include="Components\Outputs\TablePercent.html" />
     <EmbeddedResource Include="Components\Outputs\Table.html" />
