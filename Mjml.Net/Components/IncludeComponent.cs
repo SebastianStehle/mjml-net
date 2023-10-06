@@ -5,8 +5,6 @@ namespace Mjml.Net.Components;
 
 public sealed partial class IncludeComponent : Component
 {
-    private static readonly (Type, string) ContextKey = (typeof(object), "FileContext");
-
     public override string ComponentName => "mj-include";
 
     public override bool Raw => true;
@@ -57,12 +55,7 @@ public sealed partial class IncludeComponent : Component
             return;
         }
 
-        if (context.FileLoader == null)
-        {
-            return;
-        }
-
-        var content = context.FileLoader.LoadText(actualPath);
+        var content = context.FileLoader?.LoadText(actualPath);
 
         if (!string.IsNullOrWhiteSpace(content))
         {
@@ -79,13 +72,8 @@ public sealed partial class IncludeComponent : Component
             return;
         }
 
-        if (context.FileLoader == null)
-        {
-            return;
-        }
-
         // The file context is not needed here, because we have no inner rendering.
-        var content = context.FileLoader.LoadText(Path);
+        var content = context.FileLoader?.LoadText(Path);
 
         if (content == null)
         {
