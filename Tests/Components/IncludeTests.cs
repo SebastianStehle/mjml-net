@@ -33,7 +33,7 @@ public class IncludeTests
             FileLoader = () => new InMemoryFileLoader(files)
         });
 
-        AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
+        AssertHelpers.HtmlFileAssert("Components.Outputs.StyleInclude.html", result);
     }
 
     [Fact]
