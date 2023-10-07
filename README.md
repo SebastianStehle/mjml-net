@@ -50,20 +50,21 @@ public static void Main (string[] args) {
     var mjmlRenderer = new MjmlRenderer();
 
     string text = @"
-<mjml>
-    <mj-head>
-        <mj-title>Hello World Example</mj-title>
-    </mj-head>
-    <mj-body>
-        <mj-section>
-            <mj-column>
-                <mj-text>
-                    Hello World!
-                </mj-text>
-            </mj-column>
-        </mj-section>
-    </mj-body>
-</mjml>";
+        <mjml>
+            <mj-head>
+                <mj-title>Hello World Example</mj-title>
+            </mj-head>
+            <mj-body>
+                <mj-section>
+                    <mj-column>
+                        <mj-text>
+                            Hello World!
+                        </mj-text>
+                    </mj-column>
+                </mj-section>
+            </mj-body>
+        </mjml>";
+
     var options = new MjmlOptions {
         Beautify = false
     };
@@ -71,28 +72,30 @@ public static void Main (string[] args) {
     var (html, errors) = mjmlRenderer.Render(text, options);
 }
 ```
+### **Before Version 2.0.0**: XML Clenanup
 
-MJML is not necessarily valid XML. To allow the XML parser to work properly, the MJML string needs to be sanitized before you render it. You can use the method ` FixXML` for that. If you store the MJML text in the database, it is store to keep the original version and the sanitized version. More about this under "Known Issues".
+MJML is not necessarily valid XML. To allow the XML parser to work properly, the MJML string needs to be sanitized before you render it. You can use the method ` FixXML` for that. If you store the MJML text in the database, it is store to keep the original version and the sanitized version. With version 2.0 we moved to html parser that follows the official standards and can therefore accept any kind of HTML input. More about this under "Known Issues".
 
 ```csharp
 public static void Main (string[] args) {
     var mjmlRenderer = new MjmlRenderer();
 
     string text = @"
-<mjml>
-    <mj-head>
-        <mj-title>Hello World Example</mj-title>
-    </mj-head>
-    <mj-body>
-        <mj-section>
-            <mj-column>
-                <mj-text>
-                    Hello World!
-                </mj-text>
-            </mj-column>
-        </mj-section>
-    </mj-body>
-</mjml>";
+          <mjml>
+              <mj-head>
+                  <mj-title>Hello World Example</mj-title>
+              </mj-head>
+              <mj-body>
+                  <mj-section>
+                      <mj-column>
+                          <mj-text>
+                              Hello World!
+                          </mj-text>
+                      </mj-column>
+                  </mj-section>
+              </mj-body>
+          </mjml>";
+
     var options = new MjmlOptions {
         Beautify = false
     };
