@@ -22,11 +22,11 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
         "wbr",
     };
 
-    private readonly HtmlReader inner;
+    private readonly HtmlReaderWrapper inner;
     private int depth = 1;
 
-    public SubtreeReader(HtmlReader inner)
-        : base(inner)
+    public SubtreeReader(HtmlReaderWrapper inner)
+        : base(inner.Impl)
     {
         this.inner = inner;
     }
@@ -38,20 +38,27 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
             return false;
         }
 
-        var hasRead = base.Read();
+        var hasRead = inner.Read();
 
         if (hasRead)
         {
-            if (TokenKind == HtmlTokenKind.Tag && !inner.SelfClosingElement && !VoidTags.Contains(inner.Name))
+            if (!VoidTags.Contains(inner.Name))
             {
-                depth++;
-            }
-            else if (TokenKind == HtmlTokenKind.EndTag)
-            {
-                depth--;
+                if (TokenKind == HtmlTokenKind.Tag && !inner.SelfClosingElement)
+                {
+                    depth++;
+                }
+                else if (TokenKind == HtmlTokenKind.EndTag)
+                {
+                    depth--;
+                }
             }
         }
+        else
+        {
+            depth = 0;
+        }
 
-        return hasRead && depth > 0;
+        return depth > 0;
     }
 }

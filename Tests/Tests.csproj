@@ -54,6 +54,7 @@
     <PackageReference Include="AngleSharp" Version="1.0.1" />
     <PackageReference Include="AngleSharp.Diffing" Version="0.18.2-alpha-89" />
     <PackageReference Include="FakeItEasy" Version="7.3.1" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -156,6 +157,9 @@
 
   <ItemGroup>
     <None Update="Templates\amario.mjml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\bug.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\austin.mjml">

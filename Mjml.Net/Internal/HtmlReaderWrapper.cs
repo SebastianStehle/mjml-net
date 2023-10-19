@@ -6,55 +6,57 @@ namespace Mjml.Net.Internal;
 internal class HtmlReaderWrapper : IHtmlReader
 {
     private static readonly char[] TrimChars = { ' ', '\n', '\r' };
-    private readonly HtmlReaderImpl inner;
+    private readonly HtmlReaderImpl impl;
 
-    public int LineNumber => inner.LineNumber;
+    public int LineNumber => impl.LineNumber;
 
-    public int LinePosition => inner.LinePosition;
+    public int LinePosition => impl.LinePosition;
 
-    public int AttributeCount => inner.AttributeCount;
+    public int AttributeCount => impl.AttributeCount;
 
-    public string Name => inner.Name;
+    public string Name => impl.Name;
 
-    public string Text => inner.Text;
+    public string Text => impl.Text;
 
-    public bool SelfClosingElement => inner.SelfClosingElement;
+    public bool SelfClosingElement => impl.SelfClosingElement;
 
-    public HtmlTokenKind TokenKind => inner.TokenKind;
+    public HtmlTokenKind TokenKind => impl.TokenKind;
+
+    public HtmlReaderImpl Impl => impl;
 
     public HtmlReaderWrapper(HtmlReaderImpl inner)
     {
-        this.inner = inner;
+        this.impl = inner;
     }
 
     public HtmlReaderWrapper(string input)
     {
-        inner = new HtmlReaderImpl(new StringReader(input));
+        impl = new HtmlReaderImpl(new StringReader(input));
     }
 
     public string GetAttribute(string name)
     {
-        return inner.GetAttribute(name);
+        return impl.GetAttribute(name);
     }
 
     public string GetAttribute(int index)
     {
-        return inner.GetAttribute(index);
+        return impl.GetAttribute(index);
     }
 
     public string GetAttributeName(int index)
     {
-        return inner.GetAttributeName(index);
+        return impl.GetAttributeName(index);
     }
 
     public virtual bool Read()
     {
-        return inner.Read();
+        return impl.Read();
     }
 
     public IHtmlReader ReadSubtree()
     {
-        return new SubtreeReader(inner);
+        return new SubtreeReader(this);
     }
 
     public InnerTextOrHtml ReadInnerHtml()

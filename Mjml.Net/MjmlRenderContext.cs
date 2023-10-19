@@ -49,18 +49,18 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
     public void Read(IHtmlReader reader, IComponent? parent, string? file)
     {
-        while (reader.Read())
+        var substree = reader.ReadSubtree();
+
+        while (substree.Read())
         {
-            switch (reader.TokenKind)
+            switch (substree.TokenKind)
             {
                 case HtmlTokenKind.Tag:
-                    ReadElement(reader.Name, reader, parent, file);
+                    ReadElement(substree.Name, substree, parent, file);
                     break;
                 case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
-                    ReadComment(reader, parent);
+                    ReadComment(substree, parent);
                     break;
-                case HtmlTokenKind.EndTag:
-                    return;
             }
         }
     }
