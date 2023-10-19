@@ -1,0 +1,75 @@
+<mjml>
+	<mj-head>
+		<mj-title>test</mj-title>
+		<mj-preview>test</mj-preview>
+		<mj-attributes>
+			<mj-all font-family="Calibri, Arial"></mj-all>
+			<mj-table></mj-table>
+			<mj-text font-weight="400" font-size="16px" color="#000000" line-height="24px"></mj-text>
+		</mj-attributes>
+	</mj-head>
+	<mj-body background-color="#E7E7E7" width="700px">
+		<mj-section background-color="#000000" padding-bottom="15px" border-radius="10px" >
+			<mj-column width="100%">
+			</mj-column>
+		</mj-section>
+		<mj-section padding-top="15px"></mj-section>
+		<mj-section background-color="#000000">
+			<mj-column width="100%">
+			</mj-column>
+		</mj-section>
+		<mj-wrapper padding-top="0" padding-bottom="0" css-class="body-section">
+			<mj-section background-color="#ffffff" padding-left="15px" padding-right="15px">
+				<mj-column width="100%">
+					<mj-text>
+						<h3>
+							Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum: <strong>3</strong>. Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum, lorem ipsum.
+							<br></br>
+							Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum.
+						</h3>
+					</mj-text>
+					<mj-text>
+						<p>
+							Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet dfsfdsfds: <strong>bleggity.blah@dsafsd.com</strong>
+						</p>
+						<p>
+							Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet dfsfdsfds <a href="https://bleggityblah/notes/6y276nghvuxn9e3ve4uc3py/">lorem ipsum</a>. Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum <a href="mailto:bleggity.blah@dfsdsffd.com?subject=RE: lorem ipsum - adfdfsfds@fdsfd.com">lorem ipsum</a>.
+						</p>
+					</mj-text>
+					<mj-text color="#212b35" font-weight="bold" font-size="20px" align="center">lorem ipsum</mj-text>
+					<mj-table>
+						<table>
+							<colgroup>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+							</colgroup>
+							<tr>
+								<th>loremipsum</th>
+								<th>loremipsum</th>
+								<th>loremipsum</th>
+								<th>E-loremipsum</th>
+							</tr>
+							<tr>
+								<td>blehy, blah</td>
+								<td>blahp</td>
+								<td>blahg</td>
+								<td>bloggy.blah@blah.com</td>
+							</tr>
+						</table>
+					</mj-table>
+				</mj-column>
+			</mj-section>
+			<mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0">
+			</mj-section>
+			<mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0">
+				<mj-column width="100%">
+					<mj-divider border-color="#DFE3E8" border-width="1px" />
+				</mj-column>
+			</mj-section>
+			<mj-section background-color="#ffffff" padding="0 15px 0 15px">
+			</mj-section>
+		</mj-wrapper>
+	</mj-body>
+</mjml>

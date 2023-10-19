@@ -55,7 +55,7 @@ public abstract class ValidatorBase : IValidator
         {
             if (parent != null && component.AllowedParents?.Contains(parent.ComponentName) == false)
             {
-                errors.Add($"'{component.ComponentName}' must be child of '{string.Join(", ", component.AllowedParents)}'.",
+                errors.Add($"'{component.ComponentName}' must be child of '{string.Join(", ", component.AllowedParents)}', found '{parent.ComponentName}'.",
                     ValidationErrorType.InvalidParent,
                     component.Position);
             }

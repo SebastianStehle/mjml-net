@@ -48,7 +48,7 @@ public class ValidationTests
 
         var errors = Render(source);
 
-        Assert.Equal(new[] { "'mj-body' must be child of 'mjml'." }, errors);
+        Assert.Equal(new[] { "'mj-body' must be child of 'mjml', found 'mj-body'." }, errors);
     }
 
     [Fact]
