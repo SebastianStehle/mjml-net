@@ -4,10 +4,10 @@ namespace Mjml.Net.Components.Body;
 
 public partial class CarouselImageComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-carousel"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 
@@ -71,19 +71,19 @@ public partial class CarouselImageComponent : BodyComponentBase
                 .Attr("rel", Rel)
                 .Attr("target", "_blank");
 
-            RenderImage(renderer, context);
+            RenderImage(renderer);
 
             renderer.EndElement("a");
         }
         else
         {
-            RenderImage(renderer, context);
+            RenderImage(renderer);
         }
 
         renderer.EndElement("div");
     }
 
-    private void RenderImage(IHtmlRenderer renderer, GlobalContext context)
+    private void RenderImage(IHtmlRenderer renderer)
     {
         renderer.StartElement("img", true) // Style images.img
             .Attr("alt", Alt)
@@ -98,7 +98,7 @@ public partial class CarouselImageComponent : BodyComponentBase
             .Style("width", $"{ActualWidth}px");
     }
 
-    internal void RenderThumbnail(IHtmlRenderer renderer, GlobalContext context)
+    internal void RenderThumbnail(IHtmlRenderer renderer)
     {
         var (widthParsed, _) = UnitParser.Parse(TbWidth);
         var imgIndex = CarouselImageIndex + 1;
@@ -131,7 +131,7 @@ public partial class CarouselImageComponent : BodyComponentBase
         renderer.EndElement("a");
     }
 
-    internal void RenderRadio(IHtmlRenderer renderer, object context)
+    internal void RenderRadio(IHtmlRenderer renderer)
     {
         renderer.StartElement("input", true) // Style radio.input
             .Attr("checked", CarouselImageIndex == 0 ? "checked" : null)

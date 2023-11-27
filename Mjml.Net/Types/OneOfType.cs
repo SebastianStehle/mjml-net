@@ -8,7 +8,7 @@ public sealed class OneOfType : IType
 
     public OneOfType(params IType[] units)
     {
-        this.units = units.ToList();
+        this.units = [..units];
     }
 
     public bool Validate(string value, ref ValidationContext context)

@@ -1,0 +1,111 @@
+#pragma warning disable
+// Auto-generated code
+using Mjml.Net;
+
+namespace {{classNamespace}};
+
+public partial class {{className}}
+{
+	private static readonly AllowedAttributes AllowedAttributesStatic = new AllowedAttributes();
+	{{#each customTypes}}
+	private static readonly IType {{customName}} = new {{customType}}();
+	{{/each}}
+
+	static {{ClassName}}()
+	{
+	{{#each defaultTypes}}
+		AllowedAttributesStatic["{{attribute}}"] = AttributeTypes.{{defaultType}};
+	{{/each}}
+	{{#each customTypes}}
+		AllowedAttributesStatic["{{attribute}}"] = {{customName}};
+	{{/each}}
+	}
+
+	public override AllowedAttributes? AllowedFields
+	{
+		get
+		{
+			var inherited = base.AllowedFields;
+
+			if (inherited == null || inherited.Count == 0) 
+			{
+				return AllowedAttributesStatic;
+			}
+
+			var result = new AllowedAttributes(AllowedAttributesStatic);
+
+			foreach (var (key, value) in inherited)
+			{
+				result[key] = value;
+			}
+
+			return result;
+		}
+	}
+
+	public override string? GetAttribute(string? name)
+	{
+		switch (name)
+		{
+		{{#each normalFields}}
+			case "{{attribute}}":
+				return {{name}};
+		{{/each}}
+		}
+
+		return Binder.GetAttribute(name);
+	}
+
+	public override void Bind(Mjml.Net.GlobalContext context)
+	{
+		{{#each normalFields}}
+		var source{{name}} = Binder.GetAttribute("{{attribute}}");
+		if (source{{name}} != null)
+		{
+			{{#if isCustom }}
+			this.{{name}} = {{customName}}.Coerce(source{{name}});
+			{{/if}}
+			{{#unless isCustom }}
+			this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(source{{name}});
+			{{/unless}}
+		}
+		{{/each}}
+
+		{{#each expandedFields}}
+		if ({{name}} != null && ({{name}}Top == null || {{name}}Right == null || {{name}}Bottom == null || {{name}}Left == null)) 
+		{
+			{{#if isBorder }}
+			var (t, r, b, l) = BindingHelper.ParseShorthandBorder({{name}});
+			{{/if}}
+			{{#unless isBorder }}
+			var (t, r, b, l) = BindingHelper.ParseShorthandValue({{name}});
+			{{/unless}}
+
+			if ({{name}}Top == null)
+			{
+				{{name}}Top = t;
+			}
+
+			if ({{name}}Right == null)
+			{
+				{{name}}Right = r;
+			}
+
+			if ({{name}}Bottom == null)
+			{
+				{{name}}Bottom = b;
+			}
+
+			if ({{name}}Left == null)
+			{
+				{{name}}Left = l;
+			}
+		}
+		{{/each}}
+		{{#each textFields}}
+		{{name}} = Binder.GetText();
+		{{/each}}
+
+		base.Bind(context);
+	}
+}

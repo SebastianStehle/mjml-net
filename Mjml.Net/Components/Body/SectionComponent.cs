@@ -4,11 +4,11 @@ namespace Mjml.Net.Components.Body;
 
 public partial class SectionComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-body",
         "mj-wrapper"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 
@@ -146,7 +146,7 @@ public partial class SectionComponent : BodyComponentBase
         }
         else
         {
-            RenderSectionStart(renderer, true);
+            RenderSectionStart(renderer);
             RenderSection(renderer, context, true);
             RenderSectionEnd(renderer);
         }
@@ -159,7 +159,7 @@ public partial class SectionComponent : BodyComponentBase
 
     private void RenderSimple(IHtmlRenderer renderer, GlobalContext context)
     {
-        RenderSectionStart(renderer, true);
+        RenderSectionStart(renderer);
 
         if (HasBackground())
         {
@@ -173,7 +173,7 @@ public partial class SectionComponent : BodyComponentBase
         RenderSectionEnd(renderer);
     }
 
-    private void RenderSectionStart(IHtmlRenderer renderer, bool fullWidth)
+    private void RenderSectionStart(IHtmlRenderer renderer)
     {
         renderer.StartConditional("<!--[if mso | IE]>");
         {
@@ -399,7 +399,7 @@ public partial class SectionComponent : BodyComponentBase
 
         if (fullWidth)
         {
-            RenderSectionStart(renderer, fullWidth);
+            RenderSectionStart(renderer);
             RenderSection(renderer, context, fullWidth);
             RenderSectionEnd(renderer);
         }
@@ -479,7 +479,7 @@ public partial class SectionComponent : BodyComponentBase
         return FormattableString.Invariant($"{x} {y}");
     }
 
-    private (string x, string y) ParseBackgroundPosition()
+    private (string X, string Y) ParseBackgroundPosition()
     {
         var positions = BackgroundPosition.Split(' ');
 
@@ -516,7 +516,7 @@ public partial class SectionComponent : BodyComponentBase
         }
     }
 
-    private static (string xPercent, string yPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
+    private static (string XPercent, string YPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)
     {
         var xPercent = backgroundPositionX;
         var yPercent = backgroundPositionY;

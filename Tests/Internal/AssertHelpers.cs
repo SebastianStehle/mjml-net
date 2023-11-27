@@ -101,7 +101,7 @@ public static partial class AssertHelpers
                 })
                 .Build().ToList();
 
-        Assert.True(!diffs.Any(), FormatDiffs(diffs));
+        Assert.True(diffs.Count == 0, FormatDiffs(diffs));
     }
 
     private static string FormatDiffs(IEnumerable<IDiff> diffs)

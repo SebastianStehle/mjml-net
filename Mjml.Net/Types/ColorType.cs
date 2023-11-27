@@ -213,4 +213,25 @@ public sealed partial class ColorType : IType
         return Rgba.IsMatch(trimmed) || Rgb.IsMatch(trimmed) || Hex.IsMatch(trimmed);
 #endif
     }
+
+    public string Coerce(string value)
+    {
+        var trimmed = value.AsSpan().Trim();
+
+        if (trimmed.Length == 4 && trimmed[0] == '#')
+        {
+            return new string(new char[]
+            {
+                trimmed[0],
+                trimmed[1],
+                trimmed[1],
+                trimmed[2],
+                trimmed[2],
+                trimmed[3],
+                trimmed[3]
+            });
+        }
+
+        return value;
+    }
 }

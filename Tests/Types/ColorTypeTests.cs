@@ -31,7 +31,7 @@ public class ColorTypeTests
     [InlineData("#ff00bb", "#f0b ")]
     public void Should_coerce_value(string expected, string value)
     {
-        var result = BindingHelper.CoerceColor(value);
+        var result = AttributeTypes.Color.Coerce(value);
 
         Assert.Equal(expected, result);
     }

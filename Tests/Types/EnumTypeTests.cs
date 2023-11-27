@@ -24,11 +24,11 @@ public class EnumTypeTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Should_allow_empty_string_when_optional(string value)
+    public void Should_allow_empty_string_when_optional(string? value)
     {
         var context = default(ValidationContext);
 
-        var isValid = new EnumType(true, "A", "B").Validate(value, ref context);
+        var isValid = new EnumType(true, "A", "B").Validate(value!, ref context);
 
         Assert.True(isValid);
     }

@@ -14,7 +14,7 @@ public static class BindingHelper
         return breakpoint;
     }
 
-    public static (string?, string?, string?, string?) ParseShorthandBorder(string value)
+    public static (string? Top, string? Right, string? Bottom, string? Left) ParseShorthandBorder(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -24,7 +24,7 @@ public static class BindingHelper
         return (value, value, value, value);
     }
 
-    public static (string?, string?, string?, string?) ParseShorthandValue(string value)
+    public static (string? Top, string? Right, string? Bottom, string? Left) ParseShorthandValue(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -67,26 +67,5 @@ public static class BindingHelper
         }
 
         return (t, r, b, l);
-    }
-
-    public static string CoerceColor(string value)
-    {
-        var trimmed = value.AsSpan().Trim();
-
-        if (trimmed.Length == 4 && trimmed[0] == '#')
-        {
-            return new string(new char[]
-            {
-                trimmed[0],
-                trimmed[1],
-                trimmed[1],
-                trimmed[2],
-                trimmed[2],
-                trimmed[3],
-                trimmed[3]
-            });
-        }
-
-        return value;
     }
 }

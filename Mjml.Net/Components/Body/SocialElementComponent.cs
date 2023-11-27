@@ -2,10 +2,10 @@
 
 public partial class SocialElementComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-social"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 
@@ -212,7 +212,7 @@ public partial class SocialElementComponent : BodyComponentBase
         renderer.EndElement("tr");
     }
 
-    private (SocialNetwork, string?) GetSocialAttributes()
+    private (SocialNetwork Network, string? Href) GetSocialAttributes()
     {
         var socialNetwork = SocialNetwork.Default;
 

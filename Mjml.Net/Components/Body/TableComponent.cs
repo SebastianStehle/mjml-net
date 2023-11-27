@@ -4,11 +4,11 @@ namespace Mjml.Net.Components.Body;
 
 public partial class TableComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-column",
         "mj-hero"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 

@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+#pragma warning disable CA1822 // Mark members as static
+
 namespace Mjml.Net;
 
 internal sealed class RenderBuffer

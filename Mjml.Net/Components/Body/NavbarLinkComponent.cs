@@ -4,10 +4,10 @@ namespace Mjml.Net.Components.Body;
 
 public partial class NavbarLinkComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-navbar"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 

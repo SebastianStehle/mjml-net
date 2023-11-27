@@ -15,7 +15,7 @@ public static class UnitParser
 
         var hasSeparator = false;
 
-        var i = 0;
+        int i;
         for (i = 0; i < span.Length; i++)
         {
             var c = span[i];
@@ -34,8 +34,6 @@ public static class UnitParser
 
         var unitSpan = span[i..];
         var unitType = Unit.Unknown;
-
-        var f = new string(unitSpan);
 
         if (unitSpan.StartsWith("px", StringComparison.OrdinalIgnoreCase))
         {
