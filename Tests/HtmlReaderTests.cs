@@ -128,7 +128,7 @@ public class HtmlReaderTests
                         .Add(new Element("strong")))));
     }
 
-    private void Read(IHtmlReader reader, Element parent)
+    private static void Read(IHtmlReader reader, Element parent)
     {
         while (reader.Read())
         {
@@ -147,7 +147,7 @@ public class HtmlReaderTests
     {
         public string? Name { get; }
 
-        public List<Element> Children { get; } = new List<Element>();
+        public List<Element> Children { get; } = [];
 
         public Element(string? name = null)
         {

@@ -7,8 +7,8 @@ namespace Mjml.Net;
 public sealed partial class MjmlRenderContext : IMjmlReader
 {
     private readonly GlobalContext context = new GlobalContext();
-    private readonly ValidationErrors errors = new ValidationErrors();
-    private readonly List<Binder> allBinders = new List<Binder>();
+    private readonly ValidationErrors errors = [];
+    private readonly List<Binder> allBinders = [];
     private ValidationContext validationContext;
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;

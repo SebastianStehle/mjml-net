@@ -5,7 +5,6 @@ namespace Mjml.Net.Internal;
 
 internal class HtmlReaderWrapper : IHtmlReader
 {
-    private static readonly char[] TrimChars = { ' ', '\n', '\r' };
     private readonly HtmlReaderImpl impl;
 
     public int LineNumber => impl.LineNumber;

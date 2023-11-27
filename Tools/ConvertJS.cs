@@ -4,13 +4,12 @@ using Squidex.Text;
 
 namespace Tools;
 
-internal static class ConvertJS
+internal static partial class ConvertJS
 {
     public static void Run()
     {
-#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
-        var propertyRegex = new Regex("'?(?<Name>[a-z\\-]*)'?: '(?<Value>[^']*)'");
-#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
+        var propertyRegex = PropertyRegexBuilder();
+
         var directory = new DirectoryInfo("../../../../Mjml.Net");
 
         foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
@@ -34,11 +33,11 @@ internal static class ConvertJS
 
             if (startOfDefaultAttribute >= 0)
             {
-                var end = fileText.IndexOf("}", startOfDefaultAttribute, StringComparison.Ordinal);
+                var end = fileText.IndexOf('}', startOfDefaultAttribute);
 
                 var range = fileText.Substring(startOfDefaultAttribute + 1, end - startOfDefaultAttribute);
 
-                foreach (Match match in propertyRegex.Matches(range))
+                foreach (var match in propertyRegex.Matches(range).OfType<Match>())
                 {
                     var name = match.Groups["Name"].Value;
                     var value = match.Groups["Value"].Value;
@@ -53,7 +52,7 @@ internal static class ConvertJS
 
             if (startOfAllowedAttributes >= 0)
             {
-                var end = fileText.IndexOf("}", startOfAllowedAttributes, StringComparison.Ordinal);
+                var end = fileText.IndexOf('}', startOfAllowedAttributes);
 
                 var range = fileText.Substring(startOfAllowedAttributes + 1, end - startOfAllowedAttributes);
 
@@ -143,4 +142,7 @@ internal static class ConvertJS
         sb.Append(new string(' ', tabs * 4));
         sb.AppendLine(line);
     }
+
+    [GeneratedRegex("'?(?<Name>[a-z\\-]*)'?: '(?<Value>[^']*)'")]
+    private static partial Regex PropertyRegexBuilder();
 }

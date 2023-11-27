@@ -5,11 +5,11 @@ namespace Mjml.Net.Components.Body;
 
 public partial class CarouselComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-column",
         "mj-hero"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 
@@ -85,7 +85,7 @@ public partial class CarouselComponent : BodyComponentBase
             renderer.StartElement("div")
                 .Class("mj-carousel");
 
-            GenerateRadios(renderer, context);
+            GenerateRadios(renderer);
 
             renderer.StartElement("div") // Style carousel.div
                 .Class($"mj-carousel-content mj-carousel-{CarouselID}-content")
@@ -95,7 +95,7 @@ public partial class CarouselComponent : BodyComponentBase
                 .Style("text-align", "center")
                 .Style("width", "100%");
 
-            GenerateThumbnails(renderer, context);
+            GenerateThumbnails(renderer);
             GenerateCarousel(renderer, context);
 
             renderer.EndElement("div");
@@ -106,7 +106,7 @@ public partial class CarouselComponent : BodyComponentBase
         RenderFallback(renderer, context);
     }
 
-    private void GenerateRadios(IHtmlRenderer renderer, GlobalContext context)
+    private void GenerateRadios(IHtmlRenderer renderer)
     {
         for (int i = 0; i < CarouselImages.Count(); i++)
         {
@@ -116,12 +116,12 @@ public partial class CarouselComponent : BodyComponentBase
             {
                 carouselImage.CarouselID = CarouselID;
                 carouselImage.CarouselImageIndex = i;
-                carouselImage.RenderRadio(renderer, context);
+                carouselImage.RenderRadio(renderer);
             }
         }
     }
 
-    private void GenerateThumbnails(IHtmlRenderer renderer, GlobalContext context)
+    private void GenerateThumbnails(IHtmlRenderer renderer)
     {
         if (Thumbnails != "visible")
         {
@@ -139,7 +139,7 @@ public partial class CarouselComponent : BodyComponentBase
                 carouselImage.TbBorder = TbBorder;
                 carouselImage.TbBorderRadius = TbBorderRadius;
                 carouselImage.TbWidth = GetThumbnailsWidth();
-                carouselImage.RenderThumbnail(renderer, context);
+                carouselImage.RenderThumbnail(renderer);
             }
         }
     }
@@ -172,7 +172,7 @@ public partial class CarouselComponent : BodyComponentBase
 
     private void GenerateControls(IHtmlRenderer renderer, string direction, string icon)
     {
-        var (iconWidth, iconUnit) = UnitParser.Parse(IconWidth);
+        var (iconWidth, _) = UnitParser.Parse(IconWidth);
 
         renderer.StartElement("td") // Style controls.td
             .Class($"mj-carousel-{CarouselID}-icons-cell")
@@ -188,8 +188,6 @@ public partial class CarouselComponent : BodyComponentBase
 
         for (int i = 0; i < CarouselImages.Count(); i++)
         {
-            var image = CarouselImages.ElementAt(i);
-
             renderer.StartElement("label")
                 .Attr("for", $"mj-carousel-{CarouselID}-radio-{i + 1}")
                 .Class($"mj-carousel-{direction}")
@@ -322,8 +320,6 @@ public partial class CarouselComponent : BodyComponentBase
         renderer.Content(".mj-carousel-next-icons,");
         for (int i = 0; i < length; i++)
         {
-            var image = CarouselImages.ElementAt(i);
-
             var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
 
             renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-next-{((i + (1 % length) + length) % length) + 1}, ");

@@ -4,7 +4,7 @@ namespace Mjml.Net.Extensions;
 
 public static class StringExtensions
 {
-    private static readonly char[] TrimChars = { ' ', '\n', '\r' };
+    private static readonly char[] TrimChars = [' ', '\n', '\r'];
 
     public static string ToInvariantString(this double value)
     {

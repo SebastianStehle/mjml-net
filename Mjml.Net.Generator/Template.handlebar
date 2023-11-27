@@ -1,0 +1,105 @@
+#pragma warning disable
+// Auto-generated code"
+using Mjml.Net;"
+
+namespace {{classNamespace}};
+
+public partial class {{className}}
+{
+	private static readonly AllowedAttributes AllowedAttributesStatic = new AllowedAttributes();
+	{{#each customTypes}}
+	private static readonly IType {customName} = new {customType}();
+	{% endfor %}
+
+	static {{ClassName}}
+	{
+	}
+
+	public override AllowedAttributes AllowedFields
+	{
+		get
+		{
+			var result = new AllowedAttributes(base.AllowedFields);
+
+			{{#each defaultTypes}}
+				result["{{attribute}}"] = AttributeTypes.{{defaultType}};"
+			{{/each}}
+
+			{{#each customTypes}}
+				result["{{attribute}}"] = {{customTypeName}};"
+			{{/each}}
+
+			return result;
+		}
+	}
+
+	public override string ? GetAttribute(string? name)
+	{
+		switch (name)
+		{
+		{{#each normalFields}}
+			case "{{attribute}}":
+				return "{{name}}";
+		{{/each}}
+		}
+
+		return Binder.GetAttribute(name);
+	}
+
+	public override void Bind(Mjml.Net.GlobalContext context)
+	{
+		{{#each normalFields}}
+		var source{{name}} = Binder.GetAttribute("{{attribute}}");
+		if (source{{name}} != null)
+		{
+			{{#if isColor }}
+			this.{{name}} = BindingHelper.CoerceColor(source{{name}});
+			{{/if}}
+			{{#unless isColor }}
+			this.{{name}} = source.Name
+			{{/unless}}
+		}
+		{{/each}}
+
+		{{#each expandedFields}}
+		{% for field in expandedFields %}
+		if ({{name}} != null && (
+				{{name}}Top == null || 
+				{{name}}Right == null || 
+				{{name}}Bottom == null || 
+				{{name}}Left == null)) {
+			{{#if isBorder }}
+			var (t, r, b, l) = BindingHelper.ParseShorthandBorder({{../name}});
+			{{/if}}
+			{{#unless isBorder }}
+			var (t, r, b, l) = BindingHelper.ParseShorthandValue({{../name}});
+			{{/unless}}
+
+			if ({{name}}Top == null)
+			{
+				{{name}}Top = t;
+			}
+
+			if ({{name}}Right == null)
+			{
+				{{name}}Right = r;
+			}
+
+			if ({{name}}Bottom == null)
+			{
+				{{name}}Bottom = b;
+			}
+
+			if ({{name}}Left == null)
+			{
+				{{name}}Left = l;
+			}
+		}
+		{{/each}}
+		{{#each textFields}}
+		{{name}} = Binder.GetText();
+		{{/each}}
+
+		base.Bind(context);
+	}
+}

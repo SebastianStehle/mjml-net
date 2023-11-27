@@ -21,10 +21,7 @@ public sealed class InMemoryFileLoader : IFileLoader
     /// <inheritdoc />
     public string? LoadText(string path)
     {
-        if (path == null)
-        {
-            throw new ArgumentNullException(nameof(path));
-        }
+        ArgumentNullException.ThrowIfNull(path);
 
         pathStack.TryPeek(out var parentPath);
 
@@ -51,7 +48,7 @@ public sealed class InMemoryFileLoader : IFileLoader
 
         if (folderIndex >= 0)
         {
-            var folderPart = parentPath.Substring(0, folderIndex);
+            var folderPart = parentPath[..folderIndex];
 
             return $"{folderPart}/{path}";
         }
@@ -60,7 +57,7 @@ public sealed class InMemoryFileLoader : IFileLoader
 
         if (folderIndex >= 0)
         {
-            var folderPart = parentPath.Substring(0, folderIndex);
+            var folderPart = parentPath[..folderIndex];
 
             return $"{folderPart}\\{path}";
         }

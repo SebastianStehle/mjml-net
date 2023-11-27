@@ -8,7 +8,7 @@ public sealed class GlobalContext
     private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
     private IFileLoader? fileLoader;
 
-    public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = new Dictionary<(Type Type, object Identifier), GlobalData>();
+    public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = [];
 
     public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
 
@@ -60,7 +60,7 @@ public sealed class GlobalContext
     {
         if (!attributesByName.TryGetValue(name, out var attributes))
         {
-            attributes = new Dictionary<string, string>();
+            attributes = [];
             attributesByName[name] = attributes;
         }
 
@@ -71,7 +71,7 @@ public sealed class GlobalContext
     {
         if (!attributesByClass.TryGetValue(className, out var attributes))
         {
-            attributes = new Dictionary<string, string>();
+            attributes = [];
             attributesByClass[className] = attributes;
         }
 

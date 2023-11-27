@@ -26,6 +26,12 @@ dotnet_diagnostic.CA1707.severity = none
 # CS8618: Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 dotnet_diagnostic.CS8618.severity = none
 
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
+
+# IDE0301: Simplify collection initialization
+dotnet_diagnostic.IDE0301.severity = none
+
 # IDE0063: Use simple 'using' statement
 dotnet_diagnostic.IDE0063.severity = none
 
@@ -104,6 +110,9 @@ dotnet_diagnostic.MA0076.severity = none
 # MA0097: A class that implements IComparable<T> or IComparable should override comparison operators
 dotnet_diagnostic.MA0097.severity = none    
 
+# MA0111: Use string.Create instead of FormattableString
+dotnet_diagnostic.MA0111.severity = none
+
 # RECS0001: Partial classes with single part.
 dotnet_diagnostic.RECS0001.severity = none
 
@@ -118,6 +127,9 @@ dotnet_diagnostic.RECS0154.severity = none
 
 # SA1009: Closing parenthesis should be spaced correctly
 dotnet_diagnostic.SA1009.severity = none
+
+# SA1010: Opening square brackets should be spaced correctly
+dotnet_diagnostic.SA1010.severity = none
 
 # SA1011: Closing square brackets should be spaced correctly
 dotnet_diagnostic.SA1011.severity = none

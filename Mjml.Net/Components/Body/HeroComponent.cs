@@ -2,11 +2,11 @@
 
 public partial class HeroComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-body",
         "mj-wrapper"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 

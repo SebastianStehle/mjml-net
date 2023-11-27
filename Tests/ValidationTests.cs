@@ -6,7 +6,7 @@ namespace Tests;
 
 public class ValidationTests
 {
-    private readonly IMjmlRenderer sut = new MjmlRenderer();
+    private readonly MjmlRenderer sut = new MjmlRenderer();
 
     [Fact]
     public void Should_add_error_if_root_not_mjml()

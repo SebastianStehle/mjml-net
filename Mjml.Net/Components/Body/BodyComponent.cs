@@ -2,10 +2,10 @@
 
 public partial class BodyComponent : Component
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mjml"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 

@@ -2,7 +2,7 @@
 
 internal sealed class Binder : IBinder
 {
-    private readonly Dictionary<string, string> attributes = new Dictionary<string, string>();
+    private readonly Dictionary<string, string> attributes = [];
     private GlobalContext context;
     private IComponent? elementParent;
     private InnerTextOrHtml? currentText;

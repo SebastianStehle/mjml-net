@@ -9,7 +9,7 @@ public class UnitParserTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Should_parse_empty(string value)
+    public void Should_parse_empty(string? value)
     {
         var result = UnitParser.Parse(value);
 

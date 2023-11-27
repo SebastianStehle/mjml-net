@@ -21,7 +21,7 @@ public enum HelperTarget
     BodyStart,
 
     /// <summary>
-    /// The end of the body
+    /// The end of the body.
     /// </summary>
     BodyEnd
 }

@@ -5,7 +5,7 @@ namespace Mjml.Net;
 public sealed class InnerTextOrHtml
 {
     private delegate void Formatter<T>(ReadOnlySpan<char> span, T args);
-    private static readonly char[] TrimChars = { ' ', '\n', '\r' };
+    private static readonly char[] TrimChars = [' ', '\n', '\r'];
     private readonly List<string> parts;
 
     public InnerTextOrHtml(int capacity = 10)
@@ -25,7 +25,7 @@ public sealed class InnerTextOrHtml
 
     public bool IsEmpty()
     {
-        return !parts.Any(x => !x.AsSpan().IsWhiteSpace());
+        return !parts.Exists(x => !x.AsSpan().IsWhiteSpace());
     }
 
     public void AppendTo(StringBuilder sb)
@@ -104,7 +104,7 @@ public sealed class InnerTextOrHtml
         {
             if (span[i] == '\n')
             {
-                sb.Append(span[.. (i + 1)]);
+                sb.Append(span[..(i + 1)]);
 
                 // Add space characters before each line.
                 WriteLineStart(sb, indent);

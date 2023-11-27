@@ -2,8 +2,8 @@
 
 public partial class RawComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-accordion",
         "mj-accordion-element",
         "mj-body",
@@ -16,7 +16,7 @@ public partial class RawComponent : BodyComponentBase
         "mj-section",
         "mj-social",
         "mj-wrapper"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 

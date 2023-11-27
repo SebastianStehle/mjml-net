@@ -3,18 +3,15 @@ using Squidex.Text;
 
 namespace Tools;
 
-internal static class MigrateCS
+internal static partial class MigrateCS
 {
     public static void Run()
     {
         var directory = new DirectoryInfo("../../../../Mjml.Net");
 
-#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
-        var argumentRegex = new Regex("\\[\"(?<Name>.*)\"\\] = AttributeTypes\\.(?<Type>[^,]*),?", RegexOptions.Singleline | RegexOptions.Compiled);
-        var argumentAccessRegex = new Regex("node\\.GetAttribute\\(\"(?<Name>[^\"]*)\"\\)", RegexOptions.Singleline | RegexOptions.Compiled);
-
-        var defaultRegex = new Regex("\\[\"(?<Name>.*)\"\\] = \"(?<Value>.*)\"", RegexOptions.Singleline | RegexOptions.Compiled);
-#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
+        var defaultRegex = DefaultRegexBuilder();
+        var argumentRegex = ArgumentRegexBuilder();
+        var argumentAccessRegex = ArgumentAcessRegexBuilder();
 
         foreach (var file in directory.GetFiles("*.cs", SearchOption.AllDirectories))
         {
@@ -27,7 +24,7 @@ internal static class MigrateCS
 
             var defaultAttributes = new Dictionary<string, string>();
 
-            foreach (Match match in defaultRegex.Matches(fileText))
+            foreach (var match in defaultRegex.Matches(fileText).OfType<Match>())
             {
                 var name = match.Groups["Name"].Value;
                 var value = match.Groups["Value"].Value;
@@ -75,4 +72,13 @@ internal static class MigrateCS
             Console.WriteLine("{0} changed", file.FullName);
         }
     }
+
+    [GeneratedRegex("\\[\"(?<Name>.*)\"\\] = AttributeTypes\\.(?<Type>[^,]*),?", RegexOptions.Singleline | RegexOptions.Compiled)]
+    private static partial Regex ArgumentRegexBuilder();
+
+    [GeneratedRegex("node\\.GetAttribute\\(\"(?<Name>[^\"]*)\"\\)", RegexOptions.Singleline | RegexOptions.Compiled)]
+    private static partial Regex ArgumentAcessRegexBuilder();
+
+    [GeneratedRegex("\\[\"(?<Name>.*)\"\\] = \"(?<Value>.*)\"", RegexOptions.Singleline | RegexOptions.Compiled)]
+    private static partial Regex DefaultRegexBuilder();
 }

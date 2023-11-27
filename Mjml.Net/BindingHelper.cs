@@ -14,7 +14,7 @@ public static class BindingHelper
         return breakpoint;
     }
 
-    public static (string?, string?, string?, string?) ParseShorthandBorder(string value)
+    public static (string? Top, string? Right, string? Bottom, string? Left) ParseShorthandBorder(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -24,7 +24,7 @@ public static class BindingHelper
         return (value, value, value, value);
     }
 
-    public static (string?, string?, string?, string?) ParseShorthandValue(string value)
+    public static (string? Top, string? Right, string? Bottom, string? Left) ParseShorthandValue(string value)
     {
         if (string.IsNullOrEmpty(value))
         {

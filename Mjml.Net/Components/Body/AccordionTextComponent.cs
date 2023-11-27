@@ -2,10 +2,10 @@
 
 public partial class AccordionTextComponent : BodyComponentBase
 {
-    private static readonly AllowedParents Parents = new AllowedParents
-    {
+    private static readonly AllowedParents Parents =
+    [
         "mj-accordion-element"
-    };
+    ];
 
     public override AllowedParents? AllowedParents => Parents;
 

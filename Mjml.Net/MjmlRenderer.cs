@@ -12,8 +12,8 @@ namespace Mjml.Net;
 /// </summary>
 public sealed partial class MjmlRenderer : IMjmlRenderer
 {
-    private readonly Dictionary<string, Func<IComponent>> components = new Dictionary<string, Func<IComponent>>();
-    private readonly List<IHelper> helpers = new List<IHelper>();
+    private readonly Dictionary<string, Func<IComponent>> components = [];
+    private readonly List<IHelper> helpers = [];
 
     /// <inheritdoc />
     public IReadOnlyCollection<Func<IComponent>> Components => components.Values;
