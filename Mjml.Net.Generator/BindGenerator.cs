@@ -11,17 +11,17 @@ public class BindGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        try
+        var templateStream = typeof(BindGenerator).Assembly.GetManifestResourceStream("Mjml.Net.Generator.Template.handlebar");
+        var templateText = new StreamReader(templateStream).ReadToEnd();
+
+        var template = Handlebars.Compile(templateText);
+
+        static IEnumerable<FieldSource> Transform(GeneratorSyntaxContext ctx)
         {
-            var templateStream = typeof(BindGenerator).Assembly.GetManifestResourceStream("Mjml.Net.Generator.Template.fluid");
-            var templateText = new StreamReader(templateStream).ReadToEnd();
+            var classSyntax = (ClassDeclarationSyntax)ctx.Node;
 
-            var template = Handlebars.Compile(templateText);
-
-            static IEnumerable<FieldSource> Transform(GeneratorSyntaxContext ctx)
+            foreach (var field in classSyntax.Members.OfType<FieldDeclarationSyntax>())
             {
-                var field = (FieldDeclarationSyntax)ctx.Node;
-
                 foreach (var variable in field.Declaration.Variables)
                 {
                     if (ctx.SemanticModel.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSymbol)
@@ -39,32 +39,27 @@ public class BindGenerator : IIncrementalGenerator
                     }
                 }
             }
+        }
 
-            var fieldDeclarations = context.SyntaxProvider.CreateSyntaxProvider(
-                static (node, _) =>
-                {
-                    return node is FieldDeclarationSyntax fieldDeclarationSyntax &&
-                        fieldDeclarationSyntax.AttributeLists.Count > 0;
-                },
-                static (ctx, _) => Transform(ctx))
-                .Where(x => x.Any());
-
-            context.RegisterSourceOutput(fieldDeclarations, (context, fields) =>
+        var fieldDeclarations = context.SyntaxProvider.CreateSyntaxProvider(
+            static (node, _) =>
             {
-                var fieldsByClass = fields.GroupBy(f => f.Field.ContainingType, SymbolEqualityComparer.Default);
+                return node is ClassDeclarationSyntax;
+            },
+            static (ctx, _) => Transform(ctx))
+            .Where(x => x.Any());
 
-                foreach (var classFields in fieldsByClass)
-                {
-                    var source = ProcessClass((INamedTypeSymbol)classFields.Key!, classFields.ToList(), template);
-
-                    context.AddSource($"{classFields.Key!.Name}_Binder.cs", SourceText.From(source, Encoding.UTF8));
-                }
-            });
-        }
-        catch (Exception ex)
+        context.RegisterSourceOutput(fieldDeclarations, (context, fields) =>
         {
-            Console.WriteLine(ex);
-        }
+            var fieldsByClass = fields.GroupBy(f => f.Field.ContainingType, SymbolEqualityComparer.Default);
+
+            foreach (var classFields in fieldsByClass)
+            {
+                var source = ProcessClass((INamedTypeSymbol)classFields.Key!, classFields.ToList(), template);
+
+                context.AddSource($"{classFields.Key!.Name}_Binder.cs", SourceText.From(source, Encoding.UTF8));
+            }
+        });
     }
 
     private string ProcessClass(INamedTypeSymbol classSymbol, IEnumerable<FieldSource> fields, HandlebarsTemplate<object, object> template)

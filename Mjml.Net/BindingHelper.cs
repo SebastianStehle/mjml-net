@@ -68,25 +68,4 @@ public static class BindingHelper
 
         return (t, r, b, l);
     }
-
-    public static string CoerceColor(string value)
-    {
-        var trimmed = value.AsSpan().Trim();
-
-        if (trimmed.Length == 4 && trimmed[0] == '#')
-        {
-            return new string(new char[]
-            {
-                trimmed[0],
-                trimmed[1],
-                trimmed[1],
-                trimmed[2],
-                trimmed[2],
-                trimmed[3],
-                trimmed[3]
-            });
-        }
-
-        return value;
-    }
 }

@@ -1,6 +1,6 @@
 #pragma warning disable
-// Auto-generated code"
-using Mjml.Net;"
+// Auto-generated code
+using Mjml.Net;
 
 namespace {{classNamespace}};
 
@@ -8,38 +8,48 @@ public partial class {{className}}
 {
 	private static readonly AllowedAttributes AllowedAttributesStatic = new AllowedAttributes();
 	{{#each customTypes}}
-	private static readonly IType {customName} = new {customType}();
-	{% endfor %}
+	private static readonly IType {{customName}} = new {{customType}}();
+	{{/each}}
 
-	static {{ClassName}}
+	static {{ClassName}}()
 	{
+	{{#each defaultTypes}}
+		AllowedAttributesStatic["{{attribute}}"] = AttributeTypes.{{defaultType}};
+	{{/each}}
+	{{#each customTypes}}
+		AllowedAttributesStatic["{{attribute}}"] = {{customName}};
+	{{/each}}
 	}
 
-	public override AllowedAttributes AllowedFields
+	public override AllowedAttributes? AllowedFields
 	{
 		get
 		{
-			var result = new AllowedAttributes(base.AllowedFields);
+			var inherited = base.AllowedFields;
 
-			{{#each defaultTypes}}
-				result["{{attribute}}"] = AttributeTypes.{{defaultType}};"
-			{{/each}}
+			if (inherited == null || inherited.Count == 0) 
+			{
+				return AllowedAttributesStatic;
+			}
 
-			{{#each customTypes}}
-				result["{{attribute}}"] = {{customTypeName}};"
-			{{/each}}
+			var result = new AllowedAttributes(AllowedAttributesStatic);
+
+			foreach (var (key, value) in inherited)
+			{
+				result[key] = value;
+			}
 
 			return result;
 		}
 	}
 
-	public override string ? GetAttribute(string? name)
+	public override string? GetAttribute(string? name)
 	{
 		switch (name)
 		{
 		{{#each normalFields}}
 			case "{{attribute}}":
-				return "{{name}}";
+				return {{name}};
 		{{/each}}
 		}
 
@@ -52,48 +62,44 @@ public partial class {{className}}
 		var source{{name}} = Binder.GetAttribute("{{attribute}}");
 		if (source{{name}} != null)
 		{
-			{{#if isColor }}
-			this.{{name}} = BindingHelper.CoerceColor(source{{name}});
+			{{#if isCustom }}
+			source{{name}} = {{customName}}.Coerce(source{{name}});
 			{{/if}}
-			{{#unless isColor }}
-			this.{{name}} = source.Name
+			{{#unless isCustom }}
+			source{{name}} = AttributeTypes.{{defaultType}}.Coerce(source{{name}});
 			{{/unless}}
-		}
-		{{/each}}
+			{{#if isExpanded}}
+			this.{{name}} = source{{name}};
+			if ({{name}}Top == null || {{name}}Right == null || {{name}}Bottom == null || {{name}}Left == null) 
+			{
+				{{#if isBorder }}
+				var (t, r, b, l) = BindingHelper.ParseShorthandBorder(source{{name}});
+				{{/if}}
+				{{#unless isBorder }}
+				var (t, r, b, l) = BindingHelper.ParseShorthandValue(source{{name}});
+				{{/unless}}
 
-		{{#each expandedFields}}
-		{% for field in expandedFields %}
-		if ({{name}} != null && (
-				{{name}}Top == null || 
-				{{name}}Right == null || 
-				{{name}}Bottom == null || 
-				{{name}}Left == null)) {
-			{{#if isBorder }}
-			var (t, r, b, l) = BindingHelper.ParseShorthandBorder({{../name}});
+				if ({{name}}Top == null)
+				{
+					{{name}}Top = t;
+				}
+
+				if ({{name}}Right == null)
+				{
+					{{name}}Right = r;
+				}
+
+				if ({{name}}Bottom == null)
+				{
+					{{name}}Bottom = b;
+				}
+
+				if ({{name}}Left == null)
+				{
+					{{name}}Left = l;
+				}
+			}
 			{{/if}}
-			{{#unless isBorder }}
-			var (t, r, b, l) = BindingHelper.ParseShorthandValue({{../name}});
-			{{/unless}}
-
-			if ({{name}}Top == null)
-			{
-				{{name}}Top = t;
-			}
-
-			if ({{name}}Right == null)
-			{
-				{{name}}Right = r;
-			}
-
-			if ({{name}}Bottom == null)
-			{
-				{{name}}Bottom = b;
-			}
-
-			if ({{name}}Left == null)
-			{
-				{{name}}Left = l;
-			}
 		}
 		{{/each}}
 		{{#each textFields}}

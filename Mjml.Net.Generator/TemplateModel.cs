@@ -14,7 +14,7 @@ internal sealed class TemplateModel
     {
         get
         {
-            return Fields.Values.Where(x => x.CustomType != null).OrderBy(x => x.Name);
+            return Fields.Values.Where(x => x.IsCustom).OrderByDescending(x => x.Name);
         }
     }
 
@@ -22,7 +22,7 @@ internal sealed class TemplateModel
     {
         get
         {
-            return Fields.Values.Where(x => x.CustomType == null).OrderBy(x => x.Name);
+            return Fields.Values.Where(x => !x.IsCustom).OrderByDescending(x => x.Name);
         }
     }
 
@@ -30,7 +30,7 @@ internal sealed class TemplateModel
     {
         get
         {
-            return Fields.Values.Where(x => !x.IsText).OrderBy(x => x.Name);
+            return Fields.Values.Where(x => !x.IsText).OrderByDescending(x => x.Name);
         }
     }
 
@@ -38,43 +38,7 @@ internal sealed class TemplateModel
     {
         get
         {
-            return Fields.Values.Where(x => x.IsText).OrderBy(x => x.Name);
-        }
-    }
-
-    public IEnumerable<TemplateField> ExpandedFielsd
-    {
-        get
-        {
-            foreach (var field in NormalFields)
-            {
-                bool IsCandidate(string name)
-                {
-                    if (field.Attribute.Contains(name) &&
-                       !field.Attribute.EndsWith($"{name}-top", StringComparison.Ordinal) &&
-                       !field.Attribute.EndsWith($"{name}-right", StringComparison.Ordinal) &&
-                       !field.Attribute.EndsWith($"{name}-bottom", StringComparison.Ordinal) &&
-                       !field.Attribute.EndsWith($"{name}-left", StringComparison.Ordinal))
-                    {
-                        return true;
-                    }
-
-                    return false;
-                }
-
-                if (!IsCandidate("margin") && !IsCandidate("padding") && !IsCandidate("border"))
-                {
-                    continue;
-                }
-
-                if (Fields.ContainsKey($"{field.Name}Top") &&
-                    Fields.ContainsKey($"{field.Name}Right") &&
-                    Fields.ContainsKey($"{field.Name}Bottom") &&
-                    Fields.ContainsKey($"{field.Name}Left"))
-                {
-                    yield return field;
-                }
-            }
+            return Fields.Values.Where(x => x.IsText).OrderByDescending(x => x.Name);
         }
     }
 
@@ -124,6 +88,36 @@ internal sealed class TemplateModel
             }
 
             allFields[fieldInfo.Name] = fieldInfo;
+        }
+
+        foreach (var field in allFields.Values)
+        {
+            bool IsCandidate(string name)
+            {
+                if (field.Attribute.Contains(name) &&
+                   !field.Attribute.EndsWith($"{name}-top", StringComparison.Ordinal) &&
+                   !field.Attribute.EndsWith($"{name}-right", StringComparison.Ordinal) &&
+                   !field.Attribute.EndsWith($"{name}-bottom", StringComparison.Ordinal) &&
+                   !field.Attribute.EndsWith($"{name}-left", StringComparison.Ordinal))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (!IsCandidate("margin") && !IsCandidate("padding") && !IsCandidate("border"))
+            {
+                continue;
+            }
+
+            if (allFields.ContainsKey($"{field.Name}Top") &&
+                allFields.ContainsKey($"{field.Name}Right") &&
+                allFields.ContainsKey($"{field.Name}Bottom") &&
+                allFields.ContainsKey($"{field.Name}Left"))
+            {
+                field.IsExpanded = true;
+            }
         }
 
         return new TemplateModel
