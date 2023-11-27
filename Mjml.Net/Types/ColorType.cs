@@ -214,7 +214,7 @@ public sealed partial class ColorType : IType
 #endif
     }
 
-    public string CoerceColor(string value)
+    public string Coerce(string value)
     {
         var trimmed = value.AsSpan().Trim();
 

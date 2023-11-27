@@ -63,43 +63,43 @@ public partial class {{className}}
 		if (source{{name}} != null)
 		{
 			{{#if isCustom }}
-			source{{name}} = {{customName}}.Coerce(source{{name}});
+			this.{{name}} = {{customName}}.Coerce(source{{name}});
 			{{/if}}
 			{{#unless isCustom }}
-			source{{name}} = AttributeTypes.{{defaultType}}.Coerce(source{{name}});
+			this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(source{{name}});
 			{{/unless}}
-			{{#if isExpanded}}
-			this.{{name}} = source{{name}};
-			if ({{name}}Top == null || {{name}}Right == null || {{name}}Bottom == null || {{name}}Left == null) 
-			{
-				{{#if isBorder }}
-				var (t, r, b, l) = BindingHelper.ParseShorthandBorder(source{{name}});
-				{{/if}}
-				{{#unless isBorder }}
-				var (t, r, b, l) = BindingHelper.ParseShorthandValue(source{{name}});
-				{{/unless}}
+		}
+		{{/each}}
 
-				if ({{name}}Top == null)
-				{
-					{{name}}Top = t;
-				}
-
-				if ({{name}}Right == null)
-				{
-					{{name}}Right = r;
-				}
-
-				if ({{name}}Bottom == null)
-				{
-					{{name}}Bottom = b;
-				}
-
-				if ({{name}}Left == null)
-				{
-					{{name}}Left = l;
-				}
-			}
+		{{#each expandedFields}}
+		if ({{name}} != null && ({{name}}Top == null || {{name}}Right == null || {{name}}Bottom == null || {{name}}Left == null)) 
+		{
+			{{#if isBorder }}
+			var (t, r, b, l) = BindingHelper.ParseShorthandBorder({{name}});
 			{{/if}}
+			{{#unless isBorder }}
+			var (t, r, b, l) = BindingHelper.ParseShorthandValue({{name}});
+			{{/unless}}
+
+			if ({{name}}Top == null)
+			{
+				{{name}}Top = t;
+			}
+
+			if ({{name}}Right == null)
+			{
+				{{name}}Right = r;
+			}
+
+			if ({{name}}Bottom == null)
+			{
+				{{name}}Bottom = b;
+			}
+
+			if ({{name}}Left == null)
+			{
+				{{name}}Left = l;
+			}
 		}
 		{{/each}}
 		{{#each textFields}}

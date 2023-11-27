@@ -16,8 +16,6 @@ internal sealed record TemplateField
 
     public bool IsText { get; set; }
 
-    public bool IsExpanded { get; set; }
-
     public bool IsBorder => Attribute == "border";
 
     public bool IsCustom => CustomType != null;
