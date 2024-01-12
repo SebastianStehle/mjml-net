@@ -14,7 +14,7 @@ internal sealed class TemplateModel
     {
         get
         {
-            return Fields.Values.Where(x => x.IsCustom).OrderBy(x => x.Name);
+            return NormalFields.Where(x => x.IsCustom);
         }
     }
 
@@ -22,7 +22,7 @@ internal sealed class TemplateModel
     {
         get
         {
-            return Fields.Values.Where(x => !x.IsCustom).OrderBy(x => x.Name);
+            return NormalFields.Where(x => !x.IsCustom);
         }
     }
 
@@ -86,40 +86,40 @@ internal sealed class TemplateModel
 
         foreach (var source in fields)
         {
-            var bindAttribute = source.Field.GetAttributes().FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == Constants.BindAttributeName);
-
-            if (bindAttribute == null)
-            {
-                continue;
-            }
-
             var fieldInfo = new TemplateField
             {
                 Name = source.Field.Name,
-                Attribute = bindAttribute.ConstructorArguments.First().Value!.ToString()!,
+                Attribute = "none",
                 DefaultValue = source.Value ?? "null",
                 DefaultType = "String",
                 IsText = source.AsText
             };
 
-            if (bindAttribute.ConstructorArguments.Length >= 2)
+            var bindAttribute = source.Field.GetAttributes().FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == Constants.BindAttributeName);
+
+            if (bindAttribute != null)
             {
-                var argument = bindAttribute.ConstructorArguments.Last();
+                fieldInfo.Attribute = bindAttribute.ConstructorArguments.First().Value!.ToString()!;
 
-                if (argument.Type?.Name == "Type")
+                if (bindAttribute.ConstructorArguments.Length >= 2)
                 {
-                    fieldInfo.CustomType = bindAttribute.ConstructorArguments!.Last().Value!.ToString()!;
-                    fieldInfo.CustomName = $"__CustomType{customTypes}";
+                    var argument = bindAttribute.ConstructorArguments.Last();
 
-                    customTypes++;
-                }
-                else
-                {
-                    // Value is an integer here so we need to convert it to its Enum.
-                    var valueNumber = (int)bindAttribute.ConstructorArguments!.Last().Value!;
-                    var valueString = argument.Type!.GetMembers()[valueNumber].Name;
+                    if (argument.Type?.Name == "Type")
+                    {
+                        fieldInfo.CustomType = bindAttribute.ConstructorArguments!.Last().Value!.ToString()!;
+                        fieldInfo.CustomName = $"__CustomType{customTypes}";
 
-                    fieldInfo.DefaultType = valueString;
+                        customTypes++;
+                    }
+                    else
+                    {
+                        // Value is an integer here so we need to convert it to its Enum.
+                        var valueNumber = (int)bindAttribute.ConstructorArguments!.Last().Value!;
+                        var valueString = argument.Type!.GetMembers()[valueNumber].Name;
+
+                        fieldInfo.DefaultType = valueString;
+                    }
                 }
             }
 
