@@ -86,40 +86,40 @@ internal sealed class TemplateModel
 
         foreach (var source in fields)
         {
+            var bindAttribute = source.Field.GetAttributes().FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == Constants.BindAttributeName);
+
+            if (bindAttribute == null)
+            {
+                continue;
+            }
+
             var fieldInfo = new TemplateField
             {
                 Name = source.Field.Name,
-                Attribute = "none",
+                Attribute = bindAttribute.ConstructorArguments.First().Value!.ToString()!,
                 DefaultValue = source.Value ?? "null",
                 DefaultType = "String",
                 IsText = source.AsText
             };
 
-            var bindAttribute = source.Field.GetAttributes().FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == Constants.BindAttributeName);
-
-            if (bindAttribute != null)
+            if (bindAttribute.ConstructorArguments.Length >= 2)
             {
-                fieldInfo.Attribute = bindAttribute.ConstructorArguments.First().Value!.ToString()!;
+                var argument = bindAttribute.ConstructorArguments.Last();
 
-                if (bindAttribute.ConstructorArguments.Length >= 2)
+                if (argument.Type?.Name == "Type")
                 {
-                    var argument = bindAttribute.ConstructorArguments.Last();
+                    fieldInfo.CustomType = bindAttribute.ConstructorArguments!.Last().Value!.ToString()!;
+                    fieldInfo.CustomName = $"__CustomType{customTypes}";
 
-                    if (argument.Type?.Name == "Type")
-                    {
-                        fieldInfo.CustomType = bindAttribute.ConstructorArguments!.Last().Value!.ToString()!;
-                        fieldInfo.CustomName = $"__CustomType{customTypes}";
+                    customTypes++;
+                }
+                else
+                {
+                    // Value is an integer here so we need to convert it to its Enum.
+                    var valueNumber = (int)bindAttribute.ConstructorArguments!.Last().Value!;
+                    var valueString = argument.Type!.GetMembers()[valueNumber].Name;
 
-                        customTypes++;
-                    }
-                    else
-                    {
-                        // Value is an integer here so we need to convert it to its Enum.
-                        var valueNumber = (int)bindAttribute.ConstructorArguments!.Last().Value!;
-                        var valueString = argument.Type!.GetMembers()[valueNumber].Name;
-
-                        fieldInfo.DefaultType = valueString;
-                    }
+                    fieldInfo.DefaultType = valueString;
                 }
             }
 
