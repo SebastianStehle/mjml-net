@@ -7,6 +7,8 @@ internal class HtmlReaderWrapper : IHtmlReader
 {
     private readonly HtmlReaderImpl impl;
 
+    public Action<HtmlError>? OnError { get; set; }
+
     public int LineNumber => impl.LineNumber;
 
     public int LinePosition => impl.LinePosition;
@@ -23,14 +25,19 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public HtmlReaderImpl Impl => impl;
 
-    public HtmlReaderWrapper(HtmlReaderImpl inner)
+    public HtmlReaderWrapper(HtmlReaderImpl impl)
     {
-        this.impl = inner;
+        this.impl = impl;
     }
 
     public HtmlReaderWrapper(string input)
     {
         impl = new HtmlReaderImpl(new StringReader(input));
+
+        impl.ParseError += (sender, e) =>
+        {
+            OnError?.Invoke(new HtmlError(e.LineNumber, e.LinePosition, e.Message));
+        };
     }
 
     public string GetAttribute(string name)

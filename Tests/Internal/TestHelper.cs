@@ -14,6 +14,15 @@ public static class TestHelper
         return renderer.Render(source, options).Html;
     }
 
+    public static RenderResult RenderWithErrors(string source, MjmlOptions? options = null)
+    {
+        var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
+
+        options = BuildOptions(options);
+
+        return renderer.Render(source, options);
+    }
+
     public static string Render(string source, params IHelper[] helpers)
     {
         return Render(source, null, helpers);

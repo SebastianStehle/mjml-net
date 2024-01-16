@@ -1,5 +1,8 @@
-﻿using Mjml.Net;
+﻿using AngleSharp.Dom;
+using AngleSharp.Io;
+using Mjml.Net;
 using Mjml.Net.Validators;
+using System.Text.Encodings.Web;
 using Xunit;
 
 namespace Tests;

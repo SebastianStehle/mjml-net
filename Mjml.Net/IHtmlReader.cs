@@ -4,6 +4,8 @@ namespace Mjml.Net;
 
 public interface IHtmlReader
 {
+    public Action<HtmlError>? OnError { get; set; }
+
     int LineNumber { get; }
 
     int LinePosition { get; }

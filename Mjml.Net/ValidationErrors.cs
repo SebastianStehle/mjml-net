@@ -10,7 +10,8 @@ public enum ValidationErrorType
     InvalidAttribute,
     InvalidParent,
     UnknownAttribute,
-    UnknownElement
+    UnknownElement,
+    InvalidHtml
 }
 
 public sealed class ValidationErrors : List<ValidationError>

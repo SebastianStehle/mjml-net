@@ -1,4 +1,7 @@
-﻿using Tests.Internal;
+﻿using AngleSharp.Dom;
+using Mjml.Net;
+using System.Text.Encodings.Web;
+using Tests.Internal;
 using Xunit;
 
 namespace Tests;
@@ -27,5 +30,26 @@ public class HtmlSpecialCaseTests
         var result = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Button.html", result);
+    }
+
+    [Fact]
+    public void Should_expose_html_errors()
+    {
+        var source = $@"
+<mj-button href=""{HtmlEncoder.Default.Encode("\r")}"">
+    Button Text
+</mj-button>
+";
+
+        var result = TestHelper.RenderWithErrors(source);
+
+        Assert.Contains(
+            new ValidationError(
+                "Unexpected character in stream.",
+                ValidationErrorType.InvalidHtml,
+                new SourcePosition(2, 19, null)),
+            result.Errors);
+
+        Assert.Contains("Button Text", result.Html, StringComparison.Ordinal);
     }
 }

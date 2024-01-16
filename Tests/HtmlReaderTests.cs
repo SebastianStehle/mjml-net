@@ -9,7 +9,7 @@ namespace Tests;
 public class HtmlReaderTests
 {
     [Fact]
-    public void Should_read_inner_With_child()
+    public void Should_read_inner_with_child()
     {
         var input = @"
 <div>
@@ -27,7 +27,7 @@ public class HtmlReaderTests
     }
 
     [Fact]
-    public void Should_read_inner_With_children()
+    public void Should_read_inner_with_children()
     {
         var input = @"
 <div>
@@ -47,7 +47,7 @@ public class HtmlReaderTests
     }
 
     [Fact]
-    public void Should_read_inner_With_children_and_text()
+    public void Should_read_inner_with_children_and_text()
     {
         var input = @"
 <div>
@@ -127,6 +127,34 @@ public class HtmlReaderTests
                     .Add(new Element("a")
                         .Add(new Element("strong")))));
     }
+    [Fact]
+    public void Should_read_single_quoted_with_ambersand()
+    {
+        var input = @"
+<a href='&'></a>
+<a href=""url""></a>
+";
+        var root = new Element();
+
+        Read(new HtmlReaderWrapper(input), root);
+
+        root.Should().BeEquivalentTo(
+            new Element()
+                .Add(new Element("a")
+                {
+                    Attributes = new Dictionary<string, string>
+                    {
+                        ["href"] = "&"
+                    }
+                })
+                .Add(new Element("a")
+                {
+                    Attributes = new Dictionary<string, string>
+                    {
+                        ["href"] = "url"
+                    }
+                }));
+    }
 
     private static void Read(IHtmlReader reader, Element parent)
     {
@@ -135,6 +163,16 @@ public class HtmlReaderTests
             if (reader.TokenKind == HtmlTokenKind.Tag)
             {
                 var element = new Element(reader.Name);
+
+                if (reader.AttributeCount > 0)
+                {
+                    element.Attributes = [];
+
+                    for (var i = 0; i < reader.AttributeCount; i++)
+                    {
+                        element.Attributes[reader.GetAttributeName(i)] = reader.GetAttribute(i);
+                    }
+                }
 
                 parent.Add(element);
 
@@ -148,6 +186,8 @@ public class HtmlReaderTests
         public string? Name { get; }
 
         public List<Element> Children { get; } = [];
+
+        public Dictionary<string, string>? Attributes { get; set; }
 
         public Element(string? name = null)
         {
