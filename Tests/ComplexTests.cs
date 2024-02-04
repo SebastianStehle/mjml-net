@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using Castle.Components.DictionaryAdapter;
 using Mjml.Net;
 using Mjml.Net.Validators;
 using Tests.Internal;

@@ -123,7 +123,7 @@ public partial class NavbarComponent : BodyComponentBase
     {
         var key = context.Options.IdGenerator.Next();
 
-        renderer.StartConditional("<!--[if !mso><!-->");
+        renderer.StartConditional("<!--[if !mso]><!-->");
         {
             renderer.StartElement("input", true)
                 .Attr("id", key)
