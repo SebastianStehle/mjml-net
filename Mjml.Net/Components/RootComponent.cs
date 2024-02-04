@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Components;
 
-public sealed class RootComponent : Component
+public partial class RootComponent : Component
 {
     private static readonly string DefaultMeta = Resources.DefaultMeta;
     private static readonly string DefaultStyles = Resources.DefaultStyles;
@@ -10,8 +10,17 @@ public sealed class RootComponent : Component
 
     public override string ComponentName => "mjml";
 
+    [Bind("lang", BindType.RequiredString)]
+    public string Lang = "und";
+
+    [Bind("dir", BindType.RequiredString)]
+    public string Dir = "auto";
+
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
+        context.SetGlobalData("lang", new Language(Lang));
+        context.SetGlobalData("dir", new Direction(Dir));
+
         RenderChildren(renderer, context);
 
         if (Parent != null)
@@ -20,7 +29,7 @@ public sealed class RootComponent : Component
         }
 
         renderer.Content("<!doctype html>");
-        renderer.Content("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
+        renderer.Content($"<html lang=\"{Lang}\" dir=\"{Dir}\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">");
         renderer.Content(string.Empty);
 
         RenderHead(renderer, context);

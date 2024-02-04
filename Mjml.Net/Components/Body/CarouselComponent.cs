@@ -80,7 +80,7 @@ public partial class CarouselComponent : BodyComponentBase
 
         context.SetGlobalData("mj-carousel", new Style(HeadStyle));
 
-        renderer.StartConditional("<!--[if !mso><!-->");
+        renderer.StartConditional("<!--[if !mso]><!-->");
         {
             renderer.StartElement("div")
                 .Class("mj-carousel");

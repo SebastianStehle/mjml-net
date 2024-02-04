@@ -1,4 +1,6 @@
-﻿using Mjml.Net.Helpers;
+﻿using Mjml.Net.Components.Body;
+using Mjml.Net.Components.Head;
+using Mjml.Net.Helpers;
 using Mjml.Net.Types;
 
 namespace Mjml.Net.Components;
@@ -59,8 +61,72 @@ public sealed partial class IncludeComponent : Component
 
         if (!string.IsNullOrWhiteSpace(content))
         {
-            mjmlReader.ReadFragment(content, actualPath, Parent!);
+            // Add the new element to the include parent, so actually after the include to have a correct parent-child relationship.
+            mjmlReader.ReadFragment(content, actualPath, this);
+
+            static void AddToHead(IComponent component, IComponent parent)
+            {
+                // Go to the root element to find the parent.
+                while (parent.Parent != null)
+                {
+                    parent = parent.Parent;
+                }
+
+                if (parent is not RootComponent root)
+                {
+                    return;
+                }
+
+                var head = root.ChildNodes.OfType<HeadComponent>().FirstOrDefault();
+
+                // If there is no head element in the current tree, add one.
+                if (head == null)
+                {
+                    head = new HeadComponent();
+
+                    root.InsertChild(head, 0);
+                }
+
+                foreach (var child in component.ChildNodes)
+                {
+                    Add(child, head);
+                }
+            }
+
+            static void Add(IComponent component, IComponent parent)
+            {
+                if (component is HeadComponent)
+                {
+                    // Add head children to the root head.
+                    AddToHead(component, parent);
+                }
+                else if (component is RootComponent or BodyComponent or IncludeComponent)
+                {
+                    // Just ignore these component and add the children to the parent.
+                    foreach (var child in component.ChildNodes)
+                    {
+                        Add(child, parent);
+                    }
+                }
+                else
+                {
+                    parent.AddChild(component);
+                }
+            }
+
+            if (Parent != null)
+            {
+                Add(this, Parent);
+            }
+
+            // The children have been added to our parent or to the head element.
+            ClearChildren();
         }
+    }
+
+    public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
+    {
+        base.Measure(context, parentWidth, numSiblings, numNonRawSiblings);
     }
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)

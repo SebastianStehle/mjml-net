@@ -1,6 +1,5 @@
-﻿using AngleSharp.Dom;
+﻿using System.Text.Encodings.Web;
 using Mjml.Net;
-using System.Text.Encodings.Web;
 using Tests.Internal;
 using Xunit;
 
