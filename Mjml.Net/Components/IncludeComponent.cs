@@ -97,10 +97,12 @@ public sealed partial class IncludeComponent : Component
             {
                 if (component is HeadComponent)
                 {
+                    // Add head children to the root head.
                     AddToHead(component, parent);
                 }
                 else if (component is RootComponent or BodyComponent or IncludeComponent)
                 {
+                    // Just ignore these component and add the children to the parent.
                     foreach (var child in component.ChildNodes)
                     {
                         Add(child, parent);
