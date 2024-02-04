@@ -37,6 +37,8 @@ public partial class BodyComponent : Component
         renderer.StartBuffer();
 
         renderer.StartElement("div")
+            .Attr("lang", context.GlobalData.Values.OfType<Language>().FirstOrDefault()?.Value)
+            .Attr("dir", context.GlobalData.Values.OfType<Direction>().FirstOrDefault()?.Value)
             .Class(CssClass)
             .Style("background-color", BackgroundColor);
 

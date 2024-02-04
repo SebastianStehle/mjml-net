@@ -1,6 +1,4 @@
-﻿using Mjml.Net.Internal;
-
-namespace Mjml.Net;
+﻿namespace Mjml.Net;
 
 public abstract class Component : IComponent
 {
@@ -98,6 +96,11 @@ public abstract class Component : IComponent
 
     public virtual void Read(IHtmlReader htmlReader, IMjmlReader mjmlReader, GlobalContext context)
     {
+    }
+
+    protected virtual void ClearChildren()
+    {
+        childNodes?.Clear();
     }
 
     protected virtual void BeforeBind(GlobalContext context)

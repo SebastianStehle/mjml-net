@@ -87,6 +87,35 @@ public class IncludeTests
     }
 
     [Fact]
+    public void Should_include_mjml_with_dummy_body()
+    {
+        var files = new Dictionary<string, string>
+        {
+            ["./text.mjml"] = @"
+                <mjml>
+                    <mj-body>
+                        <mj-text>Hello MJML</mj-text>
+                    </mj-body>
+                </mjml>"
+        };
+
+        const string source = @"
+<mjml-test head=""false"">
+    <mj-text>Before Include</mj-text>
+    <mj-include path=""./text.mjml"" />
+    <mj-text>After Include</mj-text>
+</mjml-test>
+";
+
+        var result = TestHelper.Render(source, new MjmlOptions
+        {
+            FileLoader = () => new InMemoryFileLoader(files)
+        });
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.TextInclude.html", result);
+    }
+
+    [Fact]
     public void Should_include_mjml_nested()
     {
         var files = new Dictionary<string, string>

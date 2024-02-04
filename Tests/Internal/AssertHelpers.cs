@@ -151,10 +151,10 @@ public static partial class AssertHelpers
                 sb.AppendDiff($"Missing attribute {d.Control.Attribute.Name} at {d.Control.Path}.");
                 break;
             case UnexpectedNodeDiff d:
-                sb.AppendDiff($"Unespected node at {d.Test.Path}.");
+                sb.AppendDiff($"Unexpected node at {d.Test.Path}.");
                 break;
             case UnexpectedAttrDiff d:
-                sb.AppendDiff($"Unespected attribute at {d.Test.Path}.");
+                sb.AppendDiff($"Unexpected attribute at {d.Test.Path}.");
                 break;
             default:
                 sb.AppendDiff("Other error");

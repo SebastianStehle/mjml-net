@@ -44,6 +44,7 @@
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\List.html" />
     <None Remove="Components\Outputs\StyleInclude.html" />
+    <None Remove="Components\Outputs\TextInclude.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
     <None Remove="Components\Outputs\TextWithEntity.html" />
@@ -107,6 +108,7 @@
     <EmbeddedResource Include="Components\Outputs\TablePercent.html" />
     <EmbeddedResource Include="Components\Outputs\Table.html" />
     <EmbeddedResource Include="Components\Outputs\TextRawWhitespace.html" />
+    <EmbeddedResource Include="Components\Outputs\TextInclude.html" />
     <EmbeddedResource Include="Components\Outputs\TextWhitespace.html" />
     <EmbeddedResource Include="Components\Outputs\TextWithEntity.html" />
     <EmbeddedResource Include="Components\Outputs\TextWithHtmlAndWhitespace.html" />

@@ -105,6 +105,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         var binder = DefaultPools.Binders.Get().Setup(context, parent, component.ComponentName);
 
+        // Add all binders to list, so that we can return them later to the pool.
         allBinders.Add(binder);
 
         for (var i = 0; i < reader.AttributeCount; i++)
@@ -140,6 +141,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             Read(reader, component, file);
         }
 
+        // If there is no parent, we handle the root and we can render everything top to bottom.
         if (parent == null)
         {
             component.Bind(context);

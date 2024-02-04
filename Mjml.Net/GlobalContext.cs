@@ -29,11 +29,9 @@ public sealed class GlobalContext
     public void Clear()
     {
         GlobalData.Clear();
-
         fileLoader = null;
         attributesByClass.Clear();
         attributesByName.Clear();
-
         Options = null!;
     }
 
