@@ -12,9 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.0.7" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.0" />
-    <PackageReference Include="Meziantou.Analyzer" Version="2.0.112">
+    <PackageReference Include="AngleSharp" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.1" />
+    <PackageReference Include="Meziantou.Analyzer" Version="2.0.139">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

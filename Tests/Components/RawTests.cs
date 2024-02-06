@@ -5,63 +5,29 @@ namespace Tests.Components;
 
 public class RawTests
 {
-    public static IEnumerable<object[]> Tests()
+    public static readonly TheoryData<string> Tests = new TheoryData<string>
     {
-        yield return new object[]
-        {
             @"
-Hello MJML"
-        };
-
-        yield return new object[]
-        {
+Hello MJML",
             @"
-<strong>Hello</strong> MJML"
-        };
-
-        yield return new object[]
-        {
+<strong>Hello</strong> MJML",
             @"
-<strong>Hello</strong> <strong>MJML</strong>"
-        };
-
-        yield return new object[]
-        {
+<strong>Hello</strong> <strong>MJML</strong>",
             @"
-<strong>Hello</strong> MJML <strong>Whats Up</strong>"
-        };
-
-        yield return new object[]
-        {
+<strong>Hello</strong> MJML <strong>Whats Up</strong>",
             @"
-<strong>Hello</strong>Entity&nbsp;<strong>Whats Up</strong>"
-        };
-
-        yield return new object[]
-        {
+<strong>Hello</strong>Entity&nbsp;<strong>Whats Up</strong>",
             @"
-<button type=""submit"">Submit1</button>"
-        };
-
-        yield return new object[]
-        {
+<button type=""submit"">Submit1</button>",
             @"
 <div>
     <button type=""submit"">Submit1</button>
-</div>"
-        };
-
-        yield return new object[]
-        {
+</div>",
             @"
 <div>
     <button type=""submit"">Submit1</button>
     <button type=""submit"">Submit2</button>
-</div>"
-        };
-
-        yield return new object[]
-        {
+</div>",
             @"
 <div>
     <table>
@@ -69,8 +35,7 @@ Hello MJML"
         <button type=""submit"">Submit2</button>
     </table>
 </div>"
-        };
-    }
+    };
 
     [Theory]
     [MemberData(nameof(Tests))]
@@ -81,5 +46,15 @@ Hello MJML"
         var result = TestHelper.Render(source);
 
         AssertHelpers.HtmlAssert(html, result);
+    }
+
+    [Fact]
+    public void Should_render_raw_with_entity()
+    {
+        var source = $@"<mj-raw><div>&lt;</div></mj-raw>";
+
+        var result = TestHelper.Render(source);
+
+        Assert.Equal("<div>&lt;</div>", result);
     }
 }

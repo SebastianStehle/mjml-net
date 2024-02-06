@@ -5,6 +5,10 @@ namespace Mjml.Net.Internal;
 
 internal class HtmlReaderWrapper : IHtmlReader
 {
+    private static readonly HtmlReaderOptions Options = new HtmlReaderOptions
+    {
+
+    };
     private readonly HtmlReaderImpl impl;
 
     public Action<HtmlError>? OnError { get; set; }
