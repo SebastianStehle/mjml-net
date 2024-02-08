@@ -26,6 +26,10 @@
   <ItemGroup Condition="'$(Configuration)'=='V2_1'">
 	<PackageReference Include="Mjml.Net" Version="2.1.0-beta1" />
   </ItemGroup>
+	
+  <ItemGroup Condition="'$(Configuration)'=='V3_8'">
+	<PackageReference Include="Mjml.Net" Version="3.8.0" />
+  </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
     <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />

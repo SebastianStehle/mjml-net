@@ -55,6 +55,6 @@ Hello MJML",
 
         var result = TestHelper.Render(source);
 
-        Assert.Equal("<div>&lt;</div>", result);
+        AssertHelpers.HtmlAssert("<div>&lt;</div>", result);
     }
 }

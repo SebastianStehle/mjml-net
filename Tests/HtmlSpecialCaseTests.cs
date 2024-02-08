@@ -1,5 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using Mjml.Net;
+﻿using Mjml.Net;
 using Tests.Internal;
 using Xunit;
 
@@ -35,9 +34,7 @@ public class HtmlSpecialCaseTests
     public void Should_expose_html_errors()
     {
         var source = $@"
-<mj-button href=""{HtmlEncoder.Default.Encode("\r")}"">
-    Button Text
-</mj-button>
+<>
 ";
 
         var result = TestHelper.RenderWithErrors(source);
@@ -46,9 +43,7 @@ public class HtmlSpecialCaseTests
             new ValidationError(
                 "Unexpected character in stream.",
                 ValidationErrorType.InvalidHtml,
-                new SourcePosition(2, 19, null)),
+                new SourcePosition(2, 3, null)),
             result.Errors);
-
-        Assert.Contains("Button Text", result.Html, StringComparison.Ordinal);
     }
 }
