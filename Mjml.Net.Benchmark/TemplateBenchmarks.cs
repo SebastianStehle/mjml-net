@@ -38,6 +38,9 @@ public class TemplateBenchmarks
             AddJob(baseJob.WithCustomBuildConfiguration("V2_1")
                 .WithId("2.1.0"));
 
+            AddJob(baseJob.WithCustomBuildConfiguration("V3_8")
+                .WithId("3.8.0"));
+
             AddExporter(MarkdownExporter.GitHub);
         }
     }

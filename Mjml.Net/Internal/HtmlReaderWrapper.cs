@@ -5,6 +5,11 @@ namespace Mjml.Net.Internal;
 
 internal class HtmlReaderWrapper : IHtmlReader
 {
+    private static readonly HtmlReaderOptions Options = new HtmlReaderOptions
+    {
+        DecodeHtmlCharacters = false
+    };
+
     private readonly HtmlReaderImpl impl;
 
     public Action<HtmlError>? OnError { get; set; }
@@ -32,7 +37,7 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public HtmlReaderWrapper(string input)
     {
-        impl = new HtmlReaderImpl(new StringReader(input));
+        impl = new HtmlReaderImpl(new StringReader(input), Options);
 
         impl.ParseError += (sender, e) =>
         {
