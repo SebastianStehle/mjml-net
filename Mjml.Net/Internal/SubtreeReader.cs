@@ -42,16 +42,13 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
 
         if (hasRead)
         {
-            if (!VoidTags.Contains(inner.Name))
+            if (TokenKind == HtmlTokenKind.Tag && !VoidTags.Contains(inner.Name) && !inner.SelfClosingElement)
             {
-                if (TokenKind == HtmlTokenKind.Tag && !inner.SelfClosingElement)
-                {
-                    depth++;
-                }
-                else if (TokenKind == HtmlTokenKind.EndTag)
-                {
-                    depth--;
-                }
+                depth++;
+            }
+            else if (TokenKind == HtmlTokenKind.EndTag && !VoidTags.Contains(inner.Name))
+            {
+                depth--;
             }
         }
         else
