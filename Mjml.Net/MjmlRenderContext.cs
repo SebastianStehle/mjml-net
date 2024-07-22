@@ -12,6 +12,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     private ValidationContext validationContext;
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
+    private bool hasAddedClosingError;
 
     public ValidationErrors Validate()
     {
@@ -36,6 +37,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         mjmlOptions = null!;
         mjmlRenderer = null!;
         errors.Clear();
+        hasAddedClosingError = false;
 
         ClearRenderData();
     }
@@ -136,9 +138,27 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         component.Read(reader, this, context);
         component.Position = position;
 
-        if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
+        if (reader.TokenKind == HtmlTokenKind.Tag && !reader.SelfClosingElement)
         {
             Read(reader, component, file);
+        }
+
+        if (!hasAddedClosingError)
+        {
+            if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
+            {
+                errors.Add($"Unexpected end element, expected '{name}', got '{reader.Name}'.",
+                    ValidationErrorType.InvalidHtml,
+                    position);
+                hasAddedClosingError = true;
+            }
+            else if (reader.TokenKind != HtmlTokenKind.EndTag)
+            {
+                errors.Add($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.",
+                    ValidationErrorType.InvalidHtml,
+                    position);
+                hasAddedClosingError = true;
+            }
         }
 
         // If there is no parent, we handle the root and we can render everything top to bottom.

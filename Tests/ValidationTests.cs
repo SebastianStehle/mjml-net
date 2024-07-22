@@ -22,6 +22,41 @@ public class ValidationTests
     }
 
     [Fact]
+    public void Should_add_error_if_not_closed_properly()
+    {
+        var source = @"
+ <mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>
+";
+
+        var errors = Render(source);
+
+        Assert.Equal(new[] { "Unexpected end element, expected 'mj-column', got 'mj-section'." }, errors);
+    }
+
+    [Fact]
+    public void Should_add_error_if_not_closed_properly2()
+    {
+        var source = @"
+ <mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    <mj-column>
+";
+
+        var errors = Render(source);
+
+        Assert.Equal(new[] { "Unexpected end element, expected 'mj-text', got 'Text' token." }, errors);
+    }
+
+    [Fact]
     public void Should_add_error_if_mj_body_not_found()
     {
         var source = @"
@@ -132,9 +167,11 @@ public class ValidationTests
 
     private string[] Render(string source, IValidator? validator = null)
     {
-        return sut.Render(source, new MjmlOptions
+        var result = sut.Render(source, new MjmlOptions
         {
             Validator = validator ?? StrictValidator.Instance
-        }).Errors.Select(x => x.Error).ToArray();
+        });
+
+        return result.Errors.Select(x => x.Error).ToArray();
     }
 }
