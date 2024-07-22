@@ -180,6 +180,9 @@
     <None Update="Templates\card.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\bug-tables.mjml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\christmas.mjml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -12,6 +12,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     private ValidationContext validationContext;
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
+    private bool hasAddedClosingError;
 
     public ValidationErrors Validate()
     {
@@ -36,6 +37,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         mjmlOptions = null!;
         mjmlRenderer = null!;
         errors.Clear();
+        hasAddedClosingError = false;
 
         ClearRenderData();
     }
@@ -108,6 +110,29 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         // Add all binders to list, so that we can return them later to the pool.
         allBinders.Add(binder);
 
+        BindAttributes(reader, component, binder, file);
+        BindContent(reader, component, binder);
+
+        component.SetBinder(binder);
+        component.Read(reader, this, context);
+        component.Position = position;
+
+        if (reader.TokenKind == HtmlTokenKind.Tag && !reader.SelfClosingElement)
+        {
+            Read(reader, component, file);
+        }
+
+        ValidatingClosingState(name, reader, file);
+
+        // If there is no parent, we handle the root and we can render everything top to bottom.
+        if (parent == null)
+        {
+            BindAndRender(component);
+        }
+    }
+
+    private void BindAttributes(IHtmlReader reader, IComponent component, Binder binder, string? file)
+    {
         for (var i = 0; i < reader.AttributeCount; i++)
         {
             var attributeName = reader.GetAttributeName(i);
@@ -122,7 +147,10 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
             mjmlOptions.Validator?.Attribute(attributeName, attributeValue, component, errors, ref validationContext);
         }
+    }
 
+    private static void BindContent(IHtmlReader reader, IComponent component, Binder binder)
+    {
         if (component.ContentType == ContentType.Text)
         {
             binder.SetText(reader.ReadInnerText());
@@ -131,26 +159,52 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         {
             component.AddChild(reader.ReadInnerHtml());
         }
+    }
 
-        component.SetBinder(binder);
-        component.Read(reader, this, context);
-        component.Position = position;
+    private void BindAndRender(IComponent component)
+    {
+        component.Bind(context);
+        component.Measure(context, 600, 0, 0);
+        component.Render(this, context);
 
-        if (!reader.SelfClosingElement && reader.TokenKind != HtmlTokenKind.EndTag)
+        mjmlOptions.Validator?.Components(component, errors, ref validationContext);
+
+        Cleanup();
+    }
+
+    private void ValidatingClosingState(string name, IHtmlReader reader, string? file)
+    {
+        // Only show one closing error, otherwise we could get one for every item in the hierarchy.
+        if (hasAddedClosingError)
         {
-            Read(reader, component, file);
+            return;
         }
 
-        // If there is no parent, we handle the root and we can render everything top to bottom.
-        if (parent == null)
+        if (reader.TokenKind == HtmlTokenKind.Tag && reader.SelfClosingElement)
         {
-            component.Bind(context);
-            component.Measure(context, 600, 0, 0);
-            component.Render(this, context);
+            return;
+        }
 
-            mjmlOptions.Validator?.Components(component, errors, ref validationContext);
+        void AddClosingError(string message)
+        {
+            errors.Add(message,
+                ValidationErrorType.InvalidHtml,
+                new SourcePosition(
+                    reader.LineNumber,
+                    reader.LinePosition,
+                    file));
 
-            Cleanup();
+            // Only show one closing error, otherwise we could get one for every item in the hierarchy.
+            hasAddedClosingError = true;
+        }
+
+        if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
+        {
+            AddClosingError($"Unexpected end element, expected '{name}', got '{reader.Name}'.");
+        }
+        else if (reader.TokenKind != HtmlTokenKind.EndTag)
+        {
+            AddClosingError($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.");
         }
     }
 
