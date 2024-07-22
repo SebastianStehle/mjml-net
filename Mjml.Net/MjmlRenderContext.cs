@@ -122,10 +122,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             Read(reader, component, file);
         }
 
-        if (!hasAddedClosingError)
-        {
-            ValidateSelfClosing(name, reader, file);
-        }
+        ValidatingClosingState(name, reader, file);
 
         // If there is no parent, we handle the root and we can render everything top to bottom.
         if (parent == null)
@@ -175,26 +172,39 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         Cleanup();
     }
 
-    private void ValidateSelfClosing(string name, IHtmlReader reader, string? file)
+    private void ValidatingClosingState(string name, IHtmlReader reader, string? file)
     {
+        // Only show one closing error, otherwise we could get one for every item in the hierarchy.
+        if (hasAddedClosingError)
+        {
+            return;
+        }
+
         if (reader.TokenKind == HtmlTokenKind.Tag && reader.SelfClosingElement)
         {
             return;
         }
 
+        void AddClosingError(string message)
+        {
+            errors.Add(message,
+                ValidationErrorType.InvalidHtml,
+                new SourcePosition(
+                    reader.LineNumber,
+                    reader.LinePosition,
+                    file));
+
+            // Only show one closing error, otherwise we could get one for every item in the hierarchy.
+            hasAddedClosingError = true;
+        }
+
         if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
         {
-            errors.Add($"Unexpected end element, expected '{name}', got '{reader.Name}'.",
-                ValidationErrorType.InvalidHtml,
-                new SourcePosition(reader.LineNumber, reader.LinePosition, file));
-            hasAddedClosingError = true;
+            AddClosingError($"Unexpected end element, expected '{name}', got '{reader.Name}'.");
         }
         else if (reader.TokenKind != HtmlTokenKind.EndTag)
         {
-            errors.Add($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.",
-                ValidationErrorType.InvalidHtml,
-                new SourcePosition(reader.LineNumber, reader.LinePosition, file));
-            hasAddedClosingError = true;
+            AddClosingError($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.");
         }
     }
 
