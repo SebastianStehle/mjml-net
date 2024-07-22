@@ -126,6 +126,26 @@ public class ValidationTests
     }
 
     [Fact]
+    public void Should_not_add_error_for_self_closing_element()
+    {
+        var source = @"
+<mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-divider />
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>
+";
+
+        var errors = Render(source, SoftValidator.Instance);
+
+        Assert.Empty(errors);
+    }
+
+    [Fact]
     public void Should_not_add_error_if_component_has_invalid_attribute_value_in_soft_mode()
     {
         var source = @"

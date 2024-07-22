@@ -110,6 +110,32 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         // Add all binders to list, so that we can return them later to the pool.
         allBinders.Add(binder);
 
+        BindAttributes(reader, component, binder, file);
+        BindContent(reader, component, binder);
+
+        component.SetBinder(binder);
+        component.Read(reader, this, context);
+        component.Position = position;
+
+        if (reader.TokenKind == HtmlTokenKind.Tag && !reader.SelfClosingElement)
+        {
+            Read(reader, component, file);
+        }
+
+        if (!hasAddedClosingError)
+        {
+            ValidateSelfClosing(name, reader, position);
+        }
+
+        // If there is no parent, we handle the root and we can render everything top to bottom.
+        if (parent == null)
+        {
+            BindAndRender(component);
+        }
+    }
+
+    private void BindAttributes(IHtmlReader reader, IComponent component, Binder binder, string? file)
+    {
         for (var i = 0; i < reader.AttributeCount; i++)
         {
             var attributeName = reader.GetAttributeName(i);
@@ -124,7 +150,10 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
             mjmlOptions.Validator?.Attribute(attributeName, attributeValue, component, errors, ref validationContext);
         }
+    }
 
+    private static void BindContent(IHtmlReader reader, IComponent component, Binder binder)
+    {
         if (component.ContentType == ContentType.Text)
         {
             binder.SetText(reader.ReadInnerText());
@@ -133,44 +162,39 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         {
             component.AddChild(reader.ReadInnerHtml());
         }
+    }
 
-        component.SetBinder(binder);
-        component.Read(reader, this, context);
-        component.Position = position;
+    private void BindAndRender(IComponent component)
+    {
+        component.Bind(context);
+        component.Measure(context, 600, 0, 0);
+        component.Render(this, context);
 
-        if (reader.TokenKind == HtmlTokenKind.Tag && !reader.SelfClosingElement)
+        mjmlOptions.Validator?.Components(component, errors, ref validationContext);
+
+        Cleanup();
+    }
+
+    private void ValidateSelfClosing(string name, IHtmlReader reader, SourcePosition position)
+    {
+        if (reader.TokenKind == HtmlTokenKind.Tag && reader.SelfClosingElement)
         {
-            Read(reader, component, file);
+            return;
         }
 
-        if (!hasAddedClosingError)
+        if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
         {
-            if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
-            {
-                errors.Add($"Unexpected end element, expected '{name}', got '{reader.Name}'.",
-                    ValidationErrorType.InvalidHtml,
-                    position);
-                hasAddedClosingError = true;
-            }
-            else if (reader.TokenKind != HtmlTokenKind.EndTag)
-            {
-                errors.Add($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.",
-                    ValidationErrorType.InvalidHtml,
-                    position);
-                hasAddedClosingError = true;
-            }
+            errors.Add($"Unexpected end element, expected '{name}', got '{reader.Name}'.",
+                ValidationErrorType.InvalidHtml,
+                position);
+            hasAddedClosingError = true;
         }
-
-        // If there is no parent, we handle the root and we can render everything top to bottom.
-        if (parent == null)
+        else if (reader.TokenKind != HtmlTokenKind.EndTag)
         {
-            component.Bind(context);
-            component.Measure(context, 600, 0, 0);
-            component.Render(this, context);
-
-            mjmlOptions.Validator?.Components(component, errors, ref validationContext);
-
-            Cleanup();
+            errors.Add($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.",
+                ValidationErrorType.InvalidHtml,
+                position);
+            hasAddedClosingError = true;
         }
     }
 
