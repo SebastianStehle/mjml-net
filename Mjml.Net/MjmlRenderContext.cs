@@ -124,7 +124,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         if (!hasAddedClosingError)
         {
-            ValidateSelfClosing(name, reader, position);
+            ValidateSelfClosing(name, reader, file);
         }
 
         // If there is no parent, we handle the root and we can render everything top to bottom.
@@ -175,7 +175,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         Cleanup();
     }
 
-    private void ValidateSelfClosing(string name, IHtmlReader reader, SourcePosition position)
+    private void ValidateSelfClosing(string name, IHtmlReader reader, string? file)
     {
         if (reader.TokenKind == HtmlTokenKind.Tag && reader.SelfClosingElement)
         {
@@ -186,14 +186,14 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         {
             errors.Add($"Unexpected end element, expected '{name}', got '{reader.Name}'.",
                 ValidationErrorType.InvalidHtml,
-                position);
+                new SourcePosition(reader.LineNumber, reader.LinePosition, file));
             hasAddedClosingError = true;
         }
         else if (reader.TokenKind != HtmlTokenKind.EndTag)
         {
             errors.Add($"Unexpected end element, expected '{name}', got '{reader.TokenKind}' token.",
                 ValidationErrorType.InvalidHtml,
-                position);
+                new SourcePosition(reader.LineNumber, reader.LinePosition, file));
             hasAddedClosingError = true;
         }
     }
