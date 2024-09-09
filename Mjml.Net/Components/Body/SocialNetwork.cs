@@ -19,6 +19,10 @@ internal sealed record SocialNetwork(string? ShareUrl, string? BackgroundUrl, st
             "https://twitter.com/intent/tweet?url=[[URL]]",
             "#55acee",
             $"{ImageBaseUrl}twitter.png"),
+        ["x"] = new SocialNetwork(
+            "https://twitter.com/intent/tweet?url=[[URL]]",
+            "#000000",
+            $"{ImageBaseUrl}twitter-x.png"),
         ["google"] = new SocialNetwork(
             "https://plus.google.com/share?url=[[URL]]",
             "#dc4e41",
