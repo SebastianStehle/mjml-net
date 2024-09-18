@@ -7,6 +7,12 @@ namespace Html.Net;
 
 public sealed class InlineCssPostProcessor : IPostProcessor
 {
+    private const string FallbackStyle = "non_inline_style";
+    private static readonly IConfiguration HtmlConfiguration =
+        Configuration.Default
+            .WithCss()
+            .Without<ICssDefaultStyleSheetProvider>();
+
     public static readonly InlineCssPostProcessor Instance = new InlineCssPostProcessor();
 
     private InlineCssPostProcessor()
@@ -16,8 +22,7 @@ public sealed class InlineCssPostProcessor : IPostProcessor
     public async ValueTask<string> PostProcessAsync(string html, MjmlOptions options,
         CancellationToken ct)
     {
-        var config = Configuration.Default.WithCss().Without<ICssDefaultStyleSheetProvider>();
-        var context = BrowsingContext.New(config);
+        var context = BrowsingContext.New(HtmlConfiguration);
 
         var document = await context.OpenAsync(req => req.Content(html), ct);
 
@@ -51,29 +56,34 @@ public sealed class InlineCssPostProcessor : IPostProcessor
         {
             var css = currentStyle.ToCss();
 
-            element.SetAttribute("style", css);
+            element.SetAttribute(TagNames.Style, css);
         }
     }
 
     private static void RenameNonInline(IElement element, IDocument document)
     {
-        if (string.Equals(element.TagName, "style", StringComparison.OrdinalIgnoreCase) && !element.HasAttribute("inline"))
+        if (string.Equals(element.TagName, TagNames.Style, StringComparison.OrdinalIgnoreCase) && !IsInline(element))
         {
-            RenameTag(element, "non_inline_style", document);
+            RenameTag(element, FallbackStyle, document);
         }
     }
 
     private static void RestoreNonInline(IElement element, IDocument document)
     {
-        if (string.Equals(element.TagName, "non_inline_style", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(element.TagName, FallbackStyle, StringComparison.OrdinalIgnoreCase))
         {
-            RenameTag(element, "style", document);
+            RenameTag(element, TagNames.Style, document);
         }
 
-        if (string.Equals(element.TagName, "style", StringComparison.OrdinalIgnoreCase) && element.HasAttribute("inline"))
+        if (string.Equals(element.TagName, TagNames.Style, StringComparison.OrdinalIgnoreCase) && IsInline(element))
         {
             element.Remove();
         }
+    }
+
+    private static bool IsInline(IElement element)
+    {
+        return element.HasAttribute("inline");
     }
 
     private static void RenameTag(IElement node, string tagName, IDocument document)
