@@ -84,7 +84,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
                             Position(reader, file));
 
                         // Only add the text error once per parent.
-                        hasAddedClosingError = true;
+                        hasAddedError = true;
                         break;
                 }
             }

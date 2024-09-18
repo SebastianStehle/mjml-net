@@ -86,7 +86,7 @@
         <mj-text align="center" color="#FFFFFF" font-size="13px" padding="0 25px">
           <p>Privacy policy</p>
         </mj-text>
-      </mj-column>a
+      </mj-column>
       <mj-column width="33.33333333333333%">
         <mj-image href="https://mjml.io" src="http://191n.mj.am/img/191n/3s/yp.jpg" alt="Logo yellow" width="133px" padding="0px"></mj-image>
       </mj-column>
