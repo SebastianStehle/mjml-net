@@ -14,16 +14,13 @@ public sealed class GlobalContext
 
     public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
 
-    public MjmlOptions Options { get; private set; }
+    public MjmlOptions Options { get; set; }
+
+    public bool Async { get; set; }
 
     public IFileLoader? FileLoader
     {
         get => fileLoader ??= Options?.FileLoader?.Invoke();
-    }
-
-    public void SetOptions(MjmlOptions options)
-    {
-        Options = options;
     }
 
     public void Clear()

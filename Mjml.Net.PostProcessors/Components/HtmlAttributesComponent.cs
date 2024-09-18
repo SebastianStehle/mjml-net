@@ -15,7 +15,7 @@ public partial class HtmlAttributesComponent : Component
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
-        if (!context.Options.HasProcessor<AttributesPostProcessor>())
+        if (!context.Async || !context.Options.HasProcessor<AttributesPostProcessor>())
         {
             return;
         }

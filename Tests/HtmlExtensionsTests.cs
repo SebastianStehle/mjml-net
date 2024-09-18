@@ -15,7 +15,7 @@ public class HtmlExtensionsTests
             Beautify = true
         };
 
-        sut.Setup(new MjmlRenderer(), options);
+        sut.Setup(new MjmlRenderer(), false, options);
         sut.StartBuffer();
     }
 

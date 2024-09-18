@@ -106,7 +106,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     /// <inheritdoc />
     public RenderResult Render(string mjml, MjmlOptions? options = null)
     {
-        return RenderCore(mjml, options).Result;
+        return RenderCore(mjml, false, options).Result;
     }
 
     /// <inheritdoc />
@@ -118,7 +118,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     /// <inheritdoc />
     public RenderResult Render(TextReader mjml, MjmlOptions? options = null)
     {
-        return RenderCore(mjml.ReadToEnd(), options).Result;
+        return RenderCore(mjml.ReadToEnd(), false, options).Result;
     }
 
     public async ValueTask<RenderResult> RenderAsync(string mjml, MjmlOptions? options = null,
@@ -147,7 +147,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         CancellationToken ct)
     {
 #pragma warning disable MA0042 // Do not use blocking calls in an async method
-        var (result, actualOptions) = RenderCore(mjml, options);
+        var (result, actualOptions) = RenderCore(mjml, true, options);
 #pragma warning restore MA0042 // Do not use blocking calls in an async method
 
         if (actualOptions?.PostProcessors?.Length > 0 && !string.IsNullOrWhiteSpace(result.Html))
@@ -165,7 +165,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         return result;
     }
 
-    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, MjmlOptions? options)
+    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, bool isAsync, MjmlOptions? options)
     {
         options ??= new MjmlOptions();
 
@@ -174,7 +174,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         var context = DefaultPools.RenderContexts.Get();
         try
         {
-            context.Setup(this, options);
+            context.Setup(this, isAsync, options);
             context.StartBuffer();
             context.Read(reader, null, null);
 

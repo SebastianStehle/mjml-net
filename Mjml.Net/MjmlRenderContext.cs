@@ -19,13 +19,14 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         return new ValidationErrors(errors);
     }
 
-    public void Setup(MjmlRenderer mjmlRenderer, MjmlOptions? mjmlOptions)
+    public void Setup(MjmlRenderer mjmlRenderer, bool isAsync, MjmlOptions? mjmlOptions)
     {
         this.mjmlRenderer = mjmlRenderer;
         this.mjmlOptions = mjmlOptions ??= new MjmlOptions();
 
         // Reuse the context and therefore do not set them over the constructor.
-        context.SetOptions(mjmlOptions);
+        context.Options = mjmlOptions;
+        context.Async = isAsync;
 
         validationContext.Options = mjmlOptions;
     }
