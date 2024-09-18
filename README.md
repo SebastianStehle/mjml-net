@@ -1,6 +1,6 @@
 # MJML.NET 
 
-A blazingly-fast unofficial port of [MJML 4](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to [.NET 6 & 7](https://dotnet.microsoft.com/).
+A blazingly-fast unofficial port of [MJML 4](https://mjml.io/) (by [MailJet](https://www.mailjet.com/)) to [.NET 6 to 8](https://dotnet.microsoft.com/).
 
 [![Nuget](https://img.shields.io/nuget/v/Mjml.Net)](https://www.nuget.org/packages/Mjml.Net)
 
@@ -39,7 +39,7 @@ Firstly, you'll need to reference the [`MJML.NET` NuGet Package](https://www.nug
 PM > Install-Package Mjml.Net
 ```
 
-Secondly, include `MJML.NET` namespace into your project.
+Secondly, include `Mjml.NET` namespace into your project.
 ```csharp
 using Mjml.Net;
 ```
