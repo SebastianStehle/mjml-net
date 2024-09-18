@@ -39,7 +39,7 @@ Firstly, you'll need to reference the [`MJML.NET` NuGet Package](https://www.nug
 PM > Install-Package Mjml.Net
 ```
 
-Secondly, include `MJML.NET` namespace into your project.
+Secondly, include `Mjml.NET` namespace into your project.
 ```csharp
 using Mjml.Net;
 ```
