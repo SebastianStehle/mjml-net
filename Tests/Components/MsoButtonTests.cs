@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -14,7 +13,7 @@ public class MsoButtonTests
 </mj-msobutton>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Button.html", result);
     }
@@ -28,7 +27,7 @@ public class MsoButtonTests
 </mj-msobutton>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.MsoButton.html", result);
     }
@@ -42,7 +41,7 @@ public class MsoButtonTests
 </mj-msobutton>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.MsoButtonWithBorder.html", result);
     }

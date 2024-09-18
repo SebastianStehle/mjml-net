@@ -1,6 +1,5 @@
 ﻿using Mjml.Net;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -19,7 +18,7 @@ public class CommentTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             KeepComments = true
         });

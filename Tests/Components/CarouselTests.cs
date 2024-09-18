@@ -1,6 +1,5 @@
 ﻿using Mjml.Net;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -17,7 +16,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("41d58ca8b0b9")
         });
@@ -34,7 +33,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("a8a9d55bbf42")
         });
@@ -52,7 +51,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("424249025dc2")
         });
@@ -73,7 +72,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("6123601308e5")
         });
@@ -94,7 +93,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("94288ecacbe4")
         });
@@ -115,7 +114,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("e4cd685c98ce")
         });
@@ -136,7 +135,7 @@ public class CarouselTests
 </mj-carousel>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("0ecde39840c5")
         });
@@ -162,7 +161,7 @@ public class CarouselTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("9dd9de129727")
         });

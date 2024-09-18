@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -10,7 +9,7 @@ public class SectionTests
     {
         var source = @"<mj-section></mj-section>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Section.html", result);
     }
@@ -20,7 +19,7 @@ public class SectionTests
     {
         var source = @"<mj-section background-color=""red""></mj-section>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithBackgroundColor.html", result);
     }
@@ -30,7 +29,7 @@ public class SectionTests
     {
         var source = @"<mj-section background-url=""https://picsum.photos/600/300""></mj-section>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithBackgroundImage.html", result);
     }
@@ -45,7 +44,7 @@ public class SectionTests
     <mj-column background-color=""#0000ff""></mj-column>
 </mj-section>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithColumns.html", result);
     }
@@ -60,7 +59,7 @@ public class SectionTests
     <mj-group background-color=""#0000ff""></mj-group>
 </mj-section>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SectionWithGroups.html", result);
     }

@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -14,7 +13,7 @@ public class ButtonTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Button.html", result);
     }
@@ -28,7 +27,7 @@ public class ButtonTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonLink.html", result);
     }
@@ -42,7 +41,7 @@ public class ButtonTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonLinkWithRel.html", result);
     }
@@ -56,7 +55,7 @@ public class ButtonTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonMixedContent.html", result);
     }
@@ -70,7 +69,7 @@ public class ButtonTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonMixedContent2.html", result);
     }
@@ -84,7 +83,7 @@ public class ButtonTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ButtonWithoutWidthUnit.html", result);
     }

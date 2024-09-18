@@ -1,6 +1,5 @@
 ﻿using Mjml.Net.Helpers;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -19,7 +18,7 @@ public class PreviewTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new PreviewHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new PreviewHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Preview.html", result);
     }

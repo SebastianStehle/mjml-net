@@ -142,7 +142,7 @@ You can also specify options to the MJML parser.
 | Head | `mj-all`                                                                | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-breakpoint](https://documentation.mjml.io/#mj-breakpoint)           | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-font](https://documentation.mjml.io/#mj-font)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
-| Head | [mj-html-attributes](https://documentation.mjml.io/#mj-html-attributes) | :x:                | :x:                | Not Planned      |
+| Head | [mj-html-attributes](https://documentation.mjml.io/#mj-html-attributes) | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-preview](https://documentation.mjml.io/#mj-preview)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-style](https://documentation.mjml.io/#mj-style)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Head | [mj-title](https://documentation.mjml.io/#mj-title)                     | :white_check_mark: | :white_check_mark: | Feature Complete |
@@ -163,9 +163,9 @@ You can also specify options to the MJML parser.
 | Body | [mj-text](https://documentation.mjml.io/#mj-text)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Body | [mj-wrapper](https://documentation.mjml.io/#mj-wrapper)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
 
-## Inline Styles
+## Inline Styles and Html Attributes
 
-MJML supports inline styles (see: https://documentation.mjml.io/#mj-style). This is an expensive feature and can only be done after rendering. Therefore we have introduced a new post process step, that applies inline styles using the AngleSharp library. To reduce the dependencies this has been moved to a separate nuget package.
+MJML supports inline styles (see: https://documentation.mjml.io/#mj-style) and html attributes (see: https://documentation.mjml.io/#mj-html-attributes). These are an expensive feature and can only be done after rendering. Therefore we have introduced a new post processing step, that applies inline styles and attributes using the AngleSharp library. To reduce the dependencies this has been moved to a separate nuget package.
 
 ```cmd
 PM > Install-Package Mjml.Net.PostProcessors
@@ -176,9 +176,11 @@ You have to add the postprocessor to the options:
 ```csharp
 var options = new MjmlOptions
 {
-    PostProcessors = [InlineCssPostProcessor]
+    PostProcessors = [AngleSharpPostProcessor.Default]
 };
 
+var mjmlRenderer = new MjmlRenderer();
+mjmlRenderer.AddHtmlAttributes();
 var (html, errors) = await mjmlRenderer.RenderAsync(text, options);
 ```
 

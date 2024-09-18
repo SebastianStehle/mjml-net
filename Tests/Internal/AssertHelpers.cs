@@ -7,7 +7,6 @@ using AngleSharp.Diffing.Strategies.AttributeStrategies;
 using AngleSharp.Diffing.Strategies.TextNodeStrategies;
 using AngleSharp.Dom;
 using Mjml.Net;
-using Xunit;
 
 #pragma warning disable MA0011 // IFormatProvider is missing
 

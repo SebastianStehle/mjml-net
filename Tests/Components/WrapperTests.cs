@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -14,7 +13,7 @@ public class WrapperTests
     <mj-spacer css-class=""class2"" />
 </mj-wrapper>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Wrapper.html", result);
     }

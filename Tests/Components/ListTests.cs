@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -16,7 +15,7 @@ public class ListTests
     <mj-li>List item four.</mj-li>
 </mj-list>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.List.html", result);
     }

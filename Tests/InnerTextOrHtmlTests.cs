@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Mjml.Net;
-using Xunit;
 
 namespace Tests;
 

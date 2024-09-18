@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -28,7 +27,7 @@ public class AccordionTests
 	</mj-accordion-element>
 </mj-accordion>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Accordion.html", result);
     }
@@ -44,7 +43,7 @@ public class AccordionTests
     </mj-accordion-element>
 </mj-accordion>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.AccordionEmptyElements.html", result);
     }

@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -15,7 +14,7 @@ public class BodyTests
  </mjml>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         Assert.Contains("</body>", result, StringComparison.OrdinalIgnoreCase);
     }
@@ -30,7 +29,7 @@ public class BodyTests
 </mjml>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         Assert.Contains(@"<body style=""background-color:red;word-spacing:normal;"">", result, StringComparison.OrdinalIgnoreCase);
     }

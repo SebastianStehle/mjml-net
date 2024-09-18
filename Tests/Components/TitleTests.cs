@@ -1,6 +1,5 @@
 ﻿using Mjml.Net.Helpers;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -19,7 +18,7 @@ public class TitleTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new TitleHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new TitleHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Title.html", result);
     }

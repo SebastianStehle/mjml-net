@@ -1,6 +1,5 @@
 ﻿using Mjml.Net;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -11,7 +10,7 @@ public class TextTests
     {
         var source = @"<mj-text>Hello MJML</mj-text>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Text.html", result);
     }
@@ -21,7 +20,7 @@ public class TextTests
     {
         var source = @"<mj-text>Hello&nbsp;MJML</mj-text>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextWhitespace.html", result);
     }
@@ -31,7 +30,7 @@ public class TextTests
     {
         var source = @"<mj-text><h1>Hello <span>MJML</span></h1></mj-text>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithHtml.html", result);
     }
@@ -41,7 +40,7 @@ public class TextTests
     {
         var source = @"<mj-text>Hello <br /><br /> MJML</mj-text>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithHtml2.html", result);
     }
@@ -51,7 +50,7 @@ public class TextTests
     {
         var source = @"<mj-text>Hello ’MJML’</mj-text>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextWithEntity.html", result);
     }
@@ -64,7 +63,7 @@ public class TextTests
     <p>Hello&nbsp;MJML</p>
 </mj-text>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TextRawWhitespace.html", result);
     }

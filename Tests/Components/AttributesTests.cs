@@ -1,6 +1,5 @@
 ﻿using Mjml.Net.Helpers;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -22,7 +21,7 @@ public class AttributesTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }
@@ -43,7 +42,7 @@ public class AttributesTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }
@@ -64,7 +63,7 @@ public class AttributesTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }
@@ -86,7 +85,7 @@ public class AttributesTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }
@@ -113,7 +112,7 @@ public class AttributesTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }

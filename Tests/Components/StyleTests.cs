@@ -1,8 +1,6 @@
-﻿using Html.Net;
-using Mjml.Net;
+﻿using Mjml.Net;
 using Mjml.Net.Helpers;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -30,7 +28,7 @@ public class StyleTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new StyleHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new StyleHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Style.html", result);
     }
@@ -57,16 +55,14 @@ public class StyleTests
 </mjml-test>
 ";
 
-        var options = new MjmlOptions
+        var (result, _) = await TestHelper.RenderAsync(source, new MjmlOptions
         {
             PostProcessors =
             [
-                InlineCssPostProcessor.Instance
+                AngleSharpPostProcessor.Default
             ],
             Beautify = true
-        };
-
-        var result = await TestHelper.RenderAsync(source, options, new StyleHelper());
+        }, helpers: [new StyleHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.StyleInline.html", result);
     }
@@ -93,7 +89,7 @@ public class StyleTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new StyleHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new StyleHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.StyleInlineFallback.html", result);
     }

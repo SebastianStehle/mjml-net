@@ -2,7 +2,6 @@
 using HtmlPerformanceKit;
 using Mjml.Net;
 using Mjml.Net.Internal;
-using Xunit;
 
 namespace Tests;
 

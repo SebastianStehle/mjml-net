@@ -4,6 +4,9 @@
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
 	<LangVersion>latest</LangVersion>
 	<RootNamespace>Mjml.Net</RootNamespace>
@@ -41,6 +44,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <ProjectReference Include="..\Mjml.Net.Generator\Mjml.Net.Generator.csproj" OutputItemType="Analyzer" SetTargetFramework="TargetFramework=netstandard2.0" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
   </ItemGroup>
 
