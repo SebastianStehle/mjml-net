@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.2" />
-    <PackageReference Include="AngleSharp.Css" Version="0.17.0" />
+    <PackageReference Include="AngleSharp.Css" Version="1.0.0-beta.139" />
     <PackageReference Include="Meziantou.Analyzer" Version="2.0.145">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
