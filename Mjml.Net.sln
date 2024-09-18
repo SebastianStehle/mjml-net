@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mjml.Net.Benchmark", "Mjml.Net.Benchmark\Mjml.Net.Benchmark.csproj", "{3969326A-B528-4120-8E30-4127F66B638E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Html.Net.Inline", "Html.Net.Inline\Html.Net.Inline.csproj", "{BADECB72-90D2-44F3-AA93-27B0247C8FA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Html.Net.PostProcessors", "Html.Net.PostProcessors\Html.Net.PostProcessors.csproj", "{BADECB72-90D2-44F3-AA93-27B0247C8FA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

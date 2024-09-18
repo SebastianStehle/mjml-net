@@ -2,5 +2,6 @@
 
 public interface IPostProcessor
 {
-    string PostProcess(string html, MjmlOptions options);
+    ValueTask<string> PostProcessAsync(string html, MjmlOptions options,
+        CancellationToken ct);
 }

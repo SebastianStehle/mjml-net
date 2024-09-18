@@ -1,5 +1,4 @@
 ﻿using HtmlPerformanceKit;
-using System;
 using HtmlReaderImpl = HtmlPerformanceKit.HtmlReader;
 
 namespace Mjml.Net.Internal;

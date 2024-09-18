@@ -1,29 +1,33 @@
 ﻿using AngleSharp;
+using AngleSharp.Css;
 using AngleSharp.Dom;
 using Mjml.Net;
 
 namespace Html.Net;
 
-public sealed class InlineProcessor : IPostProcessor
+public sealed class InlineCssPostProcessor : IPostProcessor
 {
-    public static readonly InlineProcessor Instance = new InlineProcessor();
+    public static readonly InlineCssPostProcessor Instance = new InlineCssPostProcessor();
 
-    private InlineProcessor()
+    private InlineCssPostProcessor()
     {
     }
 
-    public string PostProcess(string html, MjmlOptions options)
+    public async ValueTask<string> PostProcessAsync(string html, MjmlOptions options,
+        CancellationToken ct)
     {
-        var config = Configuration.Default.WithCss();
+        var config = Configuration.Default.WithCss().Without<ICssDefaultStyleSheetProvider>();
         var context = BrowsingContext.New(config);
 
-        var document = context.OpenAsync(req => req.Content(html)).Result;
+        var document = await context.OpenAsync(req => req.Content(html), ct);
 
         Traverse(document, a => RenameNonInline(a, document));
         Traverse(document, InlineStyle);
         Traverse(document, a => RestoreNonInline(a, document));
 
-        return document.ToString()!;
+        var result = document.ToHtml();
+
+        return result;
     }
 
     private static void Traverse(INode node, Action<IElement> action)
@@ -63,7 +67,7 @@ public sealed class InlineProcessor : IPostProcessor
     {
         if (string.Equals(element.TagName, "non_inline_style", StringComparison.OrdinalIgnoreCase))
         {
-            RenameTag(element, "non_inline_style", document);
+            RenameTag(element, "style", document);
         }
 
         if (string.Equals(element.TagName, "style", StringComparison.OrdinalIgnoreCase) && element.HasAttribute("inline"))

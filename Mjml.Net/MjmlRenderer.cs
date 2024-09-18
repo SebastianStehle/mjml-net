@@ -106,7 +106,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     /// <inheritdoc />
     public RenderResult Render(string mjml, MjmlOptions? options = null)
     {
-        return RenderCore(mjml, options);
+        return RenderCore(mjml, options).Result;
     }
 
     /// <inheritdoc />
@@ -118,10 +118,54 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     /// <inheritdoc />
     public RenderResult Render(TextReader mjml, MjmlOptions? options = null)
     {
-        return RenderCore(mjml.ReadToEnd(), options);
+        return RenderCore(mjml.ReadToEnd(), options).Result;
     }
 
-    private RenderResult RenderCore(string mjml, MjmlOptions? options)
+    public async ValueTask<RenderResult> RenderAsync(string mjml, MjmlOptions? options = null,
+        CancellationToken ct = default)
+    {
+        return await RenderCoreAsync(mjml, options, ct);
+    }
+
+    public async ValueTask<RenderResult> RenderAsync(Stream mjml, MjmlOptions? options = null,
+        CancellationToken ct = default)
+    {
+        return await RenderAsync(new StreamReader(mjml), options, ct);
+    }
+
+    public async ValueTask<RenderResult> RenderAsync(TextReader mjml, MjmlOptions? options = null,
+        CancellationToken ct = default)
+    {
+#if NET8_0_OR_GREATER
+        return await RenderCoreAsync(await mjml.ReadToEndAsync(ct), options, ct);
+#else
+        return await RenderCoreAsync(await mjml.ReadToEndAsync(), options, ct);
+#endif
+    }
+
+    private async ValueTask<RenderResult> RenderCoreAsync(string mjml, MjmlOptions? options,
+        CancellationToken ct)
+    {
+#pragma warning disable MA0042 // Do not use blocking calls in an async method
+        var (result, actualOptions) = RenderCore(mjml, options);
+#pragma warning restore MA0042 // Do not use blocking calls in an async method
+
+        if (actualOptions?.PostProcessors?.Length > 0 && !string.IsNullOrWhiteSpace(result.Html))
+        {
+            var html = result.Html;
+
+            foreach (var processor in actualOptions.PostProcessors)
+            {
+                html = await processor.PostProcessAsync(html, actualOptions, ct);
+            }
+
+            result = new RenderResult(html, result.Errors);
+        }
+
+        return result;
+    }
+
+    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, MjmlOptions? options)
     {
         options ??= new MjmlOptions();
 
@@ -139,17 +183,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
             {
                 buffer = context.EndBuffer()!;
 
-                var result = buffer.ToString();
-
-                if (options.PostProcessors != null)
-                {
-                    foreach (var processor in options.PostProcessors)
-                    {
-                        result = processor.PostProcess(result, options);
-                    }
-                }
-
-                return new RenderResult(buffer!.ToString()!, context.Validate());
+                return (new RenderResult(buffer.ToString()!, context.Validate()), options);
             }
             finally
             {

@@ -45,7 +45,7 @@
     <None Remove="Components\Outputs\List.html" />
     <None Remove="Components\Outputs\StyleInclude.html" />
     <None Remove="Components\Outputs\StyleInline.html" />
-    <None Remove="Components\Outputs\StyleInlined.html" />
+    <None Remove="Components\Outputs\StyleInlineFallback.html" />
     <None Remove="Components\Outputs\TextInclude.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
@@ -78,7 +78,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\Html.Net.Inline\Html.Net.Inline.csproj" />
+    <ProjectReference Include="..\Html.Net.PostProcessors\Html.Net.PostProcessors.csproj" />
     <ProjectReference Include="..\Mjml.Net.Generator\Mjml.Net.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
@@ -106,8 +106,8 @@
     <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
     <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
-    <EmbeddedResource Include="Components\Outputs\StyleInlined.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInlineFallback.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
     <EmbeddedResource Include="Components\Outputs\TablePercent.html" />
