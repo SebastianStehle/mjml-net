@@ -16,6 +16,10 @@ public interface IHtmlReader
 
     string Text { get; }
 
+    ReadOnlySpan<char> NameAsSpan { get; }
+
+    ReadOnlySpan<char> TextAsSpan { get; }
+
     bool SelfClosingElement { get; }
 
     HtmlTokenKind TokenKind { get; }

@@ -11,6 +11,7 @@ public enum ValidationErrorType
     InvalidParent,
     UnknownAttribute,
     UnknownElement,
+    UnexpectedText,
     InvalidHtml
 }
 

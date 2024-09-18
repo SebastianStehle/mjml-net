@@ -1,4 +1,5 @@
 ﻿using HtmlPerformanceKit;
+using System;
 using HtmlReaderImpl = HtmlPerformanceKit.HtmlReader;
 
 namespace Mjml.Net.Internal;
@@ -23,6 +24,10 @@ internal class HtmlReaderWrapper : IHtmlReader
     public string Name => impl.Name;
 
     public string Text => impl.Text;
+
+    public ReadOnlySpan<char> NameAsSpan => impl.NameAsMemory.Span;
+
+    public ReadOnlySpan<char> TextAsSpan => impl.TextAsMemory.Span;
 
     public bool SelfClosingElement => impl.SelfClosingElement;
 

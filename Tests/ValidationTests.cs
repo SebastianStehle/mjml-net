@@ -126,6 +126,40 @@ public class ValidationTests
     }
 
     [Fact]
+    public void Should_add_error_if_component_has_unexpected_text()
+    {
+        var source = @"
+<mjml>
+    <mj-body>
+        <mj-section>
+            hello
+        </mj-section>
+    </mj-body>
+</mjml>
+";
+        var errors = Render(source);
+
+        Assert.Equal(new[] { "Unexpected text content." }, errors);
+    }
+
+    [Fact]
+    public void Should_add_error_if_component_has_unexpected_html_child()
+    {
+        var source = @"
+<mjml>
+    <mj-body>
+        <mj-section>
+            <button></button>
+        </mj-section>
+    </mj-body>
+</mjml>
+";
+        var errors = Render(source);
+
+        Assert.Equal(new[] { "Invalid element 'button'." }, errors);
+    }
+
+    [Fact]
     public void Should_not_add_error_for_self_closing_element()
     {
         var source = @"

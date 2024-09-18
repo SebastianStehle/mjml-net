@@ -5,11 +5,8 @@ namespace Mjml.Net.Validators;
 
 public abstract class ValidatorBase : IValidator
 {
-    private readonly bool validateAttributeValue;
-
-    protected ValidatorBase(bool validateAttributeValue)
+    protected ValidatorBase()
     {
-        this.validateAttributeValue = validateAttributeValue;
     }
 
     public void Attribute(string name, string value, IComponent component, ValidationErrors errors, ref ValidationContext context)
@@ -27,12 +24,14 @@ public abstract class ValidatorBase : IValidator
                 ValidationErrorType.UnknownAttribute,
                 context.Position);
         }
-        else if (validateAttributeValue && !attribute.Validate(value, ref context))
+        else
         {
-            errors.Add($"'{value}' is not a valid attribute '{name}' of '{component.ComponentName}'.",
-                ValidationErrorType.InvalidAttribute,
-                context.Position);
+            AttributeValue(name, value, component, attribute, errors, ref context);
         }
+    }
+
+    public virtual void AttributeValue(string name, string value, IComponent component, IType type, ValidationErrors errors, ref ValidationContext context)
+    {
     }
 
     public void Components(IComponent root, ValidationErrors errors, ref ValidationContext context)
