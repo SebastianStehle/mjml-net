@@ -1,6 +1,5 @@
 ﻿using Mjml.Net.Helpers;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -19,7 +18,7 @@ public class FontTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Font.html", result);
     }
@@ -35,7 +34,7 @@ public class FontTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.FontUbuntu.html", result);
     }
@@ -54,7 +53,7 @@ public class FontTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new FontHelper());
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.FontUbuntu2.html", result);
     }

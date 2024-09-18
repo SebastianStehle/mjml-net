@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -10,7 +9,7 @@ public class DividerTests
     {
         var source = @"<mj-divider />";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Divider.html", result);
     }
@@ -20,7 +19,7 @@ public class DividerTests
     {
         var source = @"<mj-divider width=""500""></mj-divider>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.DividerWithoutWidthUnit.html", result);
     }

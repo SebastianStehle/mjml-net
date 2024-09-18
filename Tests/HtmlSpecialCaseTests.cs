@@ -1,6 +1,5 @@
 ﻿using Mjml.Net;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests;
 
@@ -25,7 +24,7 @@ public class HtmlSpecialCaseTests
 </mj-button>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Button.html", result);
     }
@@ -37,7 +36,7 @@ public class HtmlSpecialCaseTests
 <>
 ";
 
-        var result = TestHelper.RenderWithErrors(source);
+        var result = TestHelper.Render(source);
 
         Assert.Contains(
             new ValidationError(

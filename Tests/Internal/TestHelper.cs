@@ -5,51 +5,18 @@ namespace Tests.Internal;
 
 public static class TestHelper
 {
-    public static string Render(string source, MjmlOptions? options = null)
+    public static RenderResult Render(string source, MjmlOptions? options = null, IHelper[]? helpers = null)
     {
-        var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
+        var renderer = CreateRenderer(helpers);
 
-        options = BuildOptions(options);
-
-        return renderer.Render(source, options).Html;
+        return renderer.Render(source, BuildOptions(options));
     }
 
-    public static RenderResult RenderWithErrors(string source, MjmlOptions? options = null)
+    public static async Task<RenderResult> RenderAsync(string source, MjmlOptions? options = null, IHelper[]? helpers = null)
     {
-        var renderer = new MjmlRenderer().AddList().Add<TestComponent>();
+        var renderer = CreateRenderer(helpers);
 
-        options = BuildOptions(options);
-
-        return renderer.Render(source, options);
-    }
-
-    public static string Render(string source, params IHelper[] helpers)
-    {
-        return Render(source, null, helpers);
-    }
-
-    public static async Task<string> RenderAsync(string source, MjmlOptions? options, params IHelper[] helpers)
-    {
-        var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
-
-        foreach (var helper in helpers)
-        {
-            renderer.Add(helper);
-        }
-
-        return (await renderer.RenderAsync(source, BuildOptions(options))).Html;
-    }
-
-    public static string Render(string source, MjmlOptions? options, params IHelper[] helpers)
-    {
-        var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
-
-        foreach (var helper in helpers)
-        {
-            renderer.Add(helper);
-        }
-
-        return renderer.Render(source, BuildOptions(options)).Html;
+        return await renderer.RenderAsync(source, BuildOptions(options));
     }
 
     private static MjmlOptions BuildOptions(MjmlOptions? options)
@@ -60,6 +27,27 @@ public static class TestHelper
         {
             Beautify = true
         };
+    }
+
+    private static IMjmlRenderer CreateRenderer(IHelper[]? helpers)
+    {
+        var renderer =
+            new MjmlRenderer()
+                .AddList()
+                .AddHtmlAttributes()
+                .Add<TestComponent>();
+
+        if (helpers != null)
+        {
+            renderer.ClearHelpers();
+
+            foreach (var helper in helpers)
+            {
+                renderer.Add(helper);
+            }
+        }
+
+        return renderer;
     }
 
     public static string GetContent(string content)

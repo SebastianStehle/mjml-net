@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -19,7 +18,7 @@ public class GroupTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Group.html", result);
     }
@@ -36,7 +35,7 @@ public class GroupTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.GroupWithColumns.html", result);
     }

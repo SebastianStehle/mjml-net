@@ -1,38 +1,21 @@
 ﻿using AngleSharp;
-using AngleSharp.Css;
 using AngleSharp.Dom;
-using Mjml.Net;
 
-namespace Html.Net;
+namespace Mjml.Net;
 
-public sealed class InlineCssPostProcessor : IPostProcessor
+public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 {
     private const string FallbackStyle = "non_inline_style";
-    private static readonly IConfiguration HtmlConfiguration =
-        Configuration.Default
-            .WithCss()
-            .Without<ICssDefaultStyleSheetProvider>();
 
-    public static readonly InlineCssPostProcessor Instance = new InlineCssPostProcessor();
+    public static readonly IPostProcessor Instance = new AngleSharpPostProcessor(new InlineCssPostProcessor());
 
-    private InlineCssPostProcessor()
-    {
-    }
-
-    public async ValueTask<string> PostProcessAsync(string html, MjmlOptions options,
+    public ValueTask ProcessAsync(IDocument document, MjmlOptions options,
         CancellationToken ct)
     {
-        var context = BrowsingContext.New(HtmlConfiguration);
-
-        var document = await context.OpenAsync(req => req.Content(html), ct);
-
         Traverse(document, a => RenameNonInline(a, document));
         Traverse(document, InlineStyle);
         Traverse(document, a => RestoreNonInline(a, document));
-
-        var result = document.ToHtml();
-
-        return result;
+        return default;
     }
 
     private static void Traverse(INode node, Action<IElement> action)

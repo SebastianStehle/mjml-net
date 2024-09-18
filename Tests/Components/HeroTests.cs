@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -13,7 +12,7 @@ public class HeroTests
 </mj-hero>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Hero.html", result);
     }
@@ -26,7 +25,7 @@ public class HeroTests
 </mj-hero>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Hero.html", result);
     }
@@ -40,7 +39,7 @@ public class HeroTests
 </mj-hero>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.HeroDivider.html", result);
     }
@@ -55,7 +54,7 @@ public class HeroTests
 </mj-hero>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.HeroDividers.html", result);
     }

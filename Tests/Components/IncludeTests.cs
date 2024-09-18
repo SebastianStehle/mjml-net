@@ -1,7 +1,5 @@
 ﻿using Mjml.Net;
-using Mjml.Net.Helpers;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -28,7 +26,7 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             FileLoader = () => new InMemoryFileLoader(files)
         });
@@ -56,7 +54,7 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             FileLoader = () => new InMemoryFileLoader(files)
         });
@@ -78,7 +76,7 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             FileLoader = () => new InMemoryFileLoader(files)
         });
@@ -107,7 +105,7 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             FileLoader = () => new InMemoryFileLoader(files)
         });
@@ -130,7 +128,7 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             FileLoader = () => new InMemoryFileLoader(files)
         });
@@ -152,7 +150,7 @@ public class IncludeTests
 </mjml-test>
 ";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             FileLoader = () => new InMemoryFileLoader(files)
         });

@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -27,7 +26,7 @@ public class TableTests
     </tr>
 </mj-table>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Table.html", result);
     }
@@ -54,7 +53,7 @@ public class TableTests
     </tr>
 </mj-table>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TablePixels.html", result);
     }
@@ -81,7 +80,7 @@ public class TableTests
     </tr>
 </mj-table>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.TablePercent.html", result);
     }

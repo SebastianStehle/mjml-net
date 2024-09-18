@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -10,7 +9,7 @@ public class ColumnTests
     {
         var source = @"<mj-column background-color=""red""></mj-column>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnOne.html", result);
     }
@@ -24,7 +23,7 @@ public class ColumnTests
     <mj-column background-color=""green""></mj-column>
 </mjml-test>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnTwo.html", result);
     }
@@ -39,7 +38,7 @@ public class ColumnTests
     <mj-column background-color=""blue""></mj-column>
 </mjml-test>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnThree.html", result);
     }
@@ -55,7 +54,7 @@ public class ColumnTests
     <mj-column background-color=""yellow""></mj-column>
 </mjml-test>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnFour.html", result);
     }
@@ -73,7 +72,7 @@ public class ColumnTests
     </mj-column>
 </mjml-test>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnClass.html", result);
     }
@@ -83,7 +82,7 @@ public class ColumnTests
     {
         var source = @"<mj-column background-color=""red"" padding=""20px 52px""></mj-column>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnOneWithPadding.html", result);
     }

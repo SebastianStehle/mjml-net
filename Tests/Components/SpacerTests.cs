@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -10,7 +9,7 @@ public class SpacerTests
     {
         var source = @"<mj-spacer />";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Spacer.html", result);
     }
@@ -20,7 +19,7 @@ public class SpacerTests
     {
         var source = @"<mj-spacer height=""100px"" />";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SpacerWithHeight.html", result);
     }

@@ -2,7 +2,6 @@
 using Mjml.Net;
 using Mjml.Net.Validators;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests;
 

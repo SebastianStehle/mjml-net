@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -10,7 +9,7 @@ public class SocialTests
     {
         var source = @"<mj-social />";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SocialEmpty.html", result);
     }
@@ -26,7 +25,7 @@ public class SocialTests
 </mj-social>
 ";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.SocialRaw.html", result);
     }
@@ -45,7 +44,7 @@ public class SocialTests
     <mj-social-element name=""twitter"" href=""https://mjml.io/"" />
 </mj-social>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Social.html", result);
     }

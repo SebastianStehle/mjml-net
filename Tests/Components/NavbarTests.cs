@@ -1,6 +1,5 @@
 ﻿using Mjml.Net;
 using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -11,7 +10,7 @@ public class NavbarTests
     {
         var source = @"<mj-navbar hamburger=""hamburger""></mj-navbar>";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("4c48e6fe53b37010")
         });
@@ -24,7 +23,7 @@ public class NavbarTests
     {
         var source = @"<mj-navbar></mj-navbar>";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("b5e7b1c2f1d5bc37")
         });
@@ -42,7 +41,7 @@ public class NavbarTests
     <mj-navbar-link href=""/link3"" color=""#0000ff"">Link3</mj-navbar-link>
 </mj-navbar>";
 
-        var result = TestHelper.Render(source, new MjmlOptions
+        var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
             IdGenerator = new StaticIdGenerator("b5e7b1c2f1d5bc37")
         });

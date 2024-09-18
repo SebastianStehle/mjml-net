@@ -42,6 +42,9 @@
     <None Remove="Components\Outputs\Comments.html" />
     <None Remove="Components\Outputs\DividerWithoutWidthUnit.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
+    <None Remove="Components\Outputs\HtmlAttributeInvalid.html" />
+    <None Remove="Components\Outputs\HtmlAttributes.html" />
+    <None Remove="Components\Outputs\HtmlAttributesNoProcessor.html" />
     <None Remove="Components\Outputs\List.html" />
     <None Remove="Components\Outputs\StyleInclude.html" />
     <None Remove="Components\Outputs\StyleInline.html" />
@@ -99,6 +102,8 @@
     <EmbeddedResource Include="Components\Outputs\CarouselThumbnailWidth.html" />
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
+    <EmbeddedResource Include="Components\Outputs\HtmlAttributeInvalid.html" />
+    <EmbeddedResource Include="Components\Outputs\HtmlAttributesNoProcessor.html" />
     <EmbeddedResource Include="Components\Outputs\List.html" />
     <EmbeddedResource Include="Components\Outputs\Comments.html" />
     <EmbeddedResource Include="Components\Outputs\DividerWithoutWidthUnit.html" />
@@ -106,6 +111,7 @@
     <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
     <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
+    <EmbeddedResource Include="Components\Outputs\HtmlAttributes.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInlineFallback.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
@@ -158,8 +164,13 @@
     <EmbeddedResource Include="Components\Outputs\HeroDivider.html" />
     <EmbeddedResource Include="Components\Outputs\SocialEmpty.html" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mjml.Net.PostProcessors\Mjml.Net.PostProcessors.csproj" />
     <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
   </ItemGroup>
 

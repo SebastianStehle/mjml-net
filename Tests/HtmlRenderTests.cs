@@ -1,6 +1,5 @@
 ﻿using Mjml.Net;
 using Tests.Internal;
-using Xunit;
 
 #pragma warning disable SA1122 // Use string.Empty for empty strings
 

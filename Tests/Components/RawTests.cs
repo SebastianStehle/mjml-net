@@ -1,5 +1,4 @@
 ﻿using Tests.Internal;
-using Xunit;
 
 namespace Tests.Components;
 
@@ -43,7 +42,7 @@ Hello MJML",
     {
         var source = $@"<mj-raw>{html}</mj-raw>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlAssert(html, result);
     }
@@ -53,7 +52,7 @@ Hello MJML",
     {
         var source = $@"<mj-raw><div>&lt;</div></mj-raw>";
 
-        var result = TestHelper.Render(source);
+        var (result, _) = TestHelper.Render(source);
 
         AssertHelpers.HtmlAssert("<div>&lt;</div>", result);
     }
