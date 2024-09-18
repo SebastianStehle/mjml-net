@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mjml.Net.Benchmark", "Mjml.Net.Benchmark\Mjml.Net.Benchmark.csproj", "{3969326A-B528-4120-8E30-4127F66B638E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Html.Net.PostProcessors", "Html.Net.PostProcessors\Html.Net.PostProcessors.csproj", "{BADECB72-90D2-44F3-AA93-27B0247C8FA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3969326A-B528-4120-8E30-4127F66B638E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3969326A-B528-4120-8E30-4127F66B638E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3969326A-B528-4120-8E30-4127F66B638E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BADECB72-90D2-44F3-AA93-27B0247C8FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BADECB72-90D2-44F3-AA93-27B0247C8FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BADECB72-90D2-44F3-AA93-27B0247C8FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BADECB72-90D2-44F3-AA93-27B0247C8FA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

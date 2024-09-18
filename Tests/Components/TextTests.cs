@@ -78,7 +78,6 @@ public class TextTests
 
         var result = renderer.Render(source, new MjmlOptions()
         {
-            Minify = true,
             Beautify = false,
         }).Html;
 

@@ -30,9 +30,14 @@ public sealed partial record MjmlOptions
     public string Breakpoint { get; set; } = "480px";
 
     /// <summary>
-    /// A list of custom styles. The default is: <c>false</c>.
+    /// A list of custom styles. The default is: <c>null</c>.
     /// </summary>
     public Style[]? Styles { get; init; }
+
+    /// <summary>
+    /// A list of custom post processors. The default is <c>null</c>.
+    /// </summary>
+    public IPostProcessor[] PostProcessors = [];
 
     /// <summary>
     /// True to enable media queries for OWA. The default is: <c>false</c>.
@@ -47,6 +52,7 @@ public sealed partial record MjmlOptions
     /// <summary>
     /// True to minify the HTML. The default is: <c>false</c>.
     /// </summary>
+    [Obsolete("No supported anymore.")]
     public bool Minify { get; init; }
 
     /// <summary>

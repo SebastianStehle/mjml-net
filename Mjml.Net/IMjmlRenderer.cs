@@ -92,7 +92,7 @@ public interface IMjmlRenderer
     /// The result of rendering, including the HTML and validation errors.
     /// </returns>
     /// <remarks>
-    /// This method is thread safe.
+    /// This method is thread safe. Post processors are not run in the sync method.
     /// </remarks>
     RenderResult Render(Stream mjml, MjmlOptions? options = null);
 
@@ -105,7 +105,52 @@ public interface IMjmlRenderer
     /// The result of rendering, including the HTML and validation errors.
     /// </returns>
     /// <remarks>
-    /// This method is thread safe.
+    /// This method is thread safe. Post processors are not run in the sync method.
     /// </remarks>
     RenderResult Render(TextReader mjml, MjmlOptions? options = null);
+
+    /// <summary>
+    /// Renders MJML from a string.
+    /// </summary>
+    /// <param name="mjml">The MJML as string.</param>
+    /// <param name="options">Optional options.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>
+    /// The result of rendering, including the HTML and validation errors.
+    /// </returns>
+    /// <remarks>
+    /// This method is thread safe. Post processors are not run in the sync method.
+    /// </remarks>
+    ValueTask<RenderResult> RenderAsync(string mjml, MjmlOptions? options = null,
+        CancellationToken ct = default);
+
+    /// <summary>
+    /// Renders MJML from a stream.
+    /// </summary>
+    /// <param name="mjml">The MJML as stream.</param>
+    /// <param name="options">Optional options.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>
+    /// The result of rendering, including the HTML and validation errors.
+    /// </returns>
+    /// <remarks>
+    /// This method is thread safe.
+    /// </remarks>
+    ValueTask<RenderResult> RenderAsync(Stream mjml, MjmlOptions? options = null,
+        CancellationToken ct = default);
+
+    /// <summary>
+    /// Renders MJML from a text renderer.
+    /// </summary>
+    /// <param name="mjml">The MJML as text renderer.</param>
+    /// <param name="options">Optional options.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>
+    /// The result of rendering, including the HTML and validation errors.
+    /// </returns>
+    /// <remarks>
+    /// This method is thread safe.
+    /// </remarks>
+    ValueTask<RenderResult> RenderAsync(TextReader mjml, MjmlOptions? options = null,
+        CancellationToken ct = default);
 }

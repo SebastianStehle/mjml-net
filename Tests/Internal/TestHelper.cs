@@ -28,6 +28,18 @@ public static class TestHelper
         return Render(source, null, helpers);
     }
 
+    public static async Task<string> RenderAsync(string source, MjmlOptions? options, params IHelper[] helpers)
+    {
+        var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();
+
+        foreach (var helper in helpers)
+        {
+            renderer.Add(helper);
+        }
+
+        return (await renderer.RenderAsync(source, BuildOptions(options))).Html;
+    }
+
     public static string Render(string source, MjmlOptions? options, params IHelper[] helpers)
     {
         var renderer = new MjmlRenderer().Add<TestComponent>().ClearHelpers();

@@ -72,8 +72,8 @@ public static partial class AssertHelpers
 
         var diffs =
             DiffBuilder
-                .Compare(actual)
-                .WithTest(expected)
+                .Compare(expected)
+                .WithTest(actual)
                 .WithOptions(options =>
                 {
                     options.AddAttributeComparer();

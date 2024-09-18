@@ -14,6 +14,9 @@ public sealed partial class IncludeComponent : Component
     [Bind("path", BindType.RequiredString)]
     public string Path;
 
+    [Bind("css-inline", BindType.Inline)]
+    public string? CssInline;
+
     [Bind("type", typeof(TypeValidator))]
     public string Type;
 
@@ -153,8 +156,10 @@ public sealed partial class IncludeComponent : Component
         }
         else if (ActualType == IncludeType.Css)
         {
+            var isInline = string.Equals(CssInline, "inline", StringComparison.OrdinalIgnoreCase);
+
             // Allow multiple styles and render them later.
-            context.AddGlobalData(Style.Static(new InnerTextOrHtml(content)));
+            context.AddGlobalData(Style.Static(new InnerTextOrHtml(content), isInline));
         }
     }
 

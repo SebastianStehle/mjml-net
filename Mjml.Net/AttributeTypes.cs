@@ -18,6 +18,8 @@ public static class AttributeTypes
 
     public static readonly IType IncludeType = new EnumType(true, "mjml", "html", "css");
 
+    public static readonly IType Inline = new EnumType(true, "inline");
+
     public static readonly IType Pixels = new NumberType(Unit.Pixels);
 
     public static readonly IType PixelsOrAuto = new OneOfType(new EnumType(false, "auto"), Pixels);

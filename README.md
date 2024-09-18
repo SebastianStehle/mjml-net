@@ -65,14 +65,15 @@ public static void Main (string[] args) {
             </mj-body>
         </mjml>";
 
-    var options = new MjmlOptions {
+    var options = new MjmlOptions
+    {
         Beautify = false
     };
 
     var (html, errors) = mjmlRenderer.Render(text, options);
 }
 ```
-### **Before Version 2.0.0**: XML Clenanup
+### **Before Version 2.0.0**: XML Cleanup
 
 MJML is not necessarily valid XML. To allow the XML parser to work properly, the MJML string needs to be sanitized before you render it. You can use the method ` FixXML` for that. If you store the MJML text in the database, it is store to keep the original version and the sanitized version. With version 2.0 we moved to html parser that follows the official standards and can therefore accept any kind of HTML input. More about this under "Known Issues".
 
@@ -96,7 +97,8 @@ public static void Main (string[] args) {
               </mj-body>
           </mjml>";
 
-    var options = new MjmlOptions {
+    var options = new MjmlOptions
+    {
         Beautify = false
     };
 
@@ -111,20 +113,22 @@ You can also specify options to the MJML parser.
 
 | Name             | Data Type                           | Default | Description                                                                                                                                                                                                         |
 |------------------|-------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| KeepComments     | bool                                | false   | True to keep comments.                                                                                                                                                                                              |
-| Breakpoint       | string                              | 480px   | The default breakpoint to switch to mobile view.                                                                                                                                                                    |
-| Styles           | Style[]?                            | []      | A list of custom styles.                                                                                                                                                                                            |
-| ForceOWAQueries  | bool                                | false   | True to enable media queries for OWA.                                                                                                                                                                               |
 | Beautify         | bool                                | true    | True to beatify the HTML. Impacts performance (slower).                                                                                                                                                             |
-| Minify           | bool                                | false   | True to minify the HTML.                                                                                                                                                                                            |
-| Lax              | bool                                | false   | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance.                                               |
-| IdGenerator      | IIdGenerator                        | Preset  | The ID generator to create random values for attributes like Ids.                                                                                                                                                   |
-| Fonts            | IReadOnlyDictionary<string, Font[]> | Preset  | A list of supported default fonts.                                                                                                                                                                                  |
-| XmlEntities      | IReadOnlyDictionary<string, string> | Preset  | A list of supported XML entities (**deprecated with version 1.16.0**)                                                                                                                                               |
-| ValidatorFactory | IValidatorFactory?                  | null    | The current validator, which also defines the validation mode.                                                                                                                                                      |
+| Breakpoint       | string                              | 480px   | The default breakpoint to switch to mobile view.                                                                                                                                                                    |
 | FileLoader       | IFileLoader?                        | null    | The file path loader for &lt;mj-include path="..." type="..."&gt; which handles loading the files from the specified path attribute. For example, SqlDatabaseFileLoader, InMemoryFileLoader, DiskFileLoader, etc... |
+| Fonts            | IReadOnlyDictionary<string, Font[]> | Preset  | A list of supported default fonts.                                                                                                                                                                                  |
+| ForceOWAQueries  | bool                                | false   | True to enable media queries for OWA.                                                                                                                                                                               |
+| IdGenerator      | IIdGenerator                        | Preset  | The ID generator to create random values for attributes like Ids.                                                                                                                                                   |
+| KeepComments     | bool                                | false   | True to keep comments.                                                                                                                                                                                              |
+| Lax              | bool                                | false   | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance.                                               |
+| Minify           | bool                                | false   | True to minify the HTML. (**deprecated with version 2.0.0**)
+| PostProcessors   | IPostProcessor[]?                   | []      | The post processors that will process the HTML, after rendering.                                                                                                                                                    |
+| Styles           | Style[]?                            | []      | A list of custom styles.                                                                                                                                                                                            |
+| ValidatorFactory | IValidatorFactory?                  | null    | The current validator, which also defines the validation mode.                                                                                                                                                      |
+| XmlEntities      | IReadOnlyDictionary<string, string> | Preset  | A list of supported XML entities (**deprecated with version 1.16.0**)                                                                                                                                               |
 
 ## Supported Components
+
 `MJML.NET` tries to implement all functionality `1-2-1` with the MJML 4 project. However, due to JavaScript not being a typed language this means there has been considerate refactoring to the code to make it more aligned with C# typed requirements. 
 
 | Type | Component                                                               | Implemented        | Tests              | State            |
@@ -159,7 +163,29 @@ You can also specify options to the MJML parser.
 | Body | [mj-text](https://documentation.mjml.io/#mj-text)                       | :white_check_mark: | :white_check_mark: | Feature Complete |
 | Body | [mj-wrapper](https://documentation.mjml.io/#mj-wrapper)                 | :white_check_mark: | :white_check_mark: | Feature Complete |
 
+## Inline Styles
+
+MJML supports inline styles (see: https://documentation.mjml.io/#mj-style). This is an expensive feature and can only be done after rendering. Therefore we have introduced a new post process step, that applies inline styles using the AngleSharp library. To reduce the dependencies this has been moved to a separate nuget package.
+
+```cmd
+PM > Install-Package Mjml.Net.PostProcessors
+```
+
+You have to add the postprocessor to the options:
+
+```csharp
+var options = new MjmlOptions
+{
+    PostProcessors = [InlineCssPostProcessor]
+};
+
+var (html, errors) = await mjmlRenderer.RenderAsync(text, options);
+```
+
+Post processors can use async methods. Therefore we have introduced new methods to the mjml renderer. Only the asynchronous method variants will run post processors.
+
 ## Benchmarks
+
 Performance was one of the key focuses for this project. We're aiming to support high
 througput while mainintaing low memory footprint. Below are the benchmarks for every public MJML template compiled (beautified and minified). 
 
