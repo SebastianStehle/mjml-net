@@ -10,7 +10,6 @@ namespace Mjml.Net.Benchmarking;
 public class TemplateBenchmarks
 {
     private static readonly MjmlOptions WithBeautify = new MjmlOptions { Beautify = true };
-    private static readonly MjmlOptions WithMinify = new MjmlOptions { Minify = true };
     private readonly MjmlRenderer MjmlRenderer;
  
     [ParamsSource(nameof(MjmlTemplates))]
@@ -60,11 +59,5 @@ public class TemplateBenchmarks
     public string Render_Template_Beautify()
     {
         return MjmlRenderer.Render(MjmlTemplate, WithBeautify).Html;
-    }
-
-    [Benchmark]
-    public string Render_Template_Minify()
-    {
-        return MjmlRenderer.Render(MjmlTemplate, WithMinify).Html;
     }
 }

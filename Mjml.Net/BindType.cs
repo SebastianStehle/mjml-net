@@ -10,6 +10,7 @@ public enum BindType
     File,
     FourPixelsOrPercent,
     LeftRight,
+    Inline,
     Pixels,
     PixelsOrAuto,
     PixelsOrEm,

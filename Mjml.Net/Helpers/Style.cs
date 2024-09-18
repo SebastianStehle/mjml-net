@@ -2,11 +2,11 @@
 
 namespace Mjml.Net.Helpers;
 
-public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer) : GlobalData
+public sealed record Style(Action<IHtmlRenderer, GlobalContext> Renderer, bool Inline = false) : GlobalData
 {
-    public static Style Static(InnerTextOrHtml text)
+    public static Style Static(InnerTextOrHtml text, bool inline)
     {
-        return new Style((renderer, _) => renderer.Content(text));
+        return new Style((renderer, _) => renderer.Content(text), inline);
     }
 }
 
@@ -66,10 +66,22 @@ public sealed class StyleHelper : IHelper
 
     private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
     {
+        WriteStyles(renderer, context, context.GlobalData.Values.OfType<Style>().Where(x => !x.Inline), null);
+
+        var inlineStyles = context.GlobalData.Values.OfType<Style>().Where(x => x.Inline).ToList();
+        if (inlineStyles.Count > 0)
+        {
+            WriteStyles(renderer, context, inlineStyles, "inline");
+        }
+    }
+
+    private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context, IEnumerable<Style> inline, string? inlineAttr)
+    {
         renderer.StartElement("style")
+            .Attr("inline", inlineAttr)
             .Attr("type", "text/css");
 
-        foreach (var style in context.GlobalData.Values.OfType<Style>())
+        foreach (var style in inline)
         {
             style.Renderer(renderer, context);
         }

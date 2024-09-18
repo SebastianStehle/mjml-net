@@ -137,7 +137,17 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
             StringBuilder? buffer = null;
             try
             {
-                buffer = context.EndBuffer();
+                buffer = context.EndBuffer()!;
+
+                var result = buffer.ToString();
+
+                if (options.PostProcessors != null)
+                {
+                    foreach (var processor in options.PostProcessors)
+                    {
+                        result = processor.PostProcess(result, options);
+                    }
+                }
 
                 return new RenderResult(buffer!.ToString()!, context.Validate());
             }

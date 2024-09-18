@@ -44,6 +44,8 @@
     <None Remove="Components\Outputs\FontUbuntu2.html" />
     <None Remove="Components\Outputs\List.html" />
     <None Remove="Components\Outputs\StyleInclude.html" />
+    <None Remove="Components\Outputs\StyleInline.html" />
+    <None Remove="Components\Outputs\StyleInlined.html" />
     <None Remove="Components\Outputs\TextInclude.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
     <None Remove="Components\Outputs\TextWhitespace.html" />
@@ -53,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.1.1" />
+    <PackageReference Include="AngleSharp" Version="1.1.2" />
     <PackageReference Include="AngleSharp.Diffing" Version="0.18.2" />
     <PackageReference Include="FakeItEasy" Version="8.1.0" />
     <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.3" />
@@ -76,6 +78,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <ProjectReference Include="..\Html.Net.Inline\Html.Net.Inline.csproj" />
     <ProjectReference Include="..\Mjml.Net.Generator\Mjml.Net.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
@@ -103,6 +106,8 @@
     <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
     <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInlined.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
     <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
     <EmbeddedResource Include="Components\Outputs\TablePercent.html" />

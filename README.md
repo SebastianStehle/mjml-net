@@ -65,7 +65,8 @@ public static void Main (string[] args) {
             </mj-body>
         </mjml>";
 
-    var options = new MjmlOptions {
+    var options = new MjmlOptions
+    {
         Beautify = false
     };
 
@@ -96,7 +97,8 @@ public static void Main (string[] args) {
               </mj-body>
           </mjml>";
 
-    var options = new MjmlOptions {
+    var options = new MjmlOptions
+    {
         Beautify = false
     };
 
@@ -116,7 +118,6 @@ You can also specify options to the MJML parser.
 | Styles           | Style[]?                            | []      | A list of custom styles.                                                                                                                                                                                            |
 | ForceOWAQueries  | bool                                | false   | True to enable media queries for OWA.                                                                                                                                                                               |
 | Beautify         | bool                                | true    | True to beatify the HTML. Impacts performance (slower).                                                                                                                                                             |
-| Minify           | bool                                | false   | True to minify the HTML.                                                                                                                                                                                            |
 | Lax              | bool                                | false   | In lax mode some errors in the XML will be fixed. Only work when the MJML is passed in as string. Do not turn this on in production, because it can hurt performance.                                               |
 | IdGenerator      | IIdGenerator                        | Preset  | The ID generator to create random values for attributes like Ids.                                                                                                                                                   |
 | Fonts            | IReadOnlyDictionary<string, Font[]> | Preset  | A list of supported default fonts.                                                                                                                                                                                  |

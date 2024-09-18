@@ -8,7 +8,7 @@ public partial class StyleComponent : HeadComponentBase
 
     public override string ComponentName => "mj-style";
 
-    [Bind("inline")]
+    [Bind("inline", BindType.Inline)]
     public string? Inline;
 
     [BindText]
@@ -19,7 +19,9 @@ public partial class StyleComponent : HeadComponentBase
         // Just in case that validation is disabled.
         if (Text != null)
         {
-            var style = Style.Static(Text);
+            var isInline = string.Equals(Inline, "inline", StringComparison.OrdinalIgnoreCase);
+
+            var style = Style.Static(Text, isInline);
 
             // Allow multiple styles.
             context.AddGlobalData(style);
