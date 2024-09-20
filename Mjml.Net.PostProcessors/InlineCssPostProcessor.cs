@@ -1,4 +1,5 @@
 ﻿using AngleSharp;
+using AngleSharp.Css;
 using AngleSharp.Dom;
 
 namespace Mjml.Net;
@@ -33,7 +34,7 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 
     private static void InlineStyle(IElement element)
     {
-        var currentStyle = element.ComputeCurrentStyle();
+        var currentStyle = element.Owner!.DefaultView.GetStyleCollection().GetDeclarations(element);
 
         if (currentStyle.Any())
         {

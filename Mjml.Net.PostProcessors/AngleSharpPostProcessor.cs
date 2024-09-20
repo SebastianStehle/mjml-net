@@ -9,6 +9,7 @@ public sealed class AngleSharpPostProcessor : IPostProcessor, INestingPostProces
     private static readonly IConfiguration HtmlConfiguration =
         Configuration.Default
             .WithCss()
+            .WithRenderDevice(new DefaultRenderDevice { FontSize = -1 })
             .Without<ICssDefaultStyleSheetProvider>();
 
     public static readonly IPostProcessor Default = new AngleSharpPostProcessor(new InlineCssPostProcessor(), new AttributesPostProcessor());

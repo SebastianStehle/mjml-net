@@ -136,7 +136,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             Read(reader, component, file);
         }
 
-        ValidatingClosingState(name, reader, file);
+        ValidatingClosingState(name, reader);
 
         // If there is no parent, we handle the root and we can render everything top to bottom.
         if (parent == null)
@@ -186,7 +186,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         Cleanup();
     }
 
-    private void ValidatingClosingState(string name, IHtmlReader reader, string? file)
+    private void ValidatingClosingState(string name, IHtmlReader reader)
     {
         // Only show one closing error, otherwise we could get one for every item in the hierarchy.
         if (hasAddedClosingError)

@@ -42,6 +42,7 @@ public class StyleTests
     <mj-style inline=""inline"">
       .red-text div {
         color: red !important;
+        font-size: 1.5rem;
       }
     </mj-style>
   </mj-head>
