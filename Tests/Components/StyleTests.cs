@@ -40,16 +40,12 @@ public class StyleTests
 <mjml-test>
   <mj-head>
     <mj-style inline=""inline"">
-      .red-text div {
-        color: red !important;
-        font-size: 1.5rem;
-      }
     </mj-style>
   </mj-head>
   <mj-body>
     <mj-raw>
       <div class=""red-text"">
-        <div style=""font-weight: bold""></div>
+        <div style=""word-break: break-word; font-weight: bold; font-style: abc;""></div>
       </div>
     </mj-raw>
   </mj-body>

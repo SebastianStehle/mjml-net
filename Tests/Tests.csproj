@@ -39,6 +39,7 @@
     <None Remove="Components\Outputs\CarouselImageWithHref.html" />
     <None Remove="Components\Outputs\CarouselThumbnailWidth.html" />
     <None Remove="Components\Outputs\ColumnClass.html" />
+    <None Remove="Components\Outputs\ColumnOneWithInnerBorder.html" />
     <None Remove="Components\Outputs\Comments.html" />
     <None Remove="Components\Outputs\DividerWithoutWidthUnit.html" />
     <None Remove="Components\Outputs\FontUbuntu2.html" />
@@ -102,6 +103,7 @@
     <EmbeddedResource Include="Components\Outputs\CarouselThumbnailWidth.html" />
     <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
     <EmbeddedResource Include="Components\Outputs\Accordion.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnOneWithInnerBorder.html" />
     <EmbeddedResource Include="Components\Outputs\HtmlAttributeInvalid.html" />
     <EmbeddedResource Include="Components\Outputs\HtmlAttributesNoProcessor.html" />
     <EmbeddedResource Include="Components\Outputs\List.html" />

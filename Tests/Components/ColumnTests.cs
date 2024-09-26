@@ -86,4 +86,19 @@ public class ColumnTests
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnOneWithPadding.html", result);
     }
+
+    [Fact]
+    public void Should_render_column_one_inner_border()
+    {
+        var source = @"
+<mj-column padding=""0"" inner-border=""1px solid red"">
+    <mj-text>
+          Hello World!
+     </mj-text>
+</mj-column>";
+
+        var (result, _) = TestHelper.Render(source);
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.ColumnOneWithInnerBorder.html", result);
+    }
 }
