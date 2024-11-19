@@ -165,6 +165,8 @@ You can also specify options to the MJML parser.
 
 ## Inline Styles and Html Attributes
 
+> EXPERIMENTAL FEATURE: There are a few bugs in the CSS library, therefore it is not recommended to use this feature in production yet.
+
 MJML supports inline styles (see: https://documentation.mjml.io/#mj-style) and html attributes (see: https://documentation.mjml.io/#mj-html-attributes). These are an expensive feature and can only be done after rendering. Therefore we have introduced a new post processing step, that applies inline styles and attributes using the AngleSharp library. To reduce the dependencies this has been moved to a separate nuget package.
 
 ```cmd
