@@ -14,7 +14,6 @@ internal sealed class Binder : IBinder
         context = newContext;
         elementName = newElementName!;
         elementParent = newParent;
-
         return this;
     }
 

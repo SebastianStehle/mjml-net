@@ -56,7 +56,6 @@ public partial class AccordionElementComponent : BodyComponentBase
 
             binder = DefaultPools.Binders.Get();
             binder.Setup(context, this, child.ComponentName);
-
             child.SetBinder(binder);
 
             InsertChild(child, 0);
@@ -68,7 +67,6 @@ public partial class AccordionElementComponent : BodyComponentBase
 
             binder = DefaultPools.Binders.Get();
             binder.Setup(context, this, child.ComponentName);
-
             child.SetBinder(binder);
 
             AddChild(child);

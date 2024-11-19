@@ -80,6 +80,11 @@ public partial class SectionComponent : BodyComponentBase
     [Bind("text-padding", BindType.FourPixelsOrPercent)]
     public string TextPadding = "4px 4px 4px 0";
 
+    protected override void AfterBind(GlobalContext context)
+    {
+        base.AfterBind(context);
+    }
+
     public override void Measure(GlobalContext context, double parentWidth, int numSiblings, int numNonRawSiblings)
     {
         ActualWidth = parentWidth;

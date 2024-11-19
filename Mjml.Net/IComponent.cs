@@ -10,6 +10,8 @@ public interface IComponent
 
     IComponent? Parent { get; set; }
 
+    IBinder Binder { get; }
+
     SourcePosition Position { get; set; }
 
     ContentType ContentType { get; }

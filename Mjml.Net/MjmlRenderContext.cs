@@ -8,7 +8,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 {
     private readonly GlobalContext context = new GlobalContext();
     private readonly ValidationErrors errors = [];
-    private readonly List<Binder> allBinders = [];
     private ValidationContext validationContext;
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
@@ -33,7 +32,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
     internal void Clear()
     {
-        allBinders.Clear();
         context.Clear();
         mjmlOptions = null!;
         mjmlRenderer = null!;
@@ -121,9 +119,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         var binder = DefaultPools.Binders.Get().Setup(context, parent, component.ComponentName);
 
-        // Add all binders to list, so that we can return them later to the pool.
-        allBinders.Add(binder);
-
         BindComponentAttributes(reader, component, binder, file);
         BindComponentContent(reader, component, binder);
 
@@ -183,7 +178,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         mjmlOptions.Validator?.Components(component, errors, ref validationContext);
 
-        Cleanup();
+        Cleanup(component);
     }
 
     private void ValidatingClosingState(string name, IHtmlReader reader)
@@ -226,11 +221,17 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         return new SourcePosition(reader.LineNumber, reader.LinePosition, file);
     }
 
-    private void Cleanup()
+    private static void Cleanup(IComponent component)
     {
-        foreach (var usedBinder in allBinders)
+        if (component.Binder is Binder binder)
         {
-            DefaultPools.Binders.Return(usedBinder);
+            DefaultPools.Binders.Return(binder);
+            component.SetBinder(null!);
+        }
+
+        foreach (var child in component.ChildNodes)
+        {
+            Cleanup(child);
         }
     }
 

@@ -26,6 +26,7 @@ internal static class DefaultPools
             return true;
         }
     }
+
     private sealed class BinderPolicy : PooledObjectPolicy<Binder>
     {
         public override Binder Create()
@@ -36,7 +37,6 @@ internal static class DefaultPools
         public override bool Return(Binder obj)
         {
             obj.Clear();
-
             return true;
         }
     }
