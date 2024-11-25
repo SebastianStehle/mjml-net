@@ -1,5 +1,6 @@
 ﻿using AngleSharp;
 using AngleSharp.Css;
+using AngleSharp.Css.Parser;
 using AngleSharp.Dom;
 
 namespace Mjml.Net;
@@ -8,7 +9,7 @@ public sealed class AngleSharpPostProcessor : IPostProcessor, INestingPostProces
 {
     private static readonly IConfiguration HtmlConfiguration =
         Configuration.Default
-            .WithCss()
+            .WithCss(new CssParserOptions { IsIncludingUnknownDeclarations = true })
             .WithRenderDevice(new DefaultRenderDevice { FontSize = -1 })
             .Without<ICssDefaultStyleSheetProvider>();
 
