@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Authors>Liam Riddell, Sebastian Stehle</Authors>
-    <Description>A blazingly-fast unofficial port of MJML (by MailJet) to .NET 6.</Description>
+    <Description>A blazingly-fast unofficial port of MJML (by MailJet) to .NET 9.</Description>
     <Copyright>MIT</Copyright>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
