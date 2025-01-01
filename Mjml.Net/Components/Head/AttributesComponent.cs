@@ -16,22 +16,45 @@ public partial class AttributesComponent : HeadComponentBase
                     return;
                 case HtmlTokenKind.Tag when htmlReader.Name == "mj-class":
                     var className = htmlReader.GetAttribute("name");
-
-                    if (className != null)
+                    if (string.IsNullOrWhiteSpace(className))
                     {
-                        for (var i = 0; i < htmlReader.AttributeCount; i++)
-                        {
-                            var attributeName = htmlReader.GetAttributeName(i);
-                            var attributeValue = htmlReader.GetAttribute(i);
+                        htmlReader.Read();
+                        break;
+                    }
 
-                            if (attributeName != "name")
-                            {
-                                context.SetClassAttribute(attributeName, className, attributeValue);
-                            }
+                    for (var i = 0; i < htmlReader.AttributeCount; i++)
+                    {
+                        var attributeName = htmlReader.GetAttributeName(i);
+                        var attributeValue = htmlReader.GetAttribute(i);
+
+                        if (attributeName != "name")
+                        {
+                            context.SetClassAttribute(attributeName, className, attributeValue);
                         }
                     }
 
-                    htmlReader.Read();
+                    if (htmlReader.SelfClosingElement)
+                    {
+                        htmlReader.Read();
+                        break;
+                    }
+
+                    var subTree = htmlReader.ReadSubtree();
+                    while (subTree.Read())
+                    {
+                        if (subTree.TokenKind == HtmlTokenKind.Tag)
+                        {
+                            var childTagName = htmlReader.Name;
+
+                            for (var i = 0; i < subTree.AttributeCount; i++)
+                            {
+                                var attributeName = subTree.GetAttributeName(i);
+                                var attributeValue = subTree.GetAttribute(i);
+
+                                context.SetParentClassAttribute(attributeName, className, childTagName, attributeValue);
+                            }
+                        }
+                    }
                     break;
 
                 case HtmlTokenKind.Tag:

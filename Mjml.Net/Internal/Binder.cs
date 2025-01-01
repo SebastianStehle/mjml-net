@@ -1,4 +1,7 @@
-﻿namespace Mjml.Net.Internal;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Xml.Linq;
+
+namespace Mjml.Net.Internal;
 
 internal sealed class Binder : IBinder
 {
@@ -8,6 +11,26 @@ internal sealed class Binder : IBinder
     private InnerTextOrHtml? currentText;
     private string elementName;
     private string[]? currentClasses;
+
+    public string[] ClassNames
+    {
+        get
+        {
+            if (currentClasses == null)
+            {
+                if (attributes.TryGetValue(Constants.MjClass, out var classNames))
+                {
+                    currentClasses = classNames.Split(' ');
+                }
+                else
+                {
+                    currentClasses = Array.Empty<string>();
+                }
+            }
+
+            return currentClasses;
+        }
+    }
 
     public Binder Setup(GlobalContext newContext, IComponent? newParent, string? newElementName = null)
     {
@@ -39,13 +62,12 @@ internal sealed class Binder : IBinder
 
     public string? GetAttribute(string name)
     {
-        if (attributes.TryGetValue(name, out var attribute))
+        if (attributes.TryGetValue(name, out var a1))
         {
-            return attribute;
+            return a1;
         }
 
         var inherited = elementParent?.GetInheritingAttribute(name);
-
         if (inherited != null)
         {
             return inherited;
@@ -53,52 +75,74 @@ internal sealed class Binder : IBinder
 
         if (context.AttributesByClass.Count > 0)
         {
-            if (currentClasses == null)
+            var classNames = ClassNames;
+            if (classNames.Length > 0)
             {
-                if (attributes.TryGetValue(Constants.MjClass, out var classNames))
+                string? classAttribute = null;
+                // Loop over all classes and use the last match.
+                foreach (var className in classNames)
                 {
-                    currentClasses = classNames.Split(' ');
-                }
-                else
-                {
-                    currentClasses = Array.Empty<string>();
-                }
-            }
-
-            string? classAttribute = null;
-
-            // Loop over all classes and use the last match.
-            foreach (var className in currentClasses)
-            {
-                if (context.AttributesByClass.TryGetValue(className, out var byName))
-                {
-                    if (byName.TryGetValue(name, out attribute))
+                    if (context.AttributesByClass.TryGetValue(new AttributeKey(className, name), out var a2))
                     {
-                        classAttribute = attribute;
+                        classAttribute = a2;
                     }
                 }
-            }
 
-            if (classAttribute != null)
-            {
-                return classAttribute;
+                if (classAttribute != null)
+                {
+                    return classAttribute;
+                }
             }
         }
 
-        if (context.AttributesByName.TryGetValue(name, out var byType))
+        if (context.AttributesByParentClass.Count > 0 && elementParent != null)
         {
-            if (byType.TryGetValue(elementName, out attribute))
+            var classNames = elementParent.Binder.ClassNames;
+            if (classNames.Length > 0)
             {
-                return attribute;
-            }
+                string? classAttribute = null;
+                // Loop over all classes and use the last match.
+                foreach (var className in classNames)
+                {
+                    if (context.AttributesByParentClass.TryGetValue(new AttributeParentKey(className, elementName, name), out var a3))
+                    {
+                        classAttribute = a3;
+                    }
+                }
 
-            if (byType.TryGetValue(Constants.All, out attribute))
-            {
-                return attribute;
+                if (classAttribute != null)
+                {
+                    return classAttribute;
+                }
             }
+        }
+
+        if (context.AttributesByName.TryGetValue(new AttributeKey(elementName, name), out var a4))
+        {
+            return a4;
+        }
+
+        if (context.AttributesByName.TryGetValue(new AttributeKey(Constants.All, name), out var a5))
+        {
+            return a5;
         }
 
         return null;
+    }
+
+    private static string? GetByClass(IReadOnlyDictionary<AttributeKey, string> attributes, string[] classNames, string name)
+    {
+        string? result = null;
+        // Loop over all classes and use the last match.
+        foreach (var className in classNames)
+        {
+            if (attributes.TryGetValue(new AttributeKey(className, name), out var a))
+            {
+                result = a;
+            }
+        }
+
+        return result;
     }
 
     public InnerTextOrHtml? GetText()

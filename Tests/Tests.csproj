@@ -27,39 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Components\Outputs\Accordion.html" />
-    <None Remove="Components\Outputs\AccordionEmptyElements.html" />
-    <None Remove="Components\Outputs\ButtonWithoutWidthUnit.html" />
-    <None Remove="Components\Outputs\Carousel.html" />
-    <None Remove="Components\Outputs\CarouselHeadStyles.html" />
-    <None Remove="Components\Outputs\CarouselIconWidth.html" />
-    <None Remove="Components\Outputs\CarouselImagesFive.html" />
-    <None Remove="Components\Outputs\CarouselImagesOne.html" />
-    <None Remove="Components\Outputs\CarouselImagesTwo.html" />
-    <None Remove="Components\Outputs\CarouselImageWithHref.html" />
-    <None Remove="Components\Outputs\CarouselThumbnailWidth.html" />
-    <None Remove="Components\Outputs\ColumnClass.html" />
-    <None Remove="Components\Outputs\ColumnOneWithInnerBorder.html" />
-    <None Remove="Components\Outputs\Comments.html" />
-    <None Remove="Components\Outputs\DividerWithoutWidthUnit.html" />
-    <None Remove="Components\Outputs\FontUbuntu2.html" />
-    <None Remove="Components\Outputs\HtmlAttributeInvalid.html" />
-    <None Remove="Components\Outputs\HtmlAttributes.html" />
-    <None Remove="Components\Outputs\HtmlAttributesNoProcessor.html" />
-    <None Remove="Components\Outputs\List.html" />
-    <None Remove="Components\Outputs\StyleInclude.html" />
-    <None Remove="Components\Outputs\StyleInline.html" />
-    <None Remove="Components\Outputs\StyleInline2.html" />
-    <None Remove="Components\Outputs\StyleInlineFallback.html" />
-    <None Remove="Components\Outputs\TextInclude.html" />
-    <None Remove="Components\Outputs\TextRawWhitespace.html" />
-    <None Remove="Components\Outputs\TextWhitespace.html" />
-    <None Remove="Components\Outputs\TextWithEntity.html" />
-    <None Remove="Components\Outputs\TextWithHtml2.html" />
-    <None Remove="Components\Outputs\TextWithHtmlAndWhitespace.html" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.2" />
     <PackageReference Include="AngleSharp.Diffing" Version="0.18.2" />
     <PackageReference Include="FakeItEasy" Version="8.1.0" />
@@ -83,7 +50,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\Html.Net.PostProcessors\Html.Net.PostProcessors.csproj" />
     <ProjectReference Include="..\Mjml.Net.Generator\Mjml.Net.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
@@ -92,81 +58,82 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Components\Outputs\Accordion.html" />
+    <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
+    <EmbeddedResource Include="Components\Outputs\Breakpoint.html" />
+    <EmbeddedResource Include="Components\Outputs\Button.html" />
+    <EmbeddedResource Include="Components\Outputs\ButtonLink.html" />
+    <EmbeddedResource Include="Components\Outputs\ButtonLinkWithRel.html" />
+    <EmbeddedResource Include="Components\Outputs\ButtonMixedContent.html" />
+    <EmbeddedResource Include="Components\Outputs\ButtonMixedContent2.html" />
     <EmbeddedResource Include="Components\Outputs\ButtonWithoutWidthUnit.html" />
     <EmbeddedResource Include="Components\Outputs\Carousel.html" />
-    <EmbeddedResource Include="Components\Outputs\ColumnClass.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselHeadStyles.html" />
-    <EmbeddedResource Include="Components\Outputs\CarouselImageWithHref.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselIconWidth.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselImagesFive.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselImagesOne.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselImagesTwo.html" />
+    <EmbeddedResource Include="Components\Outputs\CarouselImageWithHref.html" />
     <EmbeddedResource Include="Components\Outputs\CarouselThumbnailWidth.html" />
-    <EmbeddedResource Include="Components\Outputs\AccordionEmptyElements.html" />
-    <EmbeddedResource Include="Components\Outputs\Accordion.html" />
-    <EmbeddedResource Include="Components\Outputs\ColumnOneWithInnerBorder.html" />
-    <EmbeddedResource Include="Components\Outputs\HtmlAttributeInvalid.html" />
-    <EmbeddedResource Include="Components\Outputs\HtmlAttributesNoProcessor.html" />
-    <EmbeddedResource Include="Components\Outputs\List.html" />
-    <EmbeddedResource Include="Components\Outputs\Comments.html" />
-    <EmbeddedResource Include="Components\Outputs\DividerWithoutWidthUnit.html" />
-    <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
-    <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
-    <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
-    <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
-    <EmbeddedResource Include="Components\Outputs\HtmlAttributes.html" />
-    <EmbeddedResource Include="Components\Outputs\StyleInline2.html" />
-    <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
-    <EmbeddedResource Include="Components\Outputs\StyleInlineFallback.html" />
-    <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
-    <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
-    <EmbeddedResource Include="Components\Outputs\TablePercent.html" />
-    <EmbeddedResource Include="Components\Outputs\Table.html" />
-    <EmbeddedResource Include="Components\Outputs\TextRawWhitespace.html" />
-    <EmbeddedResource Include="Components\Outputs\TextInclude.html" />
-    <EmbeddedResource Include="Components\Outputs\TextWhitespace.html" />
-    <EmbeddedResource Include="Components\Outputs\TextWithEntity.html" />
-    <EmbeddedResource Include="Components\Outputs\TextWithHtmlAndWhitespace.html" />
-    <EmbeddedResource Include="Components\Outputs\TextWithHtml2.html" />
-    <EmbeddedResource Include="Components\Outputs\FontUbuntu.html" />
-    <EmbeddedResource Include="Components\Outputs\GroupWithColumns.html" />
-    <EmbeddedResource Include="Components\Outputs\NavbarWithoutHamburger.html" />
-    <EmbeddedResource Include="Components\Outputs\Navbar.html" />
-    <EmbeddedResource Include="Components\Outputs\SectionWithGroups.html" />
-    <EmbeddedResource Include="Components\Outputs\SectionWithColumns.html" />
-    <EmbeddedResource Include="Components\Outputs\SectionWithBackgroundImage.html" />
-    <EmbeddedResource Include="Components\Outputs\SectionWithBackgroundColor.html" />
-    <EmbeddedResource Include="Components\Outputs\Section.html" />
+    <EmbeddedResource Include="Components\Outputs\ChildClasses.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnClass.html" />
     <EmbeddedResource Include="Components\Outputs\ColumnFour.html" />
-    <EmbeddedResource Include="Components\Outputs\ColumnOneWithPadding.html" />
-    <EmbeddedResource Include="Components\Outputs\ColumnTwo.html" />
-    <EmbeddedResource Include="Components\Outputs\ColumnThree.html" />
-    <EmbeddedResource Include="Components\Outputs\Group.html" />
-    <EmbeddedResource Include="Components\Outputs\ButtonMixedContent2.html" />
-    <EmbeddedResource Include="Components\Outputs\ButtonMixedContent.html" />
-    <EmbeddedResource Include="Components\Outputs\HeroDividers.html" />
     <EmbeddedResource Include="Components\Outputs\ColumnOne.html" />
-    <EmbeddedResource Include="Components\Outputs\Social.html" />
-    <EmbeddedResource Include="Components\Outputs\SocialRaw.html" />
-    <EmbeddedResource Include="Components\Outputs\Wrapper.html" />
-    <EmbeddedResource Include="Components\Outputs\TextWithHtml.html" />
-    <EmbeddedResource Include="Components\Outputs\Text.html" />
-    <EmbeddedResource Include="Components\Outputs\Title.html" />
-    <EmbeddedResource Include="Components\Outputs\Style.html" />
-    <EmbeddedResource Include="Components\Outputs\SpacerWithHeight.html" />
-    <EmbeddedResource Include="Components\Outputs\Spacer.html" />
-    <EmbeddedResource Include="Components\Outputs\Preview.html" />
-    <EmbeddedResource Include="Components\Outputs\Image.html" />
-    <EmbeddedResource Include="Components\Outputs\ImageWithLink.html" />
-    <EmbeddedResource Include="Components\Outputs\ButtonLinkWithRel.html" />
-    <EmbeddedResource Include="Components\Outputs\ButtonLink.html" />
-    <EmbeddedResource Include="Components\Outputs\Button.html" />
-    <EmbeddedResource Include="Components\Outputs\Breakpoint.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnOneWithInnerBorder.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnOneWithPadding.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnThree.html" />
+    <EmbeddedResource Include="Components\Outputs\ColumnTwo.html" />
+    <EmbeddedResource Include="Components\Outputs\Comments.html" />
     <EmbeddedResource Include="Components\Outputs\Divider.html" />
+    <EmbeddedResource Include="Components\Outputs\DividerWithoutWidthUnit.html" />
     <EmbeddedResource Include="Components\Outputs\Font.html" />
+    <EmbeddedResource Include="Components\Outputs\FontUbuntu.html" />
+    <EmbeddedResource Include="Components\Outputs\FontUbuntu2.html" />
+    <EmbeddedResource Include="Components\Outputs\Group.html" />
+    <EmbeddedResource Include="Components\Outputs\GroupWithColumns.html" />
     <EmbeddedResource Include="Components\Outputs\Hero.html" />
     <EmbeddedResource Include="Components\Outputs\HeroDivider.html" />
+    <EmbeddedResource Include="Components\Outputs\HeroDividers.html" />
+    <EmbeddedResource Include="Components\Outputs\HtmlAttributeInvalid.html" />
+    <EmbeddedResource Include="Components\Outputs\HtmlAttributes.html" />
+    <EmbeddedResource Include="Components\Outputs\HtmlAttributesNoProcessor.html" />
+    <EmbeddedResource Include="Components\Outputs\Image.html" />
+    <EmbeddedResource Include="Components\Outputs\ImageWithLink.html" />
+    <EmbeddedResource Include="Components\Outputs\List.html" />
+    <EmbeddedResource Include="Components\Outputs\MsoButton.html" />
+    <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
+    <EmbeddedResource Include="Components\Outputs\Navbar.html" />
+    <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
+    <EmbeddedResource Include="Components\Outputs\NavbarWithoutHamburger.html" />
+    <EmbeddedResource Include="Components\Outputs\Preview.html" />
+    <EmbeddedResource Include="Components\Outputs\Section.html" />
+    <EmbeddedResource Include="Components\Outputs\SectionWithBackgroundColor.html" />
+    <EmbeddedResource Include="Components\Outputs\SectionWithBackgroundImage.html" />
+    <EmbeddedResource Include="Components\Outputs\SectionWithColumns.html" />
+    <EmbeddedResource Include="Components\Outputs\SectionWithGroups.html" />
+    <EmbeddedResource Include="Components\Outputs\Social.html" />
     <EmbeddedResource Include="Components\Outputs\SocialEmpty.html" />
+    <EmbeddedResource Include="Components\Outputs\SocialRaw.html" />
+    <EmbeddedResource Include="Components\Outputs\Spacer.html" />
+    <EmbeddedResource Include="Components\Outputs\SpacerWithHeight.html" />
+    <EmbeddedResource Include="Components\Outputs\Style.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInline2.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInlineFallback.html" />
+    <EmbeddedResource Include="Components\Outputs\Table.html" />
+    <EmbeddedResource Include="Components\Outputs\TablePercent.html" />
+    <EmbeddedResource Include="Components\Outputs\TablePixels.html" />
+    <EmbeddedResource Include="Components\Outputs\Text.html" />
+    <EmbeddedResource Include="Components\Outputs\TextInclude.html" />
+    <EmbeddedResource Include="Components\Outputs\TextRawWhitespace.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWhitespace.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWithEntity.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWithHtml.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWithHtml2.html" />
+    <EmbeddedResource Include="Components\Outputs\TextWithHtmlAndWhitespace.html" />
+    <EmbeddedResource Include="Components\Outputs\Title.html" />
+    <EmbeddedResource Include="Components\Outputs\Wrapper.html" />
   </ItemGroup>
 	
   <ItemGroup>
