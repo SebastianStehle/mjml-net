@@ -15,6 +15,11 @@ public interface IBinder
     string? GetAttribute(string name);
 
     /// <summary>
+    /// Gets the class names.
+    /// </summary>
+    string[] ClassNames { get; }
+
+    /// <summary>
     /// Get the text content of the node.
     /// </summary>
     /// <returns>The content of the node or null if not found.</returns>
