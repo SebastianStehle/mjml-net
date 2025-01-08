@@ -1,8 +1,8 @@
-﻿using System.Text;
-using HandlebarsDotNet;
+﻿using HandlebarsDotNet;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Text;
 
 namespace Mjml.Net.Generator;
 
@@ -64,7 +64,9 @@ public class BindGenerator : IIncrementalGenerator
 
     private string ProcessClass(INamedTypeSymbol classSymbol, IEnumerable<FieldSource> fields, HandlebarsTemplate<object, object> template)
     {
+#pragma warning disable RS1035 // Do not use APIs banned for analyzers
         Console.WriteLine($"Handling {classSymbol.Name}");
+#pragma warning restore RS1035 // Do not use APIs banned for analyzers
 
         if (!classSymbol.ContainingSymbol.Equals(classSymbol.ContainingNamespace, SymbolEqualityComparer.Default))
         {
