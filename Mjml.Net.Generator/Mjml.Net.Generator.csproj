@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-	<IsRoslynComponent>true</IsRoslynComponent>
+    <IsRoslynComponent>true</IsRoslynComponent>
     <Nullable>enable</Nullable>
-	<LangVersion>latest</LangVersion>
-	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <LangVersion>latest</LangVersion>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,7 +42,7 @@
       <TargetPathWithTargetPlatformMoniker Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
-	
+
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
@@ -50,13 +50,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Template.handlebar" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    
+
     <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

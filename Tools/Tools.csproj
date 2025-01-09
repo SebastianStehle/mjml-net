@@ -4,9 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-	<IsPackable>false</IsPackable>
+    <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="RefactoringEssentials" Version="5.6.0" PrivateAssets="all" />
-	<PackageReference Include="Squidex.Text" Version="6.23.0" />
+    <PackageReference Include="Squidex.Text" Version="6.23.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="all" />
   </ItemGroup>
 
