@@ -7,28 +7,28 @@
     <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;V1_24;v2_0;V2_1</Configurations>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
-	
+
   <ItemGroup Condition="'$(Configuration)'=='V1_24'">
-	<PackageReference Include="Mjml.Net" Version="1.24.0" />
+    <PackageReference Include="Mjml.Net" Version="1.24.0" />
   </ItemGroup>
-	
+
   <ItemGroup Condition="'$(Configuration)'=='V2_0'">
-	<PackageReference Include="Mjml.Net" Version="2.0.0" />
+    <PackageReference Include="Mjml.Net" Version="2.0.0" />
   </ItemGroup>
-	
+
   <ItemGroup Condition="'$(Configuration)'=='V2_1'">
-	<PackageReference Include="Mjml.Net" Version="2.1.0-beta1" />
+    <PackageReference Include="Mjml.Net" Version="2.1.0-beta1" />
   </ItemGroup>
-	
+
   <ItemGroup Condition="'$(Configuration)'=='V3_8'">
-	<PackageReference Include="Mjml.Net" Version="3.8.0" />
+    <PackageReference Include="Mjml.Net" Version="3.8.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug'">

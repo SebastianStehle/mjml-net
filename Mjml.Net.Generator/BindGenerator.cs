@@ -1,8 +1,8 @@
-﻿using HandlebarsDotNet;
+﻿using System.Text;
+using HandlebarsDotNet;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Text;
 
 namespace Mjml.Net.Generator;
 

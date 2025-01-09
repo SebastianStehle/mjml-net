@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-	<IsRoslynComponent>true</IsRoslynComponent>
+    <IsRoslynComponent>true</IsRoslynComponent>
     <Nullable>enable</Nullable>
-	<LangVersion>latest</LangVersion>
-	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <LangVersion>latest</LangVersion>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Handlebars.Net" Version="2.1.6" PrivateAssets="all" GeneratePathProperty="true" />
-    <PackageReference Include="Meziantou.Analyzer" Version="2.0.184">
+    <PackageReference Include="Meziantou.Analyzer" Version="2.0.185">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -30,7 +31,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="RefactoringEssentials" Version="5.6.0" PrivateAssets="all" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -42,7 +43,7 @@
       <TargetPathWithTargetPlatformMoniker Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
-	
+
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
@@ -50,13 +51,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Template.handlebar" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    
+
     <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

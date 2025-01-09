@@ -8,14 +8,15 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
-	<LangVersion>latest</LangVersion>
-	<RootNamespace>Mjml.Net</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Mjml.Net</RootNamespace>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.2.0" />
     <PackageReference Include="AngleSharp.Css" Version="1.0.0-beta.144" />
-    <PackageReference Include="Meziantou.Analyzer" Version="2.0.184">
+    <PackageReference Include="Meziantou.Analyzer" Version="2.0.185">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -23,14 +24,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	<PackageReference Include="RefactoringEssentials" Version="5.6.0" PrivateAssets="all" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="all" />
+    <PackageReference Include="RefactoringEssentials" Version="5.6.0" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
@@ -42,7 +43,7 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-	
+
   <ItemGroup>
     <ProjectReference Include="..\Mjml.Net.Generator\Mjml.Net.Generator.csproj" OutputItemType="Analyzer" SetTargetFramework="TargetFramework=netstandard2.0" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
