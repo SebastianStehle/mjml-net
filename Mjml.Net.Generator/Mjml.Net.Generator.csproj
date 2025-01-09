@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Handlebars.Net" Version="2.1.6" PrivateAssets="all" GeneratePathProperty="true" />
-    <PackageReference Include="Meziantou.Analyzer" Version="2.0.184">
+    <PackageReference Include="Meziantou.Analyzer" Version="2.0.185">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -9,11 +9,12 @@
     <NoWarn>1591</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>latest</LangVersion>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="HtmlPerformanceKit" Version="1.0.0" />
-    <PackageReference Include="Meziantou.Analyzer" Version="2.0.184">
+    <PackageReference Include="Meziantou.Analyzer" Version="2.0.185">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
