@@ -50,6 +50,7 @@
     <None Remove="Components\Outputs\StyleInclude.html" />
     <None Remove="Components\Outputs\StyleInline.html" />
     <None Remove="Components\Outputs\StyleInline2.html" />
+    <None Remove="Components\Outputs\StyleInline3.html" />
     <None Remove="Components\Outputs\StyleInlineFallback.html" />
     <None Remove="Components\Outputs\TextInclude.html" />
     <None Remove="Components\Outputs\TextRawWhitespace.html" />
@@ -115,6 +116,7 @@
     <EmbeddedResource Include="Components\Outputs\MsoButtonWithBorder.html" />
     <EmbeddedResource Include="Components\Outputs\NavbarWithLinks.html" />
     <EmbeddedResource Include="Components\Outputs\HtmlAttributes.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInline3.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline2.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInlineFallback.html" />

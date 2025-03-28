@@ -1,6 +1,5 @@
 ﻿using AngleSharp;
 using AngleSharp.Css;
-using AngleSharp.Css.Dom;
 using AngleSharp.Dom;
 
 namespace Mjml.Net;
@@ -41,9 +40,6 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         {
             return;
         }
-
-        var cuirrent = element.GetStyle();
-        var x = element.GetStyleSheets();
 
         var css = currentStyle.ToCss();
 

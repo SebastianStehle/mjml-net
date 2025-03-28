@@ -102,6 +102,40 @@ public class StyleTests
     }
 
     [Fact]
+    public async Task Should_render_inline3()
+    {
+        var source = @"
+<mjml-test>
+  <mj-head>
+    <mj-style inline=""inline"">
+      .break-text div {
+        word-break: break-word
+      }
+    </mj-style>
+  </mj-head>
+  <mj-body>
+    <mj-raw>
+      <div class=""break-text"">
+        <div></div>
+      </div>
+    </mj-raw>
+  </mj-body>
+</mjml-test>
+";
+
+        var (result, _) = await TestHelper.RenderAsync(source, new MjmlOptions
+        {
+            PostProcessors =
+            [
+                AngleSharpPostProcessor.Default
+            ],
+            Beautify = true
+        }, helpers: [new StyleHelper()]);
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.StyleInline3.html", result);
+    }
+
+    [Fact]
     public void Should_render_inline_fallback()
     {
         var source = @"
