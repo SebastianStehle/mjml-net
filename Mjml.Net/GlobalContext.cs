@@ -1,18 +1,23 @@
-﻿using Mjml.Net.Internal;
+﻿namespace Mjml.Net;
 
-namespace Mjml.Net;
+public record struct AttributeKey(string ClassOrType, string Name);
+
+public record struct AttributeParentKey(string ParentClass, string ClassOrType, string Name);
 
 public sealed class GlobalContext
 {
-    private readonly Dictionary<string, Dictionary<string, string>> attributesByName = new Dictionary<string, Dictionary<string, string>>(10);
-    private readonly Dictionary<string, Dictionary<string, string>> attributesByClass = new Dictionary<string, Dictionary<string, string>>(10);
+    private readonly Dictionary<AttributeKey, string> attributesByName = new Dictionary<AttributeKey, string>(10);
+    private readonly Dictionary<AttributeKey, string> attributesByClass = new Dictionary<AttributeKey, string>(10);
+    private readonly Dictionary<AttributeParentKey, string> attributesByParentClass = new Dictionary<AttributeParentKey, string>(10);
     private IFileLoader? fileLoader;
 
     public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = [];
 
-    public Dictionary<string, Dictionary<string, string>> AttributesByClass => attributesByClass;
+    public IReadOnlyDictionary<AttributeKey, string> AttributesByClass => attributesByClass;
 
-    public Dictionary<string, Dictionary<string, string>> AttributesByName => attributesByName;
+    public IReadOnlyDictionary<AttributeParentKey, string> AttributesByParentClass => attributesByParentClass;
+
+    public IReadOnlyDictionary<AttributeKey, string> AttributesByName => attributesByName;
 
     public MjmlOptions Options { get; set; }
 
@@ -53,55 +58,16 @@ public sealed class GlobalContext
 
     public void SetTypeAttribute(string name, string type, string value)
     {
-        if (!attributesByName.TryGetValue(name, out var attributes))
-        {
-            attributes = [];
-            attributesByName[name] = attributes;
-        }
-
-        attributes[type] = value;
+        attributesByName[new AttributeKey(type, name)] = value;
     }
 
     public void SetClassAttribute(string name, string className, string value)
     {
-        if (!attributesByClass.TryGetValue(className, out var attributes))
-        {
-            attributes = [];
-            attributesByClass[className] = attributes;
-        }
-
-        attributes[name] = value;
+        attributesByClass[new AttributeKey(className, name)] = value;
     }
 
-    public string? GetAttribute(string elementName, string[]? classes)
+    public void SetParentClassAttribute(string name, string parentClassName, string type, string value)
     {
-        if (attributesByName.TryGetValue(elementName, out var byType))
-        {
-            if (byType.TryGetValue(elementName, out var attribute))
-            {
-                return attribute;
-            }
-
-            if (byType.TryGetValue(Constants.All, out attribute))
-            {
-                return attribute;
-            }
-        }
-
-        if (attributesByClass.Count > 0 && classes != null)
-        {
-            foreach (var className in classes)
-            {
-                if (attributesByClass.TryGetValue(className, out var byName))
-                {
-                    if (byName.TryGetValue(elementName, out var attribute))
-                    {
-                        return attribute;
-                    }
-                }
-            }
-        }
-
-        return null;
+        attributesByParentClass[new AttributeParentKey(parentClassName, type, name)] = value;
     }
 }

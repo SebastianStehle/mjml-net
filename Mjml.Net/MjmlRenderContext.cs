@@ -61,22 +61,22 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
         try
         {
-            var substree = reader.ReadSubtree();
+            var subTree = reader.ReadSubtree();
 
             // Only add the text error once per parent.
             var hasAddedError = false;
 
-            while (substree.Read())
+            while (subTree.Read())
             {
-                switch (substree.TokenKind)
+                switch (subTree.TokenKind)
                 {
                     case HtmlTokenKind.Tag:
-                        ReadElement(substree.Name, substree, parent, file);
+                        ReadElement(subTree.Name, subTree, parent, file);
                         break;
                     case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
-                        ReadComment(substree, parent);
+                        ReadComment(subTree, parent);
                         break;
-                    case HtmlTokenKind.Text when !hasAddedError && substree.TextAsSpan.Trim().Length > 0:
+                    case HtmlTokenKind.Text when !hasAddedError && subTree.TextAsSpan.Trim().Length > 0:
                         errors.Add(
                             "Unexpected text content.",
                             ValidationErrorType.UnexpectedText,
