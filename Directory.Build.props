@@ -12,6 +12,6 @@
     <RepositoryUrl>https://github.com/SebastianStehle/mjml-net.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>4.7.0</Version>
+    <Version>4.8.0</Version>
   </PropertyGroup>
 </Project>
