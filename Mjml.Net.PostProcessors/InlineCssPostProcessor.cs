@@ -1,6 +1,8 @@
 ﻿using AngleSharp;
 using AngleSharp.Css;
+using AngleSharp.Css.Dom;
 using AngleSharp.Dom;
+using System.Diagnostics;
 
 namespace Mjml.Net;
 
@@ -34,16 +36,13 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 
     private static void InlineStyle(IElement element)
     {
-        var currentStyle = element.Owner!.DefaultView.GetStyleCollection().GetDeclarations(element);
-
-        if (!currentStyle.Any())
+        var currentStyle = element.Owner!.DefaultView.GetStyleCollection().ComputeCascadedStyle(element);
+        if (currentStyle.Any())
         {
-            return;
+            var css = currentStyle.ToCss();
+
+            element.SetAttribute(TagNames.Style, css);
         }
-
-        var css = currentStyle.ToCss();
-
-        element.SetAttribute(TagNames.Style, css);
     }
 
     private static void RenameNonInline(IElement element, IDocument document)

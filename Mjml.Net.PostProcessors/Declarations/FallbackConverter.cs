@@ -10,9 +10,23 @@ internal class FallbackConverter(IValueConverter inner) : IValueConverter
     public ICssValue Convert(StringSource source)
     {
         var result = inner.Convert(source);
+        if (result != null)
+        {
+            return result;
+        }
 
-        result ??= new FallbackCssValue(source.TakeUntilClosed());
+        var value = source.Content;
+        source.Next(value.Length);
+        return new FallbackCssValue(value);
+    }
 
-        return result;
+    public ICssValue Merge(ICssValue[] values)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ICssValue[] Split(ICssValue value)
+    {
+        throw new NotImplementedException();
     }
 }

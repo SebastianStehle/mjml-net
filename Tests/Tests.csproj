@@ -126,6 +126,7 @@
     <EmbeddedResource Include="Components\Outputs\StyleInclude.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline2.html" />
+    <EmbeddedResource Include="Components\Outputs\StyleInline4.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInline3.html" />
     <EmbeddedResource Include="Components\Outputs\StyleInlineFallback.html" />
     <EmbeddedResource Include="Components\Outputs\Table.html" />

@@ -136,6 +136,29 @@ public class StyleTests
     }
 
     [Fact]
+    public async Task Should_render_inline4_with_shorthand()
+    {
+        var source = @"
+<mjml>
+  <mj-body>
+    <mj-button href=""https://mjml.io"">MJML</mj-button>
+  </mj-body>
+</mjml>
+";
+
+        var (result, _) = await TestHelper.RenderAsync(source, new MjmlOptions
+        {
+            PostProcessors =
+            [
+                AngleSharpPostProcessor.Default
+            ],
+            Beautify = true
+        }, helpers: [new StyleHelper()]);
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.StyleInline4.html", result);
+    }
+
+    [Fact]
     public void Should_render_inline_fallback()
     {
         var source = @"
