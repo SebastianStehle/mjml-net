@@ -58,4 +58,19 @@ public class HeroTests
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.HeroDividers.html", result);
     }
+
+    [Fact]
+    public void Should_render_fixed_height_hero_with_height_less_padding()
+    {
+        var source = """
+            <mj-hero mode="fixed-height" height="469px" background-width="600px" background-height="469px"background-color="#2a3448" padding="100px 0px">
+            <mj-divider />
+            <mj-divider />
+                </mj-hero>
+            """;
+
+        var (result, _) = TestHelper.Render(source);
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.HeroFixedHeight.html", result);
+    }
 }
