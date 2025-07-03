@@ -195,7 +195,7 @@ public partial class HeroComponent : BodyComponentBase
         {
             var height =
                 UnitParser.Parse(Height).Value -
-                UnitParser.Parse(PaddingTop).Value +
+                UnitParser.Parse(PaddingTop).Value -
                 UnitParser.Parse(PaddingBottom).Value;
 
             renderer.StartElement("td") // Style: hero

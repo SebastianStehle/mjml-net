@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\Outputs\HeroFixedHeight.html" />
     <None Remove="Components\Outputs\StyleInline3.html" />
   </ItemGroup>
 
@@ -100,6 +101,7 @@
     <EmbeddedResource Include="Components\Outputs\Hero.html" />
     <EmbeddedResource Include="Components\Outputs\HeroDivider.html" />
     <EmbeddedResource Include="Components\Outputs\HeroDividers.html" />
+    <EmbeddedResource Include="Components\Outputs\HeroFixedHeight.html" />
     <EmbeddedResource Include="Components\Outputs\HtmlAttributeInvalid.html" />
     <EmbeddedResource Include="Components\Outputs\HtmlAttributes.html" />
     <EmbeddedResource Include="Components\Outputs\HtmlAttributesNoProcessor.html" />
