@@ -60,6 +60,6 @@ public class BugReportTests
         var (html, errors) = renderer.Render(four);
 
         Assert.Empty(errors);
-        Assert.DoesNotContain("data-content-key", html);
+        Assert.DoesNotContain("data-content-key", html, StringComparison.Ordinal);
     }
 }
