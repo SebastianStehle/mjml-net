@@ -26,9 +26,6 @@ dotnet_diagnostic.CA1707.severity = none
 # CS8618: Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 dotnet_diagnostic.CS8618.severity = none
 
-# IDE0290: Use primary constructor
-dotnet_diagnostic.IDE0290.severity = none
-
 # IDE0301: Simplify collection initialization
 dotnet_diagnostic.IDE0301.severity = none
 

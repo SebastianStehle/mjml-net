@@ -2,7 +2,7 @@
 
 namespace Mjml.Net.Internal;
 
-internal sealed class SubtreeReader : HtmlReaderWrapper
+internal sealed class SubtreeReader(HtmlReaderWrapper inner) : HtmlReaderWrapper(inner.Impl)
 {
     private static readonly HashSet<string> VoidTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
@@ -21,15 +21,7 @@ internal sealed class SubtreeReader : HtmlReaderWrapper
         "track",
         "wbr",
     };
-
-    private readonly HtmlReaderWrapper inner;
     private int depth = 1;
-
-    public SubtreeReader(HtmlReaderWrapper inner)
-        : base(inner.Impl)
-    {
-        this.inner = inner;
-    }
 
     public override bool Read()
     {

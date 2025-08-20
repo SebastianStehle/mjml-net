@@ -20,12 +20,6 @@ public interface IHtmlRenderer
     IHtmlAttrRenderer StartElement(string elementName, bool close = false);
 
     /// <summary>
-    /// Returns a string builder back to the pool.
-    /// </summary>
-    /// <param name="stringBuilder">The string builder to return.</param>
-    void ReturnStringBuilder(StringBuilder stringBuilder);
-
-    /// <summary>
     /// Ends an element.
     /// </summary>
     /// <param name="elementName">The name of the element.</param>
@@ -59,7 +53,7 @@ public interface IHtmlRenderer
     /// Renders a text.
     /// </summary>
     /// <param name="value">The value to render.</param>
-    void Plain(StringBuilder value);
+    void Plain(IBuffer value);
 
     /// <summary>
     /// Renders a text.
@@ -94,7 +88,7 @@ public interface IHtmlRenderer
     /// Removes the buffer from the stack and returns the content.
     /// </summary>
     /// <returns>The buffer content.</returns>
-    StringBuilder? EndBuffer();
+    IBuffer EndBuffer();
 
     internal StringBuilder StringBuilder { get; }
 

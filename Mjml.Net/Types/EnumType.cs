@@ -1,20 +1,12 @@
 ﻿namespace Mjml.Net.Types;
 
-public class EnumType : IType
+public class EnumType(bool isOptional, params string[] values) : IType
 {
-    private readonly HashSet<string> allowedValues;
-    private readonly bool isOptional;
+    private readonly HashSet<string> allowedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);
 
     public bool IsOptional => isOptional;
 
     public IReadOnlySet<string> AllowedValues => allowedValues;
-
-    public EnumType(bool isOptional, params string[] values)
-    {
-        allowedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);
-
-        this.isOptional = isOptional;
-    }
 
     public bool Validate(string value, ref ValidationContext context)
     {

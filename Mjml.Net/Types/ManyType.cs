@@ -1,23 +1,12 @@
 ﻿namespace Mjml.Net.Types;
 
-public sealed class ManyType : IType
+public sealed class ManyType(IType unit, int min, int max) : IType
 {
-    private readonly IType unit;
-    private readonly int min;
-    private readonly int max;
-
     public IType Unit => unit;
 
     public int Min => min;
 
     public int Max => max;
-
-    public ManyType(IType unit, int min, int max)
-    {
-        this.unit = unit;
-        this.min = min;
-        this.max = max;
-    }
 
     public bool Validate(string value, ref ValidationContext context)
     {

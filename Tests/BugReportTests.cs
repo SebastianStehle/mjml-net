@@ -37,4 +37,46 @@ public class BugReportTests
             return html;
         }
     }
+
+    [Fact]
+    public void Should_not_leak_content_between_calls_when_content_has_multiple_roots()
+    {
+        var renderer = new MjmlRenderer();
+
+        var mjml1 = @"
+<mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>Leaked Content</mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>
+<mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>Leaked Content</mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>";
+        _ = renderer.Render(mjml1);
+
+        var mjml2 = @"
+<mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>Hello World</mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>";
+        var (html, errors) = renderer.Render(mjml2);
+
+        Assert.Empty(errors);
+        Assert.DoesNotContain("Leaked Content", html, StringComparison.Ordinal);
+    }
 }

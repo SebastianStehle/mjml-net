@@ -1,15 +1,10 @@
 ﻿namespace Mjml.Net.Types;
 
-public sealed class OneOfType : IType
+public sealed class OneOfType(params IType[] units) : IType
 {
-    private readonly List<IType> units;
+    private readonly List<IType> units = [.. units];
 
     public IReadOnlyCollection<IType> Units => units;
-
-    public OneOfType(params IType[] units)
-    {
-        this.units = [..units];
-    }
 
     public bool Validate(string value, ref ValidationContext context)
     {

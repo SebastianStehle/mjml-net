@@ -1,15 +1,8 @@
 ﻿namespace Mjml.Net.Types;
 
-public sealed class NumberType : IType
+public sealed class NumberType(params Unit[] units) : IType
 {
-    private readonly Unit[] units;
-
     public IReadOnlyCollection<Unit> Units => units;
-
-    public NumberType(params Unit[] units)
-    {
-        this.units = units;
-    }
 
     public bool Validate(string value, ref ValidationContext context)
     {

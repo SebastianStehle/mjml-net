@@ -22,33 +22,19 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
     private void ClearRenderData()
     {
         analyzedFonts.Clear();
-
+        // Some buffers might get lost.
         buffers.Clear();
-    }
-
-    public void ReturnStringBuilder(StringBuilder stringBuilder)
-    {
-        DefaultPools.StringBuilders.Return(stringBuilder);
     }
 
     public void StartBuffer()
     {
-        buffers.Push(new RenderBuffer(DefaultPools.StringBuilders.Get(), mjmlOptions.Beautify));
+        buffers.Push(new RenderBuffer(mjmlOptions.Beautify));
     }
 
-    public StringBuilder? EndBuffer()
+    public IBuffer EndBuffer()
     {
         Buffer.FlushAll();
-
-        return buffers.Pop()?.StringBuilder;
-    }
-
-    public void RenderHelpers(HelperTarget target)
-    {
-        foreach (var helper in mjmlRenderer.Helpers)
-        {
-            helper.Render(this, target, context);
-        }
+        return buffers.Pop()!;
     }
 
     public IHtmlAttrRenderer StartElement(string elementName, bool close = false)
@@ -142,7 +128,7 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
         Buffer.StartText();
     }
 
-    public void Plain(StringBuilder? value)
+    public void Plain(IBuffer value)
     {
         Buffer.Plain(value);
     }
@@ -199,6 +185,14 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
             {
                 context.SetGlobalData(value, font, true);
             }
+        }
+    }
+
+    public void RenderHelpers(HelperTarget target)
+    {
+        foreach (var helper in mjmlRenderer.Helpers)
+        {
+            helper.Render(this, target, context);
         }
     }
 }

@@ -38,7 +38,6 @@ public partial class TestComponent : Component
             {
                 // Already formatted properly.
                 renderer.Plain(head.Buffer);
-                renderer.ReturnStringBuilder(head.Buffer);
             }
         }
 
@@ -55,7 +54,6 @@ public partial class TestComponent : Component
             {
                 // Already formatted properly.
                 renderer.Plain(body.Buffer);
-                renderer.ReturnStringBuilder(body.Buffer);
             }
         }
 
