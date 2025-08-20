@@ -18,6 +18,7 @@ public partial class RootComponent : Component
 
     public override void Render(IHtmlRenderer renderer, GlobalContext context)
     {
+        context.ClearGlobalData();
         context.SetGlobalData("lang", new Language(Lang));
         context.SetGlobalData("dir", new Direction(Dir));
 

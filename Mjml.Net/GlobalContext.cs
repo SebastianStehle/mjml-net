@@ -56,6 +56,11 @@ public sealed class GlobalContext
         GlobalData[key] = value;
     }
 
+    public void ClearGlobalData()
+    {
+        GlobalData.Clear();
+    }
+
     public void SetTypeAttribute(string name, string type, string value)
     {
         attributesByName[new AttributeKey(type, name)] = value;
