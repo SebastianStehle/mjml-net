@@ -8,15 +8,9 @@ namespace Tests.Internal;
 /// <remarks>
 /// Useful for preloading.
 /// </remarks>
-public sealed class InMemoryFileLoader : IFileLoader
+public sealed class InMemoryFileLoader(IReadOnlyDictionary<string, string> content) : IFileLoader
 {
     private readonly Stack<string> pathStack = new Stack<string>();
-    private readonly IReadOnlyDictionary<string, string> content;
-
-    public InMemoryFileLoader(IReadOnlyDictionary<string, string> content)
-    {
-        this.content = content;
-    }
 
     /// <inheritdoc />
     public string? LoadText(string path)

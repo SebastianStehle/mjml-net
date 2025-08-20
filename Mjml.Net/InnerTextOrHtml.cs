@@ -15,7 +15,7 @@ public sealed class InnerTextOrHtml
 
     public InnerTextOrHtml(string input)
     {
-        parts = new List<string>(1) { input };
+        parts = [input];
     }
 
     public void Add(string part)

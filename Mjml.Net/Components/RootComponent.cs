@@ -63,12 +63,10 @@ public partial class RootComponent : Component
             {
                 // Already formatted properly.
                 renderer.Plain(head.Buffer);
-                renderer.ReturnStringBuilder(head.Buffer);
             }
         }
 
         renderer.RenderHelpers(HelperTarget.HeadEnd);
-
         renderer.EndElement("head");
     }
 
@@ -86,12 +84,10 @@ public partial class RootComponent : Component
             {
                 // Already formatted properly.
                 renderer.Plain(body.Buffer);
-                renderer.ReturnStringBuilder(body.Buffer);
             }
         }
 
         renderer.RenderHelpers(HelperTarget.BodyEnd);
-
         renderer.EndElement("body");
     }
 }

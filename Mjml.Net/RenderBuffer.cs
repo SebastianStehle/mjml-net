@@ -4,10 +4,9 @@
 
 namespace Mjml.Net;
 
-internal sealed class RenderBuffer
+internal sealed class RenderBuffer(bool beautify) : IBuffer
 {
-    private readonly StringBuilder sb = new StringBuilder();
-    private readonly bool beautify;
+    private StringBuilder sb = DefaultPools.StringBuilders.Get() ?? new();
     private bool elementSelfClosed;
     private bool elementStarted;
     private int numClasses;
@@ -16,20 +15,41 @@ internal sealed class RenderBuffer
     private string? pendingConditionalStart;
     private string? pendingConditionalEnd;
 
-    public RenderBuffer(StringBuilder sb, bool beautify)
-    {
-        this.sb = sb;
-        this.beautify = beautify;
-    }
+    public bool IsEmpty => sb == null || sb.Length == 0;
 
     public StringBuilder StringBuilder
     {
-        get => sb!;
+        get => sb ?? throw new InvalidOperationException("Buffer has already returned to the pool.");
     }
 
-    public void ReturnStringBuilder(StringBuilder stringBuilder)
+    public void Dispose()
     {
-        DefaultPools.StringBuilders.Return(stringBuilder);
+        if (sb != null)
+        {
+            DefaultPools.StringBuilders.Return(sb);
+            // This will throw a null reference exception, but it is easier than having to check
+            // the dependency for every call.
+            sb = null!;
+        }
+    }
+
+    int IBuffer.AppendTo(StringBuilder target)
+    {
+        target.Append(sb);
+        Dispose();
+        return 0;
+    }
+
+    string IBuffer.ToText()
+    {
+        var result = sb.ToString();
+        Dispose();
+        return result;
+    }
+
+    public override string ToString()
+    {
+        throw new NotSupportedException();
     }
 
     public void FlushAll()
@@ -151,7 +171,6 @@ internal sealed class RenderBuffer
     public void EndStyle()
     {
         sb.Append(';');
-
         numStyles++;
     }
 
@@ -170,35 +189,6 @@ internal sealed class RenderBuffer
         sb.Append('>');
 
         WriteLineEnd();
-    }
-
-    private void FlushElement()
-    {
-        if (!elementStarted)
-        {
-            return;
-        }
-
-        if (numClasses > 0 || numStyles > 0)
-        {
-            // Close the open class or style attribute.
-            sb.Append('\"');
-        }
-
-        if (elementSelfClosed)
-        {
-            sb.Append("/>");
-        }
-        else
-        {
-            indent++;
-            sb.Append('>');
-        }
-
-        WriteLineEnd();
-
-        elementStarted = false;
-        elementSelfClosed = false;
     }
 
     public void Content(string? value)
@@ -266,19 +256,18 @@ internal sealed class RenderBuffer
         WriteLineStart();
     }
 
-    public void Plain(StringBuilder? value)
+    public void Plain(IBuffer value)
     {
         FlushElement();
         FlushConditionalStart();
         FlushConditionalEnd();
 
-        if (value?.Length == 0)
+        if (value.IsEmpty)
         {
             return;
         }
 
-        sb.Append(value);
-
+        value.AppendTo(sb);
         WriteLineEnd();
     }
 
@@ -294,7 +283,6 @@ internal sealed class RenderBuffer
         }
 
         value.AppendTo(sb);
-
         WriteLineEnd();
     }
 
@@ -310,7 +298,6 @@ internal sealed class RenderBuffer
         }
 
         sb.Append(value);
-
         WriteLineEnd();
     }
 
@@ -322,7 +309,7 @@ internal sealed class RenderBuffer
         }
     }
 
-    private void WriteLineStart()
+    public void WriteLineStart()
     {
         if (beautify)
         {
@@ -350,8 +337,36 @@ internal sealed class RenderBuffer
     public void EndConditional(string content)
     {
         FlushElement();
-
         pendingConditionalEnd = content;
+    }
+
+    private void FlushElement()
+    {
+        if (!elementStarted)
+        {
+            return;
+        }
+
+        if (numClasses > 0 || numStyles > 0)
+        {
+            // Close the open class or style attribute.
+            sb.Append('\"');
+        }
+
+        if (elementSelfClosed)
+        {
+            sb.Append("/>");
+        }
+        else
+        {
+            indent++;
+            sb.Append('>');
+        }
+
+        WriteLineEnd();
+
+        elementStarted = false;
+        elementSelfClosed = false;
     }
 
     private void FlushConditionalEnd()

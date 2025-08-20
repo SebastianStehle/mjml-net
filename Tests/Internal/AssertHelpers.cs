@@ -23,7 +23,7 @@ public static partial class AssertHelpers
             sb.AppendLine(line.Replace('\'', '"'));
         }
 
-        var actual = sut.EndBuffer()!.ToString();
+        var actual = sut.EndBuffer().ToText();
 
         Assert.Equal(sb.ToString(), actual);
     }

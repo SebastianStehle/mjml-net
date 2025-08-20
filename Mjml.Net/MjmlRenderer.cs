@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Mjml.Net.Components;
+﻿using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
 using Mjml.Net.Helpers;
@@ -136,7 +135,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     public async ValueTask<RenderResult> RenderAsync(TextReader mjml, MjmlOptions? options = null,
         CancellationToken ct = default)
     {
-#if NET8_0_OR_GREATER
+#if NET7_0_OR_GREATER
         return await RenderCoreAsync(await mjml.ReadToEndAsync(ct), options, ct);
 #else
         return await RenderCoreAsync(await mjml.ReadToEndAsync(), options, ct);
@@ -170,7 +169,6 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         options ??= new MjmlOptions();
 
         var reader = new HtmlReaderWrapper(mjml);
-
         var context = DefaultPools.RenderContexts.Get();
         try
         {
@@ -178,17 +176,9 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
             context.StartBuffer();
             context.Read(reader, null, null);
 
-            StringBuilder? buffer = null;
-            try
-            {
-                buffer = context.EndBuffer()!;
+            using var buffer = context.EndBuffer();
 
-                return (new RenderResult(buffer.ToString()!, context.Validate()), options);
-            }
-            finally
-            {
-                DefaultPools.StringBuilders.Return(buffer!);
-            }
+            return (new RenderResult(buffer.ToText(), context.Validate()), options);
         }
         finally
         {
