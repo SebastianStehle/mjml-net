@@ -15,7 +15,7 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
     private string? pendingConditionalStart;
     private string? pendingConditionalEnd;
 
-    public bool IsEmpty => sb.Length == 0;
+    public bool IsEmpty => sb == null || sb.Length == 0;
 
     public StringBuilder StringBuilder
     {
@@ -45,6 +45,11 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         var result = sb.ToString();
         Dispose();
         return result;
+    }
+
+    public override string ToString()
+    {
+        throw new NotSupportedException();
     }
 
     public void FlushAll()

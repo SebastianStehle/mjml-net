@@ -12,7 +12,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
     private bool hasAddedClosingError;
-    private bool hasRendered;
 
     public ValidationErrors Validate()
     {
@@ -37,7 +36,6 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         mjmlOptions = null!;
         mjmlRenderer = null!;
         errors.Clear();
-        hasRendered = false;
         hasAddedClosingError = false;
 
         ClearRenderData();
@@ -136,10 +134,9 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         ValidatingClosingState(name, reader);
 
         // If there is no parent, we handle the root and we can render everything top to bottom.
-        if (parent == null && !hasRendered)
+        if (parent == null)
         {
             BindAndRender(component);
-            hasRendered = true;
         }
     }
 

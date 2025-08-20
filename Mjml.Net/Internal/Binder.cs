@@ -1,7 +1,4 @@
-﻿using System.Runtime.Intrinsics.X86;
-using System.Xml.Linq;
-
-namespace Mjml.Net.Internal;
+﻿namespace Mjml.Net.Internal;
 
 internal sealed class Binder : IBinder
 {

@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Mjml.Net.Components;
+﻿using Mjml.Net.Components;
 using Mjml.Net.Components.Body;
 using Mjml.Net.Components.Head;
 using Mjml.Net.Helpers;
@@ -179,7 +178,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
 
             using var buffer = context.EndBuffer();
 
-            return (new RenderResult(buffer.ToString()!, context.Validate()), options);
+            return (new RenderResult(buffer.ToText(), context.Validate()), options);
         }
         finally
         {
