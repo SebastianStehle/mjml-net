@@ -32,9 +32,9 @@ public class HtmlSpecialCaseTests
     [Fact]
     public void Should_expose_html_errors()
     {
-        var source = $"""
-            <>
-            """;
+        var source = $@"
+<>
+";
 
         var result = TestHelper.Render(source);
 

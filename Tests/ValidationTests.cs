@@ -41,14 +41,14 @@ public class ValidationTests
     [Fact]
     public void Should_add_error_if_not_closed_properly2()
     {
-        var source = """
-             <mjml>
-                <mj-body>
-                    <mj-section>
-                        <mj-column>
-                            <mj-text>
-                                <mj-column>
-            """;
+        var source = @"
+ <mjml>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    <mj-column>
+";
 
         var errors = Render(source);
 

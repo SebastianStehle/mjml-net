@@ -18,6 +18,16 @@ public sealed class InnerTextOrHtml
         parts = [input];
     }
 
+    public string? SinglePart()
+    {
+        if (parts.Count == 1)
+        {
+            return parts[0];
+        }
+
+        return null;
+    }
+
     public void Add(string part)
     {
         parts.Add(part);

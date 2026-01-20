@@ -1,8 +1,6 @@
 ﻿using AngleSharp;
 using AngleSharp.Css;
-using AngleSharp.Css.Dom;
 using AngleSharp.Dom;
-using System.Diagnostics;
 
 namespace Mjml.Net;
 

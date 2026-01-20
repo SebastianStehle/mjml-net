@@ -143,7 +143,6 @@ public partial class SocialElementComponent : BodyComponentBase
 
         renderer.StartElement("img", true) // Style img
             .Attr("alt", Alt)
-            .Attr("height", $"{UnitParser.Parse(IconHeight ?? IconSize).Value}")
             .Attr("sizes", Sizes)
             .Attr("src", socialNetwork.ImageUrl)
             .Attr("srcset", Srcset)

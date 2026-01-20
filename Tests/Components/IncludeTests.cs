@@ -11,10 +11,11 @@ public class IncludeTests
         var files = new Dictionary<string, string>
         {
             ["./style.css"] = """
-            .red-text div {
-              color: red !important;
-            }
-            """        };
+                .red-text div {
+                  color: red !important;
+                }
+                """
+        };
 
         var source = """
             <mjml-test body="false">
@@ -40,13 +41,14 @@ public class IncludeTests
         var files = new Dictionary<string, string>
         {
             ["./text.mjml"] = """
-            <mj-group>
-                <mj-spacer />
-            </mj-group>
-            <mj-group>
-                <mj-spacer />
-            </mj-group>
-            """        };
+                <mj-group>
+                    <mj-spacer />
+                </mj-group>
+                <mj-group>
+                    <mj-spacer />
+                </mj-group>
+                """
+        };
 
         var source = """
             <mjml-test head="false">
@@ -90,12 +92,13 @@ public class IncludeTests
         var files = new Dictionary<string, string>
         {
             ["./text.mjml"] = """
-                            <mjml>
-                                <mj-body>
-                                    <mj-text>Hello MJML</mj-text>
-                                </mj-body>
-                            </mjml>
-            """        };
+                <mjml>
+                    <mj-body>
+                        <mj-text>Hello MJML</mj-text>
+                    </mj-body>
+                </mjml>
+                """
+        };
 
         const string source = """
             <mjml-test head="false">
