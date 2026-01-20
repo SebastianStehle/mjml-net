@@ -10,11 +10,11 @@ public class HtmlReaderTests
     [Fact]
     public void Should_read_inner_with_child()
     {
-        var input = @"
-<div>
-    <a></a>
-</div>
-";
+        var input = """
+            <div>
+                <a></a>
+            </div>
+            """;
         var root = new Element();
 
         Read(new HtmlReaderWrapper(input), root);
@@ -28,12 +28,12 @@ public class HtmlReaderTests
     [Fact]
     public void Should_read_inner_with_children()
     {
-        var input = @"
-<div>
-    <a></a>
-    <a></a>
-</div>
-";
+        var input = """
+            <div>
+                <a></a>
+                <a></a>
+            </div>
+            """;
         var root = new Element();
 
         Read(new HtmlReaderWrapper(input), root);
@@ -48,15 +48,15 @@ public class HtmlReaderTests
     [Fact]
     public void Should_read_inner_with_children_and_text()
     {
-        var input = @"
-<div>
-    text1
-    <a></a>
-    text2
-    <a></a>
-    text3
-</div>
-";
+        var input = """
+            <div>
+                text1
+                <a></a>
+                text2
+                <a></a>
+                text3
+            </div>
+            """;
         var root = new Element();
 
         Read(new HtmlReaderWrapper(input), root);
@@ -71,20 +71,20 @@ public class HtmlReaderTests
     [Fact]
     public void Should_read_nested()
     {
-        var input = @"
-<div>
-    text1
-    <a>
-        <strong></strong>
-        inner
-    </a>
-    <a>
-        <strong></strong>
-        inner
-    </a>
-    text2
-</div>
-";
+        var input = """
+            <div>
+                text1
+                <a>
+                    <strong></strong>
+                    inner
+                </a>
+                <a>
+                    <strong></strong>
+                    inner
+                </a>
+                text2
+            </div>
+            """;
         var root = new Element();
 
         Read(new HtmlReaderWrapper(input), root);
@@ -101,19 +101,19 @@ public class HtmlReaderTests
     [Fact]
     public void Should_read_invalid_html()
     {
-        var input = @"
-<div>
-    text1
-    <a>
-        <br></br>
-    </a>
-    <a>
-        <strong></strong>
-        inner
-    </a>
-    text2
-</div>
-";
+        var input = """
+            <div>
+                text1
+                <a>
+                    <br></br>
+                </a>
+                <a>
+                    <strong></strong>
+                    inner
+                </a>
+                text2
+            </div>
+            """;
         var root = new Element();
 
         Read(new HtmlReaderWrapper(input), root);
@@ -129,10 +129,10 @@ public class HtmlReaderTests
     [Fact]
     public void Should_read_single_quoted_with_ambersand()
     {
-        var input = @"
-<a href='&'></a>
-<a href=""url""></a>
-";
+        var input = """
+            <a href='&'></a>
+            <a href="url"></a>
+            """;
         var root = new Element();
 
         Read(new HtmlReaderWrapper(input), root);

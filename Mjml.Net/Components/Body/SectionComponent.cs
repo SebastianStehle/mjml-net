@@ -114,6 +114,7 @@ public partial class SectionComponent : BodyComponentBase
     private void RenderFullWidth(IHtmlRenderer renderer, GlobalContext context)
     {
         var hasBackground = HasBackground();
+        var hasBorderRadius = !string.IsNullOrWhiteSpace(BorderRadius);
 
         var tableElement = renderer.StartElement("table")
             .Attr("align", "center")
@@ -124,7 +125,8 @@ public partial class SectionComponent : BodyComponentBase
             .Attr("role", "presentation")
             .Class(CssClass)
             .Style("width", "100%")
-            .Style("border-radius", BorderRadius);
+            .Style("border-radius", BorderRadius)
+            .StyleIf("border-collapse", hasBorderRadius, "separate");
 
         if (hasBackground)
         {
@@ -206,12 +208,14 @@ public partial class SectionComponent : BodyComponentBase
     {
         var hasBackground = HasBackground();
         var background = hasBackground ? GetBackground() : null;
+        var hasBorderRadius = !string.IsNullOrWhiteSpace(BorderRadius);
 
         var divElement = renderer.StartElement("div") // Style div
             .Class(fullWidth ? null : CssClass)
             .Style("border-radius", BorderRadius)
             .Style("margin", "0px auto")
-            .Style("max-width", $"{ActualWidth}px");
+            .Style("max-width", $"{ActualWidth}px")
+            .StyleIf("overflow", !string.IsNullOrWhiteSpace(BorderRadius), "hidden");
 
         if (!fullWidth)
         {
@@ -245,8 +249,8 @@ public partial class SectionComponent : BodyComponentBase
             .Attr("cellpadding", "0")
             .Attr("cellspacing", "0")
             .Attr("role", "presentation")
-            .Style("border-radius", BorderRadius)
-            .Style("width", "100%");
+            .Style("width", "100%")
+            .StyleIf("border-collapse", hasBorderRadius, "separate");
 
         if (!fullWidth)
         {
@@ -274,6 +278,7 @@ public partial class SectionComponent : BodyComponentBase
             .Style("border-left", BorderLeft)
             .Style("border-right", BorderRight)
             .Style("border-top", BorderTop)
+            .Style("border-radius", BorderRadius)
             .Style("direction", Direction)
             .Style("font-size", "0px")
             .Style("padding", Padding)

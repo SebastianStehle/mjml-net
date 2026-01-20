@@ -58,10 +58,11 @@ public class TextTests
     [Fact]
     public void Should_render_raw_text_with_whitespace()
     {
-        var source = @"
-<mj-text>
-    <p>Hello&nbsp;MJML</p>
-</mj-text>";
+        var source = """
+            <mj-text>
+                <p>Hello&nbsp;MJML</p>
+            </mj-text>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 

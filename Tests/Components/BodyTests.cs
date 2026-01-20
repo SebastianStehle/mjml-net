@@ -7,12 +7,12 @@ public class BodyTests
     [Fact]
     public void Should_render_body_only()
     {
-        var source = @"
-<mjml>
-    <mj-body>
-    </mj-body>
- </mjml>
-";
+        var source = """
+            <mjml>
+                <mj-body>
+                </mj-body>
+             </mjml>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 
@@ -22,12 +22,12 @@ public class BodyTests
     [Fact]
     public void Should_add_background_to_body()
     {
-        var source = @"
-<mjml>
-    <mj-body background-color=""red"">
-    </mj-body>
-</mjml>
-";
+        var source = """
+            <mjml>
+                <mj-body background-color="red">
+                </mj-body>
+            </mjml>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 

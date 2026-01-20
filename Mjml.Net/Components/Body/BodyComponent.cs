@@ -1,4 +1,6 @@
-﻿namespace Mjml.Net.Components.Body;
+﻿using Mjml.Net.Helpers;
+
+namespace Mjml.Net.Components.Body;
 
 public partial class BodyComponent : Component
 {
@@ -34,11 +36,16 @@ public partial class BodyComponent : Component
             context.SetGlobalData("default", new Background(BackgroundColor));
         }
 
+        var title = context.GlobalData.Values.OfType<Title>().FirstOrDefault()?.Value;
+
         renderer.StartBuffer();
 
         renderer.StartElement("div")
-            .Attr("lang", context.GlobalData.Values.OfType<Language>().FirstOrDefault()?.Value)
+            .Attr("aria-label", context.GlobalData.Values.OfType<Title>().FirstOrDefault()?.Value.SinglePart())
+            .Attr("aria-roledescription", "email")
             .Attr("dir", context.GlobalData.Values.OfType<Direction>().FirstOrDefault()?.Value)
+            .Attr("lang", context.GlobalData.Values.OfType<Language>().FirstOrDefault()?.Value)
+            .Attr("role", "article")
             .Class(CssClass)
             .Style("background-color", BackgroundColor);
 

@@ -18,21 +18,22 @@ public class BugReportTests
 
         static string RenderSample()
         {
-            var source = @"
-<mj-raw>
-            <!-- MJML-COMPONENT-START -->
-</mj-raw>
-<mj-section>
-    <mj-column>
-        <mj-button font-family=""Helvetica"" background-color=""#f45e43"" color=""white"">
-            Don't click me!
-        </mj-button>
-    </mj-column>
-</mj-section>
-<mj-raw>
-    <!-- MJML-COMPONENT-END -->
-</mj-raw>
-";
+            var source = """
+                <mj-raw>
+                    <!-- MJML-COMPONENT-START -->
+                </mj-raw>
+                <mj-section>
+                    <mj-column>
+                        <mj-button font-family="Helvetica" background-color="#f45e43" color="white">
+                            Don't click me!
+                        </mj-button>
+                    </mj-column>
+                </mj-section>
+                <mj-raw>
+                    <!-- MJML-COMPONENT-END -->
+                </mj-raw>
+                """;
+
             var (html, _) = new MjmlRenderer().Render(source);
             return html;
         }
@@ -43,37 +44,39 @@ public class BugReportTests
     {
         var renderer = new MjmlRenderer();
 
-        var mjml1 = @"
-<mjml>
-    <mj-body>
-        <mj-section>
-            <mj-column>
-                <mj-text>Leaked Content</mj-text>
-            </mj-column>
-        </mj-section>
-    </mj-body>
-</mjml>
-<mjml>
-    <mj-body>
-        <mj-section>
-            <mj-column>
-                <mj-text>Leaked Content</mj-text>
-            </mj-column>
-        </mj-section>
-    </mj-body>
-</mjml>";
+        var mjml1 = """
+            <mjml>
+                <mj-body>
+                    <mj-section>
+                        <mj-column>
+                            <mj-text>Leaked Content</mj-text>
+                        </mj-column>
+                    </mj-section>
+                </mj-body>
+            </mjml>
+            <mjml>
+                <mj-body>
+                    <mj-section>
+                        <mj-column>
+                            <mj-text>Leaked Content</mj-text>
+                        </mj-column>
+                    </mj-section>
+                </mj-body>
+            </mjml>
+            """;
         _ = renderer.Render(mjml1);
 
-        var mjml2 = @"
-<mjml>
-    <mj-body>
-        <mj-section>
-            <mj-column>
-                <mj-text>Hello World</mj-text>
-            </mj-column>
-        </mj-section>
-    </mj-body>
-</mjml>";
+        var mjml2 = """
+            <mjml>
+                <mj-body>
+                    <mj-section>
+                        <mj-column>
+                            <mj-text>Hello World</mj-text>
+                        </mj-column>
+                    </mj-section>
+                </mj-body>
+            </mjml>
+            """;
         var (html, errors) = renderer.Render(mjml2);
 
         Assert.Empty(errors);

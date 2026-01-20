@@ -40,8 +40,7 @@ public class IncludeTests
 
         var (html, errors) = new MjmlRenderer().Render(source, options);
 
-        Assert.Empty(errors.Where(x => x.Type != ValidationErrorType.UnknownAttribute));
-
+        Assert.DoesNotContain(errors, x => x.Type != ValidationErrorType.UnknownAttribute);
         return html;
     }
 
