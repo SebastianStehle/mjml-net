@@ -6,35 +6,43 @@ public class RawTests
 {
     public static readonly TheoryData<string> Tests = new TheoryData<string>
     {
-            @"
-Hello MJML",
-            @"
-<strong>Hello</strong> MJML",
-            @"
-<strong>Hello</strong> <strong>MJML</strong>",
-            @"
-<strong>Hello</strong> MJML <strong>Whats Up</strong>",
-            @"
-<strong>Hello</strong>Entity&nbsp;<strong>Whats Up</strong>",
-            @"
-<button type=""submit"">Submit1</button>",
-            @"
-<div>
-    <button type=""submit"">Submit1</button>
-</div>",
-            @"
-<div>
-    <button type=""submit"">Submit1</button>
-    <button type=""submit"">Submit2</button>
-</div>",
-            @"
-<div>
-    <table>
-        <button type=""submit"">Submit1</button>
-        <button type=""submit"">Submit2</button>
-    </table>
-</div>"
-    };
+            """
+            Hello MJML
+            """,
+            """
+            <strong>Hello</strong> MJML
+            """,
+            """
+            <strong>Hello</strong> <strong>MJML</strong>
+            """,
+            """
+            <strong>Hello</strong> MJML <strong>Whats Up</strong>
+            """,
+            """
+            <strong>Hello</strong>Entity&nbsp;<strong>Whats Up</strong>
+            """,
+            """
+            <button type="submit">Submit1</button>
+            """,
+            """
+            <div>
+                <button type="submit">Submit1</button>
+            </div>
+            """,
+            """
+            <div>
+                <button type="submit">Submit1</button>
+                <button type="submit">Submit2</button>
+            </div>
+            """,
+            """
+            <div>
+                <table>
+                    <button type="submit">Submit1</button>
+                    <button type="submit">Submit2</button>
+                </table>
+            </div>
+            """    };
 
     [Theory]
     [MemberData(nameof(Tests))]

@@ -37,12 +37,13 @@ public class SectionTests
     [Fact]
     public void Should_render_sections_with_columns()
     {
-        var source = @"
-<mj-section>
-    <mj-column background-color=""#ff0000""></mj-column>
-    <mj-column background-color=""#00ff00""></mj-column>
-    <mj-column background-color=""#0000ff""></mj-column>
-</mj-section>";
+        var source = """
+            <mj-section>
+                <mj-column background-color="#ff0000"></mj-column>
+                <mj-column background-color="#00ff00"></mj-column>
+                <mj-column background-color="#0000ff"></mj-column>
+            </mj-section>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 
@@ -52,12 +53,13 @@ public class SectionTests
     [Fact]
     public void Should_render_sections_with_groups()
     {
-        var source = @"
-<mj-section>
-    <mj-group background-color=""#ff0000""></mj-group>
-    <mj-group background-color=""#00ff00""></mj-group>
-    <mj-group background-color=""#0000ff""></mj-group>
-</mj-section>";
+        var source = """
+            <mj-section>
+                <mj-group background-color="#ff0000"></mj-group>
+                <mj-group background-color="#00ff00"></mj-group>
+                <mj-group background-color="#0000ff"></mj-group>
+            </mj-section>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 

@@ -10,21 +10,21 @@ public class IncludeTests
     {
         var files = new Dictionary<string, string>
         {
-            ["./style.css"] = @"
-.red-text div {
-  color: red !important;
-}"
-        };
+            ["./style.css"] = """
+            .red-text div {
+              color: red !important;
+            }
+            """        };
 
-        var source = @"
-<mjml-test body=""false"">
-  <mj-head>
-    <mj-include path=""./style.css"" type=""css"" />
-  </mj-head>
-  <mj-body>
-  </mj-body>
-</mjml-test>
-";
+        var source = """
+            <mjml-test body="false">
+              <mj-head>
+                <mj-include path="./style.css" type="css" />
+              </mj-head>
+              <mj-body>
+              </mj-body>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -39,20 +39,20 @@ public class IncludeTests
     {
         var files = new Dictionary<string, string>
         {
-            ["./text.mjml"] = @"
-<mj-group>
-    <mj-spacer />
-</mj-group>
-<mj-group>
-    <mj-spacer />
-</mj-group>"
-        };
+            ["./text.mjml"] = """
+            <mj-group>
+                <mj-spacer />
+            </mj-group>
+            <mj-group>
+                <mj-spacer />
+            </mj-group>
+            """        };
 
-        var source = @"
-<mjml-test head=""false"">
-    <mj-include path=""./text.mjml"" />
-</mjml-test>
-";
+        var source = """
+            <mjml-test head="false">
+                <mj-include path="./text.mjml" />
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -70,11 +70,11 @@ public class IncludeTests
             ["./text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
         };
 
-        var source = @"
-<mjml-test head=""false"">
-    <mj-include path=""./text.mjml"" />
-</mjml-test>
-";
+        var source = """
+            <mjml-test head="false">
+                <mj-include path="./text.mjml" />
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -89,21 +89,21 @@ public class IncludeTests
     {
         var files = new Dictionary<string, string>
         {
-            ["./text.mjml"] = @"
-                <mjml>
-                    <mj-body>
-                        <mj-text>Hello MJML</mj-text>
-                    </mj-body>
-                </mjml>"
-        };
+            ["./text.mjml"] = """
+                            <mjml>
+                                <mj-body>
+                                    <mj-text>Hello MJML</mj-text>
+                                </mj-body>
+                            </mjml>
+            """        };
 
-        const string source = @"
-<mjml-test head=""false"">
-    <mj-text>Before Include</mj-text>
-    <mj-include path=""./text.mjml"" />
-    <mj-text>After Include</mj-text>
-</mjml-test>
-";
+        const string source = """
+            <mjml-test head="false">
+                <mj-text>Before Include</mj-text>
+                <mj-include path="./text.mjml" />
+                <mj-text>After Include</mj-text>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -122,11 +122,11 @@ public class IncludeTests
             ["./headers/text.mjml"] = @"<mj-text>Hello MJML</mj-text>"
         };
 
-        var source = @"
-<mjml-test head=""false"">
-    <mj-include path=""./headers/header.mjml"" />
-</mjml-test>
-";
+        var source = """
+            <mjml-test head="false">
+                <mj-include path="./headers/header.mjml" />
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -144,11 +144,11 @@ public class IncludeTests
             ["./text.html"] = @"<strong>Hello</strong> <strong>MJML</strong"
         };
 
-        var source = @"
-<mjml-test head=""false"">
-    <mj-include path=""./text.html"" type=""html"" />
-</mjml-test>
-";
+        var source = """
+            <mjml-test head="false">
+                <mj-include path="./text.html" type="html" />
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {

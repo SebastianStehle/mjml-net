@@ -165,7 +165,7 @@ public partial class HeroComponent : BodyComponentBase
             {
                 renderer.StartElement("td") // Style td-fluid
                     .Style("mso-padding-bottom-alt", "0")
-                    .Style("padding-bottom", $"{backgroundRatio}px")
+                    .Style("padding-bottom", $"{backgroundRatio}%")
                     .Style("width", "0.01%");
                 renderer.EndElement("td");
             }

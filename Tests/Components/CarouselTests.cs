@@ -8,13 +8,13 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel()
     {
-        var source = @"
-<mj-carousel>
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/3@1x.png"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel>
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/09/3@1x.png" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -27,11 +27,11 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_images_one()
     {
-        var source = @"
-<mj-carousel>
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel>
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -44,12 +44,12 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_images_two()
     {
-        var source = @"
-<mj-carousel>
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel>
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -62,15 +62,15 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_images_five()
     {
-        var source = @"
-<mj-carousel>
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel>
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -83,15 +83,15 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_thumbnail_width()
     {
-        var source = @"
-<mj-carousel tb-width=""24px"">
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel tb-width="24px">
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -104,15 +104,15 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_icon_width()
     {
-        var source = @"
-<mj-carousel icon-width=""36px"">
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel icon-width="36px">
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -125,15 +125,15 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_image_href()
     {
-        var source = @"
-<mj-carousel>
-    <mj-carousel-image href=""https://google.com"" src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-    <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-</mj-carousel>
-";
+        var source = """
+            <mj-carousel>
+                <mj-carousel-image href="https://google.com" src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+            </mj-carousel>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {
@@ -146,20 +146,20 @@ public class CarouselTests
     [Fact]
     public void Should_render_carousel_head_styles()
     {
-        var source = @"
-<mjml-test head=""true"" body=""false"">
-    <mj-head>
-    </mj-head>
-    <mj-body>
-        <mj-carousel>
-            <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg"" />
-            <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/3@1x.png"" />
-            <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png"" />
-            <mj-carousel-image src=""https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png"" />
-        </mj-carousel>
-    </mj-body>
-</mjml-test>
-";
+        var source = """
+            <mjml-test head="true" body="false">
+                <mj-head>
+                </mj-head>
+                <mj-body>
+                    <mj-carousel>
+                        <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg" />
+                        <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/09/3@1x.png" />
+                        <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png" />
+                        <mj-carousel-image src="https://www.mailjet.com/wp-content/uploads/2016/09/1@1x.png" />
+                    </mj-carousel>
+                </mj-body>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source, new MjmlOptions
         {

@@ -17,11 +17,12 @@ public class ColumnTests
     [Fact]
     public void Should_render_column_two()
     {
-        var source = @"
-<mjml-test head=""false"">
-    <mj-column background-color=""red""></mj-column>
-    <mj-column background-color=""green""></mj-column>
-</mjml-test>";
+        var source = """
+            <mjml-test head="false">
+                <mj-column background-color="red"></mj-column>
+                <mj-column background-color="green"></mj-column>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 
@@ -31,12 +32,13 @@ public class ColumnTests
     [Fact]
     public void Should_render_column_three()
     {
-        var source = @"
-<mjml-test head=""false"">
-    <mj-column background-color=""red""></mj-column>
-    <mj-column background-color=""green""></mj-column>
-    <mj-column background-color=""blue""></mj-column>
-</mjml-test>";
+        var source = """
+            <mjml-test head="false">
+                <mj-column background-color="red"></mj-column>
+                <mj-column background-color="green"></mj-column>
+                <mj-column background-color="blue"></mj-column>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 
@@ -46,13 +48,14 @@ public class ColumnTests
     [Fact]
     public void Should_render_column_four()
     {
-        var source = @"
-<mjml-test head=""false"">
-    <mj-column background-color=""red""></mj-column>
-    <mj-column background-color=""green""></mj-column>
-    <mj-column background-color=""blue""></mj-column>
-    <mj-column background-color=""yellow""></mj-column>
-</mjml-test>";
+        var source = """
+            <mjml-test head="false">
+                <mj-column background-color="red"></mj-column>
+                <mj-column background-color="green"></mj-column>
+                <mj-column background-color="blue"></mj-column>
+                <mj-column background-color="yellow"></mj-column>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 
@@ -62,15 +65,16 @@ public class ColumnTests
     [Fact]
     public void Should_render_column_with_class()
     {
-        var source = @"
-<mjml-test head=""false"">
-    <mj-attributes>
-          <mj-table css-class=""test""></mj-table>
-    </mj-attributes>
-    <mj-column>
-        <mj-table></mj-table>
-    </mj-column>
-</mjml-test>";
+        var source = """
+            <mjml-test head="false">
+                <mj-attributes>
+                      <mj-table css-class="test"></mj-table>
+                </mj-attributes>
+                <mj-column>
+                    <mj-table></mj-table>
+                </mj-column>
+            </mjml-test>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 
@@ -90,12 +94,13 @@ public class ColumnTests
     [Fact]
     public void Should_render_column_one_inner_border()
     {
-        var source = @"
-<mj-column padding=""0"" inner-border=""1px solid red"">
-    <mj-text>
-          Hello World!
-     </mj-text>
-</mj-column>";
+        var source = """
+            <mj-column padding="0" inner-border="1px solid red">
+                <mj-text>
+                      Hello World!
+                 </mj-text>
+            </mj-column>
+            """;
 
         var (result, _) = TestHelper.Render(source);
 

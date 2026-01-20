@@ -46,15 +46,15 @@ internal sealed class TemplateModel
     {
         get
         {
-            foreach (var field in NormalFields)
+            foreach (var normalField in NormalFields)
             {
                 bool IsCandidate(string name)
                 {
-                    if (field.Attribute.Contains(name) &&
-                       !field.Attribute.EndsWith($"{name}-top", StringComparison.Ordinal) &&
-                       !field.Attribute.EndsWith($"{name}-right", StringComparison.Ordinal) &&
-                       !field.Attribute.EndsWith($"{name}-bottom", StringComparison.Ordinal) &&
-                       !field.Attribute.EndsWith($"{name}-left", StringComparison.Ordinal))
+                    if (normalField.Attribute.Contains(name) &&
+                       !normalField.Attribute.EndsWith($"{name}-top", StringComparison.Ordinal) &&
+                       !normalField.Attribute.EndsWith($"{name}-right", StringComparison.Ordinal) &&
+                       !normalField.Attribute.EndsWith($"{name}-bottom", StringComparison.Ordinal) &&
+                       !normalField.Attribute.EndsWith($"{name}-left", StringComparison.Ordinal))
                     {
                         return true;
                     }
@@ -67,12 +67,12 @@ internal sealed class TemplateModel
                     continue;
                 }
 
-                if (Fields.ContainsKey($"{field.Name}Top") &&
-                    Fields.ContainsKey($"{field.Name}Right") &&
-                    Fields.ContainsKey($"{field.Name}Bottom") &&
-                    Fields.ContainsKey($"{field.Name}Left"))
+                if (Fields.ContainsKey($"{normalField.Name}Top") &&
+                    Fields.ContainsKey($"{normalField.Name}Right") &&
+                    Fields.ContainsKey($"{normalField.Name}Bottom") &&
+                    Fields.ContainsKey($"{normalField.Name}Left"))
                 {
-                    yield return field;
+                    yield return normalField;
                 }
             }
         }
