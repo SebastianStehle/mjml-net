@@ -66,22 +66,37 @@ public sealed class StyleHelper : IHelper
 
     private static void WriteStyles(IHtmlRenderer renderer, GlobalContext context)
     {
-        WriteStyles(renderer, context, context.GlobalData.Values.OfType<Style>().Where(x => !x.Inline), null);
+        List<Style>? regularStyles = null;
+        List<Style>? inlineStyles = null;
 
-        // Check if there are any inline styles without allocating a list
-        var hasInlineStyles = false;
+        // Separate inline and non-inline styles in a single pass
         foreach (var item in context.GlobalData.Values)
         {
-            if (item is Style { Inline: true })
+            if (item is Style style)
             {
-                hasInlineStyles = true;
-                break;
+                if (style.Inline)
+                {
+                    inlineStyles ??= new List<Style>();
+                    inlineStyles.Add(style);
+                }
+                else
+                {
+                    regularStyles ??= new List<Style>();
+                    regularStyles.Add(style);
+                }
             }
         }
 
-        if (hasInlineStyles)
+        // Write non-inline styles
+        if (regularStyles != null)
         {
-            WriteStyles(renderer, context, context.GlobalData.Values.OfType<Style>().Where(x => x.Inline), "inline");
+            WriteStyles(renderer, context, regularStyles, null);
+        }
+
+        // Write inline styles
+        if (inlineStyles != null)
+        {
+            WriteStyles(renderer, context, inlineStyles, "inline");
         }
     }
 
