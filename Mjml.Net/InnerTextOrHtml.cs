@@ -35,7 +35,15 @@ public sealed class InnerTextOrHtml
 
     public bool IsEmpty()
     {
-        return !parts.Exists(x => !x.AsSpan().IsWhiteSpace());
+        for (var i = 0; i < parts.Count; i++)
+        {
+            if (!parts[i].AsSpan().IsWhiteSpace())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void AppendTo(StringBuilder sb)
@@ -130,9 +138,13 @@ public sealed class InnerTextOrHtml
 
     private static void WriteLineStart(StringBuilder sb, int indent)
     {
-        for (var i = 0; i < indent; i++)
+        if (indent > 0)
         {
-            sb.Append(' ');
+            sb.EnsureCapacity(sb.Length + indent);
+            for (var i = 0; i < indent; i++)
+            {
+                sb.Append(' ');
+            }
         }
     }
 }

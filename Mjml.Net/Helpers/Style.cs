@@ -68,10 +68,20 @@ public sealed class StyleHelper : IHelper
     {
         WriteStyles(renderer, context, context.GlobalData.Values.OfType<Style>().Where(x => !x.Inline), null);
 
-        var inlineStyles = context.GlobalData.Values.OfType<Style>().Where(x => x.Inline).ToList();
-        if (inlineStyles.Count > 0)
+        // Check if there are any inline styles without allocating a list
+        var hasInlineStyles = false;
+        foreach (var item in context.GlobalData.Values)
         {
-            WriteStyles(renderer, context, inlineStyles, "inline");
+            if (item is Style { Inline: true })
+            {
+                hasInlineStyles = true;
+                break;
+            }
+        }
+
+        if (hasInlineStyles)
+        {
+            WriteStyles(renderer, context, context.GlobalData.Values.OfType<Style>().Where(x => x.Inline), "inline");
         }
     }
 
