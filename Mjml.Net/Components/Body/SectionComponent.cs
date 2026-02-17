@@ -354,6 +354,22 @@ public partial class SectionComponent : BodyComponentBase
         }
         else if (!isBackgroundSizeAuto)
         {
+#if NET8_0_OR_GREATER
+            // Optimize: Use stackalloc for small expected arrays (max 2 parts) on .NET 8+
+            Span<Range> ranges = stackalloc Range[2];
+            var count = BackgroundSize.AsSpan().Split(ranges, ' ');
+
+            if (count == 1)
+            {
+                vmlSize = BackgroundSize[ranges[0]];
+                vmlAspect = "atmost";
+            }
+            else if (count >= 2)
+            {
+                vmlSize = $"{BackgroundSize[ranges[0]]},{BackgroundSize[ranges[1]]}";
+            }
+#else
+            // For .NET 6/7, use standard Split
             var positions = BackgroundSize.Split(' ');
 
             if (positions.Length == 1)
@@ -361,10 +377,11 @@ public partial class SectionComponent : BodyComponentBase
                 vmlSize = positions[0];
                 vmlAspect = "atmost";
             }
-            else
+            else if (positions.Length >= 2)
             {
-                vmlSize = string.Join(',', positions);
+                vmlSize = $"{positions[0]},{positions[1]}";
             }
+#endif
         }
 
         if (isBackgroundSizeAuto)
@@ -491,30 +508,64 @@ public partial class SectionComponent : BodyComponentBase
 
     private (string X, string Y) ParseBackgroundPosition()
     {
+#if NET8_0_OR_GREATER
+        // Optimize: Use stackalloc to avoid heap allocation (max 2 parts) on .NET 8+
+        Span<Range> ranges = stackalloc Range[2];
+        var count = BackgroundPosition.AsSpan().Split(ranges, ' ');
+
+        static bool IsTopOrBottom(ReadOnlySpan<char> axis)
+        {
+            return axis.Equals("top", StringComparison.OrdinalIgnoreCase) ||
+                   axis.Equals("bottom", StringComparison.OrdinalIgnoreCase);
+        }
+
+        switch (count)
+        {
+            case 1:
+                var pos0 = BackgroundPosition.AsSpan(ranges[0]);
+                if (IsTopOrBottom(pos0))
+                {
+                    return ("center", BackgroundPosition[ranges[0]]);
+                }
+
+                return (BackgroundPosition[ranges[0]], "center");
+
+            case >= 2:
+                var pos0_2 = BackgroundPosition.AsSpan(ranges[0]);
+                var pos1 = BackgroundPosition.AsSpan(ranges[1]);
+
+                if (IsTopOrBottom(pos0_2) || (pos0_2.Equals("center", StringComparison.OrdinalIgnoreCase) && IsTopOrBottom(pos1)))
+                {
+                    return (BackgroundPosition[ranges[1]], BackgroundPosition[ranges[0]]);
+                }
+
+                return (BackgroundPosition[ranges[0]], BackgroundPosition[ranges[1]]);
+
+            default:
+                return ("center", "top");
+        }
+#else
+        // For .NET 6/7, use standard Split
         var positions = BackgroundPosition.Split(' ');
 
-        static bool IsTopOrBottom(ref string axis)
+        static bool IsTopOrBottom(string axis)
         {
-            if (axis.Equals("top", StringComparison.OrdinalIgnoreCase) || axis.Equals("bottom", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            return false;
+            return axis.Equals("top", StringComparison.OrdinalIgnoreCase) ||
+                   axis.Equals("bottom", StringComparison.OrdinalIgnoreCase);
         }
 
         switch (positions.Length)
         {
             case 1:
-                if (IsTopOrBottom(ref positions[0]))
+                if (IsTopOrBottom(positions[0]))
                 {
                     return ("center", positions[0]);
                 }
 
                 return (positions[0], "center");
 
-            case 2:
-                if (IsTopOrBottom(ref positions[0]) || (positions[0].Equals("center", StringComparison.OrdinalIgnoreCase) && IsTopOrBottom(ref positions[1])))
+            case >= 2:
+                if (IsTopOrBottom(positions[0]) || (positions[0].Equals("center", StringComparison.OrdinalIgnoreCase) && IsTopOrBottom(positions[1])))
                 {
                     return (positions[1], positions[0]);
                 }
@@ -524,6 +575,7 @@ public partial class SectionComponent : BodyComponentBase
             default:
                 return ("center", "top");
         }
+#endif
     }
 
     private static (string XPercent, string YPercent) GetBackgroundPositionAsPercentage(string backgroundPositionX, string backgroundPositionY)

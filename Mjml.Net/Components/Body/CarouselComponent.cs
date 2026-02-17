@@ -282,7 +282,7 @@ public partial class CarouselComponent : BodyComponentBase
         {
             var image = CarouselImages.ElementAt(i);
 
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", i));
+            var selectorSibilings = BuildSelectorSiblings(i);
 
             if (image == CarouselImages.LastOrDefault())
             {
@@ -301,7 +301,7 @@ public partial class CarouselComponent : BodyComponentBase
         {
             var image = CarouselImages.ElementAt(i);
 
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
+            var selectorSibilings = BuildSelectorSiblings(length - i - 1);
 
             if (image == CarouselImages.LastOrDefault())
             {
@@ -320,7 +320,7 @@ public partial class CarouselComponent : BodyComponentBase
         renderer.Content(".mj-carousel-next-icons,");
         for (int i = 0; i < length; i++)
         {
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
+            var selectorSibilings = BuildSelectorSiblings(length - i - 1);
 
             renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-next-{((i + (1 % length) + length) % length) + 1}, ");
         }
@@ -330,7 +330,7 @@ public partial class CarouselComponent : BodyComponentBase
         {
             var image = CarouselImages.ElementAt(i);
 
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
+            var selectorSibilings = BuildSelectorSiblings(length - i - 1);
 
             if (image == CarouselImages.LastOrDefault())
             {
@@ -349,7 +349,7 @@ public partial class CarouselComponent : BodyComponentBase
         {
             var image = CarouselImages.ElementAt(i);
 
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
+            var selectorSibilings = BuildSelectorSiblings(length - i - 1);
 
             if (image == CarouselImages.LastOrDefault())
             {
@@ -373,7 +373,7 @@ public partial class CarouselComponent : BodyComponentBase
         {
             var image = CarouselImages.ElementAt(i);
 
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
+            var selectorSibilings = BuildSelectorSiblings(length - i - 1);
 
             if (image == CarouselImages.LastOrDefault())
             {
@@ -396,7 +396,7 @@ public partial class CarouselComponent : BodyComponentBase
         {
             var image = CarouselImages.ElementAt(i);
 
-            var selectorSibilings = string.Concat(Enumerable.Repeat("+ * ", length - i - 1));
+            var selectorSibilings = BuildSelectorSiblings(length - i - 1);
 
             if (image == CarouselImages.LastOrDefault())
             {
@@ -426,11 +426,36 @@ public partial class CarouselComponent : BodyComponentBase
         renderer.Content("}");
 
         // https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-carousel/src/Carousel.js#L188-L193
-        var selectorSibilingsFallback = string.Concat(Enumerable.Repeat("+ * ", length - 1));
+        var selectorSibilingsFallback = BuildSelectorSiblings(length - 1);
 
         renderer.Content($".mj-carousel-{CarouselID}-radio-1:checked {selectorSibilingsFallback}+ .mj-carousel-content .mj-carousel-{CarouselID}-thumbnail-1 {{");
         renderer.Content("  border-color: transparent;");
         renderer.Content("}");
+    }
+
+    // Optimize: Helper to build selector siblings string efficiently
+    private static string BuildSelectorSiblings(int count)
+    {
+        if (count == 0)
+        {
+            return string.Empty;
+        }
+
+        // Use StringBuilder to avoid LINQ allocations
+        var sb = DefaultPools.StringBuilders.Get();
+        try
+        {
+            for (int i = 0; i < count; i++)
+            {
+                sb.Append("+ * ");
+            }
+
+            return sb.ToString();
+        }
+        finally
+        {
+            DefaultPools.StringBuilders.Return(sb);
+        }
     }
 
     private string GetThumbnailsWidth()

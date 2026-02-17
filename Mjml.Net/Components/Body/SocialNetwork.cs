@@ -83,9 +83,17 @@ internal sealed record SocialNetwork(string? ShareUrl, string? BackgroundUrl, st
 
     static SocialNetwork()
     {
-        foreach (var (key, value) in Defaults.ToList())
+        // Optimize: Pre-allocate array with known capacity to avoid List allocation from ToList()
+        var items = new KeyValuePair<string, SocialNetwork>[Defaults.Count];
+        var index = 0;
+        foreach (var kvp in Defaults)
         {
-            Defaults[$"{key}-noshare"] = value with { ShareUrl = "[[URL]]" };
+            items[index++] = kvp;
+        }
+
+        foreach (var kvp in items)
+        {
+            Defaults[$"{kvp.Key}-noshare"] = kvp.Value with { ShareUrl = "[[URL]]" };
         }
     }
 }

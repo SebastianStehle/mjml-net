@@ -17,7 +17,8 @@ internal sealed class Binder : IBinder
             {
                 if (attributes.TryGetValue(Constants.MjClass, out var classNames))
                 {
-                    currentClasses = classNames.Split(' ');
+                    // Optimize: Use RemoveEmptyEntries to avoid empty strings
+                    currentClasses = classNames.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 }
                 else
                 {
