@@ -50,6 +50,7 @@ public partial class MsoButtonComponent : ButtonComponent
 
             borderWeight = count > 0 ? Border[ranges[0]] : borderWeight;
             borderStyle = count > 1 ? AdaptBorderStyle(Border[ranges[1]]) : borderStyle;
+            // Changed from == 3 to >= 3 to handle cases with extra parts gracefully
             borderColor = count >= 3 ? Border[ranges[2]] : borderColor;
 #else
             // For .NET 6/7, use standard Split
@@ -57,6 +58,7 @@ public partial class MsoButtonComponent : ButtonComponent
 
             borderWeight = border.Length > 0 ? border[0] : borderWeight;
             borderStyle = border.Length > 1 ? AdaptBorderStyle(border[1]) : borderStyle;
+            // Changed from == 3 to >= 3 to handle cases with extra parts gracefully
             borderColor = border.Length >= 3 ? border[2] : borderColor;
 #endif
         }
