@@ -311,8 +311,9 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
 
     public void WriteLineStart()
     {
-        if (beautify)
+        if (beautify && indent > 0)
         {
+            sb.EnsureCapacity(sb.Length + (indent * 2));
             for (var i = 0; i < indent; i++)
             {
                 sb.Append("  ");
