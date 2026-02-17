@@ -43,11 +43,22 @@ public partial class MsoButtonComponent : ButtonComponent
 
         if (stroked)
         {
+#if NET8_0_OR_GREATER
+            // Optimize: Use stackalloc to avoid heap allocation (max 3 parts) on .NET 8+
+            Span<Range> ranges = stackalloc Range[3];
+            var count = Border.AsSpan().Split(ranges, ' ');
+
+            borderWeight = count > 0 ? Border[ranges[0]] : borderWeight;
+            borderStyle = count > 1 ? AdaptBorderStyle(Border[ranges[1]]) : borderStyle;
+            borderColor = count >= 3 ? Border[ranges[2]] : borderColor;
+#else
+            // For .NET 6/7, use standard Split
             var border = Border.Split(" ");
 
             borderWeight = border.Length > 0 ? border[0] : borderWeight;
             borderStyle = border.Length > 1 ? AdaptBorderStyle(border[1]) : borderStyle;
-            borderColor = border.Length == 3 ? border[2] : borderColor;
+            borderColor = border.Length >= 3 ? border[2] : borderColor;
+#endif
         }
 
         renderer.Content("<!--[if mso]>");
