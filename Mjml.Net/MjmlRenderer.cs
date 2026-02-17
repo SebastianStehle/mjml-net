@@ -11,8 +11,9 @@ namespace Mjml.Net;
 /// </summary>
 public sealed partial class MjmlRenderer : IMjmlRenderer
 {
-    private readonly Dictionary<string, Func<IComponent>> components = [];
-    private readonly List<IHelper> helpers = [];
+    // Optimize: Add capacity hints for known component and helper counts
+    private readonly Dictionary<string, Func<IComponent>> components = new(capacity: 32);
+    private readonly List<IHelper> helpers = new(capacity: 4);
 
     /// <inheritdoc />
     public IReadOnlyCollection<Func<IComponent>> Components => components.Values;

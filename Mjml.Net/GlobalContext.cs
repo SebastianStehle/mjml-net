@@ -11,7 +11,8 @@ public sealed class GlobalContext
     private readonly Dictionary<AttributeParentKey, string> attributesByParentClass = new Dictionary<AttributeParentKey, string>(10);
     private IFileLoader? fileLoader;
 
-    public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = [];
+    // Optimize: Add capacity hint for GlobalData dictionary
+    public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = new(capacity: 16);
 
     public IReadOnlyDictionary<AttributeKey, string> AttributesByClass => attributesByClass;
 
