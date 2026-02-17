@@ -76,12 +76,14 @@ public sealed class StyleHelper : IHelper
             {
                 if (style.Inline)
                 {
-                    inlineStyles ??= new List<Style>();
+                    // Optimize: Add capacity hint (typically small number of inline styles)
+                    inlineStyles ??= new List<Style>(4);
                     inlineStyles.Add(style);
                 }
                 else
                 {
-                    regularStyles ??= new List<Style>();
+                    // Optimize: Add capacity hint (typically small number of regular styles)
+                    regularStyles ??= new List<Style>(8);
                     regularStyles.Add(style);
                 }
             }
