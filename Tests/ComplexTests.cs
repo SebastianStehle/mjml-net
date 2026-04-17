@@ -73,17 +73,33 @@ public class ComplexTests
     {
         return Cache.GetOrAdd(template, fileName =>
         {
-            var tempFile = Guid.NewGuid().ToString();
+            var tempFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.html");
+            var templateFile = Path.Combine(AppContext.BaseDirectory, "Templates", fileName);
 
             try
             {
                 var process = new Process();
-                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.UseShellExecute = false;
                 process.StartInfo.FileName = "npx";
-                process.StartInfo.Arguments = $"mjml Templates/{fileName} --o {tempFile}";
+                process.StartInfo.ArgumentList.Add("mjml");
+                process.StartInfo.ArgumentList.Add(templateFile);
+                process.StartInfo.ArgumentList.Add("-o");
+                process.StartInfo.ArgumentList.Add(tempFile);
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardOutput = true;
                 process.Start();
+
+                var stderr = process.StandardError.ReadToEnd();
+                var stdout = process.StandardOutput.ReadToEnd();
+
                 process.WaitForExit();
+
+                if (process.ExitCode != 0 || !File.Exists(tempFile))
+                {
+                    throw new InvalidOperationException(
+                        $"npx mjml failed for '{fileName}' (exit code {process.ExitCode}).\nstdout: {stdout}\nstderr: {stderr}");
+                }
 
                 return File.ReadAllText(tempFile);
             }
