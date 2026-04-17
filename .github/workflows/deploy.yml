@@ -21,7 +21,7 @@ jobs:
 
     - name: install mjml
       run: |
-        npm i mjml -g
+        npm i mjml@4.18.0 -g
 
     - name: test
       run: |
