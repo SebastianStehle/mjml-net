@@ -73,14 +73,18 @@ public class ComplexTests
     {
         return Cache.GetOrAdd(template, fileName =>
         {
-            var tempFile = Guid.NewGuid().ToString();
+            var tempFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.html");
+            var templateFile = Path.Combine(AppContext.BaseDirectory, "Templates", fileName);
 
             try
             {
                 var process = new Process();
-                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.UseShellExecute = false;
                 process.StartInfo.FileName = "npx";
-                process.StartInfo.Arguments = $"mjml Templates/{fileName} --o {tempFile}";
+                process.StartInfo.ArgumentList.Add("mjml");
+                process.StartInfo.ArgumentList.Add(templateFile);
+                process.StartInfo.ArgumentList.Add("-o");
+                process.StartInfo.ArgumentList.Add(tempFile);
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.Start();
                 process.WaitForExit();

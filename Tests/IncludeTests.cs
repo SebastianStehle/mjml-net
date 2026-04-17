@@ -46,14 +46,18 @@ public class IncludeTests
 
     private static string CompileWithNode()
     {
-        var tempFile = Guid.NewGuid().ToString();
+        var tempFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.html");
+        var templateFile = Path.Combine(AppContext.BaseDirectory, "Templates", "include", "about.mjml");
 
         try
         {
             var process = new Process();
-            process.StartInfo.UseShellExecute = true;
+            process.StartInfo.UseShellExecute = false;
             process.StartInfo.FileName = "npx";
-            process.StartInfo.Arguments = $"mjml Templates/include/about.mjml -o {tempFile}";
+            process.StartInfo.ArgumentList.Add("mjml");
+            process.StartInfo.ArgumentList.Add(templateFile);
+            process.StartInfo.ArgumentList.Add("-o");
+            process.StartInfo.ArgumentList.Add(tempFile);
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.Start();
             process.WaitForExit();
