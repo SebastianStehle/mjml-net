@@ -1,4 +1,4 @@
-﻿using Mjml.Net.Extensions;
+f﻿using Mjml.Net.Extensions;
 using Mjml.Net.Helpers;
 
 namespace Mjml.Net.Components.Body;
@@ -283,7 +283,6 @@ public partial class CarouselComponent : BodyComponentBase
             var image = CarouselImages.ElementAt(i);
 
             var selectorSibilings = BuildSelectorSiblings(i);
-
             if (image == CarouselImages.LastOrDefault())
             {
                 renderer.Content($".mj-carousel-{CarouselID}-radio:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-image {{");
@@ -302,7 +301,6 @@ public partial class CarouselComponent : BodyComponentBase
             var image = CarouselImages.ElementAt(i);
 
             var selectorSibilings = BuildSelectorSiblings(length - i - 1);
-
             if (image == CarouselImages.LastOrDefault())
             {
                 renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-image-{i + 1} {{");
@@ -331,7 +329,6 @@ public partial class CarouselComponent : BodyComponentBase
             var image = CarouselImages.ElementAt(i);
 
             var selectorSibilings = BuildSelectorSiblings(length - i - 1);
-
             if (image == CarouselImages.LastOrDefault())
             {
                 renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-previous-{((i - (1 % length) + length) % length) + 1} {{");
@@ -350,7 +347,6 @@ public partial class CarouselComponent : BodyComponentBase
             var image = CarouselImages.ElementAt(i);
 
             var selectorSibilings = BuildSelectorSiblings(length - i - 1);
-
             if (image == CarouselImages.LastOrDefault())
             {
                 renderer.Content($".mj-carousel-{CarouselID}-radio-{i + 1}:checked {selectorSibilings}+ .mj-carousel-content .mj-carousel-{CarouselID}-thumbnail-{i + 1} {{");
@@ -374,7 +370,6 @@ public partial class CarouselComponent : BodyComponentBase
             var image = CarouselImages.ElementAt(i);
 
             var selectorSibilings = BuildSelectorSiblings(length - i - 1);
-
             if (image == CarouselImages.LastOrDefault())
             {
                 renderer.Content($".mj-carousel-{CarouselID}-thumbnail:hover {selectorSibilings}+ .mj-carousel-main .mj-carousel-image {{");
@@ -427,7 +422,6 @@ public partial class CarouselComponent : BodyComponentBase
 
         // https://github.com/mjmlio/mjml/blob/a5812ac1ad7cdf7ef9ae71fcf5808c49ba8ac5cb/packages/mjml-carousel/src/Carousel.js#L188-L193
         var selectorSibilingsFallback = BuildSelectorSiblings(length - 1);
-
         renderer.Content($".mj-carousel-{CarouselID}-radio-1:checked {selectorSibilingsFallback}+ .mj-carousel-content .mj-carousel-{CarouselID}-thumbnail-1 {{");
         renderer.Content("  border-color: transparent;");
         renderer.Content("}");
