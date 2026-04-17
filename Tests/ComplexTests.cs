@@ -86,8 +86,20 @@ public class ComplexTests
                 process.StartInfo.ArgumentList.Add("-o");
                 process.StartInfo.ArgumentList.Add(tempFile);
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardOutput = true;
                 process.Start();
+
+                var stderr = process.StandardError.ReadToEnd();
+                var stdout = process.StandardOutput.ReadToEnd();
+
                 process.WaitForExit();
+
+                if (process.ExitCode != 0 || !File.Exists(tempFile))
+                {
+                    throw new InvalidOperationException(
+                        $"npx mjml failed for '{fileName}' (exit code {process.ExitCode}).\nstdout: {stdout}\nstderr: {stderr}");
+                }
 
                 return File.ReadAllText(tempFile);
             }
