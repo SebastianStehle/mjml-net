@@ -141,4 +141,32 @@ public class AttributesTests
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ChildClasses.html", result);
     }
+
+    [Fact]
+    public void Should_render_nested_child_class_names_with_side_specific_padding()
+    {
+        var source = """
+            <mjml-test head="false">
+              <mj-head>
+                <mj-attributes>
+                  <mj-class name="mjexampleclass" align="center" icon-size="200px">
+                    <mj-social-element padding-top="1px" padding-right="2px" padding-bottom="3px" padding-left="4px" alt="christmas tree" src="https://cdn.pixabay.com/photo/2023/12/14/20/24/christmas-balls-8449615_1280.jpg" />
+                  </mj-class>
+                </mj-attributes>
+              </mj-head>
+              <mj-body>
+                <mj-social mj-class="mjexampleclass">
+                  <mj-social-element href="#">This image is not displayed when complied with mjml-net</mj-social-element>
+                </mj-social>
+              </mj-body>
+            </mjml-test>
+            """;
+
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
+
+        Assert.Contains("padding-top:1px;", result, StringComparison.Ordinal);
+        Assert.Contains("padding-right:2px;", result, StringComparison.Ordinal);
+        Assert.Contains("padding-bottom:3px;", result, StringComparison.Ordinal);
+        Assert.Contains("padding-left:4px;", result, StringComparison.Ordinal);
+    }
 }
