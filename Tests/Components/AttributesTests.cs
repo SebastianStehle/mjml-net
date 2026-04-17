@@ -156,7 +156,7 @@ public class AttributesTests
               </mj-head>
               <mj-body>
                 <mj-social mj-class="mjexampleclass">
-                  <mj-social-element href="#">This image is not displayed when complied with mjml-net</mj-social-element>
+                  <mj-social-element href="#">This image is not displayed when compiled with mjml-net</mj-social-element>
                 </mj-social>
               </mj-body>
             </mjml-test>
