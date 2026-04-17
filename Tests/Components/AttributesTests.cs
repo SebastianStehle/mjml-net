@@ -141,4 +141,36 @@ public class AttributesTests
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.ChildClasses.html", result);
     }
+
+    [Fact]
+    public void Should_render_social_element_side_paddings_from_parent_class()
+    {
+        var source = """
+            <mjml-test head="false">
+              <mj-head>
+                <mj-attributes>
+                  <mj-class name="socialclass">
+                    <mj-social-element
+                      padding-top="1px"
+                      padding-right="2px"
+                      padding-bottom="3px"
+                      padding-left="4px" />
+                  </mj-class>
+                </mj-attributes>
+              </mj-head>
+              <mj-body>
+                <mj-social mj-class="socialclass">
+                  <mj-social-element href="#">Example</mj-social-element>
+                </mj-social>
+              </mj-body>
+            </mjml-test>
+            """;
+
+        var (result, _) = TestHelper.Render(source, helpers: [new FontHelper()]);
+
+        Assert.Contains("padding-top:1px;", result, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("padding-right:2px;", result, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("padding-bottom:3px;", result, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("padding-left:4px;", result, StringComparison.OrdinalIgnoreCase);
+    }
 }
