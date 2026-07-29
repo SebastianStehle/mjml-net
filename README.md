@@ -10,7 +10,7 @@ A blazingly-fast (10x) unofficial port of [MJML 4](https://mjml.io/) (by [MailJe
 
 <p align="center">
   <a href="https://mjml.io" rel="nofollow">
-    <img width="250" src="https://camo.githubusercontent.com/49c1d426dca03897940f39457ded0b622383efada70e7c845efadf68dfc8a73b/68747470733a2f2f6d6a6d6c2e696f2f6173736574732f696d672f6c69746d75732f6d6a6d6c62796d61696c6a65742e706e67" data-canonical-src="https://mjml.io/assets/img/litmus/mjmlbymailjet.png" style="max-width:100%;">
+    <img width="250" src="https://mjml.io/assets/img/litmus/mjmlbymailjet.png" data-canonical-src="https://mjml.io/assets/img/litmus/mjmlbymailjet.png" style="max-width:100%;">
   </a>
 </p>
 

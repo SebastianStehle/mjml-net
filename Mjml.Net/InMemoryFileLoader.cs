@@ -42,18 +42,14 @@ public sealed class InMemoryFileLoader(IReadOnlyDictionary<string, string> conte
 
         if (folderIndex >= 0)
         {
-            var folderPart = parentPath[..folderIndex];
-
-            return $"{folderPart}/{path}";
+            return string.Concat(parentPath.AsSpan(0, folderIndex), "/", path);
         }
 
         folderIndex = parentPath.LastIndexOf('\\');
 
         if (folderIndex >= 0)
         {
-            var folderPart = parentPath[..folderIndex];
-
-            return $"{folderPart}\\{path}";
+            return string.Concat(parentPath.AsSpan(0, folderIndex), "\\", path);
         }
 
         return path;

@@ -2,13 +2,14 @@
 
 public abstract class Component : IComponent
 {
+    private static readonly IComponent[] EmptyComponents = [];
     private List<IComponent>? childNodes;
     private List<InnerTextOrHtml>? childInput;
     private IBinder binder;
 
     public IEnumerable<IComponent> ChildNodes
     {
-        get => childNodes ?? Enumerable.Empty<IComponent>();
+        get => (IEnumerable<IComponent>?)childNodes ?? EmptyComponents;
     }
 
     public double ActualWidth { get; protected set; }

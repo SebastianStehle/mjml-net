@@ -17,11 +17,11 @@ jobs:
     - name: setup node
       uses: actions/setup-node@v3
       with:
-        node-version: '14'
+        node-version: '18'
 
     - name: install mjml
       run: |
-        npm i mjml -g
+        npm i mjml@4.18.0 -g
 
     - name: test
       run: |
