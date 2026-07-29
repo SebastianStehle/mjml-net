@@ -49,4 +49,18 @@ public class SocialTests
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.Social.html", result);
     }
+
+    [Fact]
+    public void Should_render_social_with_padding()
+    {
+        var source = """
+            <mj-social font-size="15px" icon-size="30px" mode="horizontal">
+                <mj-social-element name="facebook" href="https://mjml.io/" padding-top="10px" />
+            </mj-social>
+            """;
+
+        var (result, _) = TestHelper.Render(source);
+
+        AssertHelpers.HtmlFileAssert("Components.Outputs.SocialWithPadding.html", result);
+    }
 }

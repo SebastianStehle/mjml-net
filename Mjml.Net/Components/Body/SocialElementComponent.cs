@@ -112,6 +112,10 @@ public partial class SocialElementComponent : BodyComponentBase
 
         renderer.StartElement("td") // Style td
             .Style("padding", Padding)
+            .Style("padding-bottom", PaddingBottom)
+            .Style("padding-left", PaddingLeft)
+            .Style("padding-right", PaddingRight)
+            .Style("padding-top", PaddingTop)
             .Style("vertical-align", VerticalAlign);
 
         renderer.StartElement("table") // Style table

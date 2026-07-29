@@ -119,6 +119,7 @@
     <EmbeddedResource Include="Components\Outputs\SectionWithBackgroundImage.html" />
     <EmbeddedResource Include="Components\Outputs\SectionWithColumns.html" />
     <EmbeddedResource Include="Components\Outputs\SectionWithGroups.html" />
+    <EmbeddedResource Include="Components\Outputs\SocialWithPadding.html" />
     <EmbeddedResource Include="Components\Outputs\Social.html" />
     <EmbeddedResource Include="Components\Outputs\SocialEmpty.html" />
     <EmbeddedResource Include="Components\Outputs\SocialRaw.html" />
