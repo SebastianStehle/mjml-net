@@ -14,16 +14,15 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlPerformanceKit" Version="1.0.0" />
-    <PackageReference Include="Meziantou.Analyzer" Version="2.0.185">
+    <PackageReference Include="Meziantou.Analyzer" Version="3.0.135">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.11" Condition="$(TargetFramework) == 'net10.0'" />
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.18" Condition="$(TargetFramework) == 'net9.0'" />
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.29" Condition="$(TargetFramework) == 'net8.0'" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="7.0.20" Condition="$(TargetFramework) == 'net7.0'" />
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.36" Condition="$(TargetFramework) == 'net6.0'" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.301">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
