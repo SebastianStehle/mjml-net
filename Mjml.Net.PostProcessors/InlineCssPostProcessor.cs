@@ -14,7 +14,7 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         CancellationToken ct)
     {
         Traverse(document, a => RenameNonInline(a, document));
-        Traverse(document, InlineStyle);
+        Traverse(document, a => InlineStyle(a, document));
         Traverse(document, a => RestoreNonInline(a, document));
         return default;
     }
@@ -32,9 +32,22 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         }
     }
 
-    private static void InlineStyle(IElement element)
+    private static void InlineStyle(IElement element, IDocument document)
     {
-        var currentStyle = element.Owner!.DefaultView.GetStyleCollection().ComputeCascadedStyle(element);
+        var device = document.Context.GetService<IRenderDevice>();
+        if (device == null)
+        {
+            return;
+        }
+
+        var view = element.Owner?.DefaultView;
+        if (view == null)
+        {
+            return;
+        }
+
+        var currentStyles = view.GetStyleCollection(device);
+        var currentStyle = currentStyles.GetDeclarations(element);
         if (currentStyle.Any())
         {
             var css = currentStyle.ToCss();

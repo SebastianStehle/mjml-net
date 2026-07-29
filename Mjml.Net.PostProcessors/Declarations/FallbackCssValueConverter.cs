@@ -24,12 +24,12 @@ internal class FallbackCssValueConverter(IValueConverter inner)
 internal sealed class FallbackCssValueConverterWithAggregate(IValueConverter inner, IValueAggregator innerAggregator)
     : FallbackCssValueConverter(inner), IValueAggregator
 {
-    public ICssValue Merge(ICssValue[] values)
+    public ICssValue? Merge(ICssValue[] values)
     {
         return innerAggregator.Merge(values);
     }
 
-    public ICssValue[] Split(ICssValue value)
+    public ICssValue[]? Split(ICssValue value)
     {
         return innerAggregator.Split(value);
     }

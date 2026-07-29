@@ -7,17 +7,16 @@ internal sealed class FallbackCssValue(string text) : ICssValue
 {
     public string CssText => text;
 
-    ICssValue? ICssValue.Compute(ICssComputeContext context)
+    ICssValue ICssValue.Compute(ICssComputeContext context)
     {
         var converter = context.Converter;
-
-        if (converter is not null && converter is not FallbackCssValueConverter)
+        if (converter is not null and not FallbackCssValueConverter)
         {
             var value = converter.Convert(text);
-            return value?.Compute(context);
+            return value?.Compute(context) ?? this;
         }
 
-        return null;
+        return this;
     }
 
     public bool Equals(ICssValue? other)
