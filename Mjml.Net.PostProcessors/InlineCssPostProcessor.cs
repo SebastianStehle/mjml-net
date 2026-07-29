@@ -46,7 +46,8 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
             return;
         }
 
-        var currentStyle = view.GetStyleCollection(device).GetDeclarations(element);
+        var currentStyles = view.GetStyleCollection(device);
+        var currentStyle = currentStyles.GetDeclarations(element);
         if (currentStyle.Any())
         {
             var css = currentStyle.ToCss();
