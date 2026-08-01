@@ -31,7 +31,13 @@ jobs:
       run: |
         cd Mjml.Net & dotnet pack -c Release
 
+    - name: publish_login
+      uses: NuGet/login@v1
+      id: publish_login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
     - name: publish
       if: github.event_name != 'pull_request' && github.ref_name == 'main'
       run: |
-        dotnet nuget push **/*.nupkg --source 'https://api.nuget.org/v3/index.json' --skip-duplicate -k ${{ secrets.nuget }} 
+        dotnet nuget push **/*.nupkg --source 'https://api.nuget.org/v3/index.json' --skip-duplicate --api-key ${{steps.publish_login.outputs.NUGET_API_KEY}} 
