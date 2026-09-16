@@ -21,7 +21,7 @@ child.Measure(context, width, childNodes.Count, childNodes.Count(x => !x.Raw));
 
 For every child, this runs a LINQ `Count` over all siblings again. That is O(n²) per parent, and it allocates an enumerator and a closure every time. Count the non-raw children once before the loop. This path runs for every container: body, section, column, group, hero, and wrapper.
 
-### 2. Keep large `StringBuilder`s in the pool
+### 2. ✅ Keep large `StringBuilder`s in the pool
 [Mjml.Net/DefaultPools.cs:8](Mjml.Net/DefaultPools.cs:8)
 
 `StringBuilderPooledObjectPolicy` has `MaximumRetainedCapacity = 4 * 1024` by default. A rendered email is usually 20–100 KB, so the pool throws away the main output builder after every render, and the next render grows a new builder from scratch through many chunk allocations (LOH for big mails). Fix options:
