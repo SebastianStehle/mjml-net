@@ -12,8 +12,12 @@ internal class HtmlReaderWrapper : IHtmlReader
     };
 
     private readonly HtmlReaderImpl impl;
+    private readonly HtmlReaderWrapper root;
+    private int depth;
 
     public Action<HtmlError>? OnError { get; set; }
+
+    protected int Depth => root.depth;
 
     public int LineNumber => impl.LineNumber;
 
@@ -33,15 +37,15 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public HtmlTokenKind TokenKind => impl.TokenKind;
 
-    public HtmlReaderImpl Impl => impl;
-
-    public HtmlReaderWrapper(HtmlReaderImpl impl)
+    protected HtmlReaderWrapper(HtmlReaderWrapper parent)
     {
-        this.impl = impl;
+        impl = parent.impl;
+        root = parent.root;
     }
 
     public HtmlReaderWrapper(string input)
     {
+        root = this;
         impl = new HtmlReaderImpl(new StringReader(input), Options);
 
         impl.ParseError += (sender, e) =>
@@ -72,7 +76,59 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public virtual bool Read()
     {
-        return impl.Read();
+        return root.ReadToken();
+    }
+
+    private bool ReadToken()
+    {
+        if (!impl.Read())
+        {
+            return false;
+        }
+
+        // Track the depth for all subtree readers at once, so that each token is only checked once.
+        if (impl.TokenKind == HtmlTokenKind.Tag && !impl.SelfClosingElement && !IsVoidTag(impl.NameAsMemory.Span))
+        {
+            depth++;
+        }
+        else if (impl.TokenKind == HtmlTokenKind.EndTag && !IsVoidTag(impl.NameAsMemory.Span))
+        {
+            depth--;
+        }
+
+        return true;
+    }
+
+    private static bool IsVoidTag(ReadOnlySpan<char> name)
+    {
+        switch (name.Length)
+        {
+            case 2:
+                return
+                    name.Equals("br", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("hr", StringComparison.OrdinalIgnoreCase);
+            case 3:
+                return
+                    name.Equals("col", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("img", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("wbr", StringComparison.OrdinalIgnoreCase);
+            case 4:
+                return
+                    name.Equals("area", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("base", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("link", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("meta", StringComparison.OrdinalIgnoreCase);
+            case 5:
+                return
+                    name.Equals("embed", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("input", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("param", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("track", StringComparison.OrdinalIgnoreCase);
+            case 6:
+                return name.Equals("source", StringComparison.OrdinalIgnoreCase);
+            default:
+                return false;
+        }
     }
 
     public IHtmlReader ReadSubtree()

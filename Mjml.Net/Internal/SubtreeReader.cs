@@ -1,53 +1,32 @@
-﻿using HtmlPerformanceKit;
+﻿namespace Mjml.Net.Internal;
 
-namespace Mjml.Net.Internal;
-
-internal sealed class SubtreeReader(HtmlReaderWrapper inner) : HtmlReaderWrapper(inner.Impl)
+internal sealed class SubtreeReader : HtmlReaderWrapper
 {
-    private static readonly HashSet<string> VoidTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    private readonly int startDepth;
+    private bool isEnded;
+
+    public SubtreeReader(HtmlReaderWrapper parent)
+        : base(parent)
     {
-        "area",
-        "base",
-        "br",
-        "col",
-        "embed",
-        "hr",
-        "img",
-        "input",
-        "link",
-        "meta",
-        "param",
-        "source",
-        "track",
-        "wbr",
-    };
-    private int depth = 1;
+        startDepth = Depth;
+    }
 
     public override bool Read()
     {
-        if (depth == 0)
+        // A nested reader could already have read the end tag of this subtree.
+        if (isEnded || Depth < startDepth)
         {
+            isEnded = true;
             return false;
         }
 
-        var hasRead = inner.Read();
-
-        if (hasRead)
+        // The subtree ends with the end tag of the current element or with the end of the input.
+        if (!base.Read() || Depth < startDepth)
         {
-            if (TokenKind == HtmlTokenKind.Tag && !VoidTags.Contains(inner.Name) && !inner.SelfClosingElement)
-            {
-                depth++;
-            }
-            else if (TokenKind == HtmlTokenKind.EndTag && !VoidTags.Contains(inner.Name))
-            {
-                depth--;
-            }
-        }
-        else
-        {
-            depth = 0;
+            isEnded = true;
+            return false;
         }
 
-        return depth > 0;
+        return true;
     }
 }

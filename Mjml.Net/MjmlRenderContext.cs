@@ -208,7 +208,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             return;
         }
 
-        if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
+        if (reader.TokenKind == HtmlTokenKind.EndTag && !reader.NameAsSpan.SequenceEqual(name))
         {
             errors.Add(
                 $"Unexpected end element, expected '{name}', got '{reader.Name}'.",

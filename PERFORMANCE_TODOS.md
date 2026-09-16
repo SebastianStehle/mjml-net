@@ -13,7 +13,7 @@ Allocation matters most here. On a typical template, most of the cost is attribu
 ## TODOs
 
 ### 1. ✅ Fix O(n²) sibling counting in `Component.MeasureChildren`
-[Mjml.Net/Component.cs:131](Mjml.Net/Component.cs:131)
+[Mjml.Net/Component.cs:132](Mjml.Net/Component.cs#L132)
 
 ```csharp
 child.Measure(context, width, childNodes.Count, childNodes.Count(x => !x.Raw));
@@ -22,7 +22,7 @@ child.Measure(context, width, childNodes.Count, childNodes.Count(x => !x.Raw));
 For every child, this runs a LINQ `Count` over all siblings again. That is O(n²) per parent, and it allocates an enumerator and a closure every time. Count the non-raw children once before the loop. This path runs for every container: body, section, column, group, hero, and wrapper.
 
 ### 2. ✅ Keep large `StringBuilder`s in the pool
-[Mjml.Net/DefaultPools.cs:8](Mjml.Net/DefaultPools.cs:8)
+[Mjml.Net/DefaultPools.cs:11](Mjml.Net/DefaultPools.cs#L11)
 
 `StringBuilderPooledObjectPolicy` has `MaximumRetainedCapacity = 4 * 1024` by default. A rendered email is usually 20–100 KB, so the pool throws away the main output builder after every render, and the next render grows a new builder from scratch through many chunk allocations (LOH for big mails). Fix options:
 - Use a separate policy with a higher `MaximumRetainedCapacity`, such as 256 KB, for the root buffer.
@@ -43,7 +43,7 @@ For every child, this runs a LINQ `Count` over all siblings again. That is O(n²
 `BodyComponentBase` declares `[Bind("css-class")]`, so `base.AllowedFields` is non-empty for every body component. As a result, the generated getter builds a **new `AllowedAttributes` dictionary and copies it** every time the property is read. `ValidatorBase` reads it for each component and attribute. Merge the inherited entries once, in the static constructor or through a `Lazy`, and return that cached instance.
 
 ### 4. Short-circuit `Binder.GetAttribute` for the common "not set" case
-[Mjml.Net/Internal/Binder.cs:60](Mjml.Net/Internal/Binder.cs:60)
+[Mjml.Net/Internal/Binder.cs:81](Mjml.Net/Internal/Binder.cs#L81)
 
 The generated `Bind()` calls `GetAttribute` for **every** bindable field. `ColumnComponent` has about 25 of them, and most are never set. Each call that finds nothing goes through:
 - a local dictionary lookup
@@ -59,7 +59,7 @@ Ideas:
 **❌ Tried and reverted.** I added a per-element index (`element → name → value`) in `GlobalContext` and had each binder look up the element's and `mj-all`'s dictionaries once. With BenchmarkDotNet (MediumRun, the 8 templates that use `mj-attributes`) it made no difference: 3.20 ± 0.32 ms with the change against 3.14 ± 0.45 ms without, and allocations were the same. When a template has no `mj-attributes`, the lookups already cost almost nothing, because an empty `Dictionary` returns before hashing. The other checks were already guarded by `Count > 0`, so attribute resolution is not a bottleneck.
 
 ### 5. Replace `GlobalData` scans with typed storage
-[Mjml.Net/GlobalContext.cs](Mjml.Net/GlobalContext.cs), [Helpers/Style.cs](Mjml.Net/Helpers/Style.cs), [Components/Body/BodyComponent.cs:39-47](Mjml.Net/Components/Body/BodyComponent.cs:39)
+[Mjml.Net/GlobalContext.cs](Mjml.Net/GlobalContext.cs), [Helpers/Style.cs](Mjml.Net/Helpers/Style.cs), [Components/Body/BodyComponent.cs:39-47](Mjml.Net/Components/Body/BodyComponent.cs#L39)
 
 `GlobalData` is a `Dictionary<(Type, object), GlobalData>`, and it has these costs:
 - The key is `object`, so string and Guid identifiers get boxed.
@@ -85,14 +85,14 @@ Store data per type instead, such as `Dictionary<Type, IList>` or a generic stat
 - **Where the ~258 KB per render goes now:** about 100 KB is the returned HTML string, which can't be avoided. About 53 KB is the up-front buffers of each new `HtmlPerformanceKit.HtmlReader` (two 10,240-char buffers plus smaller ones), and the library has no API to reuse a reader. About 28 KB is parsed tag, attribute and text strings, and about 30 KB is strings created while rendering.
 
 ### 7. Parse shorthand values without `Split`
-[Mjml.Net/BindingHelper.cs:34](Mjml.Net/BindingHelper.cs:34), [SectionComponent.cs:357,494](Mjml.Net/Components/Body/SectionComponent.cs:357), [MsoButtonComponent.cs:46](Mjml.Net/Components/Body/MsoButtonComponent.cs:46), [Binder.ClassNames](Mjml.Net/Internal/Binder.cs:15)
+[Mjml.Net/BindingHelper.cs:34](Mjml.Net/BindingHelper.cs#L34), [SectionComponent.cs:357,494](Mjml.Net/Components/Body/SectionComponent.cs#L357), [MsoButtonComponent.cs:46](Mjml.Net/Components/Body/MsoButtonComponent.cs#L46), [Binder.ClassNames](Mjml.Net/Internal/Binder.cs#L22)
 
 `ParseShorthandValue` runs for every `padding` or `border-radius` shorthand in generated `Bind()`. It allocates a `string[]` and substrings. For the common 1-part case (`padding="10px"`), return the original string with no allocation. For 2–4 parts, scan with `ReadOnlySpan<char>.IndexOf(' ')`. The `mj-class` split and the background-position split can use the same approach.
 
 **⏭️ Measured, not worth it.** Across all `Split` calls in the library, `string[]` allocations add up to about 5.6 KB per render, about 2% of the total. The substrings would still be allocated, because they are stored in fields. `ParseShorthandValue("10px 25px")` takes 38 ns and allocates 104 B. For one value, `Split` already returns the original string without a substring, so the only saving would be the array.
 
 ### 8. Parse each unit value once, not in every `Measure`/`Render`
-[ColumnComponent.cs:120](Mjml.Net/Components/Body/ColumnComponent.cs:120), [SectionComponent.cs:94](Mjml.Net/Components/Body/SectionComponent.cs:94), [ImageComponent.cs:109](Mjml.Net/Components/Body/ImageComponent.cs:109), [HeroComponent.cs](Mjml.Net/Components/Body/HeroComponent.cs), [ButtonComponent.cs:197](Mjml.Net/Components/Body/ButtonComponent.cs:197)
+[ColumnComponent.cs:120](Mjml.Net/Components/Body/ColumnComponent.cs#L120), [SectionComponent.cs:94](Mjml.Net/Components/Body/SectionComponent.cs#L94), [ImageComponent.cs:109](Mjml.Net/Components/Body/ImageComponent.cs#L109), [HeroComponent.cs](Mjml.Net/Components/Body/HeroComponent.cs), [ButtonComponent.cs:197](Mjml.Net/Components/Body/ButtonComponent.cs#L197)
 
 `UnitParser.Parse` runs 4–6 times per component, and often on `null`. It is cheap, but it runs very often. Three improvements:
 - Return early on `null` before `IsNullOrWhiteSpace` and `Trim`.
@@ -173,7 +173,7 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
 **⏭️ No longer worth it after #11.** Only elements matched by inline rules get `SetAttribute` now. On the 5 templates with inline styles, the whole inline step takes ~3.9 ms and 817 KB, so the re-parse is a small part of that. Parsing the document dominates.
 
 ### 13. Reuse the AngleSharp `BrowsingContext`
-[Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:54](Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:54)
+[Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:72](Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs#L72)
 
 **Potential: ~1 ms and ~387 KB per render.**
 - **The cost:** `BrowsingContext.New(HtmlConfiguration)` runs on every render. Creating a context alone takes about 1 ms and allocates 387 KB (services, factories, entity provider).
@@ -186,7 +186,7 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
 - **Saved:** ~500 KB per processed document.
 
 ### 14. Don't create the full HTML string when the caller doesn't need it
-[Mjml.Net/MjmlRenderer.cs:181](Mjml.Net/MjmlRenderer.cs:181), [RenderBuffer.cs](Mjml.Net/RenderBuffer.cs)
+[Mjml.Net/MjmlRenderer.cs:195](Mjml.Net/MjmlRenderer.cs#L195), [RenderBuffer.cs](Mjml.Net/RenderBuffer.cs)
 
 **Potential: ~100 KB per render (~39% of what remains), and most gen2 GCs.**
 - **Every GC is gen2:** over 6,300 renders, gen0/gen1/gen2 collections were 161/161/161. 57% of the returned HTML strings are at least 85 KB, so they are allocated on the large-object heap, and those allocations are what trigger the full collections. On a server with a large heap, gen2 GCs are the expensive kind.
@@ -201,7 +201,7 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
 - **Not done:** the post-processor path still needs the string, because `IPostProcessor.PostProcessAsync` takes and returns a `string`.
 
 ### 15. Reduce the per-reader and per-element overhead of reading MJML
-[Mjml.Net/Internal/HtmlReaderWrapper.cs](Mjml.Net/Internal/HtmlReaderWrapper.cs), [MjmlRenderContext.cs:51](Mjml.Net/MjmlRenderContext.cs:51), [Component.cs](Mjml.Net/Component.cs)
+[Mjml.Net/Internal/HtmlReaderWrapper.cs](Mjml.Net/Internal/HtmlReaderWrapper.cs), [MjmlRenderContext.cs:54](Mjml.Net/MjmlRenderContext.cs#L54), [Component.cs](Mjml.Net/Component.cs)
 
 **Potential: ~53 KB per reader, plus ~9 KB per render.**
 - **Reader buffers:** each `HtmlPerformanceKit.HtmlReader` allocates about 53 KB of buffers up front, mostly two 10,240-char buffers. A render creates one, and every `mj-include` creates another one through `ReadFragment`. HtmlPerformanceKit (osjoberg/HtmlPerformanceKit) has no way to reuse a reader. A `Reset(TextReader)` method, or buffers taken from `ArrayPool<char>`, would make pooling possible. That change is upstream.
@@ -262,7 +262,7 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
   - `AttributePrecedenceTests` covers each precedence step, parent classes and a shorthand combined with a side attribute from a class. I verified all cases against the old build before adding the tests.
 
 ### 17. Stop allocating tag names at every nesting level while reading
-[Mjml.Net/Internal/SubtreeReader.cs:37](Mjml.Net/Internal/SubtreeReader.cs:37)
+[Mjml.Net/Internal/HtmlReaderWrapper.cs:82](Mjml.Net/Internal/HtmlReaderWrapper.cs#L82)
 
 **Potential: ~37 KB per render (~15% of allocations), plus CPU that grows with nesting depth.**
 - **Chained readers:** `ReadSubtree()` wraps the current reader in another `SubtreeReader`, so a reader at depth *d* is a chain of *d* wrappers. Every token read goes through the whole chain.
@@ -273,8 +273,18 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
   - Check void tags on `NameAsMemory.Span`, for example with a `switch` on length plus `SequenceEqual`, or a `HashSet` alternate lookup on .NET 9+.
   - Compare the closing tag in `ValidatingClosingState` as a span.
 
+**✅ Done.**
+- **One depth counter:** the root `HtmlReaderWrapper` tracks the depth of every token. It uses `NameAsMemory` and a `switch` on length for the void-tag check, so no string is allocated.
+- **Flat subtrees:** a `SubtreeReader` only remembers its start depth and reads from the root. It ends when the depth drops below its start, either before reading, because a nested reader already consumed its end tag, or after reading.
+- **Closing tags:** `ValidatingClosingState` compares the end tag with `NameAsSpan.SequenceEqual` and only allocates the name for the error message.
+- **Result:** **257.5 KB → 232.4 KB per render (−10%)**. Time was roughly 10–15% faster in two rounds, but the timings on this machine are noisy.
+- **Checks:**
+  - Output is identical for all 21 templates, with and without beautify.
+  - HTML and validation errors are identical to the old build for 11 malformed inputs: void tags in text and raw content, self-closing text, unclosed and wrongly nested tags, unknown elements, stray text and uppercase void tags.
+  - An early version of this change failed one of those inputs. There, a self-closing `<mj-text />` was followed by a sibling section without whitespace between the tags, and the section got nested into the column, because the column's reader didn't notice that a nested reader had already read `</mj-column>`. `HtmlReaderTests.Should_end_parent_when_subtree_of_self_closing_element_reads_end_tag_of_parent` covers this case: it fails without the fix and passes with the old and the new implementation.
+
 ### 18. Intern tag and attribute names instead of allocating them per element
-[Mjml.Net/MjmlRenderContext.cs:157](Mjml.Net/MjmlRenderContext.cs:157), [Mjml.Net/MjmlRenderer.cs:69](Mjml.Net/MjmlRenderer.cs:69)
+[Mjml.Net/MjmlRenderContext.cs:157](Mjml.Net/MjmlRenderContext.cs#L157), [Mjml.Net/MjmlRenderer.cs:69](Mjml.Net/MjmlRenderer.cs#L69)
 
 **Potential: ~270 strings per render (~10 KB), and faster lookups.**
 - **The cost:** each render allocates **169 attribute-name strings** (`GetAttributeName`) and about 100 tag-name strings for the component lookup, although both come from a small, fixed set: component names and `AllowedFields` keys.
@@ -285,7 +295,7 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
 - **Also:** creating a component (factory lookup plus `new T()`) takes ~7 µs per render (~3%). Explicit static factory lambdas instead of the generic `new()` constraint would make this cheaper.
 
 ### 19. Reconsider `Beautify = true` as the default
-[Mjml.Net/MjmlOptions.cs:50](Mjml.Net/MjmlOptions.cs:50)
+[Mjml.Net/MjmlOptions.cs:50](Mjml.Net/MjmlOptions.cs#L50)
 
 **Potential: 11–22% of render time and ~40% of output size, for everyone who doesn't need readable HTML.**
 - **The cost:** beautify is on by default. It makes the output **49 KB instead of 30 KB** on average (+60%). That takes render time from ~0.22 ms to 0.25–0.28 ms, `ToText` from 0.010 ms to 0.031 ms, and it also increases what gets sent by email.
@@ -293,7 +303,7 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
 - **Idea:** change the default to `false` in a major version, or at least document the cost. Changing the default changes output, so it's a product decision. Callers can already pass `Beautify = false`.
 
 ### 20. Copy text and raw content instead of rebuilding it token by token
-[Mjml.Net/Internal/HtmlReaderWrapper.cs:77](Mjml.Net/Internal/HtmlReaderWrapper.cs:77)
+[Mjml.Net/Internal/HtmlReaderWrapper.cs:139](Mjml.Net/Internal/HtmlReaderWrapper.cs#L139)
 
 **Potential: ~22–26 µs per render (~9%), plus many small strings.**
 - **The cost:** for text components (`mj-text`, `mj-button`, `mj-raw` and others), `ReadInnerHtml` rebuilds the inner HTML from tokens. Every piece is added separately to an `InnerTextOrHtml`'s `List<string>`: `"<"`, the name, `" "`, the attribute name, `"="`, `"\""`, the value and `"\""`. Each `Name`, attribute name and value is a new string, and the list keeps growing from its default capacity of 10. The result is later appended to the output part by part.
@@ -306,9 +316,10 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
 
 ## Side findings (correctness, spotted during analysis)
 
-- ✅ **`GlobalContext.Clear()` never clears `attributesByParentClass`** ([GlobalContext.cs:34](Mjml.Net/GlobalContext.cs:34)). Render contexts are pooled, so parent-class attributes from one template carried over into later renders, and the dictionary kept growing. It is now cleared, and `GlobalContextTests` covers it.
-- ✅ **`ColorType.Comparer.Equals` compared `rhs` with itself** ([Types/ColorType.cs:166](Mjml.Net/Types/ColorType.cs:166)). It now compares `lhs` with `rhs`. In practice this almost never mattered: `HashSet` compares the full hash code first, and string hashes are randomized per process, so only a full 32-bit hash collision could be affected. That is also why there's no test for it.
+- ✅ **`GlobalContext.Clear()` never clears `attributesByParentClass`** ([GlobalContext.cs:39](Mjml.Net/GlobalContext.cs#L39)). Render contexts are pooled, so parent-class attributes from one template carried over into later renders, and the dictionary kept growing. It is now cleared, and `GlobalContextTests` covers it.
+- ✅ **`ColorType.Comparer.Equals` compared `rhs` with itself** ([Types/ColorType.cs:166](Mjml.Net/Types/ColorType.cs#L166)). It now compares `lhs` with `rhs`. In practice this almost never mattered: `HashSet` compares the full hash code first, and string hashes are randomized per process, so only a full 32-bit hash collision could be affected. That is also why there's no test for it.
 - ✅ **`InnerTextOrHtml.AppendIntended` skipped the first character after each newline**, so after a blank line the next line was not indented (`"a\n\nb"`). Fixed, with a test in `InnerTextOrHtmlTests`. The benchmark templates render the same as before, because none of them has blank lines in indented content.
-- ⏭️ **`SocialNetwork` calls `Defaults.ToList()` while iterating** ([SocialNetwork.cs:86](Mjml.Net/Components/Body/SocialNetwork.cs:86)). This is fine: it runs once in the static constructor, and the copy is needed because the loop adds entries to the same dictionary.
+- ⏭️ **`SocialNetwork` calls `Defaults.ToList()` while iterating** ([SocialNetwork.cs:86](Mjml.Net/Components/Body/SocialNetwork.cs#L86)). This is fine: it runs once in the static constructor, and the copy is needed because the loop adds entries to the same dictionary.
 - ✅ **`BreakpointComponent` wrote `context.Options.Breakpoint`.** That changed the caller's `MjmlOptions`, so an `mj-breakpoint` in one template carried over into later renders that reused the same options object. `GlobalContext.Breakpoint` now holds the breakpoint for the current render; it defaults to `Options.Breakpoint` and is reset in `Clear()`. `StyleHelper`, `ImageComponent` and `NavbarComponent` read it from there. `BreakpointTests` covers this: the test fails without the fix.
 - ⚠️ **Not fixed: `mj-attributes` loses definitions in MJML without whitespace between tags** ([Components/Head/AttributesComponent.cs](Mjml.Net/Components/Head/AttributesComponent.cs)). After reading a tag's attributes, `AttributesComponent.Read` calls `htmlReader.Read()` again, which consumes the next token. Normally that token is the newline between two tags. In minified MJML it is the next definition, which then gets skipped. For example, `<mj-all color="red" /><mj-text color="blue" />` ignores the `mj-text` color, and the same happens for self-closing `<mj-class … />` definitions. Found while writing `AttributePrecedenceTests`; the behavior is the same before and after #16.
+- ⚠️ **Not fixed: an unclosed text element at the end of the input throws** ([MjmlRenderContext.cs](Mjml.Net/MjmlRenderContext.cs), `ValidatingClosingState`). For example, `<mjml><mj-body><mj-section><mj-column><mj-text></mj-column></mj-section></mj-body></mjml>` throws `InvalidOperationException: Name property can only be accessed when TokenKind is Tag, EndTag or Doctype`. The inner text reader consumes everything up to the end of the input, and the closing check then reads `Name` without a valid token. The exception is thrown instead of a validation error being reported. It happens in the old and the new implementation of #17.
