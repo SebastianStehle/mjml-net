@@ -11,7 +11,11 @@ namespace Mjml.Net.Benchmarking;
 public class TemplateBenchmarks
 {
     private static readonly MjmlOptions WithBeautify = new MjmlOptions { Beautify = true };
+#if VALIDATOR_FACTORY
+    private static readonly MjmlOptions WithBeautifyAndValidation = new MjmlOptions { Beautify = true, ValidatorFactory = SoftValidatorFactory.Instance };
+#else
     private static readonly MjmlOptions WithBeautifyAndValidation = new MjmlOptions { Beautify = true, Validator = SoftValidator.Instance };
+#endif
     private readonly MjmlRenderer MjmlRenderer;
  
     [ParamsSource(nameof(MjmlTemplates))]

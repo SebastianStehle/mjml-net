@@ -28,6 +28,15 @@ For every child, this runs a LINQ `Count` over all siblings again. That is O(n²
 - Use a separate policy with a higher `MaximumRetainedCapacity`, such as 256 KB, for the root buffer.
 - Pre-size the root buffer from the input length, such as `mjml.Length * 3`.
 
+**✅ Follow-up: buffer leak.** Raising the limit only helped partly. An allocation sample still showed `char[]` and `StringBuilder` objects making up about 55% of the allocated bytes, even after more than 1,000 warm-up renders. The cause was in `RenderBuffer.Plain(IBuffer)`: it returned early for empty buffers without disposing them, so their builders never went back to the pool. A template with an empty `mj-head` lost one builder on every render. The pool then created fresh builders, and those had to grow to the full output size again. Empty buffers are now disposed as well.
+
+| | Before | After |
+|---|---|---|
+| Allocated per render, all 21 templates interleaved | 465 KB | 259 KB |
+| BenchmarkDotNet, the 8 templates that use `mj-attributes` | 3.14 ms / 5.45 MB | ~2 ms (noisy) / 2.26 MB |
+
+(I first suspected the pool's rotating order and gave each render context its own builders. That version measured exactly the same as the one-line fix, so I dropped it.)
+
 ### 3. ✅ Stop allocating in `AllowedFields` on every access (generated code)
 [Mjml.Net.Generator/Template.handlebar](Mjml.Net.Generator/Template.handlebar)
 
@@ -47,6 +56,8 @@ Ideas:
 - Only take the class-lookup path when the element actually has `mj-class`.
 - Look up `ClassNames` for the parent once per binder instead of once per attribute.
 
+**❌ Tried and reverted.** I added a per-element index (`element → name → value`) in `GlobalContext` and had each binder look up the element's and `mj-all`'s dictionaries once. With BenchmarkDotNet (MediumRun, the 8 templates that use `mj-attributes`) it made no difference: 3.20 ± 0.32 ms with the change against 3.14 ± 0.45 ms without, and allocations were the same. When a template has no `mj-attributes`, the lookups already cost almost nothing, because an empty `Dictionary` returns before hashing. The other checks were already guarded by `Count > 0`, so attribute resolution is not a bottleneck.
+
 ### 5. Replace `GlobalData` scans with typed storage
 [Mjml.Net/GlobalContext.cs](Mjml.Net/GlobalContext.cs), [Helpers/Style.cs](Mjml.Net/Helpers/Style.cs), [Components/Body/BodyComponent.cs:39-47](Mjml.Net/Components/Body/BodyComponent.cs:39)
 
@@ -59,6 +70,8 @@ Ideas:
   - `RootComponent`, `PreviewHelper`, and `TitleHelper` also scan.
 
 Store data per type instead, such as `Dictionary<Type, IList>` or a generic static-slot pattern, and use an incrementing counter instead of `Guid`.
+
+**⏭️ Measured, not worth it.** I measured this with BenchmarkDotNet, using a `GlobalContext` with 20 entries (12 media queries, 4 styles, title, language, direction and font) and running the scans a single render does. The scans took about 1.2 µs and allocated 968 B, and three `Guid` keys took about 0.2 µs and allocated 96 B. That is about 0.35% of a render (~0.4 ms) and about 0.2% of its allocations (~465 KB), too little to show up in the template benchmarks. `GlobalContext.GlobalData` is also a public `Dictionary<(Type, object), GlobalData>`, so switching to typed storage would break the public API.
 
 ### 6. Avoid string allocations in the hot rendering helpers
 - `WriterExtensions.StyleIfNumber`, `StyleIf`, and `AttrOrAuto` ([Extensions/WriterExtensions.cs](Mjml.Net/Extensions/WriterExtensions.cs)) use `$"{value}{unit}"`, which builds a string only to append it. Route these through the existing interpolated-handler overloads, such as `Style(string, ref StyleInterpolatedStringHandler)`, so they write straight into the buffer.

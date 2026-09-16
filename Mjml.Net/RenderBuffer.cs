@@ -33,7 +33,7 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         }
     }
 
-    int IBuffer.AppendTo(StringBuilder target)
+    int IBuffer.AppendToAndDispose(StringBuilder target)
     {
         target.Append(sb);
         Dispose();
@@ -262,13 +262,13 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         FlushConditionalStart();
         FlushConditionalEnd();
 
-        if (value.IsEmpty)
-        {
-            return;
-        }
+        var isEmpty = value.IsEmpty;
+        value.AppendToAndDispose(sb);
 
-        value.AppendTo(sb);
-        WriteLineEnd();
+        if (!isEmpty)
+        {
+            WriteLineEnd();
+        }
     }
 
     public void Plain(InnerTextOrHtml value)
