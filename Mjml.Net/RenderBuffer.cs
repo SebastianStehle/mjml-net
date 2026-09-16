@@ -40,6 +40,16 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         return 0;
     }
 
+    public void WriteToAndDispose(TextWriter output)
+    {
+        foreach (var chunk in sb.GetChunks())
+        {
+            output.Write(chunk.Span);
+        }
+
+        Dispose();
+    }
+
     string IBuffer.ToText()
     {
         var result = sb.ToString();

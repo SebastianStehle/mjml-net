@@ -109,6 +109,12 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     }
 
     /// <inheritdoc />
+    public ValidationErrors Render(string mjml, TextWriter output, MjmlOptions? options = null)
+    {
+        return RenderCore(mjml, false, options, output).Result.Errors;
+    }
+
+    /// <inheritdoc />
     public RenderResult Render(Stream mjml, MjmlOptions? options = null)
     {
         return Render(new StreamReader(mjml), options);
@@ -164,7 +170,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         return result;
     }
 
-    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, bool isAsync, MjmlOptions? options)
+    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, bool isAsync, MjmlOptions? options, TextWriter? output = null)
     {
         options ??= new MjmlOptions();
 
@@ -177,6 +183,14 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
             context.Read(reader, null, null);
 
             using var buffer = context.EndBuffer();
+
+            if (output != null)
+            {
+                // Avoid the result string, which is usually large enough for the large object heap.
+                ((RenderBuffer)buffer).WriteToAndDispose(output);
+
+                return (new RenderResult(string.Empty, context.Validate()), options);
+            }
 
             return (new RenderResult(buffer.ToText(), context.Validate()), options);
         }

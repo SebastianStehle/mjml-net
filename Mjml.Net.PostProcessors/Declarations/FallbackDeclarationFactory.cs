@@ -10,6 +10,13 @@ public class FallbackDeclarationFactory : IDeclarationFactory
     {
         var declaration = defaultFactory.Create(propertyName);
 
+        // AngleSharp only expands shorthands (e.g. padding, background) with its own converters. With a wrapped converter
+        // the whole declaration is dropped, so keep them as they are.
+        if (declaration.Flags.HasFlag(PropertyFlags.Shorthand))
+        {
+            return declaration;
+        }
+
         var converter =
             declaration.Converter is IValueAggregator aggregator ?
             new FallbackCssValueConverterWithAggregate(declaration.Converter, aggregator) :

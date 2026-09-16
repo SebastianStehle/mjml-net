@@ -157,12 +157,20 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
   - otherwise, compute the cascade only for elements that inline rules match. I prototyped this: 7.6× faster, and the only output change was the copied inherited properties.
 - **Verify** against the reference output with `npx mjml`, which is what the `ComplexTests` already do.
 
+**✅ Done: the behavior now matches mjml.** The mjml source (`mjml-core`) only calls juice `if (globalData.inlineStyle.length > 0)`, with `applyStyleTags: false`.
+- **`IAngleSharpPostProcessor.ShouldProcess(string html)`:** a new default interface method, so existing implementations still compile. `AngleSharpPostProcessor` returns the HTML unchanged, without parsing or serializing, when no inner processor needs it. `InlineCssPostProcessor` looks for a `<style …>` tag with `inline`. `AttributesPostProcessor` looks for `mj-html-attribute` or `mj-selector`.
+- **Only matched elements:** the inline step runs `ComputeExplicitStyle` (matched rules plus the element's own `style`, without inheritance) only for elements that the rules of the inline style sheets match. Other `style` attributes are left as written.
+- **Result:** with `AngleSharpPostProcessor.Default`, a render takes **~4 ms and ~2 MB**, down from ~27 ms / 16.7 MB (and from 128 ms / 23.6 MB originally). The 16 templates without inline styles come out the same as a normal render; only the random navbar IDs differ.
+- **Found along the way, fixed:** `FallbackDeclarationFactory` wrapped the converters of shorthand properties as well, and AngleSharp drops shorthands whose converter it doesn't recognize. As a result, `padding`, `margin`, `background`, `border`, `border-radius` and `text-decoration` disappeared from every element the inliner touched. Before this change, that meant every element of every post-processed document. Shorthands are no longer wrapped. `StyleTests.Should_render_inline4_with_shorthand` now uses an inline rule, and I regenerated its fixture. It checks that the button link keeps all its shorthands and gets the inlined `letter-spacing`.
+
 ### 12. Stop AngleSharp from re-parsing the CSS we just wrote
 [Mjml.Net.PostProcessors/InlineCssPostProcessor.cs](Mjml.Net.PostProcessors/InlineCssPostProcessor.cs)
 
 **Potential: ~7.3 ms and ~3.7 MB per render, about 25% of post-processing.**
 - **The cost:** `element.SetAttribute("style", css)` triggers AngleSharp.Css's `StyleAttributeObserver`, which parses the CSS string again into the element's style declaration. The declaration is thrown away, because we only serialize afterwards. Timed separately, the `SetAttribute` calls alone take 7.3 ms and allocate 3.7 MB.
 - **Idea:** compute all declarations first. This is equivalent, because inlining already runs children before parents and doesn't read computed children. Keep the CSS strings in a `Dictionary<IElement, string>`, and emit them from a custom `IMarkupFormatter` during `ToHtml` instead of calling `SetAttribute`.
+
+**⏭️ No longer worth it after #11.** Only elements matched by inline rules get `SetAttribute` now. On the 5 templates with inline styles, the whole inline step takes ~3.9 ms and 817 KB, so the re-parse is a small part of that. Parsing the document dominates.
 
 ### 13. Reuse the AngleSharp `BrowsingContext`
 [Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:54](Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:54)
@@ -172,6 +180,11 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
 - **Idea:** a context can open many documents, but it isn't thread-safe. Pool contexts with an `ObjectPool<IBrowsingContext>`, and dispose or close each document after `ToHtml`.
 - **Check:** confirm that nothing accumulates in a reused context, such as history or the active document.
 
+**✅ Done.** `AngleSharpPostProcessor` takes contexts from a `DefaultObjectPool<IBrowsingContext>` and disposes each document after `ToHtml`.
+- **Reuse is safe:** a reused context produced identical output, its retained heap didn't grow after 300 documents, and it has no session history.
+- **Concurrency is safe:** with a fixed ID generator, 400 parallel renders matched the sequential output. Without it, only the random carousel and navbar IDs differ.
+- **Saved:** ~500 KB per processed document.
+
 ### 14. Don't create the full HTML string when the caller doesn't need it
 [Mjml.Net/MjmlRenderer.cs:181](Mjml.Net/MjmlRenderer.cs:181), [RenderBuffer.cs](Mjml.Net/RenderBuffer.cs)
 
@@ -180,6 +193,12 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
 - **The result string is the largest remaining allocation**, at about 100 KB per render.
 - **Idea:** add overloads such as `Render(string mjml, TextWriter output, MjmlOptions?)` and `RenderAsync(..., Stream output, ...)`. They would write the `StringBuilder` chunks (`GetChunks()`) directly, for example into an ASP.NET response or an email library.
 - **With post-processors:** the HTML is materialized as a string first and then parsed. Passing AngleSharp the buffer content instead would avoid one full copy.
+
+**✅ Done (sync).**
+- **New overload:** `ValidationErrors Render(string mjml, TextWriter output, MjmlOptions? options = null)` on `IMjmlRenderer`, as a default interface method that falls back to the string version, and implemented in `MjmlRenderer`. It writes the `StringBuilder` chunks straight into the writer.
+- **Result:** writing into a reused `StreamWriter` allocates **154 KB per render instead of 254 KB**. Gen2 GCs over 6,300 renders went from **151 to 0**.
+- **Test:** `RenderToWriterTests` checks that the output equals `Render(...).Html`, with and without beautify.
+- **Not done:** the post-processor path still needs the string, because `IPostProcessor.PostProcessAsync` takes and returns a `string`.
 
 ### 15. Reduce the per-reader and per-element overhead of reading MJML
 [Mjml.Net/Internal/HtmlReaderWrapper.cs](Mjml.Net/Internal/HtmlReaderWrapper.cs), [MjmlRenderContext.cs:51](Mjml.Net/MjmlRenderContext.cs:51), [Component.cs](Mjml.Net/Component.cs)
@@ -192,6 +211,86 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
   - `IComponent.ChildNodes` is exposed as `IEnumerable<IComponent>`, so each `foreach` over it boxes the `List<T>` enumerator (~1.4 KB).
   - Together these are about 7–9 KB per render, roughly 3%.
 
+**Partly done.**
+- **✅ Error handler:** `Read` uses one `OnError` handler per context and keeps the current file in a field, restored after each call so includes still report their own file.
+  - I first suspected that the `finally { OnError = null }` dropped errors after nested reads. It doesn't, because only the top-level wrapper subscribes to the parser's `ParseError` event.
+- **✅ Child loops:** `Component.ChildNodes` now returns a `List<IComponent>`, and `IComponent.ChildNodes` is implemented explicitly as `IEnumerable<IComponent>`. `foreach` over it no longer boxes the enumerator. `Cleanup` uses it when the component is a `Component`.
+- **Result:** both allocations are gone from the sample, and a render went from 261 to 256 KB. The output is byte-for-byte identical.
+- **⏭️ `SubtreeReader`:** skipped. It is handed to custom components as the public `IHtmlReader`, so its lifetime is unknown and pooling it isn't safe.
+- **⏭️ Reader buffers:** need a change in HtmlPerformanceKit (upstream).
+
+---
+
+## Rendering TODOs (phase-timed)
+
+These five come from timing the phases of a plain `Render` (no post-processors) with `Stopwatch` counters in a temporary copy of the code, plus call counters. I didn't use the sampling profiler for these numbers: EventPipe samples at GC safe points and over-weights native calls and allocations (it showed `Guid.NewGuid` at 5%, which BenchmarkDotNet disproved).
+
+Averages per render over the 21 templates (Release, .NET 10, ~50 components and ~244 tokens per template). Timings varied between runs from ~0.25 to ~0.40 ms per render, but the shares stayed stable:
+
+| Phase | Beautify on | Beautify off |
+|---|---|---|
+| **Total** | **0.25–0.28 ms** | **~0.22 ms** |
+| Read + build tree | ~0.10 ms (35%) | ~0.09 ms |
+| – re-serializing text/raw content | ~0.024 ms | ~0.022 ms |
+| – creating components | ~0.007 ms | ~0.006 ms |
+| Bind | ~0.06 ms (22%) | ~0.055 ms |
+| Measure | ~0.01 ms (3%) | – |
+| Render | 0.065–0.075 ms (28%) | ~0.057 ms |
+| `ToText` | ~0.031 ms (12%) | ~0.010 ms |
+
+### 16. Bind only what is actually set, instead of querying every field
+[Mjml.Net.Generator/Template.handlebar](Mjml.Net.Generator/Template.handlebar), [Mjml.Net/Internal/Binder.cs](Mjml.Net/Internal/Binder.cs)
+
+**Potential: a large part of bind, which is ~22% of a render.**
+- **The cost:** the generated `Bind()` calls `Binder.GetAttribute` for every `[Bind]` field, which is **1,166 calls per render for 50 components**.
+  - Only 152 are found on the element itself and 5 through inheritance.
+  - The other **1,008 (86%)** go through the class, parent-class, type and `mj-all` lookups, and almost all of them find nothing.
+  - For templates with `mj-attributes`, each of those misses hashes two `AttributeKey` record structs, and `AttributeKey` uses randomized string hashing.
+  - Bind comes to about 50 ns per field.
+- **Idea:** invert it. Generate a `SetAttribute(string name, string value)` switch per component, and apply the sources that exist from lowest to highest precedence: `mj-all`, type, parent class, `mj-class`, inherited, own attributes. Each source only contains what is set. For inherited values, parents would expose the names they provide, since `GetInheritingAttribute` is a switch today.
+- **Note on #4:** this corrects my "not a bottleneck" conclusion. That BenchmarkDotNet run had ±10–15% noise across the whole render, which isn't precise enough for a phase that is only 22% of it.
+
+### 17. Stop allocating tag names at every nesting level while reading
+[Mjml.Net/Internal/SubtreeReader.cs:37](Mjml.Net/Internal/SubtreeReader.cs:37)
+
+**Potential: ~37 KB per render (~15% of allocations), plus CPU that grows with nesting depth.**
+- **Chained readers:** `ReadSubtree()` wraps the current reader in another `SubtreeReader`, so a reader at depth *d* is a chain of *d* wrappers. Every token read goes through the whole chain.
+- **A new string at every level:** each level calls `inner.Name` for its `VoidTags.Contains` check, and HtmlPerformanceKit creates a new string on every `Name` access. `ReadElement` and `ValidatingClosingState` read `Name` again.
+- **Measured:** **777 name strings for 244 tokens per render**.
+- **Idea:**
+  - Keep one depth counter on the root `HtmlReaderWrapper`; each `SubtreeReader` only remembers its start depth, and `Read` returns `false` below it. Then every token is checked once instead of once per level.
+  - Check void tags on `NameAsMemory.Span`, for example with a `switch` on length plus `SequenceEqual`, or a `HashSet` alternate lookup on .NET 9+.
+  - Compare the closing tag in `ValidatingClosingState` as a span.
+
+### 18. Intern tag and attribute names instead of allocating them per element
+[Mjml.Net/MjmlRenderContext.cs:157](Mjml.Net/MjmlRenderContext.cs:157), [Mjml.Net/MjmlRenderer.cs:69](Mjml.Net/MjmlRenderer.cs:69)
+
+**Potential: ~270 strings per render (~10 KB), and faster lookups.**
+- **The cost:** each render allocates **169 attribute-name strings** (`GetAttributeName`) and about 100 tag-name strings for the component lookup, although both come from a small, fixed set: component names and `AllowedFields` keys.
+- **Idea:** HtmlPerformanceKit already has `NameAsMemory` and `GetAttributeNameAsMemory(int)`.
+  - Look up components by span, using `Dictionary.GetAlternateLookup<ReadOnlySpan<char>>` on .NET 9+ or a small span-keyed table otherwise.
+  - Map attribute names to the interned strings of the component's `AllowedFields`, and only allocate unknown names.
+  - Attribute values have to stay strings, because they are stored in fields.
+- **Also:** creating a component (factory lookup plus `new T()`) takes ~7 µs per render (~3%). Explicit static factory lambdas instead of the generic `new()` constraint would make this cheaper.
+
+### 19. Reconsider `Beautify = true` as the default
+[Mjml.Net/MjmlOptions.cs:50](Mjml.Net/MjmlOptions.cs:50)
+
+**Potential: 11–22% of render time and ~40% of output size, for everyone who doesn't need readable HTML.**
+- **The cost:** beautify is on by default. It makes the output **49 KB instead of 30 KB** on average (+60%). That takes render time from ~0.22 ms to 0.25–0.28 ms, `ToText` from 0.010 ms to 0.031 ms, and it also increases what gets sent by email.
+- **mjml's default:** as far as I know, mjml itself defaults to `beautify: false` (and deprecated the option in v4).
+- **Idea:** change the default to `false` in a major version, or at least document the cost. Changing the default changes output, so it's a product decision. Callers can already pass `Beautify = false`.
+
+### 20. Copy text and raw content instead of rebuilding it token by token
+[Mjml.Net/Internal/HtmlReaderWrapper.cs:77](Mjml.Net/Internal/HtmlReaderWrapper.cs:77)
+
+**Potential: ~22–26 µs per render (~9%), plus many small strings.**
+- **The cost:** for text components (`mj-text`, `mj-button`, `mj-raw` and others), `ReadInnerHtml` rebuilds the inner HTML from tokens. Every piece is added separately to an `InnerTextOrHtml`'s `List<string>`: `"<"`, the name, `" "`, the attribute name, `"="`, `"\""`, the value and `"\""`. Each `Name`, attribute name and value is a new string, and the list keeps growing from its default capacity of 10. The result is later appended to the output part by part.
+- **Idea:**
+  - Build the inner HTML directly into a pooled `StringBuilder` with the span APIs (`NameAsMemory`, `GetAttributeNameAsMemory`, `GetAttributeAsMemory`, `TextAsMemory`), and store a single string.
+  - Better still: copy the original source text between the start and end tag. That needs character offsets, which HtmlPerformanceKit doesn't expose today, so it would be an upstream change.
+- **Note:** the tag and attribute names are affected by #17 and #18 as well.
+
 ---
 
 ## Side findings (correctness, spotted during analysis)
@@ -200,4 +299,4 @@ With post-processors, a render currently spends about **13 ms parsing** (5.6 MB)
 - ✅ **`ColorType.Comparer.Equals` compared `rhs` with itself** ([Types/ColorType.cs:166](Mjml.Net/Types/ColorType.cs:166)). It now compares `lhs` with `rhs`. In practice this almost never mattered: `HashSet` compares the full hash code first, and string hashes are randomized per process, so only a full 32-bit hash collision could be affected. That is also why there's no test for it.
 - ✅ **`InnerTextOrHtml.AppendIntended` skipped the first character after each newline**, so after a blank line the next line was not indented (`"a\n\nb"`). Fixed, with a test in `InnerTextOrHtmlTests`. The benchmark templates render the same as before, because none of them has blank lines in indented content.
 - ⏭️ **`SocialNetwork` calls `Defaults.ToList()` while iterating** ([SocialNetwork.cs:86](Mjml.Net/Components/Body/SocialNetwork.cs:86)). This is fine: it runs once in the static constructor, and the copy is needed because the loop adds entries to the same dictionary.
-- ⚠️ **Not fixed: `BreakpointComponent` writes `context.Options.Breakpoint`.** That changes the `MjmlOptions` instance the caller passed in, so an `mj-breakpoint` in one template carries over into later renders that reuse the same options object. Fixing it means storing the breakpoint per render instead of on the options. That changes where `StyleHelper` and others read it, so it needs a decision on the public behavior.
+- ✅ **`BreakpointComponent` wrote `context.Options.Breakpoint`.** That changed the caller's `MjmlOptions`, so an `mj-breakpoint` in one template carried over into later renders that reused the same options object. `GlobalContext.Breakpoint` now holds the breakpoint for the current render; it defaults to `Options.Breakpoint` and is reset in `Clear()`. `StyleHelper`, `ImageComponent` and `NavbarComponent` read it from there. `BreakpointTests` covers this: the test fails without the fix.

@@ -10,6 +10,7 @@ public sealed class GlobalContext
     private readonly Dictionary<AttributeKey, string> attributesByClass = new Dictionary<AttributeKey, string>(10);
     private readonly Dictionary<AttributeParentKey, string> attributesByParentClass = new Dictionary<AttributeParentKey, string>(10);
     private IFileLoader? fileLoader;
+    private string? breakpoint;
 
     public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = [];
 
@@ -23,6 +24,16 @@ public sealed class GlobalContext
 
     public bool Async { get; set; }
 
+    /// <summary>
+    /// The breakpoint of the current render. Defaults to <see cref="MjmlOptions.Breakpoint"/> and can be changed by
+    /// <c>mj-breakpoint</c> without modifying the options, which might be reused for other renders.
+    /// </summary>
+    public string Breakpoint
+    {
+        get => breakpoint ?? Options?.Breakpoint ?? "480px";
+        set => breakpoint = value;
+    }
+
     public IFileLoader? FileLoader
     {
         get => fileLoader ??= Options?.FileLoader?.Invoke();
@@ -32,6 +43,7 @@ public sealed class GlobalContext
     {
         GlobalData.Clear();
         fileLoader = null;
+        breakpoint = null;
         attributesByClass.Clear();
         attributesByName.Clear();
         attributesByParentClass.Clear();

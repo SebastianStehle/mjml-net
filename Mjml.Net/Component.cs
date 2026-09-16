@@ -2,15 +2,18 @@
 
 public abstract class Component : IComponent
 {
-    private static readonly IComponent[] EmptyComponents = [];
+    private static readonly List<IComponent> EmptyComponents = [];
     private List<IComponent>? childNodes;
     private List<InnerTextOrHtml>? childInput;
     private IBinder binder;
 
-    public IEnumerable<IComponent> ChildNodes
+    // A list instead of IEnumerable, so that foreach does not box the enumerator. Use AddChild or InsertChild to add children.
+    public List<IComponent> ChildNodes
     {
-        get => (IEnumerable<IComponent>?)childNodes ?? EmptyComponents;
+        get => childNodes ?? EmptyComponents;
     }
+
+    IEnumerable<IComponent> IComponent.ChildNodes => ChildNodes;
 
     public double ActualWidth { get; protected set; }
 

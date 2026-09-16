@@ -12,6 +12,8 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
     private bool hasAddedClosingError;
+    private Action<HtmlError>? onError;
+    private string? currentFile;
 
     public ValidationErrors Validate()
     {
@@ -37,6 +39,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         mjmlRenderer = null!;
         errors.Clear();
         hasAddedClosingError = false;
+        currentFile = null;
 
         ClearRenderData();
     }
@@ -50,14 +53,11 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
     public void Read(IHtmlReader reader, IComponent? parent, string? file)
     {
-        reader.OnError = error => errors.Add(
-            new ValidationError(
-                error.Message,
-                ValidationErrorType.InvalidHtml,
-                new SourcePosition(
-                    error.LineNumber,
-                    error.LinePosition,
-                    file)));
+        // Use a single handler instead of a closure per call. The file is restored afterwards, because includes are read with another file.
+        var previousFile = currentFile;
+
+        currentFile = file;
+        reader.OnError = onError ??= OnError;
 
         try
         {
@@ -91,7 +91,21 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         finally
         {
             reader.OnError = null;
+
+            currentFile = previousFile;
         }
+    }
+
+    private void OnError(HtmlError error)
+    {
+        errors.Add(
+            new ValidationError(
+                error.Message,
+                ValidationErrorType.InvalidHtml,
+                new SourcePosition(
+                    error.LineNumber,
+                    error.LinePosition,
+                    currentFile)));
     }
 
     private void ReadElement(string name, IHtmlReader reader, IComponent? parent, string? file)
@@ -229,9 +243,19 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             component.SetBinder(null!);
         }
 
-        foreach (var child in component.ChildNodes)
+        if (component is Component typed)
         {
-            Cleanup(child);
+            foreach (var child in typed.ChildNodes)
+            {
+                Cleanup(child);
+            }
+        }
+        else
+        {
+            foreach (var child in component.ChildNodes)
+            {
+                Cleanup(child);
+            }
         }
     }
 
