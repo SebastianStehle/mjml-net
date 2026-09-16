@@ -8,6 +8,8 @@ internal sealed class Binder : IBinder
     private InnerTextOrHtml? currentText;
     private string elementName;
     private string[]? currentClasses;
+    private bool isResolved;
+    private Action<string, string?>? addInheritingAttribute;
 
     public string[] ClassNames
     {
@@ -29,6 +31,19 @@ internal sealed class Binder : IBinder
         }
     }
 
+    public IReadOnlyDictionary<string, string> Attributes
+    {
+        get
+        {
+            if (!isResolved)
+            {
+                Resolve();
+            }
+
+            return attributes;
+        }
+    }
+
     public Binder Setup(GlobalContext newContext, IComponent? newParent, string? newElementName = null)
     {
         context = newContext;
@@ -45,6 +60,7 @@ internal sealed class Binder : IBinder
         currentText = null;
         elementName = null!;
         elementParent = null!;
+        isResolved = false;
     }
 
     public void SetAttribute(string name, string value)
@@ -57,93 +73,76 @@ internal sealed class Binder : IBinder
         currentText = text;
     }
 
-    public string? GetAttribute(string name)
+    public InnerTextOrHtml? GetText()
     {
-        if (attributes.TryGetValue(name, out var a1))
-        {
-            return a1;
-        }
+        return currentText;
+    }
 
-        var inherited = elementParent?.GetInheritingAttribute(name);
-        if (inherited != null)
-        {
-            return inherited;
-        }
+    private void Resolve()
+    {
+        isResolved = true;
+
+        // The classes must be read from the own attributes, before the other sources are added.
+        var classNames = ClassNames;
+
+        // The own attributes are already in the dictionary. Add the other sources from the highest to the lowest precedence.
+        // Binders are pooled, so the callback is only created once per binder.
+        elementParent?.AddInheritingAttributes(addInheritingAttribute ??= AddInheritingAttribute);
 
         if (context.AttributesByClass.Count > 0)
         {
-            var classNames = ClassNames;
-            if (classNames.Length > 0)
+            // The last class wins.
+            for (var i = classNames.Length - 1; i >= 0; i--)
             {
-                string? classAttribute = null;
-                // Loop over all classes and use the last match.
-                foreach (var className in classNames)
+                foreach (var (key, value) in context.AttributesByClass)
                 {
-                    if (context.AttributesByClass.TryGetValue(new AttributeKey(className, name), out var a2))
+                    if (key.ClassOrType == classNames[i])
                     {
-                        classAttribute = a2;
+                        attributes.TryAdd(key.Name, value);
                     }
-                }
-
-                if (classAttribute != null)
-                {
-                    return classAttribute;
                 }
             }
         }
 
         if (context.AttributesByParentClass.Count > 0 && elementParent != null)
         {
-            var classNames = elementParent.Binder.ClassNames;
-            if (classNames.Length > 0)
+            var parentClassNames = elementParent.Binder.ClassNames;
+
+            // The last class wins.
+            for (var i = parentClassNames.Length - 1; i >= 0; i--)
             {
-                string? classAttribute = null;
-                // Loop over all classes and use the last match.
-                foreach (var className in classNames)
+                foreach (var (key, value) in context.AttributesByParentClass)
                 {
-                    if (context.AttributesByParentClass.TryGetValue(new AttributeParentKey(className, elementName, name), out var a3))
+                    if (key.ParentClass == parentClassNames[i] && key.ClassOrType == elementName)
                     {
-                        classAttribute = a3;
+                        attributes.TryAdd(key.Name, value);
                     }
                 }
-
-                if (classAttribute != null)
-                {
-                    return classAttribute;
-                }
             }
         }
 
-        if (context.AttributesByName.TryGetValue(new AttributeKey(elementName, name), out var a4))
-        {
-            return a4;
-        }
-
-        if (context.AttributesByName.TryGetValue(new AttributeKey(Constants.All, name), out var a5))
-        {
-            return a5;
-        }
-
-        return null;
+        AddAll(context.GetTypeAttributes(elementName));
+        AddAll(context.GetTypeAttributes(Constants.All));
     }
 
-    private static string? GetByClass(IReadOnlyDictionary<AttributeKey, string> attributes, string[] classNames, string name)
+    private void AddInheritingAttribute(string name, string? value)
     {
-        string? result = null;
-        // Loop over all classes and use the last match.
-        foreach (var className in classNames)
+        if (value != null)
         {
-            if (attributes.TryGetValue(new AttributeKey(className, name), out var a))
-            {
-                result = a;
-            }
+            attributes.TryAdd(name, value);
         }
-
-        return result;
     }
 
-    public InnerTextOrHtml? GetText()
+    private void AddAll(Dictionary<string, string>? source)
     {
-        return currentText;
+        if (source == null)
+        {
+            return;
+        }
+
+        foreach (var (name, value) in source)
+        {
+            attributes.TryAdd(name, value);
+        }
     }
 }

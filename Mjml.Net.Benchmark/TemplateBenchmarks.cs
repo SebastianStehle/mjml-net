@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
+using Mjml.Net.Validators;
 
 namespace Mjml.Net.Benchmarking;
 
@@ -10,6 +11,11 @@ namespace Mjml.Net.Benchmarking;
 public class TemplateBenchmarks
 {
     private static readonly MjmlOptions WithBeautify = new MjmlOptions { Beautify = true };
+#if VALIDATOR_FACTORY
+    private static readonly MjmlOptions WithBeautifyAndValidation = new MjmlOptions { Beautify = true, ValidatorFactory = SoftValidatorFactory.Instance };
+#else
+    private static readonly MjmlOptions WithBeautifyAndValidation = new MjmlOptions { Beautify = true, Validator = SoftValidator.Instance };
+#endif
     private readonly MjmlRenderer MjmlRenderer;
  
     [ParamsSource(nameof(MjmlTemplates))]
@@ -59,5 +65,11 @@ public class TemplateBenchmarks
     public string Render_Template_Beautify()
     {
         return MjmlRenderer.Render(MjmlTemplate, WithBeautify).Html;
+    }
+
+    [Benchmark]
+    public string Render_Template_Beautify_Validate()
+    {
+        return MjmlRenderer.Render(MjmlTemplate, WithBeautifyAndValidation).Html;
     }
 }

@@ -171,38 +171,20 @@ public partial class SocialComponent : BodyComponentBase
         renderer.EndElement("table");
     }
 
-    public override string? GetInheritingAttribute(string name)
+    public override void AddInheritingAttributes(Action<string, string?> add)
     {
-        switch (name)
-        {
-            case "border-radius":
-                return BorderRadius;
-            case "color":
-                return Color;
-            case "font-family":
-                return FontFamily;
-            case "font-size":
-                return FontSize;
-            case "font-style":
-                return FontStyle;
-            case "font-weight":
-                return FontWeight;
-            case "icon-height":
-                return IconHeight;
-            case "icon-padding":
-                return IconPadding;
-            case "icon-size":
-                return IconSize;
-            case "padding":
-                return InnerPadding;
-            case "line-height":
-                return LineHeight;
-            case "text-padding":
-                return TextPadding;
-            case "text-decoration":
-                return TextDecoration;
-            default:
-                return null;
-        }
+        add("border-radius", BorderRadius);
+        add("color", Color);
+        add("font-family", FontFamily);
+        add("font-size", FontSize);
+        add("font-style", FontStyle);
+        add("font-weight", FontWeight);
+        add("icon-height", IconHeight);
+        add("icon-padding", IconPadding);
+        add("icon-size", IconSize);
+        add("padding", InnerPadding);
+        add("line-height", LineHeight);
+        add("text-padding", TextPadding);
+        add("text-decoration", TextDecoration);
     }
 }

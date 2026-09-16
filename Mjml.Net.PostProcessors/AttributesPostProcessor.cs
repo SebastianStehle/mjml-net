@@ -6,6 +6,14 @@ public sealed class AttributesPostProcessor : IAngleSharpPostProcessor
 {
     public static readonly IPostProcessor Instance = new AngleSharpPostProcessor(new AttributesPostProcessor());
 
+    public bool ShouldProcess(string html)
+    {
+        // Also covers stray mj-html-attribute and mj-selector elements, which are removed.
+        return
+            html.Contains("mj-html-attribute", StringComparison.OrdinalIgnoreCase) ||
+            html.Contains("mj-selector", StringComparison.OrdinalIgnoreCase);
+    }
+
     public ValueTask ProcessAsync(IDocument document, MjmlOptions options, CancellationToken ct)
     {
         foreach (var attributes in document.QuerySelectorAll("mj-html-attributes"))

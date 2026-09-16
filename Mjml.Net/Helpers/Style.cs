@@ -39,7 +39,7 @@ public sealed class StyleHelper : IHelper
         renderer.StartElement("style")
             .Attr("type", "text/css");
 
-        renderer.Content($"@media only screen and (min-width:{context.Options.Breakpoint}) {{");
+        renderer.Content($"@media only screen and (min-width:{context.Breakpoint}) {{");
 
         foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
         {
@@ -54,7 +54,7 @@ public sealed class StyleHelper : IHelper
     private static void WriteMediaQueriesThunderbird(IHtmlRenderer renderer, GlobalContext context)
     {
         renderer.StartElement("style")
-            .Attr("media", $"screen and (min-width:{context.Options.Breakpoint})");
+            .Attr("media", $"screen and (min-width:{context.Breakpoint})");
 
         foreach (var mediaQuery in context.GlobalData.Values.OfType<MediaQuery>())
         {

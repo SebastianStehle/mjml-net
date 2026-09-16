@@ -22,7 +22,7 @@ public interface IComponent
 
     string? GetDefaultValue(string name);
 
-    string? GetInheritingAttribute(string name);
+    void AddInheritingAttributes(Action<string, string?> add);
 
     string? GetAttribute(string name);
 

@@ -24,8 +24,8 @@ public sealed partial class IncludeComponent : Component
 
     public override void Read(IHtmlReader htmlReader, IMjmlReader mjmlReader, GlobalContext context)
     {
-        var actualPath = Binder.GetAttribute("path");
-        var actualType = Binder.GetAttribute("type");
+        htmlReader.TryGetAttribute("path", out var actualPath);
+        htmlReader.TryGetAttribute("type", out var actualType);
 
         switch (actualType)
         {

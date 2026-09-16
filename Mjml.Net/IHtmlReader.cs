@@ -1,4 +1,5 @@
-﻿using HtmlPerformanceKit;
+﻿using System.Diagnostics.CodeAnalysis;
+using HtmlPerformanceKit;
 
 namespace Mjml.Net;
 
@@ -28,9 +29,13 @@ public interface IHtmlReader
 
     string GetAttribute(string name);
 
+    bool TryGetAttribute(string name, [NotNullWhen(true)] out string? value);
+
     string GetAttribute(int index);
 
     string GetAttributeName(int index);
+
+    ReadOnlySpan<char> GetAttributeNameAsSpan(int index);
 
     InnerTextOrHtml ReadInnerHtml();
 

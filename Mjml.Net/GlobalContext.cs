@@ -9,7 +9,9 @@ public sealed class GlobalContext
     private readonly Dictionary<AttributeKey, string> attributesByName = new Dictionary<AttributeKey, string>(10);
     private readonly Dictionary<AttributeKey, string> attributesByClass = new Dictionary<AttributeKey, string>(10);
     private readonly Dictionary<AttributeParentKey, string> attributesByParentClass = new Dictionary<AttributeParentKey, string>(10);
+    private readonly Dictionary<string, Dictionary<string, string>> attributesByType = [];
     private IFileLoader? fileLoader;
+    private string? breakpoint;
 
     public Dictionary<(Type Type, object Identifier), GlobalData> GlobalData { get; } = [];
 
@@ -23,6 +25,12 @@ public sealed class GlobalContext
 
     public bool Async { get; set; }
 
+    public string Breakpoint
+    {
+        get => breakpoint ?? Options?.Breakpoint ?? "480px";
+        set => breakpoint = value;
+    }
+
     public IFileLoader? FileLoader
     {
         get => fileLoader ??= Options?.FileLoader?.Invoke();
@@ -32,8 +40,11 @@ public sealed class GlobalContext
     {
         GlobalData.Clear();
         fileLoader = null;
+        breakpoint = null;
         attributesByClass.Clear();
         attributesByName.Clear();
+        attributesByParentClass.Clear();
+        attributesByType.Clear();
         Options = null!;
     }
 
@@ -64,6 +75,20 @@ public sealed class GlobalContext
     public void SetTypeAttribute(string name, string type, string value)
     {
         attributesByName[new AttributeKey(type, name)] = value;
+
+        // Also index the attributes by type, so that binding can iterate over the attributes of an element type.
+        if (!attributesByType.TryGetValue(type, out var attributes))
+        {
+            attributes = [];
+            attributesByType[type] = attributes;
+        }
+
+        attributes[name] = value;
+    }
+
+    internal Dictionary<string, string>? GetTypeAttributes(string type)
+    {
+        return attributesByType.GetValueOrDefault(type);
     }
 
     public void SetClassAttribute(string name, string className, string value)

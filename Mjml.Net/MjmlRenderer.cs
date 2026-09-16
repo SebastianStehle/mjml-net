@@ -97,15 +97,25 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         return this;
     }
 
-    internal IComponent? CreateComponent(string name)
+    internal IComponent? CreateComponent(ReadOnlySpan<char> name)
     {
-        return components.GetValueOrDefault(name)?.Invoke();
+#if NET9_0_OR_GREATER
+        return components.GetAlternateLookup<ReadOnlySpan<char>>().TryGetValue(name, out var factory) ? factory() : null;
+#else
+        return components.GetValueOrDefault(name.ToString())?.Invoke();
+#endif
     }
 
     /// <inheritdoc />
     public RenderResult Render(string mjml, MjmlOptions? options = null)
     {
         return RenderCore(mjml, false, options).Result;
+    }
+
+    /// <inheritdoc />
+    public ValidationErrors Render(string mjml, TextWriter output, MjmlOptions? options = null)
+    {
+        return RenderCore(mjml, false, options, output).Result.Errors;
     }
 
     /// <inheritdoc />
@@ -164,7 +174,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         return result;
     }
 
-    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, bool isAsync, MjmlOptions? options)
+    private (RenderResult Result, MjmlOptions Options) RenderCore(string mjml, bool isAsync, MjmlOptions? options, TextWriter? output = null)
     {
         options ??= new MjmlOptions();
 
@@ -177,6 +187,14 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
             context.Read(reader, null, null);
 
             using var buffer = context.EndBuffer();
+
+            if (output != null)
+            {
+                // Avoid the result string, which is usually large enough for the large object heap.
+                ((RenderBuffer)buffer).WriteToAndDispose(output);
+
+                return (new RenderResult(string.Empty, context.Validate()), options);
+            }
 
             return (new RenderResult(buffer.ToText(), context.Validate()), options);
         }

@@ -109,30 +109,16 @@ public partial class AccordionElementComponent : BodyComponentBase
         renderer.EndElement("tr");
     }
 
-    public override string? GetInheritingAttribute(string name)
+    public override void AddInheritingAttributes(Action<string, string?> add)
     {
-        switch (name)
-        {
-            case "border":
-                return Border;
-            case "icon-align":
-                return IconAlign;
-            case "icon-height":
-                return IconHeight;
-            case "icon-position":
-                return IconPosition;
-            case "icon-width":
-                return IconWidth;
-            case "icon-unwrapped-url":
-                return IconUnwrappedUrl;
-            case "icon-unwrapped-alt":
-                return IconUnwrappedAlt;
-            case "icon-wrapped-url":
-                return IconWrappedUrl;
-            case "icon-wrapped-alt":
-                return IconWrappedAlt;
-        }
-
-        return null;
+        add("border", Border);
+        add("icon-align", IconAlign);
+        add("icon-height", IconHeight);
+        add("icon-position", IconPosition);
+        add("icon-width", IconWidth);
+        add("icon-unwrapped-url", IconUnwrappedUrl);
+        add("icon-unwrapped-alt", IconUnwrappedAlt);
+        add("icon-wrapped-url", IconWrappedUrl);
+        add("icon-wrapped-alt", IconWrappedAlt);
     }
 }

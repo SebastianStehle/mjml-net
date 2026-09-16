@@ -7,6 +7,7 @@ namespace {{classNamespace}};
 public partial class {{className}}
 {
 	private static readonly AllowedAttributes AllowedAttributesStatic = new AllowedAttributes();
+	private static AllowedAttributes? AllowedAttributesMerged;
 	{{#each customTypes}}
 	private static readonly IType {{customName}} = new {{customType}}();
 	{{/each}}
@@ -25,21 +26,34 @@ public partial class {{className}}
 	{
 		get
 		{
+			// The inherited attributes are static per type as well, so merge them only once.
+			var merged = AllowedAttributesMerged;
+
+			if (merged != null)
+			{
+				return merged;
+			}
+
 			var inherited = base.AllowedFields;
 
-			if (inherited == null || inherited.Count == 0) 
+			if (inherited == null || inherited.Count == 0)
 			{
-				return AllowedAttributesStatic;
+				merged = AllowedAttributesStatic;
+			}
+			else
+			{
+				merged = new AllowedAttributes(AllowedAttributesStatic);
+
+				foreach (var (key, value) in inherited)
+				{
+					merged[key] = value;
+				}
 			}
 
-			var result = new AllowedAttributes(AllowedAttributesStatic);
+			// Concurrent callers may merge twice, but always to an equal and fully built result.
+			AllowedAttributesMerged = merged;
 
-			foreach (var (key, value) in inherited)
-			{
-				result[key] = value;
-			}
-
-			return result;
+			return merged;
 		}
 	}
 
@@ -53,23 +67,27 @@ public partial class {{className}}
 		{{/each}}
 		}
 
-		return Binder.GetAttribute(name);
+		return Binder.Attributes.GetValueOrDefault(name!);
 	}
 
 	public override void Bind(Mjml.Net.GlobalContext context)
 	{
-		{{#each normalFields}}
-		var source{{name}} = Binder.GetAttribute("{{attribute}}");
-		if (source{{name}} != null)
+		foreach (var (name, value) in Binder.Attributes)
 		{
-			{{#if isCustom }}
-			this.{{name}} = {{customName}}.Coerce(source{{name}});
-			{{/if}}
-			{{#unless isCustom }}
-			this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(source{{name}});
-			{{/unless}}
+			switch (name)
+			{
+			{{#each normalFields}}
+				case "{{attribute}}":
+					{{#if isCustom }}
+					this.{{name}} = {{customName}}.Coerce(value);
+					{{/if}}
+					{{#unless isCustom }}
+					this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(value);
+					{{/unless}}
+					break;
+			{{/each}}
+			}
 		}
-		{{/each}}
 
 		{{#each expandedFields}}
 		if ({{name}} != null && ({{name}}Top == null || {{name}}Right == null || {{name}}Bottom == null || {{name}}Left == null)) 

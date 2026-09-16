@@ -12,7 +12,7 @@ public partial class BreakpointComponent : HeadComponentBase
         // Just in case that validation is disabled.
         if (Width != null)
         {
-            context.Options.Breakpoint = Width;
+            context.Breakpoint = Width;
         }
     }
 }

@@ -33,11 +33,21 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         }
     }
 
-    int IBuffer.AppendTo(StringBuilder target)
+    int IBuffer.AppendToAndDispose(StringBuilder target)
     {
         target.Append(sb);
         Dispose();
         return 0;
+    }
+
+    public void WriteToAndDispose(TextWriter output)
+    {
+        foreach (var chunk in sb.GetChunks())
+        {
+            output.Write(chunk.Span);
+        }
+
+        Dispose();
     }
 
     string IBuffer.ToText()
@@ -262,13 +272,13 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         FlushConditionalStart();
         FlushConditionalEnd();
 
-        if (value.IsEmpty)
-        {
-            return;
-        }
+        var isEmpty = value.IsEmpty;
+        value.AppendToAndDispose(sb);
 
-        value.AppendTo(sb);
-        WriteLineEnd();
+        if (!isEmpty)
+        {
+            WriteLineEnd();
+        }
     }
 
     public void Plain(InnerTextOrHtml value)
@@ -313,11 +323,7 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
     {
         if (beautify && indent > 0)
         {
-            sb.EnsureCapacity(sb.Length + (indent * 2));
-            for (var i = 0; i < indent; i++)
-            {
-                sb.Append("  ");
-            }
+            sb.Append(' ', indent * 2);
         }
     }
 

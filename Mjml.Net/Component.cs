@@ -2,15 +2,17 @@
 
 public abstract class Component : IComponent
 {
-    private static readonly IComponent[] EmptyComponents = [];
+    private static readonly List<IComponent> EmptyComponents = [];
     private List<IComponent>? childNodes;
     private List<InnerTextOrHtml>? childInput;
     private IBinder binder;
 
-    public IEnumerable<IComponent> ChildNodes
+    public List<IComponent> ChildNodes
     {
-        get => (IEnumerable<IComponent>?)childNodes ?? EmptyComponents;
+        get => childNodes ?? EmptyComponents;
     }
+
+    IEnumerable<IComponent> IComponent.ChildNodes => ChildNodes;
 
     public double ActualWidth { get; protected set; }
 
@@ -58,9 +60,8 @@ public abstract class Component : IComponent
         }
     }
 
-    public virtual string? GetInheritingAttribute(string name)
+    public virtual void AddInheritingAttributes(Action<string, string?> add)
     {
-        return null;
     }
 
     public virtual string? GetDefaultValue(string name)
@@ -128,9 +129,11 @@ public abstract class Component : IComponent
     {
         if (childNodes != null)
         {
+            var numNonRawSiblings = childNodes.Count(x => !x.Raw);
+
             foreach (var child in childNodes)
             {
-                child.Measure(context, width, childNodes.Count, childNodes.Count(x => !x.Raw));
+                child.Measure(context, width, childNodes.Count, numNonRawSiblings);
             }
         }
     }
