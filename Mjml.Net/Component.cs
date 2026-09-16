@@ -128,9 +128,11 @@ public abstract class Component : IComponent
     {
         if (childNodes != null)
         {
+            var numNonRawSiblings = childNodes.Count(x => !x.Raw);
+
             foreach (var child in childNodes)
             {
-                child.Measure(context, width, childNodes.Count, childNodes.Count(x => !x.Raw));
+                child.Measure(context, width, childNodes.Count, numNonRawSiblings);
             }
         }
     }
