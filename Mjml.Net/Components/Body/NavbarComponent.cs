@@ -199,14 +199,8 @@ public partial class NavbarComponent : BodyComponentBase
         renderer.Content("}");
     }
 
-    public override string? GetInheritingAttribute(string name)
+    public override void AddInheritingAttributes(Action<string, string?> add)
     {
-        switch (name)
-        {
-            case "navbar-base-url":
-                return BaseUrl;
-        }
-
-        return null;
+        add("navbar-base-url", BaseUrl);
     }
 }

@@ -1,4 +1,5 @@
-﻿using HtmlPerformanceKit;
+﻿using System.Diagnostics.CodeAnalysis;
+using HtmlPerformanceKit;
 
 namespace Mjml.Net;
 
@@ -27,6 +28,8 @@ public interface IHtmlReader
     bool Read();
 
     string GetAttribute(string name);
+
+    bool TryGetAttribute(string name, [NotNullWhen(true)] out string? value);
 
     string GetAttribute(int index);
 

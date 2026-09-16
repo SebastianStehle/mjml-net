@@ -6,7 +6,7 @@ namespace Mjml.Net;
 
 internal static class DefaultPools
 {
-    // Rendered emails are typically 10-130K characters. 
+    // Rendered emails are typically 10-130K characters.
     // With the default limit of 4K characters the output buffer would never be reused.
     public static readonly ObjectPool<StringBuilder> StringBuilders = new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy
     {

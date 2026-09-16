@@ -7,7 +7,6 @@ public abstract class Component : IComponent
     private List<InnerTextOrHtml>? childInput;
     private IBinder binder;
 
-    // A list instead of IEnumerable, so that foreach does not box the enumerator. Use AddChild or InsertChild to add children.
     public List<IComponent> ChildNodes
     {
         get => childNodes ?? EmptyComponents;
@@ -61,9 +60,8 @@ public abstract class Component : IComponent
         }
     }
 
-    public virtual string? GetInheritingAttribute(string name)
+    public virtual void AddInheritingAttributes(Action<string, string?> add)
     {
-        return null;
     }
 
     public virtual string? GetDefaultValue(string name)

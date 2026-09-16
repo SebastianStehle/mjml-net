@@ -67,23 +67,27 @@ public partial class {{className}}
 		{{/each}}
 		}
 
-		return Binder.GetAttribute(name);
+		return Binder.Attributes.GetValueOrDefault(name!);
 	}
 
 	public override void Bind(Mjml.Net.GlobalContext context)
 	{
-		{{#each normalFields}}
-		var source{{name}} = Binder.GetAttribute("{{attribute}}");
-		if (source{{name}} != null)
+		foreach (var (name, value) in Binder.Attributes)
 		{
-			{{#if isCustom }}
-			this.{{name}} = {{customName}}.Coerce(source{{name}});
-			{{/if}}
-			{{#unless isCustom }}
-			this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(source{{name}});
-			{{/unless}}
+			switch (name)
+			{
+			{{#each normalFields}}
+				case "{{attribute}}":
+					{{#if isCustom }}
+					this.{{name}} = {{customName}}.Coerce(value);
+					{{/if}}
+					{{#unless isCustom }}
+					this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(value);
+					{{/unless}}
+					break;
+			{{/each}}
+			}
 		}
-		{{/each}}
 
 		{{#each expandedFields}}
 		if ({{name}} != null && ({{name}}Top == null || {{name}}Right == null || {{name}}Bottom == null || {{name}}Left == null)) 

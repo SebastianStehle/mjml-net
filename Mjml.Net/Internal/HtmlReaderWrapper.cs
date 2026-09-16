@@ -1,4 +1,5 @@
-﻿using HtmlPerformanceKit;
+﻿using System.Diagnostics.CodeAnalysis;
+using HtmlPerformanceKit;
 using HtmlReaderImpl = HtmlPerformanceKit.HtmlReader;
 
 namespace Mjml.Net.Internal;
@@ -52,6 +53,11 @@ internal class HtmlReaderWrapper : IHtmlReader
     public string GetAttribute(string name)
     {
         return impl.GetAttribute(name);
+    }
+
+    public bool TryGetAttribute(string name, [NotNullWhen(true)] out string? value)
+    {
+        return impl.TryGetAttribute(name, out value);
     }
 
     public string GetAttribute(int index)
