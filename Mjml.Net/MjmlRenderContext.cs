@@ -71,7 +71,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
                 switch (subTree.TokenKind)
                 {
                     case HtmlTokenKind.Tag:
-                        ReadElement(subTree.Name, subTree, parent, file);
+                        ReadElement(subTree, parent, file);
                         break;
                     case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
                         ReadComment(subTree, parent);
@@ -108,9 +108,9 @@ public sealed partial class MjmlRenderContext : IMjmlReader
                     currentFile)));
     }
 
-    private void ReadElement(string name, IHtmlReader reader, IComponent? parent, string? file)
+    private void ReadElement(IHtmlReader reader, IComponent? parent, string? file)
     {
-        var component = mjmlRenderer.CreateComponent(name);
+        var component = mjmlRenderer.CreateComponent(reader.NameAsSpan);
 
         var position = new SourcePosition(
             reader.LineNumber,
@@ -120,7 +120,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         if (component == null)
         {
             errors.Add(
-                $"Invalid element '{name}'.",
+                $"Invalid element '{reader.Name}'.",
                 ValidationErrorType.UnknownElement,
                 Position(reader, file));
 
@@ -145,7 +145,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             Read(reader, component, file);
         }
 
-        ValidatingClosingState(name, reader);
+        ValidatingClosingState(component.ComponentName, reader);
 
         // If there is no parent, we handle the root and we can render everything top to bottom.
         if (parent == null)
@@ -158,7 +158,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     {
         for (var i = 0; i < reader.AttributeCount; i++)
         {
-            var attributeName = reader.GetAttributeName(i);
+            var attributeName = GetAttributeName(reader, i, component);
             var attributeValue = reader.GetAttribute(i);
 
             binder.SetAttribute(attributeName, attributeValue);
@@ -170,6 +170,20 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
             mjmlOptions.Validator?.Attribute(attributeName, attributeValue, component, errors, ref validationContext);
         }
+    }
+
+    private static string GetAttributeName(IHtmlReader reader, int index, IComponent component)
+    {
+#if NET9_0_OR_GREATER
+        // Reuse the name from the allowed attributes of the component instead of allocating a new string for every element.
+        var allowedFields = component.AllowedFields;
+
+        if (allowedFields != null && allowedFields.GetAlternateLookup<ReadOnlySpan<char>>().TryGetValue(reader.GetAttributeNameAsSpan(index), out var name, out _))
+        {
+            return name;
+        }
+#endif
+        return reader.GetAttributeName(index);
     }
 
     private static void BindComponentContent(IHtmlReader reader, IComponent component, Binder binder)

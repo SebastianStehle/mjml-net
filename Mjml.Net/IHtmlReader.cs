@@ -35,6 +35,8 @@ public interface IHtmlReader
 
     string GetAttributeName(int index);
 
+    ReadOnlySpan<char> GetAttributeNameAsSpan(int index);
+
     InnerTextOrHtml ReadInnerHtml();
 
     InnerTextOrHtml ReadInnerText();

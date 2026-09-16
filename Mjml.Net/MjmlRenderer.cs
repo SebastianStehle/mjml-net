@@ -97,9 +97,13 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         return this;
     }
 
-    internal IComponent? CreateComponent(string name)
+    internal IComponent? CreateComponent(ReadOnlySpan<char> name)
     {
-        return components.GetValueOrDefault(name)?.Invoke();
+#if NET9_0_OR_GREATER
+        return components.GetAlternateLookup<ReadOnlySpan<char>>().TryGetValue(name, out var factory) ? factory() : null;
+#else
+        return components.GetValueOrDefault(name.ToString())?.Invoke();
+#endif
     }
 
     /// <inheritdoc />

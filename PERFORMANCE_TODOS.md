@@ -2,6 +2,27 @@
 
 I found these by reading the code. I did **not** run benchmarks to measure them. To check the effect of any change, run `Mjml.Net.Benchmark` (`TemplateBenchmarks`, 21 templates, `[MemoryDiagnoser]`) before and after the change.
 
+## Result: `main` vs. current version
+
+BenchmarkDotNet (MediumRun, Release, .NET 10); each operation renders all 21 benchmark templates with beautify:
+
+| Scenario | `main` | Current | Time | Allocated |
+|---|---|---|---|---|
+| `Render` | 4.81 ms / 10.77 MB | 2.78 ms / 4.48 MB | −42% | −58% |
+| `Render` with `SoftValidator` | 6.70 ms / 15.45 MB | 2.91 ms / 4.51 MB | −57% | −71% |
+| `RenderAsync` with `AngleSharpPostProcessor.Default` | 1,353 ms / 489.78 MB | 40.5 ms / 40.03 MB | −97% (33×) | −92% |
+| `Render` into a `TextWriter` (new) | – | 2.03 ms / 2.43 MB | −58% | −77% |
+
+CPU time measured separately as process CPU time including GC threads, 3 alternating rounds of 31,500 renders each:
+
+| Per render | `main` | Current | Change |
+|---|---|---|---|
+| CPU time | ~368 µs | ~231 µs | −37% |
+| Allocated | ~523 KB | 218 KB | −58% |
+| GCs (gen0 / gen2) | 2,062 / 1,406 | 807 / 807 | −61% / −43% |
+
+With post-processors, the output differs for templates with inline styles, because the current version only inlines like mjml (#11).
+
 ## How rendering works (hot path)
 
 `MjmlRenderer.RenderCore` → `MjmlRenderContext.Read` (HtmlPerformanceKit tokenizer wrapped by `HtmlReaderWrapper`/`SubtreeReader`) → for each tag: `CreateComponent` + pooled `Binder` → `Bind` (generated code: one `Binder.GetAttribute` + `Coerce` per `[Bind]` field) → `Measure` → `Render` into a pooled `StringBuilder` (`RenderBuffer`) → helpers (`StyleHelper`, `FontHelper`, …) → `ToText()`. The async path can also run AngleSharp post-processors, which parse the whole document again.
@@ -284,7 +305,7 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
   - An early version of this change failed one of those inputs. There, a self-closing `<mj-text />` was followed by a sibling section without whitespace between the tags, and the section got nested into the column, because the column's reader didn't notice that a nested reader had already read `</mj-column>`. `HtmlReaderTests.Should_end_parent_when_subtree_of_self_closing_element_reads_end_tag_of_parent` covers this case: it fails without the fix and passes with the old and the new implementation.
 
 ### 18. Intern tag and attribute names instead of allocating them per element
-[Mjml.Net/MjmlRenderContext.cs:157](Mjml.Net/MjmlRenderContext.cs#L157), [Mjml.Net/MjmlRenderer.cs:69](Mjml.Net/MjmlRenderer.cs#L69)
+[Mjml.Net/MjmlRenderContext.cs:175](Mjml.Net/MjmlRenderContext.cs#L175), [Mjml.Net/MjmlRenderer.cs:100](Mjml.Net/MjmlRenderer.cs#L100)
 
 **Potential: ~270 strings per render (~10 KB), and faster lookups.**
 - **The cost:** each render allocates **169 attribute-name strings** (`GetAttributeName`) and about 100 tag-name strings for the component lookup, although both come from a small, fixed set: component names and `AllowedFields` keys.
@@ -293,6 +314,13 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
   - Map attribute names to the interned strings of the component's `AllowedFields`, and only allocate unknown names.
   - Attribute values have to stay strings, because they are stored in fields.
 - **Also:** creating a component (factory lookup plus `new T()`) takes ~7 µs per render (~3%). Explicit static factory lambdas instead of the generic `new()` constraint would make this cheaper.
+
+**✅ Done (names), on .NET 9+.**
+- **Tag names:** `MjmlRenderer.CreateComponent` looks up the component with `reader.NameAsSpan` through `Dictionary.GetAlternateLookup<ReadOnlySpan<char>>`. After that, `ReadElement` uses `component.ComponentName`, for example for the closing-tag check. It only allocates `reader.Name` for the "Invalid element" error.
+- **Attribute names:** `BindComponentAttributes` looks up each name, via the new `IHtmlReader.GetAttributeNameAsSpan`, in the `AllowedFields` of the component. That is the dictionary the generated code already caches per type. The alternate lookup returns the existing key string. Names the component doesn't declare, such as `mj-class`, are still allocated. The renderer doesn't manage any names.
+- **net7/net8:** `GetAlternateLookup` requires .NET 9, so these targets still allocate as before (`#if NET9_0_OR_GREATER`).
+- **Result:** **232.4 KB → 223.7 KB per render (−3.7%)**. Output is identical for all 21 templates, and HTML and validation errors are identical for the malformed inputs from #17.
+- **⏭️ Component factories:** not changed.
 
 ### 19. Reconsider `Beautify = true` as the default
 [Mjml.Net/MjmlOptions.cs:50](Mjml.Net/MjmlOptions.cs#L50)
@@ -311,6 +339,17 @@ Averages per render over the 21 templates (Release, .NET 10, ~50 components and 
   - Build the inner HTML directly into a pooled `StringBuilder` with the span APIs (`NameAsMemory`, `GetAttributeNameAsMemory`, `GetAttributeAsMemory`, `TextAsMemory`), and store a single string.
   - Better still: copy the original source text between the start and end tag. That needs character offsets, which HtmlPerformanceKit doesn't expose today, so it would be an upstream change.
 - **Note:** the tag and attribute names are affected by #17 and #18 as well.
+
+**✅ Done (raw content).**
+- **One string instead of many parts:** `ReadInnerHtml` builds the inner HTML in a pooled `StringBuilder` with the span APIs of HtmlPerformanceKit, and returns an `InnerTextOrHtml` with a single string.
+- **Trimming stays the same:** when the parts are written, whitespace-only parts at the end are dropped completely, including tabs, and then the last kept part is trimmed. That is not the same as trimming the concatenated string, which would keep for example a trailing `\n\t\t`. So `ReadInnerHtml` remembers where the last token that isn't whitespace-only text ended, keeping at least the first token, and cuts the string there. Trimming the start across parts is equivalent to trimming the concatenated string, so nothing extra is needed for that.
+- **Not changed:** `ReadInnerText` (text-only components such as `mj-title` or `mj-navbar-link`) usually has a single text token already.
+- **Result:** **223.7 KB → 218.4 KB per render (−2.4%)**.
+- **Checks:**
+  - Output is identical for all 21 templates.
+  - HTML and validation errors are identical for the malformed inputs from #17.
+  - HTML is identical to the old build for 96 content cases: `mj-text`, `mj-raw` and `mj-button`, with and without beautify. They cover empty and whitespace-only content, tabs and line breaks at the start and end, comments, attributes with spaces or empty values, a non-breaking space and nested tags.
+  - `HtmlReaderTests.Should_read_inner_html_without_trailing_whitespace_text` fails with a naive version that doesn't cut the string, and `Should_read_empty_inner_html` checks empty content.
 
 ---
 

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Text;
+using FluentAssertions;
 using HtmlPerformanceKit;
 using Mjml.Net;
 using Mjml.Net.Internal;
@@ -40,6 +41,29 @@ public class HtmlReaderTests
                     .Add(new Element("column")
                         .Add(new Element("text"))))
                 .Add(new Element("section")));
+    }
+
+    [Fact]
+    public void Should_read_inner_html_without_trailing_whitespace_text()
+    {
+        var reader = new HtmlReaderWrapper("<div>\n<p class=\"a b\">Hello</p><!--comment-->\n\t\t</div>");
+        reader.Read();
+
+        var sb = new StringBuilder();
+        reader.ReadInnerHtml().AppendTo(sb);
+
+        Assert.Equal("<p class=\"a b\">Hello</p><!-- comment -->", sb.ToString());
+    }
+
+    [Fact]
+    public void Should_read_empty_inner_html()
+    {
+        var reader = new HtmlReaderWrapper("<div>\n\t\t</div>");
+        reader.Read();
+
+        var inner = reader.ReadInnerHtml();
+
+        Assert.True(inner.IsEmpty());
     }
 
     [Fact]

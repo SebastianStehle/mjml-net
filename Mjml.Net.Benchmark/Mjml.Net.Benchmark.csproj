@@ -10,6 +10,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <!-- The CI benchmark builds this project against the source of another branch to compare the performance. -->
+  <PropertyGroup>
+    <MjmlSourceRoot Condition="'$(MjmlSourceRoot)' == ''">$(MSBuildThisFileDirectory)..</MjmlSourceRoot>
+  </PropertyGroup>
+
   <!-- Versions before 3.x configure validation over a factory. -->
   <PropertyGroup Condition="'$(Configuration)'=='V1_24' Or '$(Configuration)'=='V2_0' Or '$(Configuration)'=='V2_1'">
     <DefineConstants>$(DefineConstants);VALIDATOR_FACTORY</DefineConstants>
@@ -37,13 +42,13 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
-    <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
-    <ProjectReference Include="..\Mjml.Net.PostProcessors\Mjml.Net.PostProcessors.csproj" />
+    <ProjectReference Include="$(MjmlSourceRoot)\Mjml.Net\Mjml.Net.csproj" />
+    <ProjectReference Include="$(MjmlSourceRoot)\Mjml.Net.PostProcessors\Mjml.Net.PostProcessors.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Release'">
-    <ProjectReference Include="..\Mjml.Net\Mjml.Net.csproj" />
-    <ProjectReference Include="..\Mjml.Net.PostProcessors\Mjml.Net.PostProcessors.csproj" />
+    <ProjectReference Include="$(MjmlSourceRoot)\Mjml.Net\Mjml.Net.csproj" />
+    <ProjectReference Include="$(MjmlSourceRoot)\Mjml.Net.PostProcessors\Mjml.Net.PostProcessors.csproj" />
   </ItemGroup>
 
   <!-- The post processors are only benchmarked against the local source, not the old packages. -->
@@ -53,6 +58,7 @@
 
   <ItemGroup Condition="'$(Configuration)'!='Debug' And '$(Configuration)'!='Release'">
     <Compile Remove="PostProcessorBenchmarks.cs" />
+    <Compile Remove="CiBenchmarks.cs" />
   </ItemGroup>
 
   <ItemGroup>

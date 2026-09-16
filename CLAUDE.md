@@ -41,6 +41,11 @@ dotnet run -c Release --project Mjml.Net.Benchmark -- --postprocessors
 ```
 
 - The template benchmarks compare the current source with older NuGet versions (configurations `V1_24`, `V2_0`, `V2_1`, `V3_8`). Code in the benchmark project must compile against these versions.
+- The `Benchmark` workflow (`.github/workflows/benchmark.yml`) runs `CiBenchmarks` for every pull request, once against the source of the base branch (`-p:MjmlSourceRoot=...`) and once against the pull request. It posts the comparison as a PR comment. The benchmark project must therefore also compile against the base branch, so `CiBenchmarks` should only use the stable public API.
+
+```bash
+dotnet run -c Release --project Mjml.Net.Benchmark -- --ci artifacts/head
+```
 
 ## Performance
 
