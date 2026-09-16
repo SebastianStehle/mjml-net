@@ -12,6 +12,9 @@ public static class Program
 
         [Option('i', "interations", Required = false, HelpText = "The number of iterations when using profiler mode.", Default = 20)]
         public int TestRunnerIterations { get; set; }
+
+        [Option('a', "postprocessors", Required = false, HelpText = "Runs the benchmarks with the AngleSharp post processors.")]
+        public bool PostProcessors { get; set; }
     }
 
     public static void Main(string[] args)
@@ -22,7 +25,14 @@ public static class Program
                 if (o.TestRunner)
                 {
                     TestRunner.Run(o.TestRunnerIterations);
-                } else
+                }
+#if POST_PROCESSORS
+                else if (o.PostProcessors)
+                {
+                    BenchmarkRunner.Run<PostProcessorBenchmarks>();
+                }
+#endif
+                else
                 {
                     BenchmarkRunner.Run<TemplateBenchmarks>();
                 }

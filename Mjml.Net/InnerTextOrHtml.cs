@@ -127,9 +127,9 @@ public sealed class InnerTextOrHtml
                 // Add space characters before each line.
                 WriteLineStart(sb, indent);
 
-                // Start the span after the newline.
+                // Start the span after the newline. The loop increments the index, so the next check starts at 0.
                 span = span[(i + 1)..];
-                i = 0;
+                i = -1;
             }
         }
 

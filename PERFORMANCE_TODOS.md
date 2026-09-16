@@ -127,10 +127,77 @@ When post-processors are on, this is probably the most expensive part of renderi
 - `BrowsingContext.New` runs for every render. Check whether a context can be reused.
 - Add a benchmark that runs `RenderAsync` with `AngleSharpPostProcessor.Default`. The current benchmark only covers the sync path.
 
+**✅ Done. This was by far the most expensive path.**
+- **Before:** with `AngleSharpPostProcessor.Default`, a render took about 128 ms and allocated 23.6 MB, against 0.6 ms and 260 KB without post-processors.
+- **Where the time went:** almost all of it was inline CSS. A sampling profile showed that `GetDeclarations` went through AngleSharp.Css's internal `StyleCollection`, which enumerates every style sheet and rule again for each element and for each of its ancestors.
+- **The fix:** `InlineCssPostProcessor` now collects the rules once per document into a `CachedStyleCollection` (a list behind the public `IStyleCollection` interface). This is safe because inlining doesn't change the style sheets.
+- **Result:** about 27 ms and 16.7 MB per render, roughly 4.7× faster. The output is byte-for-byte identical for all 21 benchmark templates (5 of them use `mj-style inline="inline"`), and all 13 post-processor tests pass.
+- **What's left is inside AngleSharp:** it parses every `style` attribute while loading the document, parses the written CSS again on `SetAttribute` through its attribute observer, and computes cascaded styles.
+- **Tried and dropped:**
+  - Running the full cascade only for elements that inline rules match. It was 7.6× faster but changed the output, because the current code also copies inherited properties such as `word-spacing` onto every descendant.
+  - Caching `FallbackDeclarationFactory.Create`. It is called about 16,000 times per render, but caching made no difference to time.
+- **Benchmark:** `PostProcessorBenchmarks` runs `RenderAsync` with the post-processors, using `dotnet run -c Release -- --postprocessors`. It is only built for Debug and Release, because the old packages don't include the post-processors.
+
+---
+
+## More TODOs (measured on the current state)
+
+Items 1–10 started as guesses from reading the code. These five come from measurements taken after the fixes above: allocation sampling by type, GC counts, and a phase-by-phase timing of the post-processing. The numbers are averages per render over the 21 benchmark templates (Release, .NET 10). This machine is noisy, so treat timings as rough.
+
+With post-processors, a render currently spends about **13 ms parsing** (5.6 MB), **22 ms inlining CSS** (10.3 MB), and **0.9 ms in `ToHtml`**. Without post-processors, a render allocates **~258 KB**.
+
+### 11. Only inline CSS when there is something to inline
+[Mjml.Net.PostProcessors/InlineCssPostProcessor.cs](Mjml.Net.PostProcessors/InlineCssPostProcessor.cs)
+
+**Potential: the entire ~36 ms of post-processing for most templates.**
+- **No inline styles in most templates:** 16 of the 21 templates have no `<mj-style inline="inline">`, and none uses `mj-html-attributes`. The processor still parses the whole document with AngleSharp and computes the cascade for all ~255 elements.
+- **Rewrites every `style` attribute:** in that case it normalizes each attribute (`color:red;` → `color: red`) and copies inherited properties onto every descendant. For example, `word-spacing: normal` from `<body>` shows up on each `tbody`, `tr`, `td` and so on. As far as I know, the official mjml only runs its CSS inliner (juice) when there are inline styles, and juice only applies rules that match, so this output probably differs from mjml's.
+- **What to decide:** is the normalization and the copying of inherited properties intended? If not:
+  - skip the inline step, and the AngleSharp parse when no other post-processor needs it, whenever no `<style inline>` exists;
+  - otherwise, compute the cascade only for elements that inline rules match. I prototyped this: 7.6× faster, and the only output change was the copied inherited properties.
+- **Verify** against the reference output with `npx mjml`, which is what the `ComplexTests` already do.
+
+### 12. Stop AngleSharp from re-parsing the CSS we just wrote
+[Mjml.Net.PostProcessors/InlineCssPostProcessor.cs](Mjml.Net.PostProcessors/InlineCssPostProcessor.cs)
+
+**Potential: ~7.3 ms and ~3.7 MB per render, about 25% of post-processing.**
+- **The cost:** `element.SetAttribute("style", css)` triggers AngleSharp.Css's `StyleAttributeObserver`, which parses the CSS string again into the element's style declaration. The declaration is thrown away, because we only serialize afterwards. Timed separately, the `SetAttribute` calls alone take 7.3 ms and allocate 3.7 MB.
+- **Idea:** compute all declarations first. This is equivalent, because inlining already runs children before parents and doesn't read computed children. Keep the CSS strings in a `Dictionary<IElement, string>`, and emit them from a custom `IMarkupFormatter` during `ToHtml` instead of calling `SetAttribute`.
+
+### 13. Reuse the AngleSharp `BrowsingContext`
+[Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:54](Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs:54)
+
+**Potential: ~1 ms and ~387 KB per render.**
+- **The cost:** `BrowsingContext.New(HtmlConfiguration)` runs on every render. Creating a context alone takes about 1 ms and allocates 387 KB (services, factories, entity provider).
+- **Idea:** a context can open many documents, but it isn't thread-safe. Pool contexts with an `ObjectPool<IBrowsingContext>`, and dispose or close each document after `ToHtml`.
+- **Check:** confirm that nothing accumulates in a reused context, such as history or the active document.
+
+### 14. Don't create the full HTML string when the caller doesn't need it
+[Mjml.Net/MjmlRenderer.cs:181](Mjml.Net/MjmlRenderer.cs:181), [RenderBuffer.cs](Mjml.Net/RenderBuffer.cs)
+
+**Potential: ~100 KB per render (~39% of what remains), and most gen2 GCs.**
+- **Every GC is gen2:** over 6,300 renders, gen0/gen1/gen2 collections were 161/161/161. 57% of the returned HTML strings are at least 85 KB, so they are allocated on the large-object heap, and those allocations are what trigger the full collections. On a server with a large heap, gen2 GCs are the expensive kind.
+- **The result string is the largest remaining allocation**, at about 100 KB per render.
+- **Idea:** add overloads such as `Render(string mjml, TextWriter output, MjmlOptions?)` and `RenderAsync(..., Stream output, ...)`. They would write the `StringBuilder` chunks (`GetChunks()`) directly, for example into an ASP.NET response or an email library.
+- **With post-processors:** the HTML is materialized as a string first and then parsed. Passing AngleSharp the buffer content instead would avoid one full copy.
+
+### 15. Reduce the per-reader and per-element overhead of reading MJML
+[Mjml.Net/Internal/HtmlReaderWrapper.cs](Mjml.Net/Internal/HtmlReaderWrapper.cs), [MjmlRenderContext.cs:51](Mjml.Net/MjmlRenderContext.cs:51), [Component.cs](Mjml.Net/Component.cs)
+
+**Potential: ~53 KB per reader, plus ~9 KB per render.**
+- **Reader buffers:** each `HtmlPerformanceKit.HtmlReader` allocates about 53 KB of buffers up front, mostly two 10,240-char buffers. A render creates one, and every `mj-include` creates another one through `ReadFragment`. HtmlPerformanceKit (osjoberg/HtmlPerformanceKit) has no way to reuse a reader. A `Reset(TextReader)` method, or buffers taken from `ArrayPool<char>`, would make pooling possible. That change is upstream.
+- **Small objects per element:** measured with allocation sampling.
+  - `MjmlRenderContext.Read` assigns a new `OnError` closure on every call (`Action<HtmlError>` plus its display class, ~3.8 KB). The file name could be stored in a field instead.
+  - `ReadSubtree()` allocates a `SubtreeReader` each time (~1.9 KB).
+  - `IComponent.ChildNodes` is exposed as `IEnumerable<IComponent>`, so each `foreach` over it boxes the `List<T>` enumerator (~1.4 KB).
+  - Together these are about 7–9 KB per render, roughly 3%.
+
 ---
 
 ## Side findings (correctness, spotted during analysis)
 
-- **`GlobalContext.Clear()` never clears `attributesByParentClass`** ([GlobalContext.cs:34](Mjml.Net/GlobalContext.cs:34)). Render contexts are pooled, so parent-class attributes from one template carry over into later renders. The dictionary also keeps growing, which is a memory leak.
-- **`ColorType.Comparer.Equals` compares `rhs` with itself** ([Types/ColorType.cs:166](Mjml.Net/Types/ColorType.cs:166)). As a result, any value whose hash collides with a named color is treated as valid.
-- `SocialNetwork` calls `Defaults.ToList()` while iterating ([SocialNetwork.cs:86](Mjml.Net/Components/Body/SocialNetwork.cs:86)). Check whether this code runs per render or only once.
+- ✅ **`GlobalContext.Clear()` never clears `attributesByParentClass`** ([GlobalContext.cs:34](Mjml.Net/GlobalContext.cs:34)). Render contexts are pooled, so parent-class attributes from one template carried over into later renders, and the dictionary kept growing. It is now cleared, and `GlobalContextTests` covers it.
+- ✅ **`ColorType.Comparer.Equals` compared `rhs` with itself** ([Types/ColorType.cs:166](Mjml.Net/Types/ColorType.cs:166)). It now compares `lhs` with `rhs`. In practice this almost never mattered: `HashSet` compares the full hash code first, and string hashes are randomized per process, so only a full 32-bit hash collision could be affected. That is also why there's no test for it.
+- ✅ **`InnerTextOrHtml.AppendIntended` skipped the first character after each newline**, so after a blank line the next line was not indented (`"a\n\nb"`). Fixed, with a test in `InnerTextOrHtmlTests`. The benchmark templates render the same as before, because none of them has blank lines in indented content.
+- ⏭️ **`SocialNetwork` calls `Defaults.ToList()` while iterating** ([SocialNetwork.cs:86](Mjml.Net/Components/Body/SocialNetwork.cs:86)). This is fine: it runs once in the static constructor, and the copy is needed because the loop adds entries to the same dictionary.
+- ⚠️ **Not fixed: `BreakpointComponent` writes `context.Options.Breakpoint`.** That changes the `MjmlOptions` instance the caller passed in, so an `mj-breakpoint` in one template carries over into later renders that reuse the same options object. Fixing it means storing the breakpoint per render instead of on the options. That changes where `StyleHelper` and others read it, so it needs a decision on the public behavior.

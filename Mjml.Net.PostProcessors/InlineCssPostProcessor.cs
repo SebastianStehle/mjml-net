@@ -1,5 +1,7 @@
-﻿using AngleSharp;
+﻿using System.Collections;
+using AngleSharp;
 using AngleSharp.Css;
+using AngleSharp.Css.Dom;
 using AngleSharp.Dom;
 
 namespace Mjml.Net;
@@ -14,9 +16,32 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         CancellationToken ct)
     {
         Traverse(document, a => RenameNonInline(a, document));
-        Traverse(document, a => InlineStyle(a, document));
+
+        var styles = GetStyles(document);
+        if (styles != null)
+        {
+            Traverse(document, a => InlineStyle(a, styles));
+        }
+
         Traverse(document, a => RestoreNonInline(a, document));
         return default;
+    }
+
+    private static IStyleCollection? GetStyles(IDocument document)
+    {
+        var device = document.Context.GetService<IRenderDevice>();
+        if (device == null)
+        {
+            return null;
+        }
+
+        var view = document.DefaultView;
+        if (view == null)
+        {
+            return null;
+        }
+
+        return new CachedStyleCollection(view.GetStyleCollection(device));
     }
 
     private static void Traverse(INode node, Action<IElement> action)
@@ -32,22 +57,9 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         }
     }
 
-    private static void InlineStyle(IElement element, IDocument document)
+    private static void InlineStyle(IElement element, IStyleCollection styles)
     {
-        var device = document.Context.GetService<IRenderDevice>();
-        if (device == null)
-        {
-            return;
-        }
-
-        var view = element.Owner?.DefaultView;
-        if (view == null)
-        {
-            return;
-        }
-
-        var currentStyles = view.GetStyleCollection(device);
-        var currentStyle = currentStyles.GetDeclarations(element);
+        var currentStyle = styles.GetDeclarations(element);
         if (currentStyle.Any())
         {
             var css = currentStyle.ToCss();
@@ -97,5 +109,24 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 
         parent.InsertBefore(clone, node);
         parent.RemoveChild(node);
+    }
+
+    private sealed class CachedStyleCollection(IStyleCollection inner) : IStyleCollection
+    {
+        // The default style collection enumerates all style sheets and rules again for every element (and its ancestors).
+        // Inlining does not change the style sheets, so the rules can be collected once per document.
+        private readonly List<ICssStyleRule> rules = inner.ToList();
+
+        public IRenderDevice Device => inner.Device;
+
+        public IEnumerator<ICssStyleRule> GetEnumerator()
+        {
+            return rules.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return rules.GetEnumerator();
+        }
     }
 }

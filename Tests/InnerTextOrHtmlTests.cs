@@ -76,4 +76,13 @@ public class InnerTextOrHtmlTests
 
         Assert.Equal("Start-abc-End", sb.ToString());
     }
+
+    [Fact]
+    public void Should_indent_every_line()
+    {
+        var sb = new StringBuilder();
+        InnerTextOrHtml.AppendIntended(sb, "a\nb\n\nc\n\n\nd", 2);
+
+        Assert.Equal("a\n  b\n  \n  c\n  \n  \n  d", sb.ToString());
+    }
 }

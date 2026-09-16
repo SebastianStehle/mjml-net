@@ -34,6 +34,7 @@ public sealed class GlobalContext
         fileLoader = null;
         attributesByClass.Clear();
         attributesByName.Clear();
+        attributesByParentClass.Clear();
         Options = null!;
     }
 
