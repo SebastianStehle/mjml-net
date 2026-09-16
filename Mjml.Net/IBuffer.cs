@@ -6,7 +6,7 @@ public interface IBuffer : IDisposable
 {
     bool IsEmpty { get; }
 
-    int AppendTo(StringBuilder sb);
+    int AppendToAndDispose(StringBuilder sb);
 
     string ToText();
 }

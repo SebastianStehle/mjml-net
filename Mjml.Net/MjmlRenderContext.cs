@@ -12,6 +12,8 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     private MjmlOptions mjmlOptions;
     private MjmlRenderer mjmlRenderer;
     private bool hasAddedClosingError;
+    private Action<HtmlError>? onError;
+    private string? currentFile;
 
     public ValidationErrors Validate()
     {
@@ -37,6 +39,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         mjmlRenderer = null!;
         errors.Clear();
         hasAddedClosingError = false;
+        currentFile = null;
 
         ClearRenderData();
     }
@@ -50,14 +53,11 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
     public void Read(IHtmlReader reader, IComponent? parent, string? file)
     {
-        reader.OnError = error => errors.Add(
-            new ValidationError(
-                error.Message,
-                ValidationErrorType.InvalidHtml,
-                new SourcePosition(
-                    error.LineNumber,
-                    error.LinePosition,
-                    file)));
+        // Use a single handler instead of a closure per call. The file is restored afterwards, because includes are read with another file.
+        var previousFile = currentFile;
+
+        currentFile = file;
+        reader.OnError = onError ??= OnError;
 
         try
         {
@@ -71,7 +71,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
                 switch (subTree.TokenKind)
                 {
                     case HtmlTokenKind.Tag:
-                        ReadElement(subTree.Name, subTree, parent, file);
+                        ReadElement(subTree, parent, file);
                         break;
                     case HtmlTokenKind.Comment when mjmlOptions.KeepComments && parent != null:
                         ReadComment(subTree, parent);
@@ -91,12 +91,26 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         finally
         {
             reader.OnError = null;
+
+            currentFile = previousFile;
         }
     }
 
-    private void ReadElement(string name, IHtmlReader reader, IComponent? parent, string? file)
+    private void OnError(HtmlError error)
     {
-        var component = mjmlRenderer.CreateComponent(name);
+        errors.Add(
+            new ValidationError(
+                error.Message,
+                ValidationErrorType.InvalidHtml,
+                new SourcePosition(
+                    error.LineNumber,
+                    error.LinePosition,
+                    currentFile)));
+    }
+
+    private void ReadElement(IHtmlReader reader, IComponent? parent, string? file)
+    {
+        var component = mjmlRenderer.CreateComponent(reader.NameAsSpan);
 
         var position = new SourcePosition(
             reader.LineNumber,
@@ -106,7 +120,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
         if (component == null)
         {
             errors.Add(
-                $"Invalid element '{name}'.",
+                $"Invalid element '{reader.Name}'.",
                 ValidationErrorType.UnknownElement,
                 Position(reader, file));
 
@@ -131,7 +145,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             Read(reader, component, file);
         }
 
-        ValidatingClosingState(name, reader);
+        ValidatingClosingState(component.ComponentName, reader);
 
         // If there is no parent, we handle the root and we can render everything top to bottom.
         if (parent == null)
@@ -144,7 +158,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
     {
         for (var i = 0; i < reader.AttributeCount; i++)
         {
-            var attributeName = reader.GetAttributeName(i);
+            var attributeName = GetAttributeName(reader, i, component);
             var attributeValue = reader.GetAttribute(i);
 
             binder.SetAttribute(attributeName, attributeValue);
@@ -156,6 +170,20 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
             mjmlOptions.Validator?.Attribute(attributeName, attributeValue, component, errors, ref validationContext);
         }
+    }
+
+    private static string GetAttributeName(IHtmlReader reader, int index, IComponent component)
+    {
+#if NET9_0_OR_GREATER
+        // Reuse the name from the allowed attributes of the component instead of allocating a new string for every element.
+        var allowedFields = component.AllowedFields;
+
+        if (allowedFields != null && allowedFields.GetAlternateLookup<ReadOnlySpan<char>>().TryGetValue(reader.GetAttributeNameAsSpan(index), out var name, out _))
+        {
+            return name;
+        }
+#endif
+        return reader.GetAttributeName(index);
     }
 
     private static void BindComponentContent(IHtmlReader reader, IComponent component, Binder binder)
@@ -194,7 +222,7 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             return;
         }
 
-        if (reader.TokenKind == HtmlTokenKind.EndTag && reader.Name != name)
+        if (reader.TokenKind == HtmlTokenKind.EndTag && !reader.NameAsSpan.SequenceEqual(name))
         {
             errors.Add(
                 $"Unexpected end element, expected '{name}', got '{reader.Name}'.",
@@ -229,9 +257,19 @@ public sealed partial class MjmlRenderContext : IMjmlReader
             component.SetBinder(null!);
         }
 
-        foreach (var child in component.ChildNodes)
+        if (component is Component typed)
         {
-            Cleanup(child);
+            foreach (var child in typed.ChildNodes)
+            {
+                Cleanup(child);
+            }
+        }
+        else
+        {
+            foreach (var child in component.ChildNodes)
+            {
+                Cleanup(child);
+            }
         }
     }
 

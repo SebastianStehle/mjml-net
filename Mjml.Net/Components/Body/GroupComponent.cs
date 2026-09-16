@@ -147,14 +147,8 @@ public partial class GroupComponent : BodyComponentBase
         return className;
     }
 
-    public override string? GetInheritingAttribute(string name)
+    public override void AddInheritingAttributes(Action<string, string?> add)
     {
-        switch (name)
-        {
-            case "mobile-width":
-                return "mobile-width";
-        }
-
-        return null;
+        add("mobile-width", "mobile-width");
     }
 }

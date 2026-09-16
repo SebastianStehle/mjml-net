@@ -140,6 +140,11 @@ public class StyleTests
     {
         var source = """
             <mjml>
+              <mj-head>
+                <mj-style inline="inline">
+                  a { letter-spacing: 1px; }
+                </mj-style>
+              </mj-head>
               <mj-body>
                 <mj-button href="https://mjml.io">MJML</mj-button>
               </mj-body>

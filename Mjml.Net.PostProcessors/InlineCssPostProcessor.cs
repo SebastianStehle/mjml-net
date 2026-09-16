@@ -1,5 +1,7 @@
-﻿using AngleSharp;
+﻿using System.Collections;
+using AngleSharp;
 using AngleSharp.Css;
+using AngleSharp.Css.Dom;
 using AngleSharp.Dom;
 
 namespace Mjml.Net;
@@ -10,44 +12,98 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 
     public static readonly IPostProcessor Instance = new AngleSharpPostProcessor(new InlineCssPostProcessor());
 
+    public bool ShouldProcess(string html)
+    {
+        return HasInlineStyle(html);
+    }
+
     public ValueTask ProcessAsync(IDocument document, MjmlOptions options,
         CancellationToken ct)
     {
-        Traverse(document, a => RenameNonInline(a, document));
-        Traverse(document, a => InlineStyle(a, document));
-        Traverse(document, a => RestoreNonInline(a, document));
+        // Like mjml, only inline when there are inline styles at all.
+        var inlineStyles = document.QuerySelectorAll(TagNames.Style).Where(IsInline).ToList();
+        if (inlineStyles.Count == 0)
+        {
+            return default;
+        }
+
+        // Disable the other style sheets, so that only the inline styles are applied.
+        foreach (var style in document.QuerySelectorAll(TagNames.Style).Where(x => !IsInline(x)).ToList())
+        {
+            RenameTag(style, FallbackStyle, document);
+        }
+
+        var styles = GetStyles(document);
+        if (styles != null)
+        {
+            // Like juice in mjml, only elements that are matched by an inline rule get styles.
+            // Inherited properties are not copied and all other style attributes are left untouched.
+            foreach (var element in GetMatchedElements(document, styles))
+            {
+                InlineStyle(element, styles);
+            }
+        }
+
+        foreach (var style in document.QuerySelectorAll(FallbackStyle).ToList())
+        {
+            RenameTag(style, TagNames.Style, document);
+        }
+
+        foreach (var style in inlineStyles)
+        {
+            style.Remove();
+        }
+
         return default;
     }
 
-    private static void Traverse(INode node, Action<IElement> action)
-    {
-        foreach (var child in node.ChildNodes.ToList())
-        {
-            Traverse(child, action);
-        }
-
-        if (node is IElement element)
-        {
-            action(element);
-        }
-    }
-
-    private static void InlineStyle(IElement element, IDocument document)
+    private static IStyleCollection? GetStyles(IDocument document)
     {
         var device = document.Context.GetService<IRenderDevice>();
         if (device == null)
         {
-            return;
+            return null;
         }
 
-        var view = element.Owner?.DefaultView;
+        var view = document.DefaultView;
         if (view == null)
         {
-            return;
+            return null;
         }
 
-        var currentStyles = view.GetStyleCollection(device);
-        var currentStyle = currentStyles.GetDeclarations(element);
+        return new CachedStyleCollection(view.GetStyleCollection(device));
+    }
+
+    private static List<IElement> GetMatchedElements(IDocument document, IStyleCollection styles)
+    {
+        var matched = new HashSet<IElement>();
+
+        foreach (var rule in styles)
+        {
+            IHtmlCollection<IElement> elements;
+            try
+            {
+                elements = document.QuerySelectorAll(rule.SelectorText);
+            }
+            catch (DomException)
+            {
+                // Selectors that cannot be queried cannot be inlined anyway.
+                continue;
+            }
+
+            foreach (var element in elements)
+            {
+                matched.Add(element);
+            }
+        }
+
+        // Keep the document order to be deterministic.
+        return document.All.Where(matched.Contains).ToList();
+    }
+
+    private static void InlineStyle(IElement element, IStyleCollection styles)
+    {
+        var currentStyle = styles.ComputeExplicitStyle(element);
         if (currentStyle.Any())
         {
             var css = currentStyle.ToCss();
@@ -56,24 +112,32 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         }
     }
 
-    private static void RenameNonInline(IElement element, IDocument document)
+    internal static bool HasInlineStyle(string html)
     {
-        if (string.Equals(element.TagName, TagNames.Style, StringComparison.OrdinalIgnoreCase) && !IsInline(element))
-        {
-            RenameTag(element, FallbackStyle, document);
-        }
-    }
+        var span = html.AsSpan();
 
-    private static void RestoreNonInline(IElement element, IDocument document)
-    {
-        if (string.Equals(element.TagName, FallbackStyle, StringComparison.OrdinalIgnoreCase))
+        while (true)
         {
-            RenameTag(element, TagNames.Style, document);
-        }
+            var start = span.IndexOf("<style", StringComparison.OrdinalIgnoreCase);
+            if (start < 0)
+            {
+                return false;
+            }
 
-        if (string.Equals(element.TagName, TagNames.Style, StringComparison.OrdinalIgnoreCase) && IsInline(element))
-        {
-            element.Remove();
+            span = span[(start + 6)..];
+
+            var end = span.IndexOf('>');
+            if (end < 0)
+            {
+                return false;
+            }
+
+            if (span[..end].Contains("inline", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            span = span[end..];
         }
     }
 
@@ -97,5 +161,24 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 
         parent.InsertBefore(clone, node);
         parent.RemoveChild(node);
+    }
+
+    private sealed class CachedStyleCollection(IStyleCollection inner) : IStyleCollection
+    {
+        // The default style collection enumerates all style sheets and rules again for every element (and its ancestors).
+        // Inlining does not change the style sheets, so the rules can be collected once per document.
+        private readonly List<ICssStyleRule> rules = inner.ToList();
+
+        public IRenderDevice Device => inner.Device;
+
+        public IEnumerator<ICssStyleRule> GetEnumerator()
+        {
+            return rules.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return rules.GetEnumerator();
+        }
     }
 }

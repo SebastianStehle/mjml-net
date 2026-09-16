@@ -84,6 +84,28 @@ public interface IMjmlRenderer
     RenderResult Render(string mjml, MjmlOptions? options = null);
 
     /// <summary>
+    /// Renders MJML from a string and writes the HTML to a text writer.
+    /// </summary>
+    /// <param name="mjml">The MJML as string.</param>
+    /// <param name="output">The writer to write the HTML to.</param>
+    /// <param name="options">Optional options.</param>
+    /// <returns>
+    /// The validation errors.
+    /// </returns>
+    /// <remarks>
+    /// This method is thread safe. Post processors are not run in the sync method. It avoids allocating the HTML
+    /// as a string, which is typically large enough to end up on the large object heap.
+    /// </remarks>
+    ValidationErrors Render(string mjml, TextWriter output, MjmlOptions? options = null)
+    {
+        var result = Render(mjml, options);
+
+        output.Write(result.Html);
+
+        return result.Errors;
+    }
+
+    /// <summary>
     /// Renders MJML from a stream.
     /// </summary>
     /// <param name="mjml">The MJML as stream.</param>

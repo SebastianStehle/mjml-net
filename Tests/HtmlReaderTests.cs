@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Text;
+using FluentAssertions;
 using HtmlPerformanceKit;
 using Mjml.Net;
 using Mjml.Net.Internal;
@@ -23,6 +24,46 @@ public class HtmlReaderTests
             new Element()
                 .Add(new Element("div")
                     .Add(new Element("a"))));
+    }
+
+    [Fact]
+    public void Should_end_parent_when_subtree_of_self_closing_element_reads_end_tag_of_parent()
+    {
+        // Without whitespace, so that there are no text tokens between the tags.
+        var input = "<section><column><text /></column></section><section></section>";
+        var root = new Element();
+
+        Read(new HtmlReaderWrapper(input), root);
+
+        root.Should().BeEquivalentTo(
+            new Element()
+                .Add(new Element("section")
+                    .Add(new Element("column")
+                        .Add(new Element("text"))))
+                .Add(new Element("section")));
+    }
+
+    [Fact]
+    public void Should_read_inner_html_without_trailing_whitespace_text()
+    {
+        var reader = new HtmlReaderWrapper("<div>\n<p class=\"a b\">Hello</p><!--comment-->\n\t\t</div>");
+        reader.Read();
+
+        var sb = new StringBuilder();
+        reader.ReadInnerHtml().AppendTo(sb);
+
+        Assert.Equal("<p class=\"a b\">Hello</p><!-- comment -->", sb.ToString());
+    }
+
+    [Fact]
+    public void Should_read_empty_inner_html()
+    {
+        var reader = new HtmlReaderWrapper("<div>\n\t\t</div>");
+        reader.Read();
+
+        var inner = reader.ReadInnerHtml();
+
+        Assert.True(inner.IsEmpty());
     }
 
     [Fact]

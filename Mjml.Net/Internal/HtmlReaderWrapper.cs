@@ -1,4 +1,5 @@
-﻿using HtmlPerformanceKit;
+﻿using System.Diagnostics.CodeAnalysis;
+using HtmlPerformanceKit;
 using HtmlReaderImpl = HtmlPerformanceKit.HtmlReader;
 
 namespace Mjml.Net.Internal;
@@ -11,8 +12,12 @@ internal class HtmlReaderWrapper : IHtmlReader
     };
 
     private readonly HtmlReaderImpl impl;
+    private readonly HtmlReaderWrapper root;
+    private int depth;
 
     public Action<HtmlError>? OnError { get; set; }
+
+    protected int Depth => root.depth;
 
     public int LineNumber => impl.LineNumber;
 
@@ -32,15 +37,15 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public HtmlTokenKind TokenKind => impl.TokenKind;
 
-    public HtmlReaderImpl Impl => impl;
-
-    public HtmlReaderWrapper(HtmlReaderImpl impl)
+    protected HtmlReaderWrapper(HtmlReaderWrapper parent)
     {
-        this.impl = impl;
+        impl = parent.impl;
+        root = parent.root;
     }
 
     public HtmlReaderWrapper(string input)
     {
+        root = this;
         impl = new HtmlReaderImpl(new StringReader(input), Options);
 
         impl.ParseError += (sender, e) =>
@@ -54,6 +59,11 @@ internal class HtmlReaderWrapper : IHtmlReader
         return impl.GetAttribute(name);
     }
 
+    public bool TryGetAttribute(string name, [NotNullWhen(true)] out string? value)
+    {
+        return impl.TryGetAttribute(name, out value);
+    }
+
     public string GetAttribute(int index)
     {
         return impl.GetAttribute(index);
@@ -64,9 +74,66 @@ internal class HtmlReaderWrapper : IHtmlReader
         return impl.GetAttributeName(index);
     }
 
+    public ReadOnlySpan<char> GetAttributeNameAsSpan(int index)
+    {
+        return impl.GetAttributeNameAsMemory(index).Span;
+    }
+
     public virtual bool Read()
     {
-        return impl.Read();
+        return root.ReadToken();
+    }
+
+    private bool ReadToken()
+    {
+        if (!impl.Read())
+        {
+            return false;
+        }
+
+        // Track the depth for all subtree readers at once, so that each token is only checked once.
+        if (impl.TokenKind == HtmlTokenKind.Tag && !impl.SelfClosingElement && !IsVoidTag(impl.NameAsMemory.Span))
+        {
+            depth++;
+        }
+        else if (impl.TokenKind == HtmlTokenKind.EndTag && !IsVoidTag(impl.NameAsMemory.Span))
+        {
+            depth--;
+        }
+
+        return true;
+    }
+
+    private static bool IsVoidTag(ReadOnlySpan<char> name)
+    {
+        switch (name.Length)
+        {
+            case 2:
+                return
+                    name.Equals("br", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("hr", StringComparison.OrdinalIgnoreCase);
+            case 3:
+                return
+                    name.Equals("col", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("img", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("wbr", StringComparison.OrdinalIgnoreCase);
+            case 4:
+                return
+                    name.Equals("area", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("base", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("link", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("meta", StringComparison.OrdinalIgnoreCase);
+            case 5:
+                return
+                    name.Equals("embed", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("input", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("param", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("track", StringComparison.OrdinalIgnoreCase);
+            case 6:
+                return name.Equals("source", StringComparison.OrdinalIgnoreCase);
+            default:
+                return false;
+        }
     }
 
     public IHtmlReader ReadSubtree()
@@ -76,57 +143,66 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public InnerTextOrHtml ReadInnerHtml()
     {
-        var result = new InnerTextOrHtml();
-
-        var subTree = ReadSubtree();
-
-        while (subTree.Read())
+        var sb = DefaultPools.StringBuilders.Get();
+        try
         {
-            switch (TokenKind)
+            // Whitespace-only text at the end is not rendered, so the content ends after the last other token.
+            var contentEnd = -1;
+
+            var subTree = ReadSubtree();
+
+            while (subTree.Read())
             {
-                case HtmlTokenKind.Text:
-                    result.Add(subTree.Text);
-                    break;
-                case HtmlTokenKind.Tag:
-                    result.Add("<");
-                    result.Add(subTree.Name);
+                switch (TokenKind)
+                {
+                    case HtmlTokenKind.Text:
+                        var text = impl.TextAsMemory.Span;
 
-                    for (var i = 0; i < subTree.AttributeCount; i++)
-                    {
-                        var attributeName = subTree.GetAttributeName(i);
-                        var attributeValue = subTree.GetAttribute(i);
+                        sb.Append(text);
 
-                        result.Add(" ");
-                        result.Add(attributeName);
-                        result.Add("=");
-                        result.Add("\"");
-                        result.Add(attributeValue);
-                        result.Add("\"");
-                    }
+                        if (contentEnd < 0 || !text.IsWhiteSpace())
+                        {
+                            contentEnd = sb.Length;
+                        }
 
-                    if (subTree.SelfClosingElement)
-                    {
-                        result.Add("/>");
-                    }
-                    else
-                    {
-                        result.Add(">");
-                    }
-                    break;
-                case HtmlTokenKind.Comment:
-                    result.Add("<!-- ");
-                    result.Add(subTree.Text);
-                    result.Add(" -->");
-                    break;
-                case HtmlTokenKind.EndTag:
-                    result.Add("</");
-                    result.Add(subTree.Name);
-                    result.Add(">");
-                    break;
+                        break;
+                    case HtmlTokenKind.Tag:
+                        sb.Append('<');
+                        sb.Append(impl.NameAsMemory.Span);
+
+                        for (var i = 0; i < impl.AttributeCount; i++)
+                        {
+                            sb.Append(' ');
+                            sb.Append(impl.GetAttributeNameAsMemory(i).Span);
+                            sb.Append("=\"");
+                            sb.Append(impl.GetAttributeAsMemory(i).Span);
+                            sb.Append('"');
+                        }
+
+                        sb.Append(impl.SelfClosingElement ? "/>" : ">");
+                        contentEnd = sb.Length;
+                        break;
+                    case HtmlTokenKind.Comment:
+                        sb.Append("<!-- ");
+                        sb.Append(impl.TextAsMemory.Span);
+                        sb.Append(" -->");
+                        contentEnd = sb.Length;
+                        break;
+                    case HtmlTokenKind.EndTag:
+                        sb.Append("</");
+                        sb.Append(impl.NameAsMemory.Span);
+                        sb.Append('>');
+                        contentEnd = sb.Length;
+                        break;
+                }
             }
-        }
 
-        return result;
+            return new InnerTextOrHtml(contentEnd < 0 ? string.Empty : sb.ToString(0, contentEnd));
+        }
+        finally
+        {
+            DefaultPools.StringBuilders.Return(sb);
+        }
     }
 
     public InnerTextOrHtml ReadInnerText()

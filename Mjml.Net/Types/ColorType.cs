@@ -163,7 +163,7 @@ public sealed partial class ColorType : IType
     {
         public bool Equals(ReadOnlyMemory<char> lhs, ReadOnlyMemory<char> rhs)
         {
-            return rhs.Span.Equals(rhs.Span, StringComparison.OrdinalIgnoreCase);
+            return lhs.Span.Equals(rhs.Span, StringComparison.OrdinalIgnoreCase);
         }
 
         public int GetHashCode([DisallowNull] ReadOnlyMemory<char> obj)

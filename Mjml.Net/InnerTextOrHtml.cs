@@ -127,9 +127,9 @@ public sealed class InnerTextOrHtml
                 // Add space characters before each line.
                 WriteLineStart(sb, indent);
 
-                // Start the span after the newline.
+                // Start the span after the newline. The loop increments the index, so the next check starts at 0.
                 span = span[(i + 1)..];
-                i = 0;
+                i = -1;
             }
         }
 
@@ -140,11 +140,7 @@ public sealed class InnerTextOrHtml
     {
         if (indent > 0)
         {
-            sb.EnsureCapacity(sb.Length + indent);
-            for (var i = 0; i < indent; i++)
-            {
-                sb.Append(' ');
-            }
+            sb.Append(' ', indent);
         }
     }
 }
