@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Mjml.Net.Benchmark/Mjml.Net.Benchmark.csproj" />
+  <Project Path="Mjml.Net.Compare/Mjml.Net.Compare.csproj" />
   <Project Path="Mjml.Net.Generator/Mjml.Net.Generator.csproj" />
   <Project Path="Mjml.Net.PostProcessors/Mjml.Net.PostProcessors.csproj" />
   <Project Path="Mjml.Net/Mjml.Net.csproj" />

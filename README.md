@@ -197,6 +197,21 @@ througput while mainintaing low memory footprint. Below are the benchmarks for e
 
 If you'd like to run the benchmarks your self then you can run the `Mjml.Net.Benchmarks` project in `release` mode.
 
+<!-- COMPARISON:START -->
+### Mjml.Net vs. MJML (JavaScript)
+
+Rendering the 21 benchmark templates in-process, Mjml.Net 4.14.0 (.NET 10.0.11) is on average **11.28x faster** than MJML 4.18.0 (Node.js 24.19.0), with speedups between 4.72x and 19.13x per template.
+
+| Renderer         | All templates (sum of medians) |
+| ---------------- | ------------------------------ |
+| Mjml.Net 4.14.0  | 7.04 ms                        |
+| MJML 4.18.0 (JS) | 74.71 ms                       |
+
+Measured on AMD Ryzen AI 9 HX 370 w/ Radeon 890M, 2026-09-16. See [benchmark.md](benchmark.md) for the results per template. Run `dotnet run -c Release --project Mjml.Net.Compare` to reproduce.
+<!-- COMPARISON:END -->
+
+> **Note:** These numbers vary noticeably between runs. On the laptop used above, repeated runs gave average speedups between roughly 4.5x and 11x, probably because power management moves the benchmark between performance and efficiency cores. For reliable figures, run the comparison on a desktop or a dedicated build machine and compare several runs.
+
 ### BenchmarkDotNet
 ```
 > .\Mjml.Net.Benchmark.exe

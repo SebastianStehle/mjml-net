@@ -1,0 +1,8 @@
+{
+    "name": "mjml-net-compare",
+    "private": true,
+    "description": "Runs the official MJML (JavaScript) renderer for the Mjml.Net comparison benchmark.",
+    "dependencies": {
+        "mjml": "4.18.0"
+    }
+}
