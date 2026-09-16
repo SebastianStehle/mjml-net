@@ -28,7 +28,7 @@ For every child, this runs a LINQ `Count` over all siblings again. That is O(n²
 - Use a separate policy with a higher `MaximumRetainedCapacity`, such as 256 KB, for the root buffer.
 - Pre-size the root buffer from the input length, such as `mjml.Length * 3`.
 
-### 3. Stop allocating in `AllowedFields` on every access (generated code)
+### 3. ✅ Stop allocating in `AllowedFields` on every access (generated code)
 [Mjml.Net.Generator/Template.handlebar](Mjml.Net.Generator/Template.handlebar)
 
 `BodyComponentBase` declares `[Bind("css-class")]`, so `base.AllowedFields` is non-empty for every body component. As a result, the generated getter builds a **new `AllowedAttributes` dictionary and copies it** every time the property is read. `ValidatorBase` reads it for each component and attribute. Merge the inherited entries once, in the static constructor or through a `Lazy`, and return that cached instance.
