@@ -31,7 +31,8 @@ jobs:
 
     - name: pack
       run: |
-        cd Mjml.Net & dotnet pack -c Release
+        dotnet pack Mjml.Net -c Release
+        dotnet pack Mjml.Net.PostProcessors -c Release
 
     - name: publish_login
       uses: NuGet/login@v1
