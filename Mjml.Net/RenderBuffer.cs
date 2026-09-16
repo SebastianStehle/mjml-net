@@ -313,11 +313,7 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
     {
         if (beautify && indent > 0)
         {
-            sb.EnsureCapacity(sb.Length + (indent * 2));
-            for (var i = 0; i < indent; i++)
-            {
-                sb.Append("  ");
-            }
+            sb.Append(' ', indent * 2);
         }
     }
 

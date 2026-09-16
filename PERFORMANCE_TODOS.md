@@ -79,10 +79,17 @@ Store data per type instead, such as `Dictionary<Type, IList>` or a generic stat
 - `ColorType.Coerce` allocates a `char[]` and then a `string`. Use `string.Create`.
 - `Style.Static` allocates a closure for each style. Make it a subclass or a static lambda with state.
 
+**⏭️ Measured, not worth it.**
+- **The `WriterExtensions` point was wrong.** C# prefers an interpolated string handler overload over a `string` overload, so `renderer.Style(name, $"{value}{unit}")` already writes straight into the buffer without allocating.
+- **Columns are the largest remaining item, and they are small.** The width string, class name and `MediaQuery` of one column allocate 488 B. The benchmark templates average 12 columns, which comes to about 5.7 KB per render, or about 2% of the ~258 KB a render allocates. `ColorType.Coerce` only runs for 3-digit hex colors, and `Style.Static` only runs for `mj-include` CSS.
+- **Where the ~258 KB per render goes now:** about 100 KB is the returned HTML string, which can't be avoided. About 53 KB is the up-front buffers of each new `HtmlPerformanceKit.HtmlReader` (two 10,240-char buffers plus smaller ones), and the library has no API to reuse a reader. About 28 KB is parsed tag, attribute and text strings, and about 30 KB is strings created while rendering.
+
 ### 7. Parse shorthand values without `Split`
 [Mjml.Net/BindingHelper.cs:34](Mjml.Net/BindingHelper.cs:34), [SectionComponent.cs:357,494](Mjml.Net/Components/Body/SectionComponent.cs:357), [MsoButtonComponent.cs:46](Mjml.Net/Components/Body/MsoButtonComponent.cs:46), [Binder.ClassNames](Mjml.Net/Internal/Binder.cs:15)
 
 `ParseShorthandValue` runs for every `padding` or `border-radius` shorthand in generated `Bind()`. It allocates a `string[]` and substrings. For the common 1-part case (`padding="10px"`), return the original string with no allocation. For 2–4 parts, scan with `ReadOnlySpan<char>.IndexOf(' ')`. The `mj-class` split and the background-position split can use the same approach.
+
+**⏭️ Measured, not worth it.** Across all `Split` calls in the library, `string[]` allocations add up to about 5.6 KB per render, about 2% of the total. The substrings would still be allocated, because they are stored in fields. `ParseShorthandValue("10px 25px")` takes 38 ns and allocates 104 B. For one value, `Split` already returns the original string without a substring, so the only saving would be the array.
 
 ### 8. Parse each unit value once, not in every `Measure`/`Render`
 [ColumnComponent.cs:120](Mjml.Net/Components/Body/ColumnComponent.cs:120), [SectionComponent.cs:94](Mjml.Net/Components/Body/SectionComponent.cs:94), [ImageComponent.cs:109](Mjml.Net/Components/Body/ImageComponent.cs:109), [HeroComponent.cs](Mjml.Net/Components/Body/HeroComponent.cs), [ButtonComponent.cs:197](Mjml.Net/Components/Body/ButtonComponent.cs:197)
@@ -94,6 +101,8 @@ Store data per type instead, such as `Dictionary<Type, IList>` or a generic stat
 
 Also, `char.IsNumber` accepts Unicode digits. `char.IsAsciiDigit` is faster and correct here.
 
+**⏭️ Measured, not worth it.** `UnitParser.Parse` doesn't allocate. It takes 4 ns for `null`, 37 ns for `"25px"` and 74 ns for `"33.33333333333333%"`. There are about 40 call sites, which comes to a few hundred calls per render and most of those are on `null`. In the worst case that is well under 10 µs of a ~250–400 µs render.
+
 ### 9. Reduce per-render overhead in the render pipeline
 - `RenderCore` creates a `new MjmlOptions()` record on every call when `options` is null. Use a static default instance. `MjmlRenderContext.Setup` does the same thing again.
 - `Render(TextReader)` and `RenderAsync(Stream)` read the whole input into a `string`, and then `HtmlReaderWrapper` wraps it again in a `StringReader`. Pass the `TextReader` straight to `HtmlReader`.
@@ -102,6 +111,11 @@ Also, `char.IsNumber` accepts Unicode digits. `char.IsAsciiDigit` is faster and 
 - `ReadElement` looks up the component factory in a `Dictionary<string, Func<IComponent>>` and then calls a delegate. `new T()` in a generic lambda goes through `Activator`. Use a generated `switch` or a `FrozenDictionary` of static factory lambdas.
 - `RenderBuffer.WriteLineStart` and `InnerTextOrHtml.WriteLineStart` append spaces in a loop. Use `sb.Append(' ', indent * 2)`.
 - `Validate()` copies the error list even when it is empty.
+
+**Partly done.**
+- **✅ Indentation:** `RenderBuffer.WriteLineStart` and `InnerTextOrHtml.WriteLineStart` now use `sb.Append(' ', count)`. A beautified render writes about 800 lines with an average of 24 indentation characters. The loop took 15.2 ns per line and the single call takes 2.4 ns, which saves about 10 µs per render (~3%). The output is byte-for-byte identical for all 21 templates, with and without beautify.
+- **❌ Static default `MjmlOptions`: not safe.** `BreakpointComponent` writes `context.Options.Breakpoint`, so a shared instance would carry one template's `mj-breakpoint` into later renders. The same line also changes the `MjmlOptions` instance passed in by the caller.
+- **⏭️ Skipped the rest.** Each remaining item is a single small allocation or a few nanoseconds per render or per component.
 
 ### 10. Make the AngleSharp post-processing path cheaper
 [Mjml.Net.PostProcessors/InlineCssPostProcessor.cs](Mjml.Net.PostProcessors/InlineCssPostProcessor.cs), [AngleSharpPostProcessor.cs](Mjml.Net.PostProcessors/AngleSharpPostProcessor.cs)

@@ -140,11 +140,7 @@ public sealed class InnerTextOrHtml
     {
         if (indent > 0)
         {
-            sb.EnsureCapacity(sb.Length + indent);
-            for (var i = 0; i < indent; i++)
-            {
-                sb.Append(' ');
-            }
+            sb.Append(' ', indent);
         }
     }
 }
