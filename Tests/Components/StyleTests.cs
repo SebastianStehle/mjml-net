@@ -189,4 +189,47 @@ public class StyleTests
 
         AssertHelpers.HtmlFileAssert("Components.Outputs.StyleInlineFallback.html", result);
     }
+
+    [Fact]
+    public async Task Should_keep_non_inline_styles_when_inlining()
+    {
+        var source = """
+            <mjml-test>
+              <mj-head>
+                <mj-style>
+                  .red-text > div {
+                    color: blue;
+                  }
+                </mj-style>
+                <mj-style inline="inline">
+                  .red-text div {
+                    color: red;
+                  }
+                </mj-style>
+              </mj-head>
+              <mj-body>
+                <mj-raw>
+                  <div class="red-text">
+                    <div></div>
+                  </div>
+                </mj-raw>
+              </mj-body>
+            </mjml-test>
+            """;
+
+        var (result, _) = await TestHelper.RenderAsync(source, new MjmlOptions
+        {
+            PostProcessors =
+            [
+                AngleSharpPostProcessor.Default
+            ],
+            Beautify = true
+        }, helpers: [new StyleHelper()]);
+
+        // The non-inline style must stay unchanged and must not be applied to the elements.
+        Assert.Contains(".red-text > div", result, StringComparison.Ordinal);
+        Assert.DoesNotContain("&gt;", result, StringComparison.Ordinal);
+        Assert.Contains("<div style=\"color: rgba(255, 0, 0, 1)\"></div>", result, StringComparison.Ordinal);
+        Assert.DoesNotContain("color: blue\"", result, StringComparison.Ordinal);
+    }
 }

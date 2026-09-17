@@ -33,7 +33,7 @@ The `post` time is dominated by AngleSharp, not by Mjml.Net: only 5 templates (A
 | 1 | Do not parse every `style` attribute during the load  | post             | **-63%**         | ~-55%  | identical           | **done**    |
 | 2 | Reuse the HtmlPerformanceKit reader buffers           | render/validator | **-30%**         | ~-10%  | identical           | **done**    |
 | 3 | Cache the wrapped `DeclarationInfo` objects           | post             | **-15%** (-3.7% after #1) | noise  | identical           | **done**    |
-| 4 | Parse only inline style sheets, drop the tag renaming | post             | **-9%**          | ~-10%  | fixes a CSS bug     | open        |
+| 4 | Parse only inline style sheets, drop the tag renaming | post             | **-9%** (-25.7% after #1-#3) | ~-25% | fixes a CSS bug     | **done**    |
 | 5 | Parse from the string and serialize into a pool       | post             | **-6%**          | ~-4%   | identical           | open        |
 |   | All combined                                          | render/validator | 4.58 -> 3.19 MB (-30%) | ~-10% | |             |
 |   | All combined                                          | post             | 41.1 -> 8.0 MB (-80%)  | ~-70% | |             |
@@ -122,13 +122,13 @@ Output identical for all templates and scenarios, including the line numbers and
 
 Idea #1 removed the parsing of the `style` attributes, which created most of the declarations, so the cache saves much less than in the prototype. Four `CiBenchmarks` runs and an interleaved harness run showed no time difference beyond the noise of the machine. Identical output.
 
-## 4. Parse only inline style sheets, drop the tag renaming
+## 4. Parse only inline style sheets, drop the tag renaming (done)
 
 **Problem:**
 - AngleSharp parses every `<style>` element into a style sheet while loading the document, including the large media query and reset styles in the head of every MJML document. The inliner only needs the `<style inline>` sheets.
 - To exclude the other sheets, `InlineCssPostProcessor` renames each of them to `non_inline_style` and back. Each rename creates a new element and copies `InnerHtml`, so the CSS is serialized and parsed as HTML twice. When the element becomes a `<style>` again, its CSS is parsed a second time.
 
-**Change:** Replace `IStylingService` with a wrapper around `CssStylingService`. The wrapper returns no style sheet when the owner element has no `inline` attribute. Only inline sheets are then visible in `GetStyleCollection`, so the renaming in `InlineCssPostProcessor` can be removed.
+**Change:** `InlineOnlyStylingService` replaces `IStylingService` and wraps `CssStylingService`. It returns no style sheet when the owner element has no `inline` attribute. Only inline sheets are then visible in `GetStyleCollection`, so the renaming in `InlineCssPostProcessor` was removed.
 
 ```csharp
 public Task<IStyleSheet> ParseStylesheetAsync(IResponse response, StyleOptions options, CancellationToken cancel)
@@ -142,11 +142,17 @@ public Task<IStyleSheet> ParseStylesheetAsync(IResponse response, StyleOptions o
 }
 ```
 
-**Result (post):**
+**Result (prototype on the original base):**
 - Styling service alone: 41.1 MB -> 38.4 MB (-6.5%), time about -9%.
 - With the renaming removed as well: 37.2 MB (-9.4%), time about -10%.
 
-**Bug fix:** The current renaming escapes `>` in the CSS of non-inline styles, which breaks child combinators. Worldly currently renders `.mj-menu-checkbox[type="checkbox"] ~ .mj-inline-links &gt; a { ... }`. Without the renaming it renders the correct `> a`. This is the only output difference of all five ideas. Add a test for it.
+**Result (implemented on top of #1-#3, `CiBenchmarks`, two runs):**
+
+| Benchmark                       | Time            | Allocated                     |
+| ------------------------------- | --------------- | ----------------------------- |
+| Render_Templates_PostProcessors | -26.3% / -25.2% | 13.85 MB -> 10.29 MB (-25.7%) |
+
+**Bug fix:** The renaming escaped `>` in the CSS of non-inline styles, which broke child combinators. Worldly rendered `.mj-menu-checkbox[type="checkbox"] ~ .mj-inline-links &gt; a { ... }` and now renders the correct `> a`. This is the only output difference. `StyleTests.Should_keep_non_inline_styles_when_inlining` covers it and failed with the old code.
 
 **Risks:** A custom `IAngleSharpPostProcessor` that reads the non-inline style sheets would no longer see them. Only use the service when all inner processors do not need them, or make it an option of `AngleSharpPostProcessor`.
 

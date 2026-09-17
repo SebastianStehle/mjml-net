@@ -24,7 +24,9 @@ public sealed class AngleSharpPostProcessor : IPostProcessor, INestingPostProces
                 .WithRenderDevice(new DefaultRenderDevice { FontSize = -1 })
                 .Without<IDeclarationFactory>()
                 .Without<ICssDefaultStyleSheetProvider>()
+                .Without<IStylingService>()
                 .With<IDeclarationFactory>(_ => new FallbackDeclarationFactory())
+                .With<IStylingService>(_ => new InlineOnlyStylingService())
                 .Services
                 .Where(x => x.GetType().Name != StyleAttributeObserverName));
 
