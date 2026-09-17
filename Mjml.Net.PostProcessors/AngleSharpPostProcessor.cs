@@ -1,7 +1,11 @@
-﻿using AngleSharp;
+﻿using System.Globalization;
+using System.Text;
+using AngleSharp;
 using AngleSharp.Css;
 using AngleSharp.Css.Parser;
 using AngleSharp.Dom;
+using AngleSharp.Html;
+using AngleSharp.Html.Parser;
 using Microsoft.Extensions.ObjectPool;
 using Mjml.Net.Declarations;
 
@@ -29,6 +33,12 @@ public sealed class AngleSharpPostProcessor : IPostProcessor, INestingPostProces
                 .With<IStylingService>(_ => new InlineOnlyStylingService())
                 .Services
                 .Where(x => x.GetType().Name != StyleAttributeObserverName));
+
+    // Rendered emails are typically 10-130K characters, so the default limit of 4K characters would never reuse the builders.
+    private static readonly ObjectPool<StringBuilder> Writers = new DefaultObjectPool<StringBuilder>(new StringBuilderPooledObjectPolicy
+    {
+        MaximumRetainedCapacity = 256 * 1024
+    });
 
     private static readonly ObjectPool<IBrowsingContext> Contexts = new DefaultObjectPool<IBrowsingContext>(new ContextPolicy());
 
@@ -59,18 +69,37 @@ public sealed class AngleSharpPostProcessor : IPostProcessor, INestingPostProces
         var context = Contexts.Get();
         try
         {
-            using var document = await context.OpenAsync(req => req.Content(html), ct);
+            // Parse the string directly. OpenAsync would encode the HTML to a stream and decode it again.
+            using var document = await context.GetService<IHtmlParser>()!.ParseDocumentAsync(html, ct);
 
             foreach (var processor in inner)
             {
                 await processor.ProcessAsync(document, options, ct);
             }
 
-            return document.ToHtml();
+            return Serialize(document);
         }
         finally
         {
             Contexts.Return(context);
+        }
+    }
+
+    private static string Serialize(IDocument document)
+    {
+        var sb = Writers.Get();
+        try
+        {
+            using (var writer = new StringWriter(sb, CultureInfo.InvariantCulture))
+            {
+                document.ToHtml(writer, HtmlMarkupFormatter.Instance);
+            }
+
+            return sb.ToString();
+        }
+        finally
+        {
+            Writers.Return(sb);
         }
     }
 

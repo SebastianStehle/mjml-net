@@ -34,7 +34,7 @@ The `post` time is dominated by AngleSharp, not by Mjml.Net: only 5 templates (A
 | 2 | Reuse the HtmlPerformanceKit reader buffers           | render/validator | **-30%**         | ~-10%  | identical           | **done**    |
 | 3 | Cache the wrapped `DeclarationInfo` objects           | post             | **-15%** (-3.7% after #1) | noise  | identical           | **done**    |
 | 4 | Parse only inline style sheets, drop the tag renaming | post             | **-9%** (-25.7% after #1-#3) | ~-25% | fixes a CSS bug     | **done**    |
-| 5 | Parse from the string and serialize into a pool       | post             | **-6%**          | ~-4%   | identical           | open        |
+| 5 | Parse from the string and serialize into a pool       | post             | **-6%** (-23.0% after #1-#4) | ~-27% | identical           | **done**    |
 |   | All combined                                          | render/validator | 4.58 -> 3.19 MB (-30%) | ~-10% | |             |
 |   | All combined                                          | post             | 41.1 -> 8.0 MB (-80%)  | ~-70% | |             |
 
@@ -156,7 +156,7 @@ public Task<IStyleSheet> ParseStylesheetAsync(IResponse response, StyleOptions o
 
 **Risks:** A custom `IAngleSharpPostProcessor` that reads the non-inline style sheets would no longer see them. Only use the service when all inner processors do not need them, or make it an option of `AngleSharpPostProcessor`.
 
-## 5. Parse from the string and serialize into a pool
+## 5. Parse from the string and serialize into a pool (done)
 
 **Problem:**
 - `context.OpenAsync(req => req.Content(html))` goes through the navigation pipeline. The HTML string is encoded to UTF-8 into a `MemoryStream` (`Byte[]` ~750 KB per round), then decoded again into a `StringBuilder`-backed text source.
@@ -187,7 +187,15 @@ finally
 
 `Writers` is a `DefaultObjectPool<StringBuilder>` with a `MaximumRetainedCapacity` of 256K chars, like `DefaultPools.StringBuilders`. Style sheets and the context services work as before, because the parser is bound to the pooled browsing context.
 
-**Result (post):** 41.1 MB -> 38.5 MB (-6.3%), time about -4%. Direct parsing alone was -3.9%. Identical output.
+**Result (prototype on the original base):** 41.1 MB -> 38.5 MB (-6.3%), time about -4%. Direct parsing alone was -3.9%.
+
+**Result (implemented on top of #1-#4, `CiBenchmarks`, two runs):**
+
+| Benchmark                       | Time            | Allocated                    |
+| ------------------------------- | --------------- | ---------------------------- |
+| Render_Templates_PostProcessors | -25.0% / -29.0% | 10.29 MB -> 7.92 MB (-23.0%) |
+
+Identical output.
 
 ## Measured, but below 5%
 
