@@ -94,13 +94,7 @@ internal sealed class Binder : IBinder
             // The last class wins.
             for (var i = classNames.Length - 1; i >= 0; i--)
             {
-                foreach (var (key, value) in context.AttributesByClass)
-                {
-                    if (key.ClassOrType == classNames[i])
-                    {
-                        attributes.TryAdd(key.Name, value);
-                    }
-                }
+                AddAll(context.GetClassAttributes(classNames[i]));
             }
         }
 
@@ -111,13 +105,7 @@ internal sealed class Binder : IBinder
             // The last class wins.
             for (var i = parentClassNames.Length - 1; i >= 0; i--)
             {
-                foreach (var (key, value) in context.AttributesByParentClass)
-                {
-                    if (key.ParentClass == parentClassNames[i] && key.ClassOrType == elementName)
-                    {
-                        attributes.TryAdd(key.Name, value);
-                    }
-                }
+                AddAll(context.GetParentClassAttributes(parentClassNames[i], elementName));
             }
         }
 
