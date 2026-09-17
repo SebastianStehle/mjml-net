@@ -72,20 +72,21 @@ public partial class {{className}}
 
 	public override void Bind(Mjml.Net.GlobalContext context)
 	{
-		foreach (var (name, value) in Binder.Attributes)
+		var attributes = Binder.Attributes;
+
+		// Enumerate the concrete dictionary to avoid the boxed enumerator of the interface.
+		if (attributes is System.Collections.Generic.Dictionary<string, string> dictionary)
 		{
-			switch (name)
+			foreach (var (name, value) in dictionary)
 			{
-			{{#each normalFields}}
-				case "{{attribute}}":
-					{{#if isCustom }}
-					this.{{name}} = {{customName}}.Coerce(value);
-					{{/if}}
-					{{#unless isCustom }}
-					this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(value);
-					{{/unless}}
-					break;
-			{{/each}}
+				BindAttribute(name, value);
+			}
+		}
+		else
+		{
+			foreach (var (name, value) in attributes)
+			{
+				BindAttribute(name, value);
 			}
 		}
 
@@ -125,5 +126,22 @@ public partial class {{className}}
 		{{/each}}
 
 		base.Bind(context);
+	}
+
+	private void BindAttribute(string name, string value)
+	{
+		switch (name)
+		{
+		{{#each normalFields}}
+			case "{{attribute}}":
+				{{#if isCustom }}
+				this.{{name}} = {{customName}}.Coerce(value);
+				{{/if}}
+				{{#unless isCustom }}
+				this.{{name}} = AttributeTypes.{{defaultType}}.Coerce(value);
+				{{/unless}}
+				break;
+		{{/each}}
+		}
 	}
 }

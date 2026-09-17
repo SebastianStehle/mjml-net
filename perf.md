@@ -200,6 +200,6 @@ Identical output.
 ## Measured, but below 5%
 
 - **`IndexOf('\n')` in `InnerTextOrHtml.AppendIntended`** instead of a loop over every char (**done**): identical output, no allocation change. `CiBenchmarks` showed +4.1% / -3.4% for `Render_Templates` (noise). An interleaved harness run showed about -1% (3.52 ms -> 3.48 ms).
-- **Concrete `Dictionary` enumeration in the generated `Bind` method** (no boxed `IReadOnlyDictionary` enumerator), plus direct component factories instead of `new T()`: -1.1% allocations, time within noise.
+- **Concrete `Dictionary` enumeration in the generated `Bind` method** (no boxed `IReadOnlyDictionary` enumerator), plus direct component factories instead of `new T()` (**done**): identical output. `Render_Templates` and `Render_Templates_Validator` allocations 3.10 MB -> 3.05 MB (-1.6%). `CiBenchmarks` time +1.5% / -5.3% (noise). An interleaved harness run showed -3.4% for `Render` (3.48 ms -> 3.36 ms, faster in all 4 pairs).
 - **GC settings** (`GCRetainVM`, larger gen0): no effect.
 - **Index `AttributesByClass` by class name** in `Binder.Resolve`: the current code is quadratic in the number of `mj-class` attributes, but only UGGRoyale and Worldly use `mj-class`, so the benchmarks would not show it.
