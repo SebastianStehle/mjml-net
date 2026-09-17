@@ -32,7 +32,7 @@ The `post` time is dominated by AngleSharp, not by Mjml.Net: only 5 templates (A
 | - | ----------------------------------------------------- | ---------------- | ---------------- | ------ | ------------------- | ----------- |
 | 1 | Do not parse every `style` attribute during the load  | post             | **-63%**         | ~-55%  | identical           | **done**    |
 | 2 | Reuse the HtmlPerformanceKit reader buffers           | render/validator | **-30%**         | ~-10%  | identical           | **done**    |
-| 3 | Cache the wrapped `DeclarationInfo` objects           | post             | **-15%**         | noise  | identical           | open        |
+| 3 | Cache the wrapped `DeclarationInfo` objects           | post             | **-15%** (-3.7% after #1) | noise  | identical           | **done**    |
 | 4 | Parse only inline style sheets, drop the tag renaming | post             | **-9%**          | ~-10%  | fixes a CSS bug     | open        |
 | 5 | Parse from the string and serialize into a pool       | post             | **-6%**          | ~-4%   | identical           | open        |
 |   | All combined                                          | render/validator | 4.58 -> 3.19 MB (-30%) | ~-10% | |             |
@@ -106,15 +106,21 @@ Output identical for all templates and scenarios, including the line numbers and
 
 **Follow-up:** The tokenizer still reads through a `TextReader` and a peek queue. Reading from the string directly could reduce the tokenizer CPU (~15-20% of `render`).
 
-## 3. Cache the wrapped `DeclarationInfo` objects
+## 3. Cache the wrapped `DeclarationInfo` objects (done)
 
 **Problem:** `FallbackDeclarationFactory.Create` is called for every parsed CSS declaration. It wraps the default declaration into a new `DeclarationInfo` with a new `FallbackCssValueConverter` every time. For unknown properties, `DefaultDeclarationFactory` also creates new converters and `IValueConverter[]` arrays. Together, `DeclarationInfo`, `IValueConverter[]`, `StandardValueConverter`, `OrValueConverter` and `FallbackCssValueConverter` were about 6.6 MB per round.
 
-**Change:** The declarations are immutable. Cache them per property name in a static `ConcurrentDictionary<string, DeclarationInfo>(StringComparer.Ordinal)`, and use one static `DefaultDeclarationFactory`.
+**Change:** The declarations are immutable. `FallbackDeclarationFactory` caches them per property name in a static `ConcurrentDictionary<string, DeclarationInfo>(StringComparer.Ordinal)` and uses one static `DefaultDeclarationFactory`. The property names come from the CSS of the templates, so the cache stops adding new names at 1,024 entries.
 
-**Result (post):** 41.1 MB -> 35.0 MB (-14.7%). Time within noise. Identical output.
+**Result (prototype on the original base):** 41.1 MB -> 35.0 MB (-14.7%). Time within noise.
 
-**Risks:** Property names come from the CSS input, so the cache can grow with arbitrary names from user templates. Limit the size, or cache only the names that `DefaultDeclarationFactory` knows.
+**Result (implemented on top of #1 and #2):**
+
+| Benchmark                       | Time  | Allocated                  |
+| ------------------------------- | ----- | -------------------------- |
+| Render_Templates_PostProcessors | noise | 14.38 MB -> 13.85 MB (-3.7%) |
+
+Idea #1 removed the parsing of the `style` attributes, which created most of the declarations, so the cache saves much less than in the prototype. Four `CiBenchmarks` runs and an interleaved harness run showed no time difference beyond the noise of the machine. Identical output.
 
 ## 4. Parse only inline style sheets, drop the tag renaming
 
