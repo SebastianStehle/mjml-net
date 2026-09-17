@@ -118,19 +118,16 @@ public sealed class InnerTextOrHtml
     {
         sb.EnsureCapacity(sb.Length + span.Length);
 
-        for (int i = 0; i < span.Length; i++)
+        // IndexOf is vectorized, which is faster than checking each character.
+        int index;
+        while ((index = span.IndexOf('\n')) >= 0)
         {
-            if (span[i] == '\n')
-            {
-                sb.Append(span[..(i + 1)]);
+            sb.Append(span[..(index + 1)]);
 
-                // Add space characters before each line.
-                WriteLineStart(sb, indent);
+            // Add space characters before each line.
+            WriteLineStart(sb, indent);
 
-                // Start the span after the newline. The loop increments the index, so the next check starts at 0.
-                span = span[(i + 1)..];
-                i = -1;
-            }
+            span = span[(index + 1)..];
         }
 
         sb.Append(span);
