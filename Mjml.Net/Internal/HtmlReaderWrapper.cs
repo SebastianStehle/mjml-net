@@ -48,10 +48,34 @@ internal class HtmlReaderWrapper : IHtmlReader
         root = this;
         impl = new HtmlReaderImpl(new StringReader(input), Options);
 
+        // The wrapper is pooled, so the handler must only be added once.
         impl.ParseError += (sender, e) =>
         {
             OnError?.Invoke(new HtmlError(e.LineNumber, e.LinePosition, e.Message));
         };
+    }
+
+    public static HtmlReaderWrapper Rent(string input)
+    {
+        var reader = DefaultPools.HtmlReaders.Get();
+
+        // Reuse the buffers of the tokenizer, which are large compared to the typical input.
+        reader.impl.Reset(new StringReader(input));
+        return reader;
+    }
+
+    public void Return()
+    {
+        DefaultPools.HtmlReaders.Return(this);
+    }
+
+    public void Clear()
+    {
+        // Do not keep a reference to the last input.
+        impl.Reset(TextReader.Null);
+
+        depth = 0;
+        OnError = null;
     }
 
     public string GetAttribute(string name)

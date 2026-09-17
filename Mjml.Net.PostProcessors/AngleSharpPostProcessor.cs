@@ -9,17 +9,24 @@ namespace Mjml.Net;
 
 public sealed class AngleSharpPostProcessor : IPostProcessor, INestingPostProcessor
 {
+    // The observer parses the CSS of every style attribute while the document is loaded, which is the most expensive part of the post processing.
+    // The inliner only needs the styles of the matched elements, which are parsed on demand. The class is internal, so it can only be removed by name.
+    private const string StyleAttributeObserverName = "StyleAttributeObserver";
+
     private static readonly IConfiguration HtmlConfiguration =
-        Configuration.Default
-            .WithCss(new CssParserOptions
-            {
-                IsIncludingUnknownDeclarations = true,
-                IsIncludingUnknownRules = true
-            })
-            .WithRenderDevice(new DefaultRenderDevice { FontSize = -1 })
-            .Without<IDeclarationFactory>()
-            .Without<ICssDefaultStyleSheetProvider>()
-            .With<IDeclarationFactory>(_ => new FallbackDeclarationFactory());
+        new Configuration(
+            Configuration.Default
+                .WithCss(new CssParserOptions
+                {
+                    IsIncludingUnknownDeclarations = true,
+                    IsIncludingUnknownRules = true
+                })
+                .WithRenderDevice(new DefaultRenderDevice { FontSize = -1 })
+                .Without<IDeclarationFactory>()
+                .Without<ICssDefaultStyleSheetProvider>()
+                .With<IDeclarationFactory>(_ => new FallbackDeclarationFactory())
+                .Services
+                .Where(x => x.GetType().Name != StyleAttributeObserverName));
 
     private static readonly ObjectPool<IBrowsingContext> Contexts = new DefaultObjectPool<IBrowsingContext>(new ContextPolicy());
 

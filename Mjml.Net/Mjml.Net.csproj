@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlPerformanceKit" Version="1.0.0" />
+    <PackageReference Include="MjmlNet.HtmlPerformanceKit" Version="1.1.0" />
     <PackageReference Include="Meziantou.Analyzer" Version="3.0.135">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -178,7 +178,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     {
         options ??= new MjmlOptions();
 
-        var reader = new HtmlReaderWrapper(mjml);
+        var reader = HtmlReaderWrapper.Rent(mjml);
         var context = DefaultPools.RenderContexts.Get();
         try
         {
@@ -201,6 +201,8 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         finally
         {
             DefaultPools.RenderContexts.Return(context);
+
+            reader.Return();
         }
     }
 }
