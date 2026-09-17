@@ -8,8 +8,6 @@ namespace Mjml.Net;
 
 public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
 {
-    private const string FallbackStyle = "non_inline_style";
-
     public static readonly IPostProcessor Instance = new AngleSharpPostProcessor(new InlineCssPostProcessor());
 
     public bool ShouldProcess(string html)
@@ -27,12 +25,7 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
             return default;
         }
 
-        // Disable the other style sheets, so that only the inline styles are applied.
-        foreach (var style in document.QuerySelectorAll(TagNames.Style).Where(x => !IsInline(x)).ToList())
-        {
-            RenameTag(style, FallbackStyle, document);
-        }
-
+        // Only the inline style sheets are parsed (see InlineOnlyStylingService), so the other sheets are not applied.
         var styles = GetStyles(document);
         if (styles != null)
         {
@@ -42,11 +35,6 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
             {
                 InlineStyle(element, styles);
             }
-        }
-
-        foreach (var style in document.QuerySelectorAll(FallbackStyle).ToList())
-        {
-            RenameTag(style, TagNames.Style, document);
         }
 
         foreach (var style in inlineStyles)
@@ -141,26 +129,9 @@ public sealed class InlineCssPostProcessor : IAngleSharpPostProcessor
         }
     }
 
-    private static bool IsInline(IElement element)
+    internal static bool IsInline(IElement element)
     {
         return element.HasAttribute("inline");
-    }
-
-    private static void RenameTag(IElement node, string tagName, IDocument document)
-    {
-        var clone = document.CreateElement(tagName);
-
-        foreach (var attribute in node.Attributes)
-        {
-            clone.SetAttribute(attribute.NamespaceUri, attribute.Name, attribute.Value);
-        }
-
-        var parent = node.Parent!;
-
-        clone.InnerHtml = node.InnerHtml;
-
-        parent.InsertBefore(clone, node);
-        parent.RemoveChild(node);
     }
 
     private sealed class CachedStyleCollection(IStyleCollection inner) : IStyleCollection

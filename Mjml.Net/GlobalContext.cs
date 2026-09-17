@@ -10,6 +10,8 @@ public sealed class GlobalContext
     private readonly Dictionary<AttributeKey, string> attributesByClass = new Dictionary<AttributeKey, string>(10);
     private readonly Dictionary<AttributeParentKey, string> attributesByParentClass = new Dictionary<AttributeParentKey, string>(10);
     private readonly Dictionary<string, Dictionary<string, string>> attributesByType = [];
+    private readonly Dictionary<string, Dictionary<string, string>> attributesByClassName = [];
+    private readonly Dictionary<(string ParentClass, string Type), Dictionary<string, string>> attributesByParentClassAndType = [];
     private IFileLoader? fileLoader;
     private string? breakpoint;
 
@@ -45,6 +47,8 @@ public sealed class GlobalContext
         attributesByName.Clear();
         attributesByParentClass.Clear();
         attributesByType.Clear();
+        attributesByClassName.Clear();
+        attributesByParentClassAndType.Clear();
         Options = null!;
     }
 
@@ -77,13 +81,7 @@ public sealed class GlobalContext
         attributesByName[new AttributeKey(type, name)] = value;
 
         // Also index the attributes by type, so that binding can iterate over the attributes of an element type.
-        if (!attributesByType.TryGetValue(type, out var attributes))
-        {
-            attributes = [];
-            attributesByType[type] = attributes;
-        }
-
-        attributes[name] = value;
+        GetOrAddAttributes(attributesByType, type)[name] = value;
     }
 
     internal Dictionary<string, string>? GetTypeAttributes(string type)
@@ -94,10 +92,36 @@ public sealed class GlobalContext
     public void SetClassAttribute(string name, string className, string value)
     {
         attributesByClass[new AttributeKey(className, name)] = value;
+
+        // Also index the attributes by class, so that binding does not have to iterate over the attributes of all classes for each class of an element.
+        GetOrAddAttributes(attributesByClassName, className)[name] = value;
+    }
+
+    internal Dictionary<string, string>? GetClassAttributes(string className)
+    {
+        return attributesByClassName.GetValueOrDefault(className);
     }
 
     public void SetParentClassAttribute(string name, string parentClassName, string type, string value)
     {
         attributesByParentClass[new AttributeParentKey(parentClassName, type, name)] = value;
+
+        GetOrAddAttributes(attributesByParentClassAndType, (parentClassName, type))[name] = value;
+    }
+
+    internal Dictionary<string, string>? GetParentClassAttributes(string parentClassName, string type)
+    {
+        return attributesByParentClassAndType.GetValueOrDefault((parentClassName, type));
+    }
+
+    private static Dictionary<string, string> GetOrAddAttributes<TKey>(Dictionary<TKey, Dictionary<string, string>> source, TKey key) where TKey : notnull
+    {
+        if (!source.TryGetValue(key, out var attributes))
+        {
+            attributes = [];
+            source[key] = attributes;
+        }
+
+        return attributes;
     }
 }

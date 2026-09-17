@@ -1,0 +1,469 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" />
+      <mj-class name="text-0" color="#000000" font-size="12px" line-height="16px" padding="0px 0px" align="left" />
+      <mj-class name="column-1" background-color="#f1f1f1" padding="1px">
+        <mj-text color="#313131" font-weight="700" />
+        <mj-button background-color="#116191" border-radius="1px" />
+      </mj-class>
+      <mj-class name="text-2" color="#0a0604" font-size="14px" line-height="18px" padding="2px 2px" align="left" />
+      <mj-class name="column-3" background-color="#f3f3f3" padding="3px">
+        <mj-text color="#333333" font-weight="700" />
+        <mj-button background-color="#136393" border-radius="3px" />
+      </mj-class>
+      <mj-class name="text-4" color="#140c08" font-size="16px" line-height="20px" padding="4px 0px" align="left" />
+      <mj-class name="column-5" background-color="#f5f5f5" padding="5px">
+        <mj-text color="#353535" font-weight="700" />
+        <mj-button background-color="#156595" border-radius="0px" />
+      </mj-class>
+      <mj-class name="text-6" color="#1e120c" font-size="18px" line-height="22px" padding="0px 2px" align="left" />
+      <mj-class name="column-7" background-color="#f7f7f7" padding="7px">
+        <mj-text color="#373737" font-weight="700" />
+        <mj-button background-color="#176797" border-radius="2px" />
+      </mj-class>
+      <mj-class name="text-8" color="#281810" font-size="12px" line-height="24px" padding="2px 0px" align="left" />
+      <mj-class name="column-9" background-color="#f9f9f9" padding="1px">
+        <mj-text color="#393939" font-weight="700" />
+        <mj-button background-color="#196999" border-radius="4px" />
+      </mj-class>
+      <mj-class name="text-10" color="#321e14" font-size="14px" line-height="16px" padding="4px 2px" align="left" />
+      <mj-class name="column-11" background-color="#f1f1f1" padding="3px">
+        <mj-text color="#313131" font-weight="700" />
+        <mj-button background-color="#116191" border-radius="1px" />
+      </mj-class>
+      <mj-class name="text-12" color="#3c2418" font-size="16px" line-height="18px" padding="0px 0px" align="left" />
+      <mj-class name="column-13" background-color="#f3f3f3" padding="5px">
+        <mj-text color="#333333" font-weight="700" />
+        <mj-button background-color="#136393" border-radius="3px" />
+      </mj-class>
+      <mj-class name="text-14" color="#462a1c" font-size="18px" line-height="20px" padding="2px 2px" align="left" />
+      <mj-class name="column-15" background-color="#f5f5f5" padding="7px">
+        <mj-text color="#353535" font-weight="700" />
+        <mj-button background-color="#156595" border-radius="0px" />
+      </mj-class>
+      <mj-class name="text-16" color="#503020" font-size="12px" line-height="22px" padding="4px 0px" align="left" />
+      <mj-class name="column-17" background-color="#f7f7f7" padding="1px">
+        <mj-text color="#373737" font-weight="700" />
+        <mj-button background-color="#176797" border-radius="2px" />
+      </mj-class>
+      <mj-class name="text-18" color="#5a3624" font-size="14px" line-height="24px" padding="0px 2px" align="left" />
+      <mj-class name="column-19" background-color="#f9f9f9" padding="3px">
+        <mj-text color="#393939" font-weight="700" />
+        <mj-button background-color="#196999" border-radius="4px" />
+      </mj-class>
+      <mj-class name="text-20" color="#643c28" font-size="16px" line-height="16px" padding="2px 0px" align="left" />
+      <mj-class name="column-21" background-color="#f1f1f1" padding="5px">
+        <mj-text color="#313131" font-weight="700" />
+        <mj-button background-color="#116191" border-radius="1px" />
+      </mj-class>
+      <mj-class name="text-22" color="#6e422c" font-size="18px" line-height="18px" padding="4px 2px" align="left" />
+      <mj-class name="column-23" background-color="#f3f3f3" padding="7px">
+        <mj-text color="#333333" font-weight="700" />
+        <mj-button background-color="#136393" border-radius="3px" />
+      </mj-class>
+      <mj-class name="text-24" color="#784830" font-size="12px" line-height="20px" padding="0px 0px" align="left" />
+      <mj-class name="column-25" background-color="#f5f5f5" padding="1px">
+        <mj-text color="#353535" font-weight="700" />
+        <mj-button background-color="#156595" border-radius="0px" />
+      </mj-class>
+      <mj-class name="text-26" color="#824e34" font-size="14px" line-height="22px" padding="2px 2px" align="left" />
+      <mj-class name="column-27" background-color="#f7f7f7" padding="3px">
+        <mj-text color="#373737" font-weight="700" />
+        <mj-button background-color="#176797" border-radius="2px" />
+      </mj-class>
+      <mj-class name="text-28" color="#8c5438" font-size="16px" line-height="24px" padding="4px 0px" align="left" />
+      <mj-class name="column-29" background-color="#f9f9f9" padding="5px">
+        <mj-text color="#393939" font-weight="700" />
+        <mj-button background-color="#196999" border-radius="4px" />
+      </mj-class>
+      <mj-class name="text-30" color="#965a3c" font-size="18px" line-height="16px" padding="0px 2px" align="left" />
+      <mj-class name="column-31" background-color="#f1f1f1" padding="7px">
+        <mj-text color="#313131" font-weight="700" />
+        <mj-button background-color="#116191" border-radius="1px" />
+      </mj-class>
+      <mj-class name="text-32" color="#a06040" font-size="12px" line-height="18px" padding="2px 0px" align="left" />
+      <mj-class name="column-33" background-color="#f3f3f3" padding="1px">
+        <mj-text color="#333333" font-weight="700" />
+        <mj-button background-color="#136393" border-radius="3px" />
+      </mj-class>
+      <mj-class name="text-34" color="#aa6644" font-size="14px" line-height="20px" padding="4px 2px" align="left" />
+      <mj-class name="column-35" background-color="#f5f5f5" padding="3px">
+        <mj-text color="#353535" font-weight="700" />
+        <mj-button background-color="#156595" border-radius="0px" />
+      </mj-class>
+      <mj-class name="text-36" color="#b46c48" font-size="16px" line-height="22px" padding="0px 0px" align="left" />
+      <mj-class name="column-37" background-color="#f7f7f7" padding="5px">
+        <mj-text color="#373737" font-weight="700" />
+        <mj-button background-color="#176797" border-radius="2px" />
+      </mj-class>
+      <mj-class name="text-38" color="#be724c" font-size="18px" line-height="24px" padding="2px 2px" align="left" />
+      <mj-class name="column-39" background-color="#f9f9f9" padding="7px">
+        <mj-text color="#393939" font-weight="700" />
+        <mj-button background-color="#196999" border-radius="4px" />
+      </mj-class>
+    </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column mj-class="column-1">
+        <mj-text mj-class="text-0 text-0">Section 0, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-0 text-0 text-0">Section 0, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-0" href="https://example.com/0/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-3">
+        <mj-text mj-class="text-2 text-2">Section 0, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-2 text-2 text-2">Section 0, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-2" href="https://example.com/0/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-5">
+        <mj-text mj-class="text-2 text-6">Section 1, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-6 text-14 text-2">Section 1, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-14" href="https://example.com/1/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-7">
+        <mj-text mj-class="text-4 text-8">Section 1, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-8 text-16 text-4">Section 1, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-16" href="https://example.com/1/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-9">
+        <mj-text mj-class="text-4 text-12">Section 2, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-12 text-28 text-4">Section 2, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-28" href="https://example.com/2/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-11">
+        <mj-text mj-class="text-6 text-14">Section 2, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-14 text-30 text-6">Section 2, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-30" href="https://example.com/2/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-13">
+        <mj-text mj-class="text-6 text-18">Section 3, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-18 text-2 text-6">Section 3, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-2" href="https://example.com/3/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-15">
+        <mj-text mj-class="text-8 text-20">Section 3, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-20 text-4 text-8">Section 3, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-4" href="https://example.com/3/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-17">
+        <mj-text mj-class="text-8 text-24">Section 4, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-24 text-16 text-8">Section 4, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-16" href="https://example.com/4/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-19">
+        <mj-text mj-class="text-10 text-26">Section 4, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-26 text-18 text-10">Section 4, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-18" href="https://example.com/4/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-21">
+        <mj-text mj-class="text-10 text-30">Section 5, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-30 text-30 text-10">Section 5, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-30" href="https://example.com/5/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-23">
+        <mj-text mj-class="text-12 text-32">Section 5, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-32 text-32 text-12">Section 5, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-32" href="https://example.com/5/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-25">
+        <mj-text mj-class="text-12 text-36">Section 6, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-36 text-4 text-12">Section 6, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-4" href="https://example.com/6/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-27">
+        <mj-text mj-class="text-14 text-38">Section 6, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-38 text-6 text-14">Section 6, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-6" href="https://example.com/6/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-29">
+        <mj-text mj-class="text-14 text-2">Section 7, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-2 text-18 text-14">Section 7, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-18" href="https://example.com/7/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-31">
+        <mj-text mj-class="text-16 text-4">Section 7, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-4 text-20 text-16">Section 7, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-20" href="https://example.com/7/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-33">
+        <mj-text mj-class="text-16 text-8">Section 8, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-8 text-32 text-16">Section 8, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-32" href="https://example.com/8/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-35">
+        <mj-text mj-class="text-18 text-10">Section 8, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-10 text-34 text-18">Section 8, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-34" href="https://example.com/8/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-37">
+        <mj-text mj-class="text-18 text-14">Section 9, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-14 text-6 text-18">Section 9, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-6" href="https://example.com/9/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-39">
+        <mj-text mj-class="text-20 text-16">Section 9, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-16 text-8 text-20">Section 9, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-8" href="https://example.com/9/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-1">
+        <mj-text mj-class="text-20 text-20">Section 10, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-20 text-20 text-20">Section 10, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-20" href="https://example.com/10/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-3">
+        <mj-text mj-class="text-22 text-22">Section 10, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-22 text-22 text-22">Section 10, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-22" href="https://example.com/10/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-5">
+        <mj-text mj-class="text-22 text-26">Section 11, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-26 text-34 text-22">Section 11, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-34" href="https://example.com/11/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-7">
+        <mj-text mj-class="text-24 text-28">Section 11, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-28 text-36 text-24">Section 11, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-36" href="https://example.com/11/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-9">
+        <mj-text mj-class="text-24 text-32">Section 12, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-32 text-8 text-24">Section 12, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-8" href="https://example.com/12/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-11">
+        <mj-text mj-class="text-26 text-34">Section 12, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-34 text-10 text-26">Section 12, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-10" href="https://example.com/12/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-13">
+        <mj-text mj-class="text-26 text-38">Section 13, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-38 text-22 text-26">Section 13, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-22" href="https://example.com/13/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-15">
+        <mj-text mj-class="text-28 text-0">Section 13, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-0 text-24 text-28">Section 13, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-24" href="https://example.com/13/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-17">
+        <mj-text mj-class="text-28 text-4">Section 14, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-4 text-36 text-28">Section 14, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-36" href="https://example.com/14/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-19">
+        <mj-text mj-class="text-30 text-6">Section 14, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-6 text-38 text-30">Section 14, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-38" href="https://example.com/14/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-21">
+        <mj-text mj-class="text-30 text-10">Section 15, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-10 text-10 text-30">Section 15, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-10" href="https://example.com/15/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-23">
+        <mj-text mj-class="text-32 text-12">Section 15, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-12 text-12 text-32">Section 15, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-12" href="https://example.com/15/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-25">
+        <mj-text mj-class="text-32 text-16">Section 16, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-16 text-24 text-32">Section 16, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-24" href="https://example.com/16/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-27">
+        <mj-text mj-class="text-34 text-18">Section 16, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-18 text-26 text-34">Section 16, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-26" href="https://example.com/16/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-29">
+        <mj-text mj-class="text-34 text-22">Section 17, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-22 text-38 text-34">Section 17, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-38" href="https://example.com/17/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-31">
+        <mj-text mj-class="text-36 text-24">Section 17, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-24 text-0 text-36">Section 17, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-0" href="https://example.com/17/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-33">
+        <mj-text mj-class="text-36 text-28">Section 18, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-28 text-12 text-36">Section 18, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-12" href="https://example.com/18/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-35">
+        <mj-text mj-class="text-38 text-30">Section 18, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-30 text-14 text-38">Section 18, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-14" href="https://example.com/18/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-37">
+        <mj-text mj-class="text-38 text-34">Section 19, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-34 text-26 text-38">Section 19, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-26" href="https://example.com/19/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-39">
+        <mj-text mj-class="text-0 text-36">Section 19, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-36 text-28 text-0">Section 19, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-28" href="https://example.com/19/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-1">
+        <mj-text mj-class="text-0 text-0">Section 20, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-0 text-0 text-0">Section 20, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-0" href="https://example.com/20/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-3">
+        <mj-text mj-class="text-2 text-2">Section 20, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-2 text-2 text-2">Section 20, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-2" href="https://example.com/20/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-5">
+        <mj-text mj-class="text-2 text-6">Section 21, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-6 text-14 text-2">Section 21, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-14" href="https://example.com/21/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-7">
+        <mj-text mj-class="text-4 text-8">Section 21, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-8 text-16 text-4">Section 21, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-16" href="https://example.com/21/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-9">
+        <mj-text mj-class="text-4 text-12">Section 22, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-12 text-28 text-4">Section 22, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-28" href="https://example.com/22/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-11">
+        <mj-text mj-class="text-6 text-14">Section 22, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-14 text-30 text-6">Section 22, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-30" href="https://example.com/22/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-13">
+        <mj-text mj-class="text-6 text-18">Section 23, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-18 text-2 text-6">Section 23, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-2" href="https://example.com/23/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-15">
+        <mj-text mj-class="text-8 text-20">Section 23, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-20 text-4 text-8">Section 23, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-4" href="https://example.com/23/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-17">
+        <mj-text mj-class="text-8 text-24">Section 24, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-24 text-16 text-8">Section 24, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-16" href="https://example.com/24/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-19">
+        <mj-text mj-class="text-10 text-26">Section 24, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-26 text-18 text-10">Section 24, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-18" href="https://example.com/24/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-21">
+        <mj-text mj-class="text-10 text-30">Section 25, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-30 text-30 text-10">Section 25, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-30" href="https://example.com/25/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-23">
+        <mj-text mj-class="text-12 text-32">Section 25, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-32 text-32 text-12">Section 25, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-32" href="https://example.com/25/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-25">
+        <mj-text mj-class="text-12 text-36">Section 26, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-36 text-4 text-12">Section 26, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-4" href="https://example.com/26/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-27">
+        <mj-text mj-class="text-14 text-38">Section 26, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-38 text-6 text-14">Section 26, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-6" href="https://example.com/26/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-29">
+        <mj-text mj-class="text-14 text-2">Section 27, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-2 text-18 text-14">Section 27, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-18" href="https://example.com/27/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-31">
+        <mj-text mj-class="text-16 text-4">Section 27, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-4 text-20 text-16">Section 27, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-20" href="https://example.com/27/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-33">
+        <mj-text mj-class="text-16 text-8">Section 28, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-8 text-32 text-16">Section 28, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-32" href="https://example.com/28/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-35">
+        <mj-text mj-class="text-18 text-10">Section 28, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-10 text-34 text-18">Section 28, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-34" href="https://example.com/28/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column mj-class="column-37">
+        <mj-text mj-class="text-18 text-14">Section 29, column 0, first paragraph.</mj-text>
+        <mj-text mj-class="text-14 text-6 text-18">Section 29, column 0, second paragraph.</mj-text>
+        <mj-button mj-class="text-6" href="https://example.com/29/0">Read more</mj-button>
+      </mj-column>
+      <mj-column mj-class="column-39">
+        <mj-text mj-class="text-20 text-16">Section 29, column 1, first paragraph.</mj-text>
+        <mj-text mj-class="text-16 text-8 text-20">Section 29, column 1, second paragraph.</mj-text>
+        <mj-button mj-class="text-8" href="https://example.com/29/1">Read more</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

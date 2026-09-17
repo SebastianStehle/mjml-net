@@ -46,9 +46,15 @@ public sealed partial class MjmlRenderContext : IMjmlReader
 
     public void ReadFragment(string mjml, string? file, IComponent parent)
     {
-        var reader = new HtmlReaderWrapper(mjml);
-
-        Read(reader, parent, file);
+        var reader = HtmlReaderWrapper.Rent(mjml);
+        try
+        {
+            Read(reader, parent, file);
+        }
+        finally
+        {
+            reader.Return();
+        }
     }
 
     public void Read(IHtmlReader reader, IComponent? parent, string? file)

@@ -17,6 +17,22 @@ internal static class DefaultPools
 
     public static readonly ObjectPool<MjmlRenderContext> RenderContexts = new DefaultObjectPool<MjmlRenderContext>(new MjmlRenderContextPolicy());
 
+    public static readonly ObjectPool<HtmlReaderWrapper> HtmlReaders = new DefaultObjectPool<HtmlReaderWrapper>(new HtmlReaderPolicy());
+
+    private sealed class HtmlReaderPolicy : PooledObjectPolicy<HtmlReaderWrapper>
+    {
+        public override HtmlReaderWrapper Create()
+        {
+            return new HtmlReaderWrapper(string.Empty);
+        }
+
+        public override bool Return(HtmlReaderWrapper obj)
+        {
+            obj.Clear();
+            return true;
+        }
+    }
+
     private sealed class MjmlRenderContextPolicy : PooledObjectPolicy<MjmlRenderContext>
     {
         public override MjmlRenderContext Create()

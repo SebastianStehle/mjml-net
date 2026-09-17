@@ -25,39 +25,40 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     /// </summary>
     public MjmlRenderer()
     {
-        Add<AccordionComponent>();
-        Add<AccordionElementComponent>();
-        Add<AccordionTextComponent>();
-        Add<AccordionTitleComponent>();
-        Add<AttributesComponent>();
-        Add<BodyComponent>();
-        Add<BreakpointComponent>();
-        Add<ButtonComponent>();
-        Add<CarouselComponent>();
-        Add<CarouselImageComponent>();
-        Add<ColumnComponent>();
-        Add<DividerComponent>();
-        Add<FontComponent>();
-        Add<GroupComponent>();
-        Add<HeadComponent>();
-        Add<HeroComponent>();
-        Add<IncludeComponent>();
-        Add<ImageComponent>();
-        Add<MsoButtonComponent>();
-        Add<NavbarComponent>();
-        Add<NavbarLinkComponent>();
-        Add<PreviewComponent>();
-        Add<RawComponent>();
-        Add<RootComponent>();
-        Add<SectionComponent>();
-        Add<SocialComponent>();
-        Add<SocialElementComponent>();
-        Add<SpacerComponent>();
-        Add<StyleComponent>();
-        Add<TableComponent>();
-        Add<TextComponent>();
-        Add<TitleComponent>();
-        Add<WrapperComponent>();
+        // Use direct factories, because new T() in a generic method uses Activator.CreateInstance.
+        AddFactory(() => new AccordionComponent());
+        AddFactory(() => new AccordionElementComponent());
+        AddFactory(() => new AccordionTextComponent());
+        AddFactory(() => new AccordionTitleComponent());
+        AddFactory(() => new AttributesComponent());
+        AddFactory(() => new BodyComponent());
+        AddFactory(() => new BreakpointComponent());
+        AddFactory(() => new ButtonComponent());
+        AddFactory(() => new CarouselComponent());
+        AddFactory(() => new CarouselImageComponent());
+        AddFactory(() => new ColumnComponent());
+        AddFactory(() => new DividerComponent());
+        AddFactory(() => new FontComponent());
+        AddFactory(() => new GroupComponent());
+        AddFactory(() => new HeadComponent());
+        AddFactory(() => new HeroComponent());
+        AddFactory(() => new IncludeComponent());
+        AddFactory(() => new ImageComponent());
+        AddFactory(() => new MsoButtonComponent());
+        AddFactory(() => new NavbarComponent());
+        AddFactory(() => new NavbarLinkComponent());
+        AddFactory(() => new PreviewComponent());
+        AddFactory(() => new RawComponent());
+        AddFactory(() => new RootComponent());
+        AddFactory(() => new SectionComponent());
+        AddFactory(() => new SocialComponent());
+        AddFactory(() => new SocialElementComponent());
+        AddFactory(() => new SpacerComponent());
+        AddFactory(() => new StyleComponent());
+        AddFactory(() => new TableComponent());
+        AddFactory(() => new TextComponent());
+        AddFactory(() => new TitleComponent());
+        AddFactory(() => new WrapperComponent());
 
         Add(new FontHelper());
         Add(new PreviewHelper());
@@ -95,6 +96,11 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         helpers.Clear();
 
         return this;
+    }
+
+    private void AddFactory(Func<IComponent> factory)
+    {
+        components[factory().ComponentName] = factory;
     }
 
     internal IComponent? CreateComponent(ReadOnlySpan<char> name)
@@ -178,7 +184,7 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
     {
         options ??= new MjmlOptions();
 
-        var reader = new HtmlReaderWrapper(mjml);
+        var reader = HtmlReaderWrapper.Rent(mjml);
         var context = DefaultPools.RenderContexts.Get();
         try
         {
@@ -201,6 +207,8 @@ public sealed partial class MjmlRenderer : IMjmlRenderer
         finally
         {
             DefaultPools.RenderContexts.Return(context);
+
+            reader.Return();
         }
     }
 }
