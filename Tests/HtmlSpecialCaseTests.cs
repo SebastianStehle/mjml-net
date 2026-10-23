@@ -38,11 +38,12 @@ public class HtmlSpecialCaseTests
 
         var result = TestHelper.Render(source);
 
+        // The line position is the column of the invalid character.
         Assert.Contains(
             new ValidationError(
                 "Unexpected character in stream.",
                 ValidationErrorType.InvalidHtml,
-                new SourcePosition(2, 3, null)),
+                new SourcePosition(2, 2, null)),
             result.Errors);
     }
 }

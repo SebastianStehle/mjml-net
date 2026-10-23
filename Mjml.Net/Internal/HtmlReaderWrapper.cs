@@ -6,13 +6,14 @@ namespace Mjml.Net.Internal;
 
 internal class HtmlReaderWrapper : IHtmlReader
 {
-    private static readonly HtmlReaderOptions Options = new HtmlReaderOptions
+    private static readonly HtmlReaderPool Readers = new HtmlReaderPool(new HtmlReaderOptions
     {
         DecodeHtmlCharacters = false
-    };
+    });
 
-    private readonly HtmlReaderImpl impl;
+    private readonly EventHandler<HtmlParseErrorEventArgs>? parseError;
     private readonly HtmlReaderWrapper root;
+    private HtmlReaderImpl impl;
     private int depth;
 
     public Action<HtmlError>? OnError { get; set; }
@@ -43,24 +44,30 @@ internal class HtmlReaderWrapper : IHtmlReader
         root = parent.root;
     }
 
-    public HtmlReaderWrapper(string input)
+    public HtmlReaderWrapper()
     {
         root = this;
-        impl = new HtmlReaderImpl(new StringReader(input), Options);
 
-        // The wrapper is pooled, so the handler must only be added once.
-        impl.ParseError += (sender, e) =>
+        // The wrapper is pooled, so the handler is only allocated once, even though the reader is rented per input.
+        parseError = (sender, e) =>
         {
             OnError?.Invoke(new HtmlError(e.LineNumber, e.LinePosition, e.Message));
         };
+
+        impl = null!;
+    }
+
+    public HtmlReaderWrapper(string input)
+        : this()
+    {
+        Initialize(input);
     }
 
     public static HtmlReaderWrapper Rent(string input)
     {
         var reader = DefaultPools.HtmlReaders.Get();
 
-        // Reuse the buffers of the tokenizer, which are large compared to the typical input.
-        reader.impl.Reset(new StringReader(input));
+        reader.Initialize(input);
         return reader;
     }
 
@@ -71,11 +78,19 @@ internal class HtmlReaderWrapper : IHtmlReader
 
     public void Clear()
     {
-        // Do not keep a reference to the last input.
-        impl.Reset(TextReader.Null);
+        // Returning the reader keeps the buffers of the tokenizer, which are large compared to the typical input.
+        impl.ParseError -= parseError;
+        Readers.Return(impl);
+        impl = null!;
 
         depth = 0;
         OnError = null;
+    }
+
+    private void Initialize(string input)
+    {
+        impl = Readers.Rent(new StringReader(input));
+        impl.ParseError += parseError;
     }
 
     public string GetAttribute(string name)
