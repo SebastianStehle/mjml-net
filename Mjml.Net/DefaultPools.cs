@@ -23,7 +23,7 @@ internal static class DefaultPools
     {
         public override HtmlReaderWrapper Create()
         {
-            return new HtmlReaderWrapper(string.Empty);
+            return new HtmlReaderWrapper();
         }
 
         public override bool Return(HtmlReaderWrapper obj)
