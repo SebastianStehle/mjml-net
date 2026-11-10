@@ -103,6 +103,18 @@ internal sealed class RenderBuffer(bool beautify) : IBuffer
         EndAttr();
     }
 
+    public void AttrIfNotNull(string name, string? value)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        StartAttr(name);
+        sb.Append(value);
+        EndAttr();
+    }
+
     public void StartAttr(string name)
     {
         sb.Append(' ');

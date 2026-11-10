@@ -14,6 +14,8 @@ public interface IHtmlAttrRenderer : IHtmlClassRenderer
     /// <returns>The current instance to set more attributes.</returns>
     IHtmlAttrRenderer Attr(string name, string? value);
 
+    IHtmlAttrRenderer AttrIfNotNull(string name, string? value);
+
     /// <summary>
     /// Sets an attribute by name for the current element.
     /// </summary>
