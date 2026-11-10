@@ -51,6 +51,12 @@ public sealed partial class MjmlRenderContext : IHtmlRenderer, IHtmlAttrRenderer
         return this;
     }
 
+    public IHtmlAttrRenderer AttrIfNotNull(string name, string? value)
+    {
+        Buffer.AttrIfNotNull(name, value);
+        return this;
+    }
+
     public IHtmlAttrRenderer Attr(string name, [InterpolatedStringHandlerArgument("", "name")] ref AttrInterpolatedStringHandler value)
     {
         Buffer.EndAttr();

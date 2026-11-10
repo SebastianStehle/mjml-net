@@ -19,7 +19,7 @@ public partial class ImageComponent : BodyComponentBase
     public string Align = "center";
 
     [Bind("alt")]
-    public string? Alt;
+    public string? Alt = string.Empty;
 
     [Bind("border")]
     public string Border = "0";
@@ -179,7 +179,7 @@ public partial class ImageComponent : BodyComponentBase
     private void RenderImage(IHtmlRenderer renderer, bool fullWidth)
     {
         renderer.StartElement("img", true)
-            .Attr("alt", Alt)
+            .AttrIfNotNull("alt", Alt)
             .AttrOrAuto("height", Height)
             .Attr("sizes", Sizes)
             .Attr("src", Src)

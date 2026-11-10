@@ -146,7 +146,7 @@ public partial class SocialElementComponent : BodyComponentBase
         }
 
         renderer.StartElement("img", true) // Style img
-            .Attr("alt", Alt)
+            .AttrIfNotNull("alt", Alt)
             .Attr("sizes", Sizes)
             .Attr("src", socialNetwork.ImageUrl)
             .Attr("srcset", Srcset)

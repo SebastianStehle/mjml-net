@@ -86,7 +86,7 @@ public partial class CarouselImageComponent : BodyComponentBase
     private void RenderImage(IHtmlRenderer renderer)
     {
         renderer.StartElement("img", true) // Style images.img
-            .Attr("alt", Alt)
+            .AttrIfNotNull("alt", Alt)
             .Attr("border", "0")
             .Attr("src", Src)
             .Attr("title", Title)
@@ -120,7 +120,7 @@ public partial class CarouselImageComponent : BodyComponentBase
             .Attr("for", $"mj-carousel-{CarouselID}-radio-{imgIndex}");
 
         renderer.StartElement("img", true) // Style thumbnails.img
-            .Attr("alt", Alt)
+            .AttrIfNotNull("alt", Alt)
             .Attr("src", !string.IsNullOrEmpty(ThumbnailsSrc) ? ThumbnailsSrc : Src)
             .Attr("width", $"{widthParsed}")
             .Style("display", "block")
